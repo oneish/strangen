@@ -4,7 +4,7 @@ project(strangen VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-add_executable(strangen strangen.cpp)
+add_executable(strangen strange__generation.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
