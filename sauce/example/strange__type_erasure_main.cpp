@@ -15,6 +15,12 @@ struct implementation
         std::cout << "modify: " << x << " -> " << (x + 1) << std::endl;
         ++x;
     }
+
+    inline void push()
+    {
+        std::cout << "push: " << x << " -> " << (x - 1) << std::endl;
+        --x;
+    }
 };
 
 int main()
@@ -27,5 +33,11 @@ int main()
     w2.modify();
     w1.display();
     w2.display();
+
+    strange::button b1 = strange::button::_make<implementation>();
+    b1.push();
+
+    w1 = b1;
+
     return 0;
 }
