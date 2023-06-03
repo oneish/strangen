@@ -11,6 +11,14 @@ protected:
         virtual std::shared_ptr<_common::_base> _clone() const = 0;
     };
 
+    inline void _mutate()
+    {
+        if (_shared.use_count() > 1)
+        {
+            _shared = _shared->_clone();
+        }
+    }
+
     std::shared_ptr<_common::_base> _shared;
 };
 
@@ -67,7 +75,7 @@ public:
 
     inline void modify()
     {
-        _shared = _shared->_clone();
+        _mutate();
         std::static_pointer_cast<widget::_derived>(_shared)->modify();
     }
 };
@@ -124,7 +132,7 @@ public:
 
     inline void push()
     {
-        _shared = _shared->_clone();
+        _mutate();
         std::static_pointer_cast<button::_derived>(_shared)->push();
     }
 };
