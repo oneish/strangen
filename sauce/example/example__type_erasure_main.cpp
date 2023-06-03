@@ -1,4 +1,4 @@
-#include "strange__type_erasure.h"
+#include "example__type_erasure.h"
 #include <iostream>
 
 struct implementation
@@ -21,11 +21,21 @@ struct implementation
         std::cout << "push: " << x << " -> " << (x - 1) << std::endl;
         --x;
     }
+
+    inline void inc()
+    {
+        ++x;
+    }
+
+    inline void dec()
+    {
+        --x;
+    }
 };
 
 int main()
 {
-    strange::widget w1 = strange::widget::_make<implementation>();
+    auto w1 = example::widget::_make<implementation>();
     w1.modify();
     auto w2 = w1;
     w1.display();
@@ -34,10 +44,14 @@ int main()
     w1.display();
     w2.display();
 
-    strange::button b1 = strange::button::_make<implementation>();
+    auto b1 = example::button::_make<implementation>();
     b1.push();
 
     w1 = b1;
+
+    auto n1 = example::number::_make<implementation>();
+    n1.inc();
+    n1.dec();
 
     return 0;
 }
