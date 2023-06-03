@@ -33,6 +33,11 @@ struct implementation
     }
 };
 
+void increment(example::number & num)
+{
+    num.inc();
+}
+
 int main()
 {
     auto w1 = example::widget::_make<implementation>();
@@ -52,6 +57,29 @@ int main()
     auto n1 = example::number::_make<implementation>();
     n1.inc();
     n1.dec();
+
+    auto wn1 = example::widget_number::_make<implementation>();
+    wn1.inc();
+    wn1.display();
+
+    example::number wn2 = wn1;
+    wn2.inc();
+
+    example::widget wn3 = wn2;
+    wn3.modify();
+    wn3.display();
+
+    wn1.display();
+    increment(wn1);
+    wn1.display();
+
+    increment(wn2);
+    
+    wn3 = wn2;
+    wn3.display();
+    increment(wn2);
+    wn3 = wn2;
+    wn3.display();
 
     return 0;
 }
