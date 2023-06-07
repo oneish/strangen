@@ -11,6 +11,20 @@ protected:
         virtual std::shared_ptr<_common::_base> _clone() const = 0;
     };
 
+    std::shared_ptr<_common::_base> _shared;
+
+    inline _common() = default;
+
+    inline _common(std::shared_ptr<_common::_base> const & shared)
+    :_shared(shared)
+    {
+    }
+
+    inline _common(std::shared_ptr<_common::_base> && shared)
+    :_shared(std::move(shared))
+    {
+    }
+
     inline void _mutate()
     {
         if (_shared.use_count() > 1)
@@ -20,65 +34,74 @@ protected:
     }
 
 public:
-    std::shared_ptr<_common::_base> _shared;
+    inline bool _something()
+    {
+        return _shared.operator bool();
+    }
 };
 
 struct widget : virtual _common
 {
-    widget()
+    inline widget() = default;
+
+    inline widget(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
     {
     }
 
-    widget(widget const & other)
+    inline widget(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
     {
-        _common::_shared = other._shared;
     }
 
-    widget(widget && other)
+    inline widget(widget const & other)
+    :_common(other)
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    widget & operator=(widget const & other)
+    inline widget(widget && other)
+    :_common(std::move(other))
     {
-        _common::_shared = other._shared;
+    }
+
+    inline widget & operator=(widget const & other)
+    {
+        _common::operator=(other);
         return *this;
     }
 
-    widget & operator=(widget && other)
+    inline widget & operator=(widget && other)
     {
-        _common::_shared = std::move(other._shared);
+        _common::operator=(std::move(other));
         return *this;
     }
 
-    widget(_common const & other)
+    inline widget(_common const & other)
+    :_common(other)
     {
-        _common::_shared = other._shared;
     }
 
-    widget(_common && other)
+    inline widget(_common && other)
+    :_common(std::move(other))
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    widget & operator=(_common const & other)
+    inline widget & operator=(_common const & other)
     {
-        _common::_shared = other._shared;
+        _common::operator=(other);
         return *this;
     }
 
-    widget & operator=(_common && other)
+    inline widget & operator=(_common && other)
     {
-        _common::_shared = std::move(other._shared);
+        _common::operator=(std::move(other));
         return *this;
     }
 
     template <typename _Other>
-    operator _Other() const
+    inline operator _Other() const
     {
-        _Other other;
-        other._shared = _common::_shared;
-        return other;
+        return _Other(*this);
     }
 
 protected:
@@ -93,36 +116,36 @@ private:
     struct _instance final : widget::_derived
     {
         template<typename ... _Args>
-        _instance(_Args && ... _args)
-        :_thing(std::forward<_Args>(_args) ...)
+        inline _instance(_Args && ... _args)
+        :widget::_derived()
+        ,_thing(std::forward<_Args>(_args) ...)
         {
         }
 
-        std::shared_ptr<_common::_base> _clone() const final
+        inline std::shared_ptr<_common::_base> _clone() const final
         {
             return std::make_shared<widget::_instance<_Thing>>(_thing);
         }
 
-        void display() const final
+        inline void display() const final
         {
             _thing.display();
         }
 
-        void modify() final
+        inline void modify() final
         {
             _thing.modify();
         }
 
+    private:
         _Thing _thing;
     };
 
 public:
     template<typename _Thing, typename ... _Args>
-    static widget _make(_Args && ... _args)
+    inline static widget _make(_Args && ... _args)
     {
-        widget i;
-        i._shared = std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...);
-        return i;
+        return widget(std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...));
     }
 
     inline void display() const
@@ -139,60 +162,72 @@ public:
 
 struct button : widget
 {
-    button()
+    inline button() = default;
+
+    inline button(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    ,widget()
     {
     }
 
-    button(button const & other)
+    inline button(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    ,widget()
     {
-        _common::_shared = other._shared;
     }
 
-    button(button && other)
+    inline button(button const & other)
+    :_common(other)
+    ,widget()
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    button & operator=(button const & other)
+    inline button(button && other)
+    :_common(std::move(other))
+    ,widget()
     {
-        _common::_shared = other._shared;
+    }
+
+    inline button & operator=(button const & other)
+    {
+        widget::operator=(other);
         return *this;
     }
 
-    button & operator=(button && other)
+    inline button & operator=(button && other)
     {
-        _common::_shared = std::move(other._shared);
+        widget::operator=(std::move(other));
         return *this;
     }
 
-    button(_common const & other)
+    inline button(_common const & other)
+    :_common(other)
+    ,widget()
     {
-        _common::_shared = other._shared;
     }
 
-    button(_common && other)
+    inline button(_common && other)
+    :_common(std::move(other))
+    ,widget()
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    button & operator=(_common const & other)
+    inline button & operator=(_common const & other)
     {
-        _common::_shared = other._shared;
+        widget::operator=(other);
         return *this;
     }
 
-    button & operator=(_common && other)
+    inline button & operator=(_common && other)
     {
-        _common::_shared = std::move(other._shared);
+        widget::operator=(std::move(other));
         return *this;
     }
 
     template <typename _Other>
-    operator _Other() const
+    inline operator _Other() const
     {
-        _Other other;
-        other._shared = _common::_shared;
-        return other;
+        return _Other(*this);
     }
 
 protected:
@@ -206,41 +241,41 @@ private:
     struct _instance final : button::_derived
     {
         template<typename ... _Args>
-        _instance(_Args && ... _args)
-        :_thing(std::forward<_Args>(_args) ...)
+        inline _instance(_Args && ... _args)
+        :button::_derived()
+        ,_thing(std::forward<_Args>(_args) ...)
         {
         }
 
-        std::shared_ptr<_common::_base> _clone() const final
+        inline std::shared_ptr<_common::_base> _clone() const final
         {
             return std::make_shared<button::_instance<_Thing>>(_thing);
         }
 
-        void display() const final
+        inline void display() const final
         {
             _thing.display();
         }
 
-        void modify() final
+        inline void modify() final
         {
             _thing.modify();
         }
 
-        void push() final
+        inline void push() final
         {
             _thing.push();
         }
 
+    private:
         _Thing _thing;
     };
 
 public:
     template<typename _Thing, typename ... _Args>
-    static button _make(_Args && ... _args)
+    inline static button _make(_Args && ... _args)
     {
-        button i;
-        i._shared = std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...);
-        return i;
+        return button(std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...));
     }
 
     inline void push()
@@ -252,60 +287,66 @@ public:
 
 struct number : virtual _common
 {
-    number()
+    inline number() = default;
+
+    inline number(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
     {
     }
 
-    number(number const & other)
+    inline number(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
     {
-        _common::_shared = other._shared;
     }
 
-    number(number && other)
+    inline number(number const & other)
+    :_common(other)
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    number & operator=(number const & other)
+    inline number(number && other)
+    :_common(std::move(other))
     {
-        _common::_shared = other._shared;
+    }
+
+    inline number & operator=(number const & other)
+    {
+        _common::operator=(other);
         return *this;
     }
 
-    number & operator=(number && other)
+    inline number & operator=(number && other)
     {
-        _common::_shared = std::move(other._shared);
+        _common::operator=(std::move(other));
         return *this;
     }
 
-    number(_common const & other)
+    inline number(_common const & other)
+    :_common(other)
     {
-        _common::_shared = other._shared;
     }
 
-    number(_common && other)
+    inline number(_common && other)
+    :_common(std::move(other))
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    number & operator=(_common const & other)
+    inline number & operator=(_common const & other)
     {
-        _common::_shared = other._shared;
+        _common::operator=(other);
         return *this;
     }
 
-    number & operator=(_common && other)
+    inline number & operator=(_common && other)
     {
-        _common::_shared = std::move(other._shared);
+        _common::operator=(std::move(other));
         return *this;
     }
 
     template <typename _Other>
-    operator _Other() const
+    inline operator _Other() const
     {
-        _Other other;
-        other._shared = _common::_shared;
-        return other;
+        return _Other(*this);
     }
 
 protected:
@@ -320,36 +361,36 @@ private:
     struct _instance final : number::_derived
     {
         template<typename ... _Args>
-        _instance(_Args && ... _args)
-        :_thing(std::forward<_Args>(_args) ...)
+        inline _instance(_Args && ... _args)
+        :number::_derived()
+        ,_thing(std::forward<_Args>(_args) ...)
         {
         }
 
-        std::shared_ptr<_common::_base> _clone() const final
+        inline std::shared_ptr<_common::_base> _clone() const final
         {
             return std::make_shared<number::_instance<_Thing>>(_thing);
         }
 
-        void inc() final
+        inline void inc() final
         {
             _thing.inc();
         }
 
-        void dec() final
+        inline void dec() final
         {
             _thing.dec();
         }
 
+    private:
         _Thing _thing;
     };
 
 public:
     template<typename _Thing, typename ... _Args>
-    static number _make(_Args && ... _args)
+    inline static number _make(_Args && ... _args)
     {
-        number i;
-        i._shared = std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...);
-        return i;
+        return number(std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...));
     }
 
     inline void inc()
@@ -367,60 +408,78 @@ public:
 
 struct widget_number : widget, number
 {
-    widget_number()
+    inline widget_number() = default;
+
+    inline widget_number(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    ,widget()
+    ,number()
     {
     }
 
-    widget_number(widget_number const & other)
+    inline widget_number(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    ,widget()
+    ,number()
     {
-        _common::_shared = other._shared;
     }
 
-    widget_number(widget_number && other)
+    inline widget_number(widget_number const & other)
+    :_common(other)
+    ,widget()
+    ,number()
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    widget_number & operator=(widget_number const & other)
+    inline widget_number(widget_number && other)
+    :_common(std::move(other))
+    ,widget()
+    ,number()
     {
-        _common::_shared = other._shared;
+    }
+
+    inline widget_number & operator=(widget_number const & other)
+    {
+        number::operator=(other);
         return *this;
     }
 
-    widget_number & operator=(widget_number && other)
+    inline widget_number & operator=(widget_number && other)
     {
-        _common::_shared = std::move(other._shared);
+        number::operator=(std::move(other));
         return *this;
     }
 
-    widget_number(_common const & other)
+    inline widget_number(_common const & other)
+    :_common(other)
+    ,widget()
+    ,number()
     {
-        _common::_shared = other._shared;
     }
 
-    widget_number(_common && other)
+    inline widget_number(_common && other)
+    :_common(std::move(other))
+    ,widget()
+    ,number()
     {
-        _common::_shared = std::move(other._shared);
     }
 
-    widget_number & operator=(_common const & other)
+    inline widget_number & operator=(_common const & other)
     {
-        _common::_shared = other._shared;
+        number::operator=(other);
         return *this;
     }
 
-    widget_number & operator=(_common && other)
+    inline widget_number & operator=(_common && other)
     {
-        _common::_shared = std::move(other._shared);
+        number::operator=(std::move(other));
         return *this;
     }
 
     template <typename _Other>
-    operator _Other() const
+    inline operator _Other() const
     {
-        _Other other;
-        other._shared = _common::_shared;
-        return other;
+        return _Other(*this);
     }
 
 protected:
@@ -433,48 +492,48 @@ private:
     struct _instance final : widget_number::_derived
     {
         template<typename ... _Args>
-        _instance(_Args && ... _args)
-        :_thing(std::forward<_Args>(_args) ...)
+        inline _instance(_Args && ... _args)
+        :widget_number::_derived()
+        ,_thing(std::forward<_Args>(_args) ...)
         {
         }
 
-        std::shared_ptr<_common::_base> _clone() const final
+        inline std::shared_ptr<_common::_base> _clone() const final
         {
             return std::static_pointer_cast<widget::_derived>(
                 std::make_shared<widget_number::_instance<_Thing>>(_thing));
         }
 
-        void display() const final
+        inline void display() const final
         {
             _thing.display();
         }
 
-        void modify() final
+        inline void modify() final
         {
             _thing.modify();
         }
 
-        void inc() final
+        inline void inc() final
         {
             _thing.inc();
         }
 
-        void dec() final
+        inline void dec() final
         {
             _thing.dec();
         }
 
+    private:
         _Thing _thing;
     };
 
 public:
     template<typename _Thing, typename ... _Args>
-    static widget_number _make(_Args && ... _args)
+    inline static widget_number _make(_Args && ... _args)
     {
-        widget_number i;
-        i._shared = std::static_pointer_cast<widget::_derived>(
-            std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...));
-        return i;
+        return widget_number(std::static_pointer_cast<widget::_derived>(
+            std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...)));
     }
 
     inline void inc()

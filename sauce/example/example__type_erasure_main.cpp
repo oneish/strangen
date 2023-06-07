@@ -40,6 +40,7 @@ void increment(example::number & num)
 
 int main()
 {
+
     auto w1 = example::widget::_make<implementation>();
     w1.modify();
     auto w2 = w1;
@@ -50,6 +51,14 @@ int main()
     w2.display();
 
     auto b1 = example::button::_make<implementation>();
+    if (b1._something())
+    {
+        std::cout << "yes" << std::endl;
+    }
+    else
+    {
+        std::cout << "no" << std::endl;
+    }
     b1.push();
 
     w1 = b1;
