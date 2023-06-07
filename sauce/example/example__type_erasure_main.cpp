@@ -59,6 +59,30 @@ int main()
     {
         std::cout << "no" << std::endl;
     }
+    if (b1._dynamic())
+    {
+        std::cout << "yes" << std::endl;
+    }
+    else
+    {
+        std::cout << "no" << std::endl;
+    }
+    if (static_cast<example::number>(b1)._something())
+    {
+        std::cout << "yes" << std::endl;
+    }
+    else
+    {
+        std::cout << "no" << std::endl;
+    }
+    if (static_cast<example::number>(b1)._dynamic())
+    {
+        std::cout << "yes" << std::endl;
+    }
+    else
+    {
+        std::cout << "no" << std::endl;
+    }
     b1.push();
 
     w1 = b1;

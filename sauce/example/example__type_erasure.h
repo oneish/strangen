@@ -148,6 +148,11 @@ public:
         return widget(std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...));
     }
 
+    inline bool _dynamic() const
+    {
+        return std::dynamic_pointer_cast<widget::_derived>(_common::_shared).operator bool();
+    }
+
     inline void display() const
     {
         std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->display();
@@ -278,6 +283,11 @@ public:
         return button(std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...));
     }
 
+    inline bool _dynamic() const
+    {
+        return std::dynamic_pointer_cast<button::_derived>(_common::_shared).operator bool();
+    }
+
     inline void push()
     {
         _common::_mutate();
@@ -391,6 +401,11 @@ public:
     inline static number _make(_Args && ... _args)
     {
         return number(std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+    }
+
+    inline bool _dynamic() const
+    {
+        return std::dynamic_pointer_cast<number::_derived>(_common::_shared).operator bool();
     }
 
     inline void inc()
@@ -534,6 +549,11 @@ public:
     {
         return widget_number(std::static_pointer_cast<widget::_derived>(
             std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...)));
+    }
+
+    inline bool _dynamic() const
+    {
+        return std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared).operator bool();
     }
 
     inline void inc()
