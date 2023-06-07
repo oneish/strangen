@@ -568,4 +568,134 @@ public:
         std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared)->dec();
     }
 };
+
+template<typename Data>
+struct numeric : number
+{
+    inline numeric() = default;
+
+    inline numeric(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    ,number()
+    {
+    }
+
+    inline numeric(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    ,number()
+    {
+    }
+
+    inline numeric(numeric const & other)
+    :_common(other)
+    ,number()
+    {
+    }
+
+    inline numeric(numeric && other)
+    :_common(std::move(other))
+    ,number()
+    {
+    }
+
+    inline numeric & operator=(numeric const & other)
+    {
+        number::operator=(other);
+        return *this;
+    }
+
+    inline numeric & operator=(numeric && other)
+    {
+        number::operator=(std::move(other));
+        return *this;
+    }
+
+    inline numeric(_common const & other)
+    :_common(other)
+    ,number()
+    {
+    }
+
+    inline numeric(_common && other)
+    :_common(std::move(other))
+    ,number()
+    {
+    }
+
+    inline numeric & operator=(_common const & other)
+    {
+        number::operator=(other);
+        return *this;
+    }
+
+    inline numeric & operator=(_common && other)
+    {
+        number::operator=(std::move(other));
+        return *this;
+    }
+
+    template <typename _Other>
+    inline operator _Other() const
+    {
+        return _Other(*this);
+    }
+
+protected:
+    struct _derived : number::_derived
+    {
+        virtual Data get() const = 0;
+    };
+
+private:
+    template<typename _Thing>
+    struct _instance final : numeric::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :numeric::_derived()
+        ,_thing(std::forward<_Args>(_args) ...)
+        {
+        }
+
+        inline std::shared_ptr<_common::_base> _clone() const final
+        {
+            return std::make_shared<numeric::_instance<_Thing>>(_thing);
+        }
+
+        inline void inc() final
+        {
+            _thing.inc();
+        }
+
+        inline void dec() final
+        {
+            _thing.dec();
+        }
+
+        inline Data get() const final
+        {
+            return _thing.get();
+        }
+
+    private:
+        _Thing _thing;
+    };
+
+public:
+    template<typename _Thing, typename ... _Args>
+    inline static numeric _make(_Args && ... _args)
+    {
+        return numeric(std::make_shared<numeric::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+    }
+
+    inline bool _dynamic() const
+    {
+        return std::dynamic_pointer_cast<numeric::_derived>(_common::_shared).operator bool();
+    }
+
+    inline Data get() const
+    {
+        return std::dynamic_pointer_cast<numeric::_derived>(_common::_shared)->get();
+    }
+};
 }

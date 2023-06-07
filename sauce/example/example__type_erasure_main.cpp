@@ -31,6 +31,11 @@ struct implementation
     {
         --x;
     }
+
+    inline int get() const
+    {
+        return x;
+    }
 };
 
 void increment(example::number & num)
@@ -113,6 +118,10 @@ int main()
     increment(wn2);
     wn3 = wn2;
     wn3.display();
+
+    auto ni1 = example::numeric<int>::_make<implementation>();
+    ni1.inc();
+    std::cout << ni1.get() << std::endl;
 
     return 0;
 }
