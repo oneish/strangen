@@ -5,7 +5,7 @@ struct implementation
 {
     int x = 0;
  
-    inline void display() const
+    inline void display(example::button b) const
     {
         std::cout << "display: " << x << std::endl;
     }
