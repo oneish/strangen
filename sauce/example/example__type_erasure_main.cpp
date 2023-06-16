@@ -1,4 +1,5 @@
 #include "example__type_erasure.h"
+#include "example__space_definition.h"
 #include <iostream>
 
 struct implementation
