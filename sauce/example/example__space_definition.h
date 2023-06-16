@@ -54,6 +54,32 @@ namespace example
                         },
                     },
                 },
+                {
+                    // abstraction
+                    .name = "number",
+                    .operations =
+                    {
+                        {
+                            // operation
+                            .name = "inc",
+                            .result = "void",
+                        },
+                        {
+                            // operation
+                            .name = "dec",
+                            .result = "void",
+                        },
+                    },
+                },
+                {
+                    // abstraction
+                    .name = "widget_number",
+                    .parents =
+                    {
+                        "widget",
+                        "number",
+                    },
+                },
             },
         };
     }
