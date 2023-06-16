@@ -38,6 +38,22 @@ namespace example
                         },
                     },
                 },
+                {
+                    // abstraction
+                    .name = "button",
+                    .parents =
+                    {
+                        "widget",
+                    },
+                    .operations =
+                    {
+                        {
+                            // operation
+                            .name = "push",
+                            .result = "void",
+                        },
+                    },
+                },
             },
         };
     }
