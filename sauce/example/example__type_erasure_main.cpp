@@ -11,9 +11,9 @@ struct implementation
         std::cout << "display: " << x << std::endl;
     }
 
-    inline void modify()
+    inline void inc()
     {
-        std::cout << "modify: " << x << " -> " << (x + 1) << std::endl;
+        std::cout << "inc: " << x << " -> " << (x + 1) << std::endl;
         ++x;
     }
 
@@ -23,18 +23,15 @@ struct implementation
         --x;
     }
 
-    inline void inc()
-    {
-        ++x;
-    }
-
     inline void dec()
     {
+        std::cout << "dec: " << x << " -> " << (x - 1) << std::endl;
         --x;
     }
 
     inline int get() const
     {
+        std::cout << "get: " << x << std::endl;
         return x;
     }
 };
@@ -48,11 +45,11 @@ int main()
 {
 
     auto w1 = example::widget::_make<implementation>();
-    w1.modify();
+    w1.inc();
     auto w2 = w1;
     w1.display();
     w2.display();
-    w2.modify();
+    w2.inc();
     w1.display();
     w2.display();
 
@@ -105,7 +102,7 @@ int main()
     wn2.inc();
 
     example::widget wn3 = wn2;
-    wn3.modify();
+    wn3.inc();
     wn3.display();
 
     wn1.display();

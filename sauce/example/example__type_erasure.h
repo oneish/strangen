@@ -115,7 +115,7 @@ protected:
     struct _derived : _common::_base
     {
         virtual void display(button b) const = 0;
-        virtual void modify() = 0;
+        virtual void inc() = 0;
     };
 
 private:
@@ -136,7 +136,7 @@ private:
 
         inline void display(button b) const final;
 
-        inline void modify() final;
+        inline void inc() final;
 
     private:
         _Thing _thing;
@@ -156,7 +156,7 @@ public:
 
     inline void display(button b) const;
 
-    inline void modify();
+    inline void inc();
 };
 
 struct button : widget
@@ -253,7 +253,7 @@ private:
 
         inline void display(button b) const final;
 
-        inline void modify() final;
+        inline void inc() final;
 
         inline void push() final;
 
@@ -272,6 +272,10 @@ public:
     {
         return std::dynamic_pointer_cast<button::_derived>(_common::_shared).operator bool();
     }
+
+    inline void display(button b) const;
+
+    inline void inc();
 
     inline void push();
 };
@@ -488,8 +492,6 @@ private:
 
         inline void display(button b) const final;
 
-        inline void modify() final;
-
         inline void inc() final;
 
         inline void dec() final;
@@ -510,6 +512,8 @@ public:
     {
         return std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared).operator bool();
     }
+
+    inline void display(button b) const;
 
     inline void inc();
 
@@ -631,6 +635,10 @@ public:
         return std::dynamic_pointer_cast<numeric::_derived>(_common::_shared).operator bool();
     }
 
+    inline void inc();
+
+    inline void dec();
+
     inline Data get() const;
 };
 
@@ -641,9 +649,9 @@ inline void widget::_instance<_Thing>::display(button b) const
 }
 
 template<typename _Thing>
-inline void widget::_instance<_Thing>::modify()
+inline void widget::_instance<_Thing>::inc()
 {
-    _thing.modify();
+    _thing.inc();
 }
 
 inline void widget::display(button b = button()) const
@@ -651,10 +659,10 @@ inline void widget::display(button b = button()) const
     std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->display(b);
 }
 
-inline void widget::modify()
+inline void widget::inc()
 {
     _common::_mutate();
-    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->modify();
+    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->inc();
 }
 
 template<typename _Thing>
@@ -664,15 +672,26 @@ inline void button::_instance<_Thing>::display(button b) const
 }
 
 template<typename _Thing>
-inline void button::_instance<_Thing>::modify()
+inline void button::_instance<_Thing>::inc()
 {
-    _thing.modify();
+    _thing.inc();
 }
 
 template<typename _Thing>
 inline void button::_instance<_Thing>::push()
 {
     _thing.push();
+}
+
+inline void button::display(button b = button()) const
+{
+    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->display(b);
+}
+
+inline void button::inc()
+{
+    _common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->inc();
 }
 
 inline void button::push()
@@ -712,12 +731,6 @@ inline void widget_number::_instance<_Thing>::display(button b) const
 }
 
 template<typename _Thing>
-inline void widget_number::_instance<_Thing>::modify()
-{
-    _thing.modify();
-}
-
-template<typename _Thing>
 inline void widget_number::_instance<_Thing>::inc()
 {
     _thing.inc();
@@ -729,16 +742,21 @@ inline void widget_number::_instance<_Thing>::dec()
     _thing.dec();
 }
 
+inline void widget_number::display(button b = button()) const
+{
+    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->display(b);
+}
+
 inline void widget_number::inc()
 {
     _common::_mutate();
-    std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared)->inc();
+    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->inc();
 }
 
 inline void widget_number::dec()
 {
     _common::_mutate();
-    std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared)->dec();
+    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->dec();
 }
 
 template<typename Data>
@@ -760,6 +778,20 @@ template<typename _Thing>
 inline Data numeric<Data>::_instance<_Thing>::get() const
 {
     return _thing.get();
+}
+
+template<typename Data>
+inline void numeric<Data>::inc()
+{
+    _common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->inc();
+}
+
+template<typename Data>
+inline void numeric<Data>::dec()
+{
+    _common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->dec();
 }
 
 template<typename Data>
