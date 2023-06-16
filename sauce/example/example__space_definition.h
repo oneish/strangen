@@ -5,8 +5,40 @@ namespace example
 {
     strange::space definition()
     {
-        strange::space space;
-        // ...
-        return space;
+        return
+        {
+            // space
+            .name = "example",
+            .abstractions =
+            {
+                {
+                    // abstraction
+                    .name = "widget",
+                    .operations =
+                    {
+                        {
+                            // operation
+                            .name = "display",
+                            .parameters =
+                            {
+                                {
+                                    // parameter
+                                    .type = "button",
+                                    .name = "b",
+                                    .argument = "button()",
+                                },
+                            },
+                            .constness = true,
+                            .result = "void",
+                        },
+                        {
+                            // operation
+                            .name = "modify",
+                            .result = "void",
+                        },
+                    },
+                },
+            },
+        };
     }
 }

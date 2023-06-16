@@ -10,7 +10,7 @@ struct operation
 {
     std::string name;
     std::vector<strange::parameter> parameters;
-    bool constness;
+    bool constness = false;
     std::string result;
 };
 

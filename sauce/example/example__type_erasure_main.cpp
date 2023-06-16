@@ -124,5 +124,7 @@ int main()
     ni1.inc();
     std::cout << ni1.get() << std::endl;
 
+    example::definition();
+
     return 0;
 }
