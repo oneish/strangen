@@ -33,7 +33,7 @@ namespace example
                         },
                         {
                             // operation
-                            .name = "modify",
+                            .name = "inc",
                             .result = "void",
                         },
                     },
@@ -78,6 +78,31 @@ namespace example
                     {
                         "widget",
                         "number",
+                    },
+                },
+                {
+                    // abstraction
+                    .parameters =
+                    {
+                        {
+                            // parameter
+                            .type = "typename",
+                            .name = "Data",
+                            .argument = "int",
+                        },
+                    },
+                    .name = "numeric",
+                    .parents =
+                    {
+                        "number",
+                    },
+                    .operations =
+                    {
+                        {
+                            .name = "get",
+                            .constness = true,
+                            .result = "Data",
+                        },
                     },
                 },
             },
