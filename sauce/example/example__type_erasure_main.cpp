@@ -1,5 +1,8 @@
 #include "example__type_erasure.h"
-#include "example__space_definition.h"
+namespace temp
+{
+#include "example__space_transformation_3.h"
+}
 #include <iostream>
 
 struct implementation
@@ -120,8 +123,6 @@ int main()
     auto ni1 = example::numeric<int>::_make<implementation>();
     ni1.inc();
     std::cout << ni1.get() << std::endl;
-
-    example::definition();
 
     return 0;
 }
