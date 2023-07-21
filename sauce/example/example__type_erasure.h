@@ -57,7 +57,11 @@ public:
     inline _Other _dynamic() const
     {
         _Other other(_shared);
-        return other._valid() ? other : _Other();
+        if (other._valid())
+        {
+            return other;
+        }
+        return _Other();
     }
 };
 
