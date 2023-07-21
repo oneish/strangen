@@ -46,6 +46,12 @@ public:
     {
         return _shared.operator bool();
     }
+
+    template<typename _Other>
+    inline explicit operator _Other() const
+    {
+        return _Other(_shared);
+    }
 };
 
 struct widget : virtual _common
@@ -124,6 +130,11 @@ public:
     inline static auto _make(_Args && ... _args) -> widget
     {
         return widget(std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<widget::_derived>(_common::_shared).operator bool();
     }
 
     inline auto display(button b) const -> void;
@@ -214,6 +225,11 @@ public:
         return button(std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...));
     }
 
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<button::_derived>(_common::_shared).operator bool();
+    }
+
     inline auto display(button b) const -> void;
 
     inline auto inc() -> void;
@@ -297,6 +313,11 @@ public:
     inline static auto _make(_Args && ... _args) -> number
     {
         return number(std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<number::_derived>(_common::_shared).operator bool();
     }
 
     inline auto inc() -> void;
@@ -392,6 +413,11 @@ public:
             std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...)));
     }
 
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared).operator bool();
+    }
+
     inline auto display(button b) const -> void;
 
     inline auto inc() -> void;
@@ -481,6 +507,11 @@ public:
     inline static auto _make(_Args && ... _args) -> numeric
     {
         return numeric(std::make_shared<numeric::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<numeric::_derived>(_common::_shared).operator bool();
     }
 
     inline auto inc() -> void;

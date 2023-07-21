@@ -71,6 +71,24 @@ int main()
     b1.push();
 
     w1 = b1;
+    b1 = static_cast<example::button>(w1);
+    if (b1._valid())
+    {
+        std::cout << "yes" << std::endl;
+    }
+    else
+    {
+        std::cout << "no" << std::endl;
+    }
+
+    if (static_cast<example::number>(w1)._valid())
+    {
+        std::cout << "yes" << std::endl;
+    }
+    else
+    {
+        std::cout << "no" << std::endl;
+    }
 
     auto n1 = example::number::_make<implementation>();
     n1.inc();
