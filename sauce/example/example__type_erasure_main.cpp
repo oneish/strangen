@@ -71,7 +71,7 @@ int main()
     b1.push();
 
     w1 = b1;
-    b1 = static_cast<example::button>(w1);
+    b1 = w1._static<example::button>();
     if (b1._valid())
     {
         std::cout << "yes" << std::endl;
@@ -81,7 +81,16 @@ int main()
         std::cout << "no" << std::endl;
     }
 
-    if (static_cast<example::number>(w1)._valid())
+    if (w1._static<example::number>()._valid())
+    {
+        std::cout << "yes" << std::endl;
+    }
+    else
+    {
+        std::cout << "no" << std::endl;
+    }
+
+    if (w1._dynamic<example::number>()._something())
     {
         std::cout << "yes" << std::endl;
     }

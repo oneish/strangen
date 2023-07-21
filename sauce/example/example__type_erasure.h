@@ -48,9 +48,16 @@ public:
     }
 
     template<typename _Other>
-    inline explicit operator _Other() const
+    inline _Other _static() const
     {
         return _Other(_shared);
+    }
+
+    template<typename _Other>
+    inline _Other _dynamic() const
+    {
+        _Other other(_shared);
+        return other._valid() ? other : _Other();
     }
 };
 
