@@ -68,31 +68,6 @@ int main()
     {
         std::cout << "no" << std::endl;
     }
-    if (b1._dynamic())
-    {
-        std::cout << "yes" << std::endl;
-    }
-    else
-    {
-        std::cout << "no" << std::endl;
-    }
-// seg fault
-//    if (static_cast<example::number>(b1)._something())
-//    {
-//        std::cout << "yes" << std::endl;
-//    }
-//    else
-//    {
-//        std::cout << "no" << std::endl;
-//    }
-//    if (static_cast<example::number>(b1)._dynamic())
-//    {
-//        std::cout << "yes" << std::endl;
-//    }
-//    else
-//    {
-//        std::cout << "no" << std::endl;
-//    }
     b1.push();
 
     w1 = b1;
@@ -108,7 +83,7 @@ int main()
     example::number wn2 = wn1;
     wn2.inc();
 
-    example::widget wn3 = wn1; // = wn2; - seg fault
+    example::widget wn3 = wn1;
     wn3.inc();
     wn3.display();
 
@@ -117,12 +92,6 @@ int main()
     wn1.display();
 
     increment(wn2);
-    
-    wn3 = wn2;
-    wn3.display();
-    increment(wn2);
-    wn3 = wn2;
-    wn3.display();
 
     auto ni1 = example::numeric<int>::_make<implementation>();
     ni1.inc();

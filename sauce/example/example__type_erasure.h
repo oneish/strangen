@@ -84,34 +84,6 @@ struct widget : virtual _common
         return *this;
     }
 
-    inline widget(_common const & other)
-    :_common(other)
-    {
-    }
-
-    inline widget(_common && other)
-    :_common(std::move(other))
-    {
-    }
-
-    inline auto operator=(_common const & other) -> widget &
-    {
-        _common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(_common && other) -> widget &
-    {
-        _common::operator=(std::move(other));
-        return *this;
-    }
-
-    template <typename _Other>
-    inline operator _Other() const
-    {
-        return _Other(*this);
-    }
-
 protected:
     struct _derived : _common::_base
     {
@@ -152,11 +124,6 @@ public:
     inline static auto _make(_Args && ... _args) -> widget
     {
         return widget(std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...));
-    }
-
-    inline auto _dynamic() const -> bool
-    {
-        return std::dynamic_pointer_cast<widget::_derived>(_common::_shared).operator bool();
     }
 
     inline auto display(button b) const -> void;
@@ -204,36 +171,6 @@ struct button : widget
         return *this;
     }
 
-    inline button(_common const & other)
-    :_common(other)
-    ,widget()
-    {
-    }
-
-    inline button(_common && other)
-    :_common(std::move(other))
-    ,widget()
-    {
-    }
-
-    inline auto operator=(_common const & other) -> button &
-    {
-        widget::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(_common && other) -> button &
-    {
-        widget::operator=(std::move(other));
-        return *this;
-    }
-
-    template <typename _Other>
-    inline operator _Other() const
-    {
-        return _Other(*this);
-    }
-
 protected:
     struct _derived : widget::_derived
     {
@@ -275,11 +212,6 @@ public:
     inline static auto _make(_Args && ... _args) -> button
     {
         return button(std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...));
-    }
-
-    inline auto _dynamic() const -> bool
-    {
-        return std::dynamic_pointer_cast<button::_derived>(_common::_shared).operator bool();
     }
 
     inline auto display(button b) const -> void;
@@ -325,34 +257,6 @@ struct number : virtual _common
         return *this;
     }
 
-    inline number(_common const & other)
-    :_common(other)
-    {
-    }
-
-    inline number(_common && other)
-    :_common(std::move(other))
-    {
-    }
-
-    inline auto operator=(_common const & other) -> number &
-    {
-        _common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(_common && other) -> number &
-    {
-        _common::operator=(std::move(other));
-        return *this;
-    }
-
-    template <typename _Other>
-    inline operator _Other() const
-    {
-        return _Other(*this);
-    }
-
 protected:
     struct _derived : _common::_base
     {
@@ -393,11 +297,6 @@ public:
     inline static auto _make(_Args && ... _args) -> number
     {
         return number(std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...));
-    }
-
-    inline auto _dynamic() const -> bool
-    {
-        return std::dynamic_pointer_cast<number::_derived>(_common::_shared).operator bool();
     }
 
     inline auto inc() -> void;
@@ -449,38 +348,6 @@ struct widget_number : widget, number
         return *this;
     }
 
-    inline widget_number(_common const & other)
-    :_common(other)
-    ,widget()
-    ,number()
-    {
-    }
-
-    inline widget_number(_common && other)
-    :_common(std::move(other))
-    ,widget()
-    ,number()
-    {
-    }
-
-    inline auto operator=(_common const & other) -> widget_number &
-    {
-        number::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(_common && other) -> widget_number &
-    {
-        number::operator=(std::move(other));
-        return *this;
-    }
-
-    template <typename _Other>
-    inline operator _Other() const
-    {
-        return _Other(*this);
-    }
-
 protected:
     struct _derived : widget::_derived, number::_derived
     {
@@ -523,11 +390,6 @@ public:
     {
         return widget_number(std::static_pointer_cast<widget::_derived>(
             std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...)));
-    }
-
-    inline auto _dynamic() const -> bool
-    {
-        return std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared).operator bool();
     }
 
     inline auto display(button b) const -> void;
@@ -578,36 +440,6 @@ struct numeric : number
         return *this;
     }
 
-    inline numeric(_common const & other)
-    :_common(other)
-    ,number()
-    {
-    }
-
-    inline numeric(_common && other)
-    :_common(std::move(other))
-    ,number()
-    {
-    }
-
-    inline auto operator=(_common const & other) -> numeric &
-    {
-        number::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(_common && other) -> numeric &
-    {
-        number::operator=(std::move(other));
-        return *this;
-    }
-
-    template <typename _Other>
-    inline operator _Other() const
-    {
-        return _Other(*this);
-    }
-
 protected:
     struct _derived : number::_derived
     {
@@ -649,11 +481,6 @@ public:
     inline static auto _make(_Args && ... _args) -> numeric
     {
         return numeric(std::make_shared<numeric::_instance<_Thing>>(std::forward<_Args>(_args) ...));
-    }
-
-    inline auto _dynamic() const -> bool
-    {
-        return std::dynamic_pointer_cast<numeric::_derived>(_common::_shared).operator bool();
     }
 
     inline auto inc() -> void;
