@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <type_traits>
 
 namespace example
 {
@@ -131,7 +132,11 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            return std::make_shared<widget::_instance<_Thing>>(_thing);
+            if constexpr (std::is_copy_constructible_v<_Thing>)
+            {
+                return std::make_shared<widget::_instance<_Thing>>(_thing);
+            }
+            throw std::runtime_error("widget clone called for non-copy-constructible type");
         }
 
         inline auto display(button b) const -> void final;
@@ -248,7 +253,11 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            return std::make_shared<button::_instance<_Thing>>(_thing);
+            if constexpr (std::is_copy_constructible_v<_Thing>)
+            {
+                return std::make_shared<button::_instance<_Thing>>(_thing);
+            }
+            throw std::runtime_error("button clone called for non-copy-constructible type");
         }
 
         inline auto display(button b) const -> void final;
@@ -364,7 +373,11 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            return std::make_shared<number::_instance<_Thing>>(_thing);
+            if constexpr (std::is_copy_constructible_v<_Thing>)
+            {
+                return std::make_shared<number::_instance<_Thing>>(_thing);
+            }
+            throw std::runtime_error("number clone called for non-copy-constructible type");
         }
 
         inline auto inc() -> void final;
@@ -486,8 +499,12 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            return std::static_pointer_cast<widget::_derived>(
-                std::make_shared<widget_number::_instance<_Thing>>(_thing));
+            if constexpr (std::is_copy_constructible_v<_Thing>)
+            {
+                return std::static_pointer_cast<widget::_derived>(
+                    std::make_shared<widget_number::_instance<_Thing>>(_thing));
+            }
+            throw std::runtime_error("widget_number clone called for non-copy-constructible type");
         }
 
         inline auto display(button b) const -> void final;
@@ -610,7 +627,11 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            return std::make_shared<numeric::_instance<_Thing>>(_thing);
+            if constexpr (std::is_copy_constructible_v<_Thing>)
+            {
+                return std::make_shared<numeric::_instance<_Thing>>(_thing);
+            }
+            throw std::runtime_error("numeric clone called for non-copy-constructible type");
         }
 
         inline auto inc() -> void final;

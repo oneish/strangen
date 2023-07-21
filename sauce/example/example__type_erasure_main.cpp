@@ -7,6 +7,9 @@ namespace temp
 
 struct implementation
 {
+    // implementation() = default;
+    // implementation(implementation const&) = delete;
+
     int x = 0;
  
     inline void display(example::button b) const
@@ -73,22 +76,23 @@ int main()
     {
         std::cout << "no" << std::endl;
     }
-    if (static_cast<example::number>(b1)._something())
-    {
-        std::cout << "yes" << std::endl;
-    }
-    else
-    {
-        std::cout << "no" << std::endl;
-    }
-    if (static_cast<example::number>(b1)._dynamic())
-    {
-        std::cout << "yes" << std::endl;
-    }
-    else
-    {
-        std::cout << "no" << std::endl;
-    }
+// seg fault
+//    if (static_cast<example::number>(b1)._something())
+//    {
+//        std::cout << "yes" << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "no" << std::endl;
+//    }
+//    if (static_cast<example::number>(b1)._dynamic())
+//    {
+//        std::cout << "yes" << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "no" << std::endl;
+//    }
     b1.push();
 
     w1 = b1;
@@ -104,7 +108,7 @@ int main()
     example::number wn2 = wn1;
     wn2.inc();
 
-    example::widget wn3 = wn2;
+    example::widget wn3 = wn1; // = wn2; - seg fault
     wn3.inc();
     wn3.display();
 
