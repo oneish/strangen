@@ -84,9 +84,10 @@ public:
     }
 
     template<typename Message>
-    inline auto _error(Message && message) -> void
+    inline auto _error(Message && message) -> std::string
     {
-        _shared = std::make_shared<_common::_message>(message);
+        _shared = std::make_shared<_common::_message>(std::forward<Message>(message));
+        return _shared->_error();
     }
 
     inline auto _error() const -> std::string

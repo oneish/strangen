@@ -62,11 +62,11 @@ int main()
     auto b1 = example::button::_make<implementation>();
     if (b1._something())
     {
-        std::cout << "yes" << std::endl;
+        std::cout << "yes" << b1._error() << std::endl;
     }
     else
     {
-        std::cout << "no" << std::endl;
+        std::cout << "no" << b1._error() << std::endl;
     }
     b1.push();
 
@@ -74,30 +74,33 @@ int main()
     b1 = w1._static<example::button>();
     if (b1._valid())
     {
-        std::cout << "yes" << std::endl;
+        std::cout << "yes" << b1._error() << std::endl;
     }
     else
     {
-        std::cout << "no" << std::endl;
+        std::cout << "no" << b1._error() << std::endl;
     }
 
     if (w1._static<example::number>()._valid())
     {
-        std::cout << "yes" << std::endl;
+        std::cout << "yes" << b1._error() << std::endl;
     }
     else
     {
-        std::cout << "no" << std::endl;
+        std::cout << "no" << b1._error() << std::endl;
     }
 
     if (w1._dynamic<example::number>()._something())
     {
-        std::cout << "yes" << std::endl;
+        std::cout << "yes" << b1._error() << std::endl;
     }
     else
     {
-        std::cout << "no" << std::endl;
+        std::cout << "no" << b1._error() << std::endl;
     }
+
+    std::cout << w1._error("help!") << std::endl;
+    std::cout << w1._error() << std::endl;
 
     auto n1 = example::number::_make<implementation>();
     n1.inc();
