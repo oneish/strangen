@@ -22,7 +22,7 @@ protected:
 
         virtual inline auto _error() const -> std::string
         {
-            return std::string();
+            return std::string{};
         }
     };
 
@@ -31,12 +31,12 @@ protected:
     inline _common() = default;
 
     explicit inline _common(std::shared_ptr<_common::_base> const & shared)
-    :_shared(shared)
+    :_shared{shared}
     {
     }
 
     explicit inline _common(std::shared_ptr<_common::_base> && shared)
-    :_shared(std::move(shared))
+    :_shared{std::move(shared)}
     {
     }
 
@@ -59,7 +59,7 @@ private:
     {
         template<typename Message>
         inline _message(Message && msg)
-        :message(std::forward<Message>(msg))
+        :message{std::forward<Message>(msg)}
         {
         }
 
@@ -96,24 +96,24 @@ public:
         {
             return _shared->_error();
         }
-        return std::string();
+        return std::string{};
     }
 
     template<typename Other>
     inline auto _static() const -> Other
     {
-        return Other(_shared);
+        return Other{_shared};
     }
 
     template<typename Other>
     inline auto _dynamic() const -> Other
     {
-        Other other(_shared);
+        Other other{_shared};
         if (other._valid())
         {
             return other;
         }
-        return Other();
+        return Other{};
     }
 };
 
@@ -122,12 +122,12 @@ struct widget : virtual _common
     inline widget() = default;
 
     inline widget(widget const & other)
-    :_common(other)
+    :_common{other}
     {
     }
 
     inline widget(widget && other)
-    :_common(std::move(other))
+    :_common{std::move(other)}
     {
     }
 
@@ -144,12 +144,12 @@ struct widget : virtual _common
     }
 
     explicit inline widget(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
+    :_common{shared}
     {
     }
 
     explicit inline widget(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
+    :_common{std::move(shared)}
     {
     }
 
@@ -166,8 +166,8 @@ private:
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :widget::_derived()
-        ,_thing(std::forward<_Args>(_args) ...)
+        :widget::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
         {
         }
 
@@ -192,7 +192,7 @@ public:
     template<typename _Thing, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget
     {
-        return widget(std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+        return widget{std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
@@ -210,14 +210,14 @@ struct button : widget
     inline button() = default;
 
     inline button(button const & other)
-    :_common(other)
-    ,widget()
+    :_common{other}
+    ,widget{}
     {
     }
 
     inline button(button && other)
-    :_common(std::move(other))
-    ,widget()
+    :_common{std::move(other)}
+    ,widget{}
     {
     }
 
@@ -234,14 +234,14 @@ struct button : widget
     }
 
     explicit inline button(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    ,widget()
+    :_common{shared}
+    ,widget{}
     {
     }
 
     explicit inline button(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    ,widget()
+    :_common{std::move(shared)}
+    ,widget{}
     {
     }
 
@@ -257,8 +257,8 @@ private:
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :button::_derived()
-        ,_thing(std::forward<_Args>(_args) ...)
+        :button::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
         {
         }
 
@@ -285,7 +285,7 @@ public:
     template<typename _Thing, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> button
     {
-        return button(std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+        return button{std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
@@ -305,12 +305,12 @@ struct number : virtual _common
     inline number() = default;
 
     inline number(number const & other)
-    :_common(other)
+    :_common{other}
     {
     }
 
     inline number(number && other)
-    :_common(std::move(other))
+    :_common{std::move(other)}
     {
     }
 
@@ -327,12 +327,12 @@ struct number : virtual _common
     }
 
     explicit inline number(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
+    :_common{shared}
     {
     }
 
     explicit inline number(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
+    :_common{std::move(shared)}
     {
     }
 
@@ -349,8 +349,8 @@ private:
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :number::_derived()
-        ,_thing(std::forward<_Args>(_args) ...)
+        :number::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
         {
         }
 
@@ -375,7 +375,7 @@ public:
     template<typename _Thing, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> number
     {
-        return number(std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+        return number{std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
@@ -393,16 +393,16 @@ struct widget_number : widget, number
     inline widget_number() = default;
 
     inline widget_number(widget_number const & other)
-    :_common(other)
-    ,widget()
-    ,number()
+    :_common{other}
+    ,widget{}
+    ,number{}
     {
     }
 
     inline widget_number(widget_number && other)
-    :_common(std::move(other))
-    ,widget()
-    ,number()
+    :_common{std::move(other)}
+    ,widget{}
+    ,number{}
     {
     }
 
@@ -419,16 +419,16 @@ struct widget_number : widget, number
     }
 
     explicit inline widget_number(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    ,widget()
-    ,number()
+    :_common{shared}
+    ,widget{}
+    ,number{}
     {
     }
 
     explicit inline widget_number(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    ,widget()
-    ,number()
+    :_common{std::move(shared)}
+    ,widget{}
+    ,number{}
     {
     }
 
@@ -443,8 +443,8 @@ private:
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :widget_number::_derived()
-        ,_thing(std::forward<_Args>(_args) ...)
+        :widget_number::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
         {
         }
 
@@ -472,8 +472,8 @@ public:
     template<typename _Thing, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget_number
     {
-        return widget_number(std::static_pointer_cast<widget::_derived>(
-            std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...)));
+        return widget_number{std::static_pointer_cast<widget::_derived>(
+            std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
@@ -494,14 +494,14 @@ struct numeric : number
     inline numeric() = default;
 
     inline numeric(numeric const & other)
-    :_common(other)
-    ,number()
+    :_common{other}
+    ,number{}
     {
     }
 
     inline numeric(numeric && other)
-    :_common(std::move(other))
-    ,number()
+    :_common{std::move(other)}
+    ,number{}
     {
     }
 
@@ -518,14 +518,14 @@ struct numeric : number
     }
 
     explicit inline numeric(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    ,number()
+    :_common{shared}
+    ,number{}
     {
     }
 
     explicit inline numeric(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    ,number()
+    :_common{std::move(shared)}
+    ,number{}
     {
     }
 
@@ -541,8 +541,8 @@ private:
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :numeric::_derived()
-        ,_thing(std::forward<_Args>(_args) ...)
+        :numeric::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
         {
         }
 
@@ -569,7 +569,7 @@ public:
     template<typename _Thing, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> numeric
     {
-        return numeric(std::make_shared<numeric::_instance<_Thing>>(std::forward<_Args>(_args) ...));
+        return numeric{std::make_shared<numeric::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
