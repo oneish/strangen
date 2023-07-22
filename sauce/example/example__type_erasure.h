@@ -26,7 +26,36 @@ protected:
         }
     };
 
-    struct _message final : _base
+    std::shared_ptr<_common::_base> _shared;
+
+    inline _common() = default;
+
+    explicit inline _common(std::shared_ptr<_common::_base> const & shared)
+    :_shared(shared)
+    {
+    }
+
+    explicit inline _common(std::shared_ptr<_common::_base> && shared)
+    :_shared(std::move(shared))
+    {
+    }
+
+    inline auto _mutate() -> void
+    {
+        if (_shared.use_count() > 1)
+        {
+            try
+            {
+                _shared = _shared->_clone();
+            }
+            catch(bool const &)
+            {
+            }
+        }
+    }
+
+private:
+    struct _message final : _common::_base
     {
         template<typename Message>
         inline _message(Message && msg)
@@ -48,34 +77,6 @@ protected:
         std::string const message;
     };
 
-    std::shared_ptr<_common::_base> _shared;
-
-    inline _common() = default;
-
-    inline _common(std::shared_ptr<_common::_base> const & shared)
-    :_shared(shared)
-    {
-    }
-
-    inline _common(std::shared_ptr<_common::_base> && shared)
-    :_shared(std::move(shared))
-    {
-    }
-
-    inline auto _mutate() -> void
-    {
-        if (_shared.use_count() > 1)
-        {
-            try
-            {
-                _shared = _shared->_clone();
-            }
-            catch(bool const &)
-            {
-            }
-        }
-    }
-
 public:
     inline auto _something() const -> bool
     {
@@ -85,7 +86,7 @@ public:
     template<typename Message>
     inline auto _error(Message && message) -> void
     {
-        _shared = std::make_shared<_message>(message);
+        _shared = std::make_shared<_common::_message>(message);
     }
 
     inline auto _error() const -> std::string
@@ -119,16 +120,6 @@ struct widget : virtual _common
 {
     inline widget() = default;
 
-    inline widget(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    {
-    }
-
-    inline widget(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    {
-    }
-
     inline widget(widget const & other)
     :_common(other)
     {
@@ -149,6 +140,16 @@ struct widget : virtual _common
     {
         _common::operator=(std::move(other));
         return *this;
+    }
+
+    explicit inline widget(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    {
+    }
+
+    explicit inline widget(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    {
     }
 
 protected:
@@ -207,18 +208,6 @@ struct button : widget
 {
     inline button() = default;
 
-    inline button(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    ,widget()
-    {
-    }
-
-    inline button(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    ,widget()
-    {
-    }
-
     inline button(button const & other)
     :_common(other)
     ,widget()
@@ -241,6 +230,18 @@ struct button : widget
     {
         widget::operator=(std::move(other));
         return *this;
+    }
+
+    explicit inline button(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    ,widget()
+    {
+    }
+
+    explicit inline button(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    ,widget()
+    {
     }
 
 protected:
@@ -302,16 +303,6 @@ struct number : virtual _common
 {
     inline number() = default;
 
-    inline number(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    {
-    }
-
-    inline number(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    {
-    }
-
     inline number(number const & other)
     :_common(other)
     {
@@ -332,6 +323,16 @@ struct number : virtual _common
     {
         _common::operator=(std::move(other));
         return *this;
+    }
+
+    explicit inline number(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    {
+    }
+
+    explicit inline number(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    {
     }
 
 protected:
@@ -390,20 +391,6 @@ struct widget_number : widget, number
 {
     inline widget_number() = default;
 
-    inline widget_number(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    ,widget()
-    ,number()
-    {
-    }
-
-    inline widget_number(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    ,widget()
-    ,number()
-    {
-    }
-
     inline widget_number(widget_number const & other)
     :_common(other)
     ,widget()
@@ -428,6 +415,20 @@ struct widget_number : widget, number
     {
         number::operator=(std::move(other));
         return *this;
+    }
+
+    explicit inline widget_number(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    ,widget()
+    ,number()
+    {
+    }
+
+    explicit inline widget_number(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    ,widget()
+    ,number()
+    {
     }
 
 protected:
@@ -491,18 +492,6 @@ struct numeric : number
 {
     inline numeric() = default;
 
-    inline numeric(std::shared_ptr<_common::_base> const & shared)
-    :_common(shared)
-    ,number()
-    {
-    }
-
-    inline numeric(std::shared_ptr<_common::_base> && shared)
-    :_common(std::move(shared))
-    ,number()
-    {
-    }
-
     inline numeric(numeric const & other)
     :_common(other)
     ,number()
@@ -525,6 +514,18 @@ struct numeric : number
     {
         number::operator=(std::move(other));
         return *this;
+    }
+
+    explicit inline numeric(std::shared_ptr<_common::_base> const & shared)
+    :_common(shared)
+    ,number()
+    {
+    }
+
+    explicit inline numeric(std::shared_ptr<_common::_base> && shared)
+    :_common(std::move(shared))
+    ,number()
+    {
     }
 
 protected:
