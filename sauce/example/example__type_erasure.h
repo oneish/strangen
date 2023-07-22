@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <string>
+#include <stdexcept>
 #include <type_traits>
 
 namespace example
@@ -17,6 +19,33 @@ protected:
     struct _base
     {
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
+
+        virtual inline auto _error() const -> std::string
+        {
+            return std::string();
+        }
+    };
+
+    struct _message final : _base
+    {
+        template<typename Message>
+        inline _message(Message && msg)
+        :message(std::forward<Message>(msg))
+        {
+        }
+
+        inline auto _clone() const -> std::shared_ptr<_common::_base> final
+        {
+            throw false;
+        }
+
+        inline auto _error() const -> std::string final
+        {
+            return message;
+        }
+
+    private:
+        std::string const message;
     };
 
     std::shared_ptr<_common::_base> _shared;
@@ -37,31 +66,52 @@ protected:
     {
         if (_shared.use_count() > 1)
         {
-            _shared = _shared->_clone();
+            try
+            {
+                _shared = _shared->_clone();
+            }
+            catch(bool const &)
+            {
+            }
         }
     }
 
 public:
-    inline auto _something() -> bool
+    inline auto _something() const -> bool
     {
         return _shared.operator bool();
     }
 
-    template<typename _Other>
-    inline _Other _static() const
+    template<typename Message>
+    inline auto _error(Message && message) -> void
     {
-        return _Other(_shared);
+        _shared = std::make_shared<_message>(message);
     }
 
-    template<typename _Other>
-    inline _Other _dynamic() const
+    inline auto _error() const -> std::string
     {
-        _Other other(_shared);
+        if (_shared)
+        {
+            return _shared->_error();
+        }
+        return std::string();
+    }
+
+    template<typename Other>
+    inline auto _static() const -> Other
+    {
+        return Other(_shared);
+    }
+
+    template<typename Other>
+    inline auto _dynamic() const -> Other
+    {
+        Other other(_shared);
         if (other._valid())
         {
             return other;
         }
-        return _Other();
+        return Other();
     }
 };
 
@@ -125,7 +175,7 @@ private:
             {
                 return std::make_shared<widget::_instance<_Thing>>(_thing);
             }
-            throw std::runtime_error("widget clone called for non-copy-constructible type");
+            throw true;
         }
 
         inline auto display(button b) const -> void final;
@@ -216,7 +266,7 @@ private:
             {
                 return std::make_shared<button::_instance<_Thing>>(_thing);
             }
-            throw std::runtime_error("button clone called for non-copy-constructible type");
+            throw true;
         }
 
         inline auto display(button b) const -> void final;
@@ -308,7 +358,7 @@ private:
             {
                 return std::make_shared<number::_instance<_Thing>>(_thing);
             }
-            throw std::runtime_error("number clone called for non-copy-constructible type");
+            throw true;
         }
 
         inline auto inc() -> void final;
@@ -403,7 +453,7 @@ private:
                 return std::static_pointer_cast<widget::_derived>(
                     std::make_shared<widget_number::_instance<_Thing>>(_thing));
             }
-            throw std::runtime_error("widget_number clone called for non-copy-constructible type");
+            throw true;
         }
 
         inline auto display(button b) const -> void final;
@@ -500,7 +550,7 @@ private:
             {
                 return std::make_shared<numeric::_instance<_Thing>>(_thing);
             }
-            throw std::runtime_error("numeric clone called for non-copy-constructible type");
+            throw true;
         }
 
         inline auto inc() -> void final;
