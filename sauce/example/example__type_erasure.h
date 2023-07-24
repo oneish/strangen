@@ -18,6 +18,7 @@ struct _common
 protected:
     struct _base
     {
+        virtual auto _address() const -> void const * = 0;
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
 
         virtual inline auto _error() const -> std::string
@@ -63,6 +64,11 @@ private:
         {
         }
 
+        inline auto _address() const -> void const * final
+        {
+            return &message;
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             throw false;
@@ -78,6 +84,15 @@ private:
     };
 
 public:
+    inline auto _address() const -> void const *
+    {
+        if (_shared)
+        {
+            return _shared->_address();
+        }
+        return nullptr;
+    }
+
     inline auto _something() const -> bool
     {
         return _shared.operator bool();
@@ -171,13 +186,21 @@ private:
         {
         }
 
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             if constexpr (std::is_copy_constructible_v<_Thing>)
             {
                 return std::make_shared<widget::_instance<_Thing>>(_thing);
             }
-            throw true;
+            else
+            {
+                throw true;
+            }
         }
 
         inline auto display(button b) const -> void final;
@@ -262,13 +285,21 @@ private:
         {
         }
 
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             if constexpr (std::is_copy_constructible_v<_Thing>)
             {
                 return std::make_shared<button::_instance<_Thing>>(_thing);
             }
-            throw true;
+            else
+            {
+                throw true;
+            }
         }
 
         inline auto display(button b) const -> void final;
@@ -354,13 +385,21 @@ private:
         {
         }
 
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             if constexpr (std::is_copy_constructible_v<_Thing>)
             {
                 return std::make_shared<number::_instance<_Thing>>(_thing);
             }
-            throw true;
+            else
+            {
+                throw true;
+            }
         }
 
         inline auto inc() -> void final;
@@ -448,6 +487,11 @@ private:
         {
         }
 
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             if constexpr (std::is_copy_constructible_v<_Thing>)
@@ -455,7 +499,10 @@ private:
                 return std::static_pointer_cast<widget::_derived>(
                     std::make_shared<widget_number::_instance<_Thing>>(_thing));
             }
-            throw true;
+            else
+            {
+                throw true;
+            }
         }
 
         inline auto display(button b) const -> void final;
@@ -546,13 +593,21 @@ private:
         {
         }
 
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             if constexpr (std::is_copy_constructible_v<_Thing>)
             {
                 return std::make_shared<numeric::_instance<_Thing>>(_thing);
             }
-            throw true;
+            else
+            {
+                throw true;
+            }
         }
 
         inline auto inc() -> void final;
