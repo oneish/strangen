@@ -19,6 +19,7 @@ protected:
     struct _base
     {
         virtual auto _address() const -> void const * = 0;
+        virtual auto _sizeof() const -> size_t = 0;
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
 
         virtual inline auto _error() const -> std::string
@@ -69,6 +70,11 @@ private:
             return &message;
         }
 
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(message);
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             throw false;
@@ -91,6 +97,15 @@ public:
             return _shared->_address();
         }
         return nullptr;
+    }
+
+    inline auto _sizeof() const -> size_t
+    {
+        if (_shared)
+        {
+            return _shared->_sizeof();
+        }
+        return static_cast<size_t>(0);
     }
 
     inline auto _something() const -> bool
@@ -191,6 +206,11 @@ private:
             return &_thing;
         }
 
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             if constexpr (std::is_copy_constructible_v<_Thing>)
@@ -288,6 +308,11 @@ private:
         inline auto _address() const -> void const * final
         {
             return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
         }
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
@@ -390,6 +415,11 @@ private:
             return &_thing;
         }
 
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             if constexpr (std::is_copy_constructible_v<_Thing>)
@@ -490,6 +520,11 @@ private:
         inline auto _address() const -> void const * final
         {
             return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
         }
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
@@ -596,6 +631,11 @@ private:
         inline auto _address() const -> void const * final
         {
             return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
         }
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
