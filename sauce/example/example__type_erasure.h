@@ -4,14 +4,8 @@
 #include <stdexcept>
 #include <type_traits>
 
-namespace example
+namespace strange
 {
-
-struct widget;
-struct button;
-struct number;
-struct widget_number;
-template<typename Data = int> struct numeric;
 
 struct _common
 {
@@ -147,44 +141,55 @@ public:
     }
 };
 
-struct widget : virtual _common
+}
+
+namespace example
+{
+
+struct widget;
+struct button;
+struct number;
+struct widget_number;
+template<typename Data = int> struct numeric;
+
+struct widget : virtual strange::_common
 {
     inline widget() = default;
 
     inline widget(widget const & other)
-    :_common{other}
+    :strange::_common{other}
     {
     }
 
     inline widget(widget && other)
-    :_common{std::move(other)}
+    :strange::_common{std::move(other)}
     {
     }
 
     inline auto operator=(widget const & other) -> widget &
     {
-        _common::operator=(other);
+        strange::_common::operator=(other);
         return *this;
     }
 
     inline auto operator=(widget && other) -> widget &
     {
-        _common::operator=(std::move(other));
+        strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline widget(std::shared_ptr<_common::_base> const & shared)
-    :_common{shared}
+    explicit inline widget(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
     {
     }
 
-    explicit inline widget(std::shared_ptr<_common::_base> && shared)
-    :_common{std::move(shared)}
+    explicit inline widget(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
     {
     }
 
 protected:
-    struct _derived : _common::_base
+    struct _derived : strange::_common::_base
     {
         virtual auto display(button b) const -> void = 0;
         virtual auto inc() -> void = 0;
@@ -211,7 +216,7 @@ private:
             return sizeof(_thing);
         }
 
-        inline auto _clone() const -> std::shared_ptr<_common::_base> final
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
         {
             if constexpr (_Copy)
             {
@@ -240,7 +245,7 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<widget::_derived>(_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared).operator bool();
     }
 
     inline auto display(button b) const -> void;
@@ -253,13 +258,13 @@ struct button : widget
     inline button() = default;
 
     inline button(button const & other)
-    :_common{other}
+    :strange::_common{other}
     ,widget{}
     {
     }
 
     inline button(button && other)
-    :_common{std::move(other)}
+    :strange::_common{std::move(other)}
     ,widget{}
     {
     }
@@ -276,14 +281,14 @@ struct button : widget
         return *this;
     }
 
-    explicit inline button(std::shared_ptr<_common::_base> const & shared)
-    :_common{shared}
+    explicit inline button(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
     ,widget{}
     {
     }
 
-    explicit inline button(std::shared_ptr<_common::_base> && shared)
-    :_common{std::move(shared)}
+    explicit inline button(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
     ,widget{}
     {
     }
@@ -315,7 +320,7 @@ private:
             return sizeof(_thing);
         }
 
-        inline auto _clone() const -> std::shared_ptr<_common::_base> final
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
         {
             if constexpr (_Copy)
             {
@@ -346,7 +351,7 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<button::_derived>(_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<button::_derived>(strange::_common::_shared).operator bool();
     }
 
     inline auto display(button b) const -> void;
@@ -356,44 +361,44 @@ public:
     inline auto push() -> void;
 };
 
-struct number : virtual _common
+struct number : virtual strange::_common
 {
     inline number() = default;
 
     inline number(number const & other)
-    :_common{other}
+    :strange::_common{other}
     {
     }
 
     inline number(number && other)
-    :_common{std::move(other)}
+    :strange::_common{std::move(other)}
     {
     }
 
     inline auto operator=(number const & other) -> number &
     {
-        _common::operator=(other);
+        strange::_common::operator=(other);
         return *this;
     }
 
     inline auto operator=(number && other) -> number &
     {
-        _common::operator=(std::move(other));
+        strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline number(std::shared_ptr<_common::_base> const & shared)
-    :_common{shared}
+    explicit inline number(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
     {
     }
 
-    explicit inline number(std::shared_ptr<_common::_base> && shared)
-    :_common{std::move(shared)}
+    explicit inline number(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
     {
     }
 
 protected:
-    struct _derived : _common::_base
+    struct _derived : strange::_common::_base
     {
         virtual auto inc() -> void = 0;
         virtual auto dec() -> void = 0;
@@ -420,7 +425,7 @@ private:
             return sizeof(_thing);
         }
 
-        inline auto _clone() const -> std::shared_ptr<_common::_base> final
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
         {
             if constexpr (_Copy)
             {
@@ -449,7 +454,7 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<number::_derived>(_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared).operator bool();
     }
 
     inline auto inc() -> void;
@@ -462,14 +467,14 @@ struct widget_number : widget, number
     inline widget_number() = default;
 
     inline widget_number(widget_number const & other)
-    :_common{other}
+    :strange::_common{other}
     ,widget{}
     ,number{}
     {
     }
 
     inline widget_number(widget_number && other)
-    :_common{std::move(other)}
+    :strange::_common{std::move(other)}
     ,widget{}
     ,number{}
     {
@@ -487,15 +492,15 @@ struct widget_number : widget, number
         return *this;
     }
 
-    explicit inline widget_number(std::shared_ptr<_common::_base> const & shared)
-    :_common{shared}
+    explicit inline widget_number(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
     ,widget{}
     ,number{}
     {
     }
 
-    explicit inline widget_number(std::shared_ptr<_common::_base> && shared)
-    :_common{std::move(shared)}
+    explicit inline widget_number(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
     ,widget{}
     ,number{}
     {
@@ -527,7 +532,7 @@ private:
             return sizeof(_thing);
         }
 
-        inline auto _clone() const -> std::shared_ptr<_common::_base> final
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
         {
             if constexpr (_Copy)
             {
@@ -560,7 +565,7 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<widget_number::_derived>(_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<widget_number::_derived>(strange::_common::_shared).operator bool();
     }
 
     inline auto display(button b) const -> void;
@@ -576,13 +581,13 @@ struct numeric : number
     inline numeric() = default;
 
     inline numeric(numeric const & other)
-    :_common{other}
+    :strange::_common{other}
     ,number{}
     {
     }
 
     inline numeric(numeric && other)
-    :_common{std::move(other)}
+    :strange::_common{std::move(other)}
     ,number{}
     {
     }
@@ -599,14 +604,14 @@ struct numeric : number
         return *this;
     }
 
-    explicit inline numeric(std::shared_ptr<_common::_base> const & shared)
-    :_common{shared}
+    explicit inline numeric(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
     ,number{}
     {
     }
 
-    explicit inline numeric(std::shared_ptr<_common::_base> && shared)
-    :_common{std::move(shared)}
+    explicit inline numeric(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
     ,number{}
     {
     }
@@ -638,7 +643,7 @@ private:
             return sizeof(_thing);
         }
 
-        inline auto _clone() const -> std::shared_ptr<_common::_base> final
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
         {
             if constexpr (_Copy)
             {
@@ -669,7 +674,7 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<numeric::_derived>(_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<numeric::_derived>(strange::_common::_shared).operator bool();
     }
 
     inline auto inc() -> void;
@@ -693,13 +698,13 @@ inline auto widget::_instance<_Thing, _Copy>::inc() -> void
 
 inline auto widget::display(button b = button()) const -> void
 {
-    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->display(b);
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->display(b);
 }
 
 inline auto widget::inc() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->inc();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->inc();
 }
 
 template<typename _Thing, bool _Copy>
@@ -722,19 +727,19 @@ inline auto button::_instance<_Thing, _Copy>::push() -> void
 
 inline auto button::display(button b = button()) const -> void
 {
-    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->display(b);
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->display(b);
 }
 
 inline auto button::inc() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->inc();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->inc();
 }
 
 inline auto button::push() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<button::_derived>(_common::_shared)->push();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<button::_derived>(strange::_common::_shared)->push();
 }
 
 template<typename _Thing, bool _Copy>
@@ -751,14 +756,14 @@ inline auto number::_instance<_Thing, _Copy>::dec() -> void
 
 inline auto number::inc() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->inc();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->inc();
 }
 
 inline auto number::dec() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->dec();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->dec();
 }
 
 template<typename _Thing, bool _Copy>
@@ -781,19 +786,19 @@ inline auto widget_number::_instance<_Thing, _Copy>::dec() -> void
 
 inline auto widget_number::display(button b = button()) const -> void
 {
-    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->display(b);
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->display(b);
 }
 
 inline auto widget_number::inc() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->inc();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->inc();
 }
 
 inline auto widget_number::dec() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->dec();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->dec();
 }
 
 template<typename Data>
@@ -820,21 +825,21 @@ inline auto numeric<Data>::_instance<_Thing, _Copy>::get() const -> Data
 template<typename Data>
 inline auto numeric<Data>::inc() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->inc();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->inc();
 }
 
 template<typename Data>
 inline auto numeric<Data>::dec() -> void
 {
-    _common::_mutate();
-    std::dynamic_pointer_cast<number::_derived>(_common::_shared)->dec();
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->dec();
 }
 
 template<typename Data>
 inline auto numeric<Data>::get() const -> Data
 {
-    return std::dynamic_pointer_cast<numeric<Data>::_derived>(_common::_shared)->get();
+    return std::dynamic_pointer_cast<numeric<Data>::_derived>(strange::_common::_shared)->get();
 }
 
 }
