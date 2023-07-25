@@ -191,7 +191,7 @@ protected:
     };
 
 private:
-    template<typename _Thing>
+    template<typename _Thing, bool _Copy>
     struct _instance final : widget::_derived
     {
         template<typename ... _Args>
@@ -213,9 +213,9 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            if constexpr (std::is_copy_constructible_v<_Thing>)
+            if constexpr (_Copy)
             {
-                return std::make_shared<widget::_instance<_Thing>>(_thing);
+                return std::make_shared<widget::_instance<_Thing, _Copy>>(_thing);
             }
             else
             {
@@ -232,10 +232,10 @@ private:
     };
 
 public:
-    template<typename _Thing, typename ... _Args>
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget
     {
-        return widget{std::make_shared<widget::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
+        return widget{std::make_shared<widget::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
@@ -295,7 +295,7 @@ protected:
     };
 
 private:
-    template<typename _Thing>
+    template<typename _Thing, bool _Copy>
     struct _instance final : button::_derived
     {
         template<typename ... _Args>
@@ -317,9 +317,9 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            if constexpr (std::is_copy_constructible_v<_Thing>)
+            if constexpr (_Copy)
             {
-                return std::make_shared<button::_instance<_Thing>>(_thing);
+                return std::make_shared<button::_instance<_Thing, _Copy>>(_thing);
             }
             else
             {
@@ -338,10 +338,10 @@ private:
     };
 
 public:
-    template<typename _Thing, typename ... _Args>
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> button
     {
-        return button{std::make_shared<button::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
+        return button{std::make_shared<button::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
@@ -400,7 +400,7 @@ protected:
     };
 
 private:
-    template<typename _Thing>
+    template<typename _Thing, bool _Copy>
     struct _instance final : number::_derived
     {
         template<typename ... _Args>
@@ -422,9 +422,9 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            if constexpr (std::is_copy_constructible_v<_Thing>)
+            if constexpr (_Copy)
             {
-                return std::make_shared<number::_instance<_Thing>>(_thing);
+                return std::make_shared<number::_instance<_Thing, _Copy>>(_thing);
             }
             else
             {
@@ -441,10 +441,10 @@ private:
     };
 
 public:
-    template<typename _Thing, typename ... _Args>
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> number
     {
-        return number{std::make_shared<number::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
+        return number{std::make_shared<number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
@@ -507,7 +507,7 @@ protected:
     };
 
 private:
-    template<typename _Thing>
+    template<typename _Thing, bool _Copy>
     struct _instance final : widget_number::_derived
     {
         template<typename ... _Args>
@@ -529,10 +529,10 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            if constexpr (std::is_copy_constructible_v<_Thing>)
+            if constexpr (_Copy)
             {
                 return std::static_pointer_cast<widget::_derived>(
-                    std::make_shared<widget_number::_instance<_Thing>>(_thing));
+                    std::make_shared<widget_number::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -551,11 +551,11 @@ private:
     };
 
 public:
-    template<typename _Thing, typename ... _Args>
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget_number
     {
         return widget_number{std::static_pointer_cast<widget::_derived>(
-            std::make_shared<widget_number::_instance<_Thing>>(std::forward<_Args>(_args) ...))};
+            std::make_shared<widget_number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
@@ -618,7 +618,7 @@ protected:
     };
 
 private:
-    template<typename _Thing>
+    template<typename _Thing, bool _Copy>
     struct _instance final : numeric::_derived
     {
         template<typename ... _Args>
@@ -640,9 +640,9 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            if constexpr (std::is_copy_constructible_v<_Thing>)
+            if constexpr (_Copy)
             {
-                return std::make_shared<numeric::_instance<_Thing>>(_thing);
+                return std::make_shared<numeric::_instance<_Thing, _Copy>>(_thing);
             }
             else
             {
@@ -661,10 +661,10 @@ private:
     };
 
 public:
-    template<typename _Thing, typename ... _Args>
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> numeric
     {
-        return numeric{std::make_shared<numeric::_instance<_Thing>>(std::forward<_Args>(_args) ...)};
+        return numeric{std::make_shared<numeric::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
     }
 
     inline auto _valid() const -> bool
@@ -679,14 +679,14 @@ public:
     inline auto get() const -> Data;
 };
 
-template<typename _Thing>
-inline auto widget::_instance<_Thing>::display(button b) const -> void
+template<typename _Thing, bool _Copy>
+inline auto widget::_instance<_Thing, _Copy>::display(button b) const -> void
 {
     _thing.display(b);
 }
 
-template<typename _Thing>
-inline auto widget::_instance<_Thing>::inc() -> void
+template<typename _Thing, bool _Copy>
+inline auto widget::_instance<_Thing, _Copy>::inc() -> void
 {
     _thing.inc();
 }
@@ -702,20 +702,20 @@ inline auto widget::inc() -> void
     std::dynamic_pointer_cast<widget::_derived>(_common::_shared)->inc();
 }
 
-template<typename _Thing>
-inline auto button::_instance<_Thing>::display(button b) const -> void
+template<typename _Thing, bool _Copy>
+inline auto button::_instance<_Thing, _Copy>::display(button b) const -> void
 {
     _thing.display(b);
 }
 
-template<typename _Thing>
-inline auto button::_instance<_Thing>::inc() -> void
+template<typename _Thing, bool _Copy>
+inline auto button::_instance<_Thing, _Copy>::inc() -> void
 {
     _thing.inc();
 }
 
-template<typename _Thing>
-inline auto button::_instance<_Thing>::push() -> void
+template<typename _Thing, bool _Copy>
+inline auto button::_instance<_Thing, _Copy>::push() -> void
 {
     _thing.push();
 }
@@ -737,14 +737,14 @@ inline auto button::push() -> void
     std::dynamic_pointer_cast<button::_derived>(_common::_shared)->push();
 }
 
-template<typename _Thing>
-inline auto number::_instance<_Thing>::inc() -> void
+template<typename _Thing, bool _Copy>
+inline auto number::_instance<_Thing, _Copy>::inc() -> void
 {
     _thing.inc();
 }
 
-template<typename _Thing>
-inline auto number::_instance<_Thing>::dec() -> void
+template<typename _Thing, bool _Copy>
+inline auto number::_instance<_Thing, _Copy>::dec() -> void
 {
     _thing.dec();
 }
@@ -761,20 +761,20 @@ inline auto number::dec() -> void
     std::dynamic_pointer_cast<number::_derived>(_common::_shared)->dec();
 }
 
-template<typename _Thing>
-inline auto widget_number::_instance<_Thing>::display(button b) const -> void
+template<typename _Thing, bool _Copy>
+inline auto widget_number::_instance<_Thing, _Copy>::display(button b) const -> void
 {
     _thing.display(b);
 }
 
-template<typename _Thing>
-inline auto widget_number::_instance<_Thing>::inc() -> void
+template<typename _Thing, bool _Copy>
+inline auto widget_number::_instance<_Thing, _Copy>::inc() -> void
 {
     _thing.inc();
 }
 
-template<typename _Thing>
-inline auto widget_number::_instance<_Thing>::dec() -> void
+template<typename _Thing, bool _Copy>
+inline auto widget_number::_instance<_Thing, _Copy>::dec() -> void
 {
     _thing.dec();
 }
@@ -797,22 +797,22 @@ inline auto widget_number::dec() -> void
 }
 
 template<typename Data>
-template<typename _Thing>
-inline auto numeric<Data>::_instance<_Thing>::inc() -> void
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::inc() -> void
 {
     _thing.inc();
 }
 
 template<typename Data>
-template<typename _Thing>
-inline auto numeric<Data>::_instance<_Thing>::dec() -> void
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::dec() -> void
 {
     _thing.dec();
 }
 
 template<typename Data>
-template<typename _Thing>
-inline auto numeric<Data>::_instance<_Thing>::get() const -> Data
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::get() const -> Data
 {
     return _thing.get();
 }
