@@ -25,6 +25,10 @@ protected:
     std::shared_ptr<_common::_base> _shared;
 
     inline _common() = default;
+    inline _common(_common const &) = default;
+    inline _common(_common &&) = default;
+    inline auto operator=(_common const &) -> _common & = default;
+    inline auto operator=(_common &&) -> _common & = default;
 
     explicit inline _common(std::shared_ptr<_common::_base> const & shared)
     :_shared{shared}
