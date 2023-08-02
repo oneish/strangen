@@ -12,6 +12,8 @@ struct _common
 protected:
     struct _base
     {
+        virtual ~_base() = default;
+
         virtual auto _address() const -> void const * = 0;
         virtual auto _sizeof() const -> size_t = 0;
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
