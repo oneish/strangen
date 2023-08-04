@@ -1,6 +1,6 @@
 #pragma once
+
 #include <memory>
-#include <string>
 #include <type_traits>
 #include "../common/strange__common.h"
 

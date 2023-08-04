@@ -22,7 +22,6 @@ public:
     {
         _out << R"#(
 #include <memory>
-#include <string>
 #include <type_traits>
 #include "../common/strange__common.h"
 )#";
@@ -38,8 +37,8 @@ namespace )#" << _space.name << R"#(
 
 )#";
         _forward_declarations();
-        _out << R"#(
-}
+        _declarations();
+        _out << R"#(}
 )#";
     }
 
@@ -71,6 +70,62 @@ protected:
                 _out << R"#(> )#";
             }
             _out << R"#(struct )#" << abstraction.name << R"#(;
+)#";
+        }
+        _out << R"#(
+)#";
+    }
+
+    auto _declarations() -> void
+    {
+        for (auto const & abstraction : _space.abstractions)
+        {
+            if (!abstraction.parameters.empty())
+            {
+                _out << R"#(template<)#";
+                bool first = true;
+                for (auto const & parameter : abstraction.parameters)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        _out << parameter.type << R"#(, )#";
+                    }
+                    _out << parameter.type << R"#( )#" << parameter.name;
+                }
+                _out << R"#(>
+)#";
+            }
+            _out << R"#(struct )#" << abstraction.name << R"#( : )#";
+            if (abstraction.parents.empty())
+            {
+                _out << R"#(virtual strange::_common)#";
+            }
+            else
+            {
+                bool first = true;
+                for (auto const & parent : abstraction.parents)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        _out << R"#(, )#";
+                    }
+                    _out << parent;
+                }
+            }
+            _out << R"#(
+{
+)#";
+
+            _out << R"#(};
+
 )#";
         }
     }
