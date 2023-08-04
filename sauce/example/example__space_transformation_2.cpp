@@ -7,8 +7,7 @@
 #include <iostream>
 int main()
 {
-std::cout << R"~(
-// normal code
+std::cout << R"~(#pragma once
 )~";
 
 // more meta code

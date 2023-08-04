@@ -18,33 +18,63 @@ public:
     {
     }
 
-    void transform()
+    auto transform() -> void
     {
         _out << R"#(
-#pragma once
 #include <memory>
+#include <string>
+#include <type_traits>
+#include "../common/strange__common.h"
 )#";
         _namespace();
     }
 
 protected:
-    void _namespace()
+    auto _namespace() -> void
     {
         _out << R"#(
 namespace )#" << _space.name << R"#(
 {
+
 )#";
-        // _forward_declarations();
+        _forward_declarations();
         _out << R"#(
 }
 )#";
     }
 
-    void _()
+protected:
+    auto _forward_declarations() -> void
     {
-        _out << R"#(
+        for (auto const & abstraction : _space.abstractions)
+        {
+            if (!abstraction.parameters.empty())
+            {
+                _out << R"#(template<)#";
+                bool first = true;
+                for (auto const & parameter : abstraction.parameters)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        _out << parameter.type << R"#(, )#";
+                    }
+                    _out << parameter.type << R"#( )#" << parameter.name;
+                    if (!parameter.argument.empty())
+                    {
+                        _out << R"#( = )#" << parameter.argument;
+                    }
+                }
+                _out << R"#(> )#";
+            }
+            _out << R"#(struct )#" << abstraction.name << R"#(;
 )#";
+        }
     }
+
 };
 
 }
