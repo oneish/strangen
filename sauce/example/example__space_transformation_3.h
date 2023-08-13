@@ -57,11 +57,51 @@ struct widget : virtual strange::_common
 protected:
     struct _derived : strange::_common::_base
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<widget::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
         virtual auto display(button b) const -> void = 0;
         virtual auto inc() -> void = 0;
     };
 
 private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : widget::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :widget::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return widget::_derived::_static_shared_to_base(std::make_shared<widget::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+    private:
+        _Thing _thing;
+    };
 };
 
 struct button : widget
@@ -107,10 +147,50 @@ struct button : widget
 protected:
     struct _derived : widget::_derived
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<button::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return widget::_derived::_static_shared_to_base(derived);
+        }
+
         virtual auto push() -> void = 0;
     };
 
 private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : button::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :button::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return button::_derived::_static_shared_to_base(std::make_shared<button::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+    private:
+        _Thing _thing;
+    };
 };
 
 struct number : virtual strange::_common
@@ -152,11 +232,51 @@ struct number : virtual strange::_common
 protected:
     struct _derived : strange::_common::_base
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<number::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
         virtual auto inc() -> void = 0;
         virtual auto dec() -> void = 0;
     };
 
 private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : number::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :number::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return number::_derived::_static_shared_to_base(std::make_shared<number::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+    private:
+        _Thing _thing;
+    };
 };
 
 struct widget_number : widget, number
@@ -206,9 +326,48 @@ struct widget_number : widget, number
 protected:
     struct _derived : widget::_derived, number::_derived
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<widget_number::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return widget::_derived::_static_shared_to_base(derived);
+        }
     };
 
 private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : widget_number::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :widget_number::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return widget_number::_derived::_static_shared_to_base(std::make_shared<widget_number::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+    private:
+        _Thing _thing;
+    };
 };
 
 template<typename Data>
@@ -255,10 +414,50 @@ struct numeric : number
 protected:
     struct _derived : number::_derived
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<numeric::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return number::_derived::_static_shared_to_base(derived);
+        }
+
         virtual auto get() const -> Data = 0;
     };
 
 private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : numeric::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :numeric::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return numeric::_derived::_static_shared_to_base(std::make_shared<numeric::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+    private:
+        _Thing _thing;
+    };
 };
 
 }

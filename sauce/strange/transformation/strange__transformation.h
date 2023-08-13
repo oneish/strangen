@@ -110,17 +110,73 @@ protected:
             _abstraction_parents(abstraction, true);
             _out << R"#(
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<)#" << abstraction.name << R"#(::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
 )#";
-            for (auto const & operation : abstraction.operations)
+            if (abstraction.parents.empty())
             {
-                _out << R"#(        virtual auto )#" << operation.name;
-                _operation_parameters(operation, false);
-                _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result << R"#( = 0;
+                _out << R"#(            return derived;
 )#";
+            }
+            else
+            {
+                _out << R"#(            return )#" << abstraction.parents[0] << R"#(::_derived::_static_shared_to_base(derived);
+)#";
+            }
+            _out << R"#(        }
+)#";
+            if (!abstraction.operations.empty())
+            {
+                _out << R"#(
+)#";
+                for (auto const & operation : abstraction.operations)
+                {
+                    _out << R"#(        virtual auto )#" << operation.name;
+                    _operation_parameters(operation, false);
+                    _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result << R"#( = 0;
+)#";
+                }
             }
             _out << R"#(    };
 
 private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : )#" << abstraction.name << R"#(::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :)#" << abstraction.name << R"#(::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+)#";
+        _out << R"#(                return )#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name << R"#(::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+)#";
+        _out << R"#(    private:
+        _Thing _thing;
+    };
 )#";
             _out << R"#(};
 

@@ -57,6 +57,11 @@ struct widget : virtual strange::_common
 protected:
     struct _derived : strange::_common::_base
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<widget::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
         virtual auto display(button b) const -> void = 0;
         virtual auto inc() -> void = 0;
     };
@@ -86,7 +91,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return std::make_shared<widget::_instance<_Thing, _Copy>>(_thing);
+                return widget::_derived::_static_shared_to_base(std::make_shared<widget::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -162,6 +167,11 @@ struct button : widget
 protected:
     struct _derived : widget::_derived
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<button::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return widget::_derived::_static_shared_to_base(derived);
+        }
+
         virtual auto push() -> void = 0;
     };
 
@@ -190,7 +200,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return std::make_shared<button::_instance<_Thing, _Copy>>(_thing);
+                return button::_derived::_static_shared_to_base(std::make_shared<button::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -266,6 +276,11 @@ struct number : virtual strange::_common
 protected:
     struct _derived : strange::_common::_base
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<number::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
         virtual auto inc() -> void = 0;
         virtual auto dec() -> void = 0;
     };
@@ -295,7 +310,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return std::make_shared<number::_instance<_Thing, _Copy>>(_thing);
+                return number::_derived::_static_shared_to_base(std::make_shared<number::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -375,6 +390,10 @@ struct widget_number : widget, number
 protected:
     struct _derived : widget::_derived, number::_derived
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<widget_number::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return widget::_derived::_static_shared_to_base(derived);
+        }
     };
 
 private:
@@ -402,8 +421,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return std::static_pointer_cast<widget::_derived>(
-                    std::make_shared<widget_number::_instance<_Thing, _Copy>>(_thing));
+                return widget_number::_derived::_static_shared_to_base(std::make_shared<widget_number::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -485,6 +503,11 @@ struct numeric : number
 protected:
     struct _derived : number::_derived
     {
+        static inline auto _static_shared_to_base(std::shared_ptr<numeric::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return number::_derived::_static_shared_to_base(derived);
+        }
+
         virtual auto get() const -> Data = 0;
     };
 
@@ -513,7 +536,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return std::make_shared<numeric::_instance<_Thing, _Copy>>(_thing);
+                return numeric::_derived::_static_shared_to_base(std::make_shared<numeric::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
