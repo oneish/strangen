@@ -160,10 +160,11 @@ private:
                 throw true;
             }
         }
-
 )#";
-
-        _out << R"#(    private:
+        //TODO need to override base class operations as well
+        _abstraction_operations(abstraction, true, false);
+        _out << R"#(
+    private:
         _Thing _thing;
     };
 )#";
