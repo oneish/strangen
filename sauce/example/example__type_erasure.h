@@ -63,6 +63,7 @@ protected:
         }
 
         virtual auto display(button b) const -> void = 0;
+
         virtual auto inc() -> void = 0;
     };
 
@@ -282,6 +283,7 @@ protected:
         }
 
         virtual auto inc() -> void = 0;
+
         virtual auto dec() -> void = 0;
     };
 

@@ -42,7 +42,6 @@ namespace )#" << _space.name << R"#(
 )#";
     }
 
-protected:
     auto _forward_declarations() -> void
     {
         for (auto const & abstraction : _space.abstractions)
@@ -125,18 +124,7 @@ protected:
             }
             _out << R"#(        }
 )#";
-            if (!abstraction.operations.empty())
-            {
-                _out << R"#(
-)#";
-                for (auto const & operation : abstraction.operations)
-                {
-                    _out << R"#(        virtual auto )#" << operation.name;
-                    _operation_parameters(operation, false);
-                    _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result << R"#( = 0;
-)#";
-                }
-            }
+            _abstraction_operations(abstraction, true, true);
             _out << R"#(    };
 
 private:
@@ -174,12 +162,40 @@ private:
         }
 
 )#";
+
         _out << R"#(    private:
         _Thing _thing;
     };
 )#";
             _out << R"#(};
 
+)#";
+        }
+    }
+
+    auto _abstraction_parameters(strange::abstraction const & abstraction, bool const arguments) -> void
+    {
+        if (!abstraction.parameters.empty())
+        {
+            _out << R"#(template<)#";
+            bool first = true;
+            for (auto const & parameter : abstraction.parameters)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    _out << R"#(, )#";
+                }
+                _out << parameter.type << R"#( )#" << parameter.name;
+                if (arguments && !parameter.argument.empty())
+                {
+                    _out << R"#( = )#" << parameter.argument;
+                }
+            }
+            _out << R"#(>
 )#";
         }
     }
@@ -228,30 +244,36 @@ private:
         }
     }
 
-    auto _abstraction_parameters(strange::abstraction const & abstraction, bool const arguments) -> void
+    auto _abstraction_operations(strange::abstraction const & abstraction, bool const inner, bool const pure) -> void
     {
-        if (!abstraction.parameters.empty())
+        if (!abstraction.operations.empty())
         {
-            _out << R"#(template<)#";
-            bool first = true;
-            for (auto const & parameter : abstraction.parameters)
+            for (auto const & operation : abstraction.operations)
             {
-                if (first)
+                if (pure)
                 {
-                    first = false;
+                    _out << R"#(
+        virtual )#";
                 }
                 else
                 {
-                    _out << R"#(, )#";
+                    _out << R"#(
+        inline )#";
                 }
-                _out << parameter.type << R"#( )#" << parameter.name;
-                if (arguments && !parameter.argument.empty())
+                _out << R"#(auto )#" << operation.name;
+                _operation_parameters(operation, false);
+                _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result;
+                if (pure)
                 {
-                    _out << R"#( = )#" << parameter.argument;
+                    _out << R"#( = 0;
+)#";
+                }
+                else
+                {
+                    _out << R"#( final;
+)#";
                 }
             }
-            _out << R"#(>
-)#";
         }
     }
 
