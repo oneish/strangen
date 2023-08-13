@@ -132,13 +132,13 @@ struct button : widget
 
     inline auto operator=(button const & other) -> button &
     {
-        widget::operator=(other);
+        strange::_common::operator=(other);
         return *this;
     }
 
     inline auto operator=(button && other) -> button &
     {
-        widget::operator=(std::move(other));
+        strange::_common::operator=(std::move(other));
         return *this;
     }
 
@@ -343,13 +343,13 @@ struct widget_number : widget, number
 
     inline auto operator=(widget_number const & other) -> widget_number &
     {
-        number::operator=(other);
+        strange::_common::operator=(other);
         return *this;
     }
 
     inline auto operator=(widget_number && other) -> widget_number &
     {
-        number::operator=(std::move(other));
+        strange::_common::operator=(std::move(other));
         return *this;
     }
 
@@ -455,13 +455,13 @@ struct numeric : number
 
     inline auto operator=(numeric const & other) -> numeric &
     {
-        number::operator=(other);
+        strange::_common::operator=(other);
         return *this;
     }
 
     inline auto operator=(numeric && other) -> numeric &
     {
-        number::operator=(std::move(other));
+        strange::_common::operator=(std::move(other));
         return *this;
     }
 

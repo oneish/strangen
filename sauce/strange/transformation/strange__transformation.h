@@ -122,10 +122,61 @@ protected:
             }
             _out << R"#(
 {
-)#";
+    inline )#" << abstraction.name << R"#(() = default;
 
+    inline )#" << abstraction.name << R"#(()#" << abstraction.name << R"#( const & other)
+    :strange::_common{other}
+)#";
+            _default_construct_bases(abstraction);
+            _out << R"#(    {
+    }
+
+    inline )#" << abstraction.name << R"#(()#" << abstraction.name << R"#( && other)
+    :strange::_common{std::move(other)}
+)#";
+            _default_construct_bases(abstraction);
+            _out << R"#(    {
+    }
+
+    inline auto operator=()#" << abstraction.name << R"#( const & other) -> )#" << abstraction.name << R"#( &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=()#" << abstraction.name << R"#( && other) -> )#" << abstraction.name << R"#( &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline )#" << abstraction.name << R"#((std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+)#";
+            _default_construct_bases(abstraction);
+            _out << R"#(    {
+    }
+
+    explicit inline )#" << abstraction.name << R"#((std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+)#";
+            _default_construct_bases(abstraction);
+            _out << R"#(    {
+    }
+
+protected:
+)#";
             _out << R"#(};
 
+)#";
+        }
+    }
+
+    auto _default_construct_bases(strange::abstraction const & abstraction) -> void
+    {
+        for (auto const & parent : abstraction.parents)
+        {
+            _out << R"#(    ,)#" << parent << R"#({}
 )#";
         }
     }
