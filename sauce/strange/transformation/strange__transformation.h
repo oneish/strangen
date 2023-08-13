@@ -60,26 +60,7 @@ protected:
         {
             _abstraction_parameters(abstraction, false);
             _out << R"#(struct )#" << abstraction.name << R"#( : )#";
-            if (abstraction.parents.empty())
-            {
-                _out << R"#(virtual strange::_common)#";
-            }
-            else
-            {
-                bool first = true;
-                for (auto const & parent : abstraction.parents)
-                {
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        _out << R"#(, )#";
-                    }
-                    _out << parent;
-                }
-            }
+            _abstraction_parents(abstraction, false);
             _out << R"#(
 {
     inline )#" << abstraction.name << R"#(() = default;
@@ -87,14 +68,14 @@ protected:
     inline )#" << abstraction.name << R"#(()#" << abstraction.name << R"#( const & other)
     :strange::_common{other}
 )#";
-            _default_construct_bases(abstraction);
+            _abstraction_default_construct_bases(abstraction);
             _out << R"#(    {
     }
 
     inline )#" << abstraction.name << R"#(()#" << abstraction.name << R"#( && other)
     :strange::_common{std::move(other)}
 )#";
-            _default_construct_bases(abstraction);
+            _abstraction_default_construct_bases(abstraction);
             _out << R"#(    {
     }
 
@@ -113,39 +94,20 @@ protected:
     explicit inline )#" << abstraction.name << R"#((std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
 )#";
-            _default_construct_bases(abstraction);
+            _abstraction_default_construct_bases(abstraction);
             _out << R"#(    {
     }
 
     explicit inline )#" << abstraction.name << R"#((std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
 )#";
-            _default_construct_bases(abstraction);
+            _abstraction_default_construct_bases(abstraction);
             _out << R"#(    {
     }
 
 protected:
     struct _derived : )#";
-            if (abstraction.parents.empty())
-            {
-                _out << R"#(strange::_common::_base)#";
-            }
-            else
-            {
-                bool first = true;
-                for (auto const & parent : abstraction.parents)
-                {
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        _out << R"#(, )#";
-                    }
-                    _out << parent << R"#(::_derived)#";
-                }
-            }
+            _abstraction_parents(abstraction, true);
             _out << R"#(
     {
 )#";
@@ -166,7 +128,42 @@ private:
         }
     }
 
-    auto _default_construct_bases(strange::abstraction const & abstraction) -> void
+    auto _abstraction_parents(strange::abstraction const & abstraction, bool const inner) -> void
+    {
+        if (abstraction.parents.empty())
+        {
+            if (inner)
+            {
+                _out << R"#(strange::_common::_base)#";
+            }
+            else
+            {
+                _out << R"#(virtual strange::_common)#";
+            }
+        }
+        else
+        {
+            bool first = true;
+            for (auto const & parent : abstraction.parents)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    _out << R"#(, )#";
+                }
+                _out << parent;
+                if (inner)
+                {
+                    _out << R"#(::_derived)#";
+                }
+            }
+        }
+    }
+
+    auto _abstraction_default_construct_bases(strange::abstraction const & abstraction) -> void
     {
         for (auto const & parent : abstraction.parents)
         {
