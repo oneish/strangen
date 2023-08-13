@@ -47,58 +47,18 @@ protected:
     {
         for (auto const & abstraction : _space.abstractions)
         {
-            if (!abstraction.parameters.empty())
-            {
-                _out << R"#(template<)#";
-                bool first = true;
-                for (auto const & parameter : abstraction.parameters)
-                {
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        _out << parameter.type << R"#(, )#";
-                    }
-                    _out << parameter.type << R"#( )#" << parameter.name;
-                    if (!parameter.argument.empty())
-                    {
-                        _out << R"#( = )#" << parameter.argument;
-                    }
-                }
-                _out << R"#(> )#";
-            }
+            _abstraction_parameters(abstraction, true);
             _out << R"#(struct )#" << abstraction.name << R"#(;
+
 )#";
         }
-        _out << R"#(
-)#";
     }
 
     auto _declarations() -> void
     {
         for (auto const & abstraction : _space.abstractions)
         {
-            if (!abstraction.parameters.empty())
-            {
-                _out << R"#(template<)#";
-                bool first = true;
-                for (auto const & parameter : abstraction.parameters)
-                {
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        _out << parameter.type << R"#(, )#";
-                    }
-                    _out << parameter.type << R"#( )#" << parameter.name;
-                }
-                _out << R"#(>
-)#";
-            }
+            _abstraction_parameters(abstraction, false);
             _out << R"#(struct )#" << abstraction.name << R"#( : )#";
             if (abstraction.parents.empty())
             {
@@ -165,6 +125,40 @@ protected:
     }
 
 protected:
+    struct _derived : )#";
+            if (abstraction.parents.empty())
+            {
+                _out << R"#(strange::_common::_base)#";
+            }
+            else
+            {
+                bool first = true;
+                for (auto const & parent : abstraction.parents)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        _out << R"#(, )#";
+                    }
+                    _out << parent << R"#(::_derived)#";
+                }
+            }
+            _out << R"#(
+    {
+)#";
+            for (auto const & operation : abstraction.operations)
+            {
+                _out << R"#(        virtual auto )#" << operation.name;
+                _operation_parameters(operation, false);
+                _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result << R"#( = 0;
+)#";
+            }
+            _out << R"#(    };
+
+private:
 )#";
             _out << R"#(};
 
@@ -179,6 +173,56 @@ protected:
             _out << R"#(    ,)#" << parent << R"#({}
 )#";
         }
+    }
+
+    auto _abstraction_parameters(strange::abstraction const & abstraction, bool const arguments) -> void
+    {
+        if (!abstraction.parameters.empty())
+        {
+            _out << R"#(template<)#";
+            bool first = true;
+            for (auto const & parameter : abstraction.parameters)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    _out << R"#(, )#";
+                }
+                _out << parameter.type << R"#( )#" << parameter.name;
+                if (arguments && !parameter.argument.empty())
+                {
+                    _out << R"#( = )#" << parameter.argument;
+                }
+            }
+            _out << R"#(>
+)#";
+        }
+    }
+
+    auto _operation_parameters(strange::operation const & operation, bool const arguments) -> void
+    {
+        _out << R"#(()#";
+        bool first = true;
+        for (auto const & parameter : operation.parameters)
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                _out << R"#(, )#";
+            }
+            _out << parameter.type << R"#( )#" << parameter.name;
+            if (arguments && !parameter.argument.empty())
+            {
+                _out << R"#( = )#" << parameter.argument;
+            }
+        }
+        _out << R"#())#";
     }
 
 };

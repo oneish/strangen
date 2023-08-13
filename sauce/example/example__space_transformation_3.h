@@ -8,10 +8,15 @@ namespace example
 {
 
 struct widget;
+
 struct button;
+
 struct number;
+
 struct widget_number;
-template<typename Data = int> struct numeric;
+
+template<typename Data = int>
+struct numeric;
 
 struct widget : virtual strange::_common
 {
@@ -50,6 +55,13 @@ struct widget : virtual strange::_common
     }
 
 protected:
+    struct _derived : strange::_common::_base
+    {
+        virtual auto display(button b) const -> void = 0;
+        virtual auto inc() -> void = 0;
+    };
+
+private:
 };
 
 struct button : widget
@@ -93,6 +105,12 @@ struct button : widget
     }
 
 protected:
+    struct _derived : widget::_derived
+    {
+        virtual auto push() -> void = 0;
+    };
+
+private:
 };
 
 struct number : virtual strange::_common
@@ -132,6 +150,13 @@ struct number : virtual strange::_common
     }
 
 protected:
+    struct _derived : strange::_common::_base
+    {
+        virtual auto inc() -> void = 0;
+        virtual auto dec() -> void = 0;
+    };
+
+private:
 };
 
 struct widget_number : widget, number
@@ -179,6 +204,11 @@ struct widget_number : widget, number
     }
 
 protected:
+    struct _derived : widget::_derived, number::_derived
+    {
+    };
+
+private:
 };
 
 template<typename Data>
@@ -223,6 +253,12 @@ struct numeric : number
     }
 
 protected:
+    struct _derived : number::_derived
+    {
+        virtual auto get() const -> Data = 0;
+    };
+
+private:
 };
 
 }

@@ -8,10 +8,15 @@ namespace example
 {
 
 struct widget;
+
 struct button;
+
 struct number;
+
 struct widget_number;
-template<typename Data = int> struct numeric;
+
+template<typename Data = int>
+struct numeric;
 
 struct widget : virtual strange::_common
 {
