@@ -1,6 +1,40 @@
 #pragma once
 #include "../strange/definition/strange__space.h"
 
+/*
+namespace example
+{
+
+struct widget
+{
+    virtual auto display(button b = button()) const -> void = 0;
+    virtual auto inc() -> void = 0;
+};
+
+struct button : widget
+{
+    virtual auto push() -> void = 0;
+};
+
+struct number
+{
+    virtual auto inc() -> void = 0;
+    virtual auto dec() -> void = 0;
+};
+
+struct widget_number : widget, number
+{
+};
+
+template<typename Data = int>
+struct numeric
+{
+    virtual auto get() const -> Data = 0;
+};
+
+}
+*/
+
 namespace example
 {
     strange::space definition()
