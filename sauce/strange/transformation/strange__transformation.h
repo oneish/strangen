@@ -1,5 +1,7 @@
 #pragma once
 #include <ostream>
+#include <algorithm>
+#include <unordered_set>
 #include "../definition/strange__space.h"
 
 namespace strange
@@ -124,7 +126,10 @@ protected:
             }
             _out << R"#(        }
 )#";
-            _abstraction_operations(abstraction, true, true);
+            {
+                std::unordered_set<strange::operation> unique;
+                _abstraction_operations(abstraction, true, true, unique);
+            }
             _out << R"#(    };
 
 private:
@@ -153,7 +158,7 @@ private:
             if constexpr (_Copy)
             {
 )#";
-        _out << R"#(                return )#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name << R"#(::_instance<_Thing, _Copy>>(_thing));
+            _out << R"#(                return )#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name << R"#(::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -161,9 +166,11 @@ private:
             }
         }
 )#";
-        //TODO need to override base class operations as well
-        _abstraction_operations(abstraction, true, false);
-        _out << R"#(
+            {
+                std::unordered_set<strange::operation> unique;
+                _abstraction_operations(abstraction, true, false, unique);
+            }
+            _out << R"#(
     private:
         _Thing _thing;
     };
@@ -245,12 +252,30 @@ private:
         }
     }
 
-    auto _abstraction_operations(strange::abstraction const & abstraction, bool const inner, bool const pure) -> void
+    auto _abstraction_operations(strange::abstraction const & abstraction, bool const inner, bool const pure, std::unordered_set<strange::operation> & unique) -> void
     {
+        if ((!inner) || (!pure))
+        {
+            // need to override base class operations as well
+            for (auto const & parent : abstraction.parents)
+            {
+                auto it = std::find_if(_space.abstractions.cbegin(), _space.abstractions.cend(),
+                    [& parent](strange::abstraction const & candidate){return candidate.name == parent;});
+                if (it != _space.abstractions.cend())
+                {
+                    _abstraction_operations(*it, inner, pure, unique);
+                }
+            }
+        }
         if (!abstraction.operations.empty())
         {
             for (auto const & operation : abstraction.operations)
             {
+                if (unique.count(operation))
+                {
+                    continue;
+                }
+                unique.insert(operation);
                 if (pure)
                 {
                     _out << R"#(

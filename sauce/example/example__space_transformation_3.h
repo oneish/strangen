@@ -193,6 +193,10 @@ private:
             }
         }
 
+        inline auto display(button b) const -> void final;
+
+        inline auto inc() -> void final;
+
         inline auto push() -> void final;
 
     private:
@@ -377,6 +381,12 @@ private:
             }
         }
 
+        inline auto display(button b) const -> void final;
+
+        inline auto inc() -> void final;
+
+        inline auto dec() -> void final;
+
     private:
         _Thing _thing;
     };
@@ -466,6 +476,10 @@ private:
                 throw true;
             }
         }
+
+        inline auto inc() -> void final;
+
+        inline auto dec() -> void final;
 
         inline auto get() const -> Data final;
 
