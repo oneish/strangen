@@ -574,4 +574,85 @@ public:
     inline auto get() const -> Data;
 };
 
+template<typename _Thing, bool _Copy>
+inline auto widget::_instance<_Thing, _Copy>::display(button b) const -> void
+{
+    _thing.display(b);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto widget::_instance<_Thing, _Copy>::inc() -> void
+{
+    _thing.inc();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto button::_instance<_Thing, _Copy>::display(button b) const -> void
+{
+    _thing.display(b);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto button::_instance<_Thing, _Copy>::inc() -> void
+{
+    _thing.inc();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto button::_instance<_Thing, _Copy>::push() -> void
+{
+    _thing.push();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto number::_instance<_Thing, _Copy>::inc() -> void
+{
+    _thing.inc();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto number::_instance<_Thing, _Copy>::dec() -> void
+{
+    _thing.dec();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto widget_number::_instance<_Thing, _Copy>::display(button b) const -> void
+{
+    _thing.display(b);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto widget_number::_instance<_Thing, _Copy>::inc() -> void
+{
+    _thing.inc();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto widget_number::_instance<_Thing, _Copy>::dec() -> void
+{
+    _thing.dec();
+}
+
+template<typename Data>
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::inc() -> void
+{
+    _thing.inc();
+}
+
+template<typename Data>
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::dec() -> void
+{
+    _thing.dec();
+}
+
+template<typename Data>
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::get() const -> Data
+{
+    return _thing.get();
+}
+
 }

@@ -40,6 +40,7 @@ namespace )#" << _space.name << R"#(
 )#";
         _forward_declarations();
         _declarations();
+        _definitions();
         _out << R"#(}
 )#";
     }
@@ -48,7 +49,7 @@ namespace )#" << _space.name << R"#(
     {
         for (auto const & abstraction : _space.abstractions)
         {
-            _abstraction_parameters(abstraction, true);
+            _abstraction_parameters(abstraction, true, true);
             _out << R"#(struct )#" << abstraction.name << R"#(;
 
 )#";
@@ -59,7 +60,7 @@ namespace )#" << _space.name << R"#(
     {
         for (auto const & abstraction : _space.abstractions)
         {
-            _abstraction_parameters(abstraction, false);
+            _abstraction_parameters(abstraction, true, false);
             _out << R"#(struct )#" << abstraction.name << R"#( : )#";
             _abstraction_parents(abstraction, false);
             _out << R"#(
@@ -128,7 +129,7 @@ protected:
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, true, true, unique);
+                _abstraction_operations(abstraction, abstraction, true, true, false, unique);
             }
             _out << R"#(    };
 
@@ -168,7 +169,7 @@ private:
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, true, false, unique);
+                _abstraction_operations(abstraction, abstraction, true, false, false, unique);
             }
             _out << R"#(
     private:
@@ -189,7 +190,7 @@ public:
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, false, false, unique);
+                _abstraction_operations(abstraction, abstraction, false, false, false, unique);
             }
             _out << R"#(};
 
@@ -197,11 +198,30 @@ public:
         }
     }
 
-    auto _abstraction_parameters(strange::abstraction const & abstraction, bool const arguments) -> void
+    auto _definitions() -> void
+    {
+        for (auto const & abstraction : _space.abstractions)
+        {
+            {
+                std::unordered_set<strange::operation> unique;
+                _abstraction_operations(abstraction, abstraction, true, false, true, unique);
+            }
+        }
+    }
+
+    auto _abstraction_parameters(strange::abstraction const & abstraction, bool const types, bool const arguments) -> void
     {
         if (!abstraction.parameters.empty())
         {
-            _out << R"#(template<)#";
+            if (types)
+            {
+                _out << R"#(template<)#";
+
+            }
+            else
+            {
+                _out << R"#(<)#";
+            }
             bool first = true;
             for (auto const & parameter : abstraction.parameters)
             {
@@ -213,14 +233,25 @@ public:
                 {
                     _out << R"#(, )#";
                 }
-                _out << parameter.type << R"#( )#" << parameter.name;
+                if (types)
+                {
+                    _out << parameter.type << R"#( )#";
+                }
+                _out << parameter.name;
                 if (arguments && !parameter.argument.empty())
                 {
                     _out << R"#( = )#" << parameter.argument;
                 }
             }
-            _out << R"#(>
+            if (types)
+            {
+                _out << R"#(>
 )#";
+            }
+            else
+            {
+                _out << R"#(>)#";
+            }
         }
     }
 
@@ -268,7 +299,7 @@ public:
         }
     }
 
-    auto _abstraction_operations(strange::abstraction const & abstraction, bool const inner, bool const pure, std::unordered_set<strange::operation> & unique) -> void
+    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<strange::operation> & unique) -> void
     {
         if ((!inner) || (!pure))
         {
@@ -279,7 +310,7 @@ public:
                     [& parent](strange::abstraction const & candidate){return candidate.name == parent;});
                 if (it != _space.abstractions.cend())
                 {
-                    _abstraction_operations(*it, inner, pure, unique);
+                    _abstraction_operations(*it, derived, inner, pure, definition, unique);
                 }
             }
         }
@@ -292,44 +323,84 @@ public:
                     continue;
                 }
                 unique.insert(operation);
-                if (pure)
+                if (!definition)
                 {
-                    _out << R"#(
+                    if (pure)
+                    {
+                        _out << R"#(
         virtual )#";
-                }
-                else if (inner)
-                {
-                    _out << R"#(
+                    }
+                    else if (inner)
+                    {
+                        _out << R"#(
         inline )#";
-                }
-                else
-                {
-                    _out << R"#(
+                    }
+                    else
+                    {
+                        _out << R"#(
     inline )#";
-                }
-                _out << R"#(auto )#" << operation.name;
-                _operation_parameters(operation, false);
-                _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result;
-                if (pure)
-                {
-                    _out << R"#( = 0;
-)#";
+                    }
                 }
                 else if (inner)
                 {
-                    _out << R"#( final;
+                    _abstraction_parameters(derived, true, false);
+                    _out << R"#(template<typename _Thing, bool _Copy>
+inline )#";
+                }
+                else
+                {
+
+                }
+                if (!definition)
+                {
+                    _out << R"#(auto )#" << operation.name;
+                }
+                else
+                {
+                    _out << R"#(auto )#" << derived.name;
+                    _abstraction_parameters(derived, false, false);
+                    _out << R"#(::_instance<_Thing, _Copy>::)#" << operation.name;
+                }
+                _operation_parameters(operation, true, false);
+                _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result;
+                if (!definition)
+                {
+                    if (pure)
+                    {
+                        _out << R"#( = 0;
+)#";
+                    }
+                    else if (inner)
+                    {
+                        _out << R"#( final;
+)#";
+                    }
+                    else
+                    {
+                        _out << R"#(;
+)#";
+                    }
+                }
+                else if (inner)
+                {
+                    _out << R"#(
+{
+    )#" << (operation.result == "void" ? R"#()#" : R"#(return )#") << R"#(_thing.)#" << operation.name;
+                    _operation_parameters(operation, false, false);
+                    _out << R"#(;
+}
+
 )#";
                 }
                 else
                 {
-                    _out << R"#(;
-)#";
+
                 }
             }
         }
     }
 
-    auto _operation_parameters(strange::operation const & operation, bool const arguments) -> void
+    auto _operation_parameters(strange::operation const & operation, bool const types, bool const arguments) -> void
     {
         _out << R"#(()#";
         bool first = true;
@@ -343,7 +414,11 @@ public:
             {
                 _out << R"#(, )#";
             }
-            _out << parameter.type << R"#( )#" << parameter.name;
+            if (types)
+            {
+                _out << parameter.type << R"#( )#";
+            }
+            _out << parameter.name;
             if (arguments && !parameter.argument.empty())
             {
                 _out << R"#( = )#" << parameter.argument;
