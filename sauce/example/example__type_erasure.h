@@ -112,7 +112,7 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget
     {
-        return widget{std::make_shared<widget::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
+        return widget{widget::_derived::_static_shared_to_base(std::make_shared<widget::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
@@ -223,7 +223,7 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> button
     {
-        return button{std::make_shared<button::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
+        return button{button::_derived::_static_shared_to_base(std::make_shared<button::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
@@ -332,7 +332,7 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> number
     {
-        return number{std::make_shared<number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
+        return number{number::_derived::_static_shared_to_base(std::make_shared<number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
@@ -445,8 +445,7 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget_number
     {
-        return widget_number{std::static_pointer_cast<widget::_derived>(
-            std::make_shared<widget_number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+        return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<widget_number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
@@ -560,7 +559,7 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> numeric
     {
-        return numeric{std::make_shared<numeric::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...)};
+        return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<numeric::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool

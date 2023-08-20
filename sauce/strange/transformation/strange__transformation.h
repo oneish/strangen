@@ -174,6 +174,19 @@ private:
     private:
         _Thing _thing;
     };
+
+public:
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> )#" << abstraction.name << R"#(
+    {
+        return )#" << abstraction.name << R"#({)#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name << R"#(::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
+    }
+
 )#";
             _out << R"#(};
 
@@ -256,7 +269,7 @@ private:
     {
         if ((!inner) || (!pure))
         {
-            // need to override base class operations as well
+            // override base class operations as well
             for (auto const & parent : abstraction.parents)
             {
                 auto it = std::find_if(_space.abstractions.cbegin(), _space.abstractions.cend(),
