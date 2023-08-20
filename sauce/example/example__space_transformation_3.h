@@ -120,6 +120,9 @@ public:
         return std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared).operator bool();
     }
 
+    inline auto display(button b) const -> void;
+
+    inline auto inc() -> void;
 };
 
 struct button : widget
@@ -228,6 +231,11 @@ public:
         return std::dynamic_pointer_cast<button::_derived>(strange::_common::_shared).operator bool();
     }
 
+    inline auto display(button b) const -> void;
+
+    inline auto inc() -> void;
+
+    inline auto push() -> void;
 };
 
 struct number : virtual strange::_common
@@ -332,6 +340,9 @@ public:
         return std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared).operator bool();
     }
 
+    inline auto inc() -> void;
+
+    inline auto dec() -> void;
 };
 
 struct widget_number : widget, number
@@ -442,6 +453,11 @@ public:
         return std::dynamic_pointer_cast<widget_number::_derived>(strange::_common::_shared).operator bool();
     }
 
+    inline auto display(button b) const -> void;
+
+    inline auto inc() -> void;
+
+    inline auto dec() -> void;
 };
 
 template<typename Data>
@@ -551,6 +567,11 @@ public:
         return std::dynamic_pointer_cast<numeric::_derived>(strange::_common::_shared).operator bool();
     }
 
+    inline auto inc() -> void;
+
+    inline auto dec() -> void;
+
+    inline auto get() const -> Data;
 };
 
 }

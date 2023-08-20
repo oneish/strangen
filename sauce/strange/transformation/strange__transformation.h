@@ -186,8 +186,11 @@ public:
     {
         return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
     }
-
 )#";
+            {
+                std::unordered_set<strange::operation> unique;
+                _abstraction_operations(abstraction, false, false, unique);
+            }
             _out << R"#(};
 
 )#";
@@ -294,10 +297,15 @@ public:
                     _out << R"#(
         virtual )#";
                 }
-                else
+                else if (inner)
                 {
                     _out << R"#(
         inline )#";
+                }
+                else
+                {
+                    _out << R"#(
+    inline )#";
                 }
                 _out << R"#(auto )#" << operation.name;
                 _operation_parameters(operation, false);
@@ -307,9 +315,14 @@ public:
                     _out << R"#( = 0;
 )#";
                 }
-                else
+                else if (inner)
                 {
                     _out << R"#( final;
+)#";
+                }
+                else
+                {
+                    _out << R"#(;
 )#";
                 }
             }
