@@ -112,7 +112,8 @@ protected:
             _abstraction_parents(abstraction, true);
             _out << R"#(
     {
-        static inline auto _static_shared_to_base(std::shared_ptr<)#" << abstraction.name << R"#(::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        static inline auto _static_shared_to_base(std::shared_ptr<)#" << abstraction.name
+                << R"#(::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
 )#";
             if (abstraction.parents.empty())
@@ -122,7 +123,8 @@ protected:
             }
             else
             {
-                _out << R"#(            return )#" << abstraction.parents[0] << R"#(::_derived::_static_shared_to_base(derived);
+                _out << R"#(            return )#" << abstraction.parents[0]
+                    << R"#(::_derived::_static_shared_to_base(derived);
 )#";
             }
             _out << R"#(        }
@@ -159,7 +161,8 @@ private:
             if constexpr (_Copy)
             {
 )#";
-            _out << R"#(                return )#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name << R"#(::_instance<_Thing, _Copy>>(_thing));
+            _out << R"#(                return )#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#"
+                << abstraction.name << R"#(::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -180,7 +183,9 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> )#" << abstraction.name << R"#(
     {
-        return )#" << abstraction.name << R"#({)#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name << R"#(::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+        return )#" << abstraction.name << R"#({)#" << abstraction.name
+            << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name
+            << R"#(::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
@@ -205,6 +210,10 @@ public:
             {
                 std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, true, unique);
+            }
+            {
+                std::unordered_set<strange::operation> unique;
+                _abstraction_operations(abstraction, abstraction, false, false, true, unique);
             }
         }
     }
@@ -341,15 +350,18 @@ public:
     inline )#";
                     }
                 }
-                else if (inner)
-                {
-                    _abstraction_parameters(derived, true, false);
-                    _out << R"#(template<typename _Thing, bool _Copy>
-inline )#";
-                }
                 else
                 {
-
+                    _abstraction_parameters(derived, true, false);
+                    if (inner)
+                    {
+                        _out << R"#(template<typename _Thing, bool _Copy>
+inline )#";
+                    }
+                    else
+                    {
+                        _out << R"#(inline )#";
+                    }
                 }
                 if (!definition)
                 {
@@ -359,9 +371,17 @@ inline )#";
                 {
                     _out << R"#(auto )#" << derived.name;
                     _abstraction_parameters(derived, false, false);
-                    _out << R"#(::_instance<_Thing, _Copy>::)#" << operation.name;
+                    if (inner)
+                    {
+                        _out << R"#(::_instance<_Thing, _Copy>::)#";
+                    }
+                    else
+                    {
+                        _out << R"#(::)#";
+                    }
+                    _out << operation.name;
                 }
-                _operation_parameters(operation, true, false);
+                _operation_parameters(operation, true, definition && !inner);
                 _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result;
                 if (!definition)
                 {
@@ -381,20 +401,32 @@ inline )#";
 )#";
                     }
                 }
-                else if (inner)
+                else
                 {
                     _out << R"#(
 {
-    )#" << (operation.result == "void" ? R"#()#" : R"#(return )#") << R"#(_thing.)#" << operation.name;
+    )#";
+                    if (inner)
+                    {
+                        _out << (operation.result == "void" ? R"#()#" : R"#(return )#") << R"#(_thing.)#" << operation.name;
+                    }
+                    else
+                    {
+                        if (!operation.constness)
+                        {
+                            _out << R"#(strange::_common::_mutate();
+    )#";
+                        }
+                        _out << (operation.result == "void" ? R"#()#" : R"#(return )#")
+                            << R"#(std::dynamic_pointer_cast<)#" << abstraction.name;
+                        _abstraction_parameters(abstraction, false, false);
+                        _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
+                    }
                     _operation_parameters(operation, false, false);
                     _out << R"#(;
 }
 
 )#";
-                }
-                else
-                {
-
                 }
             }
         }

@@ -586,6 +586,17 @@ inline auto widget::_instance<_Thing, _Copy>::inc() -> void
     _thing.inc();
 }
 
+inline auto widget::display(button b = button()) const -> void
+{
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->display(b);
+}
+
+inline auto widget::inc() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->inc();
+}
+
 template<typename _Thing, bool _Copy>
 inline auto button::_instance<_Thing, _Copy>::display(button b) const -> void
 {
@@ -604,6 +615,23 @@ inline auto button::_instance<_Thing, _Copy>::push() -> void
     _thing.push();
 }
 
+inline auto button::display(button b = button()) const -> void
+{
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->display(b);
+}
+
+inline auto button::inc() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->inc();
+}
+
+inline auto button::push() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<button::_derived>(strange::_common::_shared)->push();
+}
+
 template<typename _Thing, bool _Copy>
 inline auto number::_instance<_Thing, _Copy>::inc() -> void
 {
@@ -614,6 +642,18 @@ template<typename _Thing, bool _Copy>
 inline auto number::_instance<_Thing, _Copy>::dec() -> void
 {
     _thing.dec();
+}
+
+inline auto number::inc() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->inc();
+}
+
+inline auto number::dec() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->dec();
 }
 
 template<typename _Thing, bool _Copy>
@@ -632,6 +672,23 @@ template<typename _Thing, bool _Copy>
 inline auto widget_number::_instance<_Thing, _Copy>::dec() -> void
 {
     _thing.dec();
+}
+
+inline auto widget_number::display(button b = button()) const -> void
+{
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->display(b);
+}
+
+inline auto widget_number::inc() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->inc();
+}
+
+inline auto widget_number::dec() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->dec();
 }
 
 template<typename Data>
@@ -653,6 +710,26 @@ template<typename _Thing, bool _Copy>
 inline auto numeric<Data>::_instance<_Thing, _Copy>::get() const -> Data
 {
     return _thing.get();
+}
+
+template<typename Data>
+inline auto numeric<Data>::inc() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->inc();
+}
+
+template<typename Data>
+inline auto numeric<Data>::dec() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared)->dec();
+}
+
+template<typename Data>
+inline auto numeric<Data>::get() const -> Data
+{
+    return std::dynamic_pointer_cast<numeric<Data>::_derived>(strange::_common::_shared)->get();
 }
 
 }
