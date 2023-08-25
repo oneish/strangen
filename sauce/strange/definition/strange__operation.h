@@ -13,13 +13,15 @@ struct operation
     std::vector<strange::parameter> parameters;
     bool constness = false;
     std::string result;
+    bool data = false;
 
     auto operator==(operation const & other) const -> bool
     {
         return name == other.name
             && parameters == other.parameters
             && constness == other.constness
-            && result == other.result;
+            && result == other.result
+            && data == other.data;
     }
 };
 
@@ -36,6 +38,7 @@ struct std::hash<strange::operation>
             h ^= std::hash<strange::parameter>{}(param);
         }
         return h ^ std::hash<bool>{}(op.constness)
-            ^ std::hash<std::string>{}(op.result);
+            ^ std::hash<std::string>{}(op.result)
+            ^ std::hash<bool>{}(op.data);
     }
 };

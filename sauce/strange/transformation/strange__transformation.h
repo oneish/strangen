@@ -422,7 +422,10 @@ inline )#";
                         _abstraction_parameters(abstraction, false, false);
                         _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
                     }
-                    _operation_parameters(operation, false, false);
+                    if ((!inner) || (!operation.data))
+                    {
+                        _operation_parameters(operation, false, false);
+                    }
                     _out << R"#(;
 }
 

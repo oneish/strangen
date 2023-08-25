@@ -30,6 +30,8 @@ template<typename Data = int>
 struct numeric
 {
     virtual auto get() const -> Data = 0;
+    virtual auto x() const -> Data const & = 0;
+    virtual auto x() -> Data & = 0;
 };
 
 }
@@ -136,6 +138,17 @@ namespace example
                             .name = "get",
                             .constness = true,
                             .result = "Data",
+                        },
+                        {
+                            .name = "x",
+                            .constness = true,
+                            .result = "Data const &",
+                            .data = true,
+                        },
+                        {
+                            .name = "x",
+                            .result = "Data &",
+                            .data = true,
                         },
                     },
                 },

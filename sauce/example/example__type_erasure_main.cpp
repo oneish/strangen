@@ -125,7 +125,9 @@ int main()
 
     auto ni1 = example::numeric<int>::_make<implementation>();
     ni1.inc();
-    std::cout << ni1.get() << std::endl;
+    auto ni2 = ni1;
+    ni2.x() = 2;
+    std::cout << ni1.get() << ni1.x() << ni2.x() << std::endl;
 
     return 0;
 }

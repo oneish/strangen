@@ -510,6 +510,10 @@ protected:
         }
 
         virtual auto get() const -> Data = 0;
+
+        virtual auto x() const -> Data const & = 0;
+
+        virtual auto x() -> Data & = 0;
     };
 
 private:
@@ -551,6 +555,10 @@ private:
 
         inline auto get() const -> Data final;
 
+        inline auto x() const -> Data const & final;
+
+        inline auto x() -> Data & final;
+
     private:
         _Thing _thing;
     };
@@ -572,6 +580,10 @@ public:
     inline auto dec() -> void;
 
     inline auto get() const -> Data;
+
+    inline auto x() const -> Data const &;
+
+    inline auto x() -> Data &;
 };
 
 template<typename _Thing, bool _Copy>
@@ -713,6 +725,20 @@ inline auto numeric<Data>::_instance<_Thing, _Copy>::get() const -> Data
 }
 
 template<typename Data>
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::x() const -> Data const &
+{
+    return _thing.x;
+}
+
+template<typename Data>
+template<typename _Thing, bool _Copy>
+inline auto numeric<Data>::_instance<_Thing, _Copy>::x() -> Data &
+{
+    return _thing.x;
+}
+
+template<typename Data>
 inline auto numeric<Data>::inc() -> void
 {
     strange::_common::_mutate();
@@ -730,6 +756,19 @@ template<typename Data>
 inline auto numeric<Data>::get() const -> Data
 {
     return std::dynamic_pointer_cast<numeric<Data>::_derived>(strange::_common::_shared)->get();
+}
+
+template<typename Data>
+inline auto numeric<Data>::x() const -> Data const &
+{
+    return std::dynamic_pointer_cast<numeric<Data>::_derived>(strange::_common::_shared)->x();
+}
+
+template<typename Data>
+inline auto numeric<Data>::x() -> Data &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<numeric<Data>::_derived>(strange::_common::_shared)->x();
 }
 
 }
