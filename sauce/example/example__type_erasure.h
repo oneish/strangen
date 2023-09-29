@@ -67,6 +67,8 @@ protected:
         virtual auto inc() -> void = 0;
 
         virtual auto operator++() -> void = 0;
+
+        virtual auto operator--(int i) -> void = 0;
     };
 
 private:
@@ -108,6 +110,8 @@ private:
 
         inline auto operator++() -> void final;
 
+        inline auto operator--(int i) -> void final;
+
     private:
         _Thing _thing;
     };
@@ -129,6 +133,8 @@ public:
     inline auto inc() -> void;
 
     inline auto operator++() -> widget &;
+
+    inline auto operator--(int i) -> widget;
 };
 
 struct button : widget
@@ -221,6 +227,8 @@ private:
 
         inline auto operator++() -> void final;
 
+        inline auto operator--(int i) -> void final;
+
         inline auto push() -> void final;
 
     private:
@@ -244,6 +252,8 @@ public:
     inline auto inc() -> void;
 
     inline auto operator++() -> button &;
+
+    inline auto operator--(int i) -> button;
 
     inline auto push() -> void;
 };
@@ -447,6 +457,8 @@ private:
 
         inline auto operator++() -> void final;
 
+        inline auto operator--(int i) -> void final;
+
         inline auto dec() -> void final;
 
     private:
@@ -470,6 +482,8 @@ public:
     inline auto inc() -> void;
 
     inline auto operator++() -> widget_number &;
+
+    inline auto operator--(int i) -> widget_number;
 
     inline auto dec() -> void;
 };
@@ -618,6 +632,12 @@ inline auto widget::_instance<_Thing, _Copy>::operator++() -> void
     _thing.operator++();
 }
 
+template<typename _Thing, bool _Copy>
+inline auto widget::_instance<_Thing, _Copy>::operator--(int i) -> void
+{
+    _thing.operator--(i);
+}
+
 inline auto widget::display(button b = button()) const -> void
 {
     std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->display(b);
@@ -636,6 +656,14 @@ inline auto widget::operator++() -> widget &
     return *this;
 }
 
+inline auto widget::operator--(int i) -> widget
+{
+    auto _result = *this;
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->operator--(i);
+    return _result;
+}
+
 template<typename _Thing, bool _Copy>
 inline auto button::_instance<_Thing, _Copy>::display(button b) const -> void
 {
@@ -652,6 +680,12 @@ template<typename _Thing, bool _Copy>
 inline auto button::_instance<_Thing, _Copy>::operator++() -> void
 {
     _thing.operator++();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto button::_instance<_Thing, _Copy>::operator--(int i) -> void
+{
+    _thing.operator--(i);
 }
 
 template<typename _Thing, bool _Copy>
@@ -676,6 +710,14 @@ inline auto button::operator++() -> button &
     strange::_common::_mutate();
     std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->operator++();
     return *this;
+}
+
+inline auto button::operator--(int i) -> button
+{
+    auto _result = *this;
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->operator--(i);
+    return _result;
 }
 
 inline auto button::push() -> void
@@ -727,6 +769,12 @@ inline auto widget_number::_instance<_Thing, _Copy>::operator++() -> void
 }
 
 template<typename _Thing, bool _Copy>
+inline auto widget_number::_instance<_Thing, _Copy>::operator--(int i) -> void
+{
+    _thing.operator--(i);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto widget_number::_instance<_Thing, _Copy>::dec() -> void
 {
     _thing.dec();
@@ -748,6 +796,14 @@ inline auto widget_number::operator++() -> widget_number &
     strange::_common::_mutate();
     std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->operator++();
     return *this;
+}
+
+inline auto widget_number::operator--(int i) -> widget_number
+{
+    auto _result = *this;
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared)->operator--(i);
+    return _result;
 }
 
 inline auto widget_number::dec() -> void

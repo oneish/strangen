@@ -390,7 +390,10 @@ inline )#";
                 {
                     _out << R"#( -> )#";
                 }
-                if (operation.result == "*this")
+                bool const that = (operation.result == "*that");
+                bool const this_or_that = (that || operation.result == "*this");
+                bool const this_or_that_or_void = (this_or_that || operation.result == "void");
+                if (this_or_that)
                 {
                     if (inner || pure)
                     {
@@ -398,7 +401,11 @@ inline )#";
                     }
                     else
                     {
-                        _out << derived.name << R"#( &)#";
+                        _out << derived.name;
+                        if (!that)
+                        {
+                            _out << R"#( &)#";
+                        }
                     }
                 }
                 else
@@ -430,7 +437,7 @@ inline )#";
     )#";
                     if (inner)
                     {
-                        if (operation.result == "void" || operation.result == "*this")
+                        if (this_or_that_or_void)
                         {
                             _out << R"#(_thing.)#" << operation.name;
                         }
@@ -441,12 +448,17 @@ inline )#";
                     }
                     else
                     {
+                        if (that)
+                        {
+                            _out << R"#(auto _result = *this;
+    )#";
+                        }
                         if (!operation.constness)
                         {
                             _out << R"#(strange::_common::_mutate();
     )#";
                         }
-                        if (operation.result == "void" || operation.result == "*this")
+                        if (this_or_that_or_void)
                         {
                             _out << R"#(std::dynamic_pointer_cast<)#" << abstraction.name;
                         }
@@ -461,10 +473,19 @@ inline )#";
                     {
                         _operation_parameters(operation, false, false);
                     }
-                    if ((!inner) && operation.result == "*this")
+                    if ((!inner) && this_or_that)
                     {
-                        _out << R"#(;
+                        if (that)
+                        {
+                            _out << R"#(;
+    return _result;)#";
+
+                        }
+                        else
+                        {
+                            _out << R"#(;
     return *this;)#";
+                        }
                     }
                     else
                     {

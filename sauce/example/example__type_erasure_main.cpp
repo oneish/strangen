@@ -29,6 +29,12 @@ struct implementation
         ++x;
     }
 
+    inline void operator--(int)
+    {
+        std::cout << "operator--: " << x << " -> " << (x - 1) << std::endl;
+        x--;
+    }
+
     inline void push()
     {
         std::cout << "push: " << x << " -> " << (x - 1) << std::endl;
@@ -65,7 +71,7 @@ int main()
     w1.display();
     w2.display();
 
-    auto b1 = example::button::_make<implementation>();
+    auto b1 = example::button::_make<implementation>()--;
     if (b1._something())
     {
         std::cout << "yes" << b1._error() << std::endl;
