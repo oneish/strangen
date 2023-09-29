@@ -23,6 +23,12 @@ struct implementation
         ++x;
     }
 
+    inline void operator++()
+    {
+        std::cout << "operator++: " << x << " -> " << (x + 1) << std::endl;
+        ++x;
+    }
+
     inline void push()
     {
         std::cout << "push: " << x << " -> " << (x - 1) << std::endl;
@@ -52,6 +58,7 @@ int main()
 
     auto w1 = example::widget::_make<implementation>();
     w1.inc();
+    ++w1;
     auto w2 = w1;
     w1.display();
     w2.display();

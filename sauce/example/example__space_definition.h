@@ -9,6 +9,7 @@ struct widget
 {
     virtual auto display(button b = button()) const -> void = 0;
     virtual auto inc() -> void = 0;
+    virtual auto operator++() -> void = 0;
 };
 
 struct button : widget
@@ -70,6 +71,11 @@ namespace example
                         {
                             // operation
                             .name = "inc",
+                            .result = "void",
+                        },
+                        {
+                            // operation
+                            .name = "operator++",
                             .result = "void",
                         },
                     },
