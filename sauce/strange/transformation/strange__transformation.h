@@ -382,7 +382,29 @@ inline )#";
                     _out << operation.name;
                 }
                 _operation_parameters(operation, true, definition && !inner);
-                _out << (operation.constness ? R"#( const)#" : R"#()#") << R"#( -> )#" << operation.result;
+                if (operation.constness)
+                {
+                    _out << R"#( const -> )#";
+                }
+                else
+                {
+                    _out << R"#( -> )#";
+                }
+                if (operation.result == "*this")
+                {
+                    if (inner || pure)
+                    {
+                        _out << "void";
+                    }
+                    else
+                    {
+                        _out << derived.name << R"#( &)#";
+                    }
+                }
+                else
+                {
+                    _out << operation.result;
+                }
                 if (!definition)
                 {
                     if (pure)
@@ -408,7 +430,14 @@ inline )#";
     )#";
                     if (inner)
                     {
-                        _out << (operation.result == "void" ? R"#()#" : R"#(return )#") << R"#(_thing.)#" << operation.name;
+                        if (operation.result == "void" || operation.result == "*this")
+                        {
+                            _out << R"#(_thing.)#" << operation.name;
+                        }
+                        else
+                        {
+                            _out << R"#(return _thing.)#" << operation.name;
+                        }
                     }
                     else
                     {
@@ -417,8 +446,14 @@ inline )#";
                             _out << R"#(strange::_common::_mutate();
     )#";
                         }
-                        _out << (operation.result == "void" ? R"#()#" : R"#(return )#")
-                            << R"#(std::dynamic_pointer_cast<)#" << abstraction.name;
+                        if (operation.result == "void" || operation.result == "*this")
+                        {
+                            _out << R"#(std::dynamic_pointer_cast<)#" << abstraction.name;
+                        }
+                        else
+                        {
+                            _out << R"#(return std::dynamic_pointer_cast<)#" << abstraction.name;
+                        }
                         _abstraction_parameters(abstraction, false, false);
                         _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
                     }
@@ -426,7 +461,16 @@ inline )#";
                     {
                         _operation_parameters(operation, false, false);
                     }
-                    _out << R"#(;
+                    if ((!inner) && operation.result == "*this")
+                    {
+                        _out << R"#(;
+    return *this;)#";
+                    }
+                    else
+                    {
+                        _out << R"#(;)#";
+                    }
+                    _out << R"#(
 }
 
 )#";

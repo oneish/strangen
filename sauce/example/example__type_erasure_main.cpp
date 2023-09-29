@@ -58,8 +58,7 @@ int main()
 
     auto w1 = example::widget::_make<implementation>();
     w1.inc();
-    ++w1;
-    auto w2 = w1;
+    auto w2 = ++w1;
     w1.display();
     w2.display();
     w2.inc();
