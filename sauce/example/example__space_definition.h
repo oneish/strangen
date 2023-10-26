@@ -1,5 +1,5 @@
 #pragma once
-#include "../strange/definition/strange__space.h"
+#include "../strange/definition/implementation/strange__space.h"
 
 /*
 namespace example

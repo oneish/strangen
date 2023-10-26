@@ -2,7 +2,7 @@
 #include <ostream>
 #include <algorithm>
 #include <unordered_set>
-#include "../definition/strange__space.h"
+#include "../definition/implementation/strange__space.h"
 
 namespace strange
 {
