@@ -2,7 +2,7 @@
 // meta code
 #include <iostream>
 #include "example__space_definition.h"
-#include "../strange/transformation/strange__transformation.h"
+#include "../../sauce/strange/transformation/strange__transformation.h"
 
 #include <iostream>
 int main()

@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <type_traits>
-#include "../common/strange__common.h"
+#include "../../sauce/common/strange__common.h"
 
 namespace example
 {
