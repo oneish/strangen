@@ -2,7 +2,7 @@
 #include <ostream>
 #include <algorithm>
 #include <unordered_set>
-#include "../definition/implementation/strange__space.h"
+#include "../definition/strange__definition__space.h"
 
 namespace strange
 {
@@ -10,11 +10,11 @@ namespace strange
 struct transformation
 {
 protected:
-    strange::space _space;
+    definition::space _space;
     std::ostream & _out;
 
 public:
-    transformation(strange::space space, std::ostream & out)
+    transformation(definition::space space, std::ostream & out)
     :_space(space)
     ,_out(out)
     {
@@ -25,7 +25,6 @@ public:
         _out << R"#(
 #include <memory>
 #include <type_traits>
-#include "../../sauce/common/strange__common.h"
 )#";
         _namespace();
     }
@@ -130,7 +129,7 @@ protected:
             _out << R"#(        }
 )#";
             {
-                std::unordered_set<strange::operation> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, true, false, unique);
             }
             _out << R"#(    };
@@ -171,7 +170,7 @@ private:
         }
 )#";
             {
-                std::unordered_set<strange::operation> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, false, unique);
             }
             _out << R"#(
@@ -194,7 +193,7 @@ public:
     }
 )#";
             {
-                std::unordered_set<strange::operation> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, false, unique);
             }
             _out << R"#(};
@@ -208,17 +207,17 @@ public:
         for (auto const & abstraction : _space.abstractions)
         {
             {
-                std::unordered_set<strange::operation> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, true, unique);
             }
             {
-                std::unordered_set<strange::operation> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, true, unique);
             }
         }
     }
 
-    auto _abstraction_parameters(strange::abstraction const & abstraction, bool const types, bool const arguments) -> void
+    auto _abstraction_parameters(definition::abstraction const & abstraction, bool const types, bool const arguments) -> void
     {
         if (!abstraction.parameters.empty())
         {
@@ -264,7 +263,7 @@ public:
         }
     }
 
-    auto _abstraction_parents(strange::abstraction const & abstraction, bool const inner) -> void
+    auto _abstraction_parents(definition::abstraction const & abstraction, bool const inner) -> void
     {
         if (abstraction.parents.empty())
         {
@@ -299,7 +298,7 @@ public:
         }
     }
 
-    auto _abstraction_default_construct_bases(strange::abstraction const & abstraction) -> void
+    auto _abstraction_default_construct_bases(definition::abstraction const & abstraction) -> void
     {
         for (auto const & parent : abstraction.parents)
         {
@@ -308,7 +307,7 @@ public:
         }
     }
 
-    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<strange::operation> & unique) -> void
+    auto _abstraction_operations(definition::abstraction const & abstraction, definition::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<definition::operation> & unique) -> void
     {
         if ((!inner) || (!pure))
         {
@@ -316,7 +315,7 @@ public:
             for (auto const & parent : abstraction.parents)
             {
                 auto it = std::find_if(_space.abstractions.cbegin(), _space.abstractions.cend(),
-                    [& parent](strange::abstraction const & candidate){return candidate.name == parent;});
+                    [& parent](definition::abstraction const & candidate){return candidate.name == parent;});
                 if (it != _space.abstractions.cend())
                 {
                     _abstraction_operations(*it, derived, inner, pure, definition, unique);
@@ -500,7 +499,7 @@ inline )#";
         }
     }
 
-    auto _operation_parameters(strange::operation const & operation, bool const types, bool const arguments) -> void
+    auto _operation_parameters(definition::operation const & operation, bool const types, bool const arguments) -> void
     {
         _out << R"#(()#";
         bool first = true;

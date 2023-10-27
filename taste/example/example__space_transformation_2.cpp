@@ -8,6 +8,7 @@
 int main()
 {
 std::cout << R"~(#pragma once
+#include "../../sauce/strange/common/strange__common.h"
 )~";
 
 // more meta code

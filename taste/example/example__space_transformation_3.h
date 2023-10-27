@@ -1,8 +1,8 @@
 #pragma once
+#include "../../sauce/strange/common/strange__common.h"
 
 #include <memory>
 #include <type_traits>
-#include "../../sauce/common/strange__common.h"
 
 namespace example
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../sauce/strange/definition/implementation/strange__space.h"
+#include "../../sauce/strange/definition/strange__definition__space.h"
 
 /*
 namespace example
@@ -41,7 +41,7 @@ struct numeric
 
 namespace example
 {
-    strange::space definition()
+    strange::definition::space definition()
     {
         return
         {

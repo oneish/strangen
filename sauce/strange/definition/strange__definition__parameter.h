@@ -3,7 +3,8 @@
 
 namespace strange
 {
-
+namespace definition
+{
 struct parameter
 {
     std::string type;
@@ -17,13 +18,13 @@ struct parameter
             && argument == other.argument;
     }
 };
-
+}
 }
 
 template<>
-struct std::hash<strange::parameter>
+struct std::hash<strange::definition::parameter>
 {
-    auto operator()(strange::parameter const & param) const -> size_t
+    auto operator()(strange::definition::parameter const & param) const -> size_t
     {
         return std::hash<std::string>{}(param.type)
             ^ std::hash<std::string>{}(param.name)
