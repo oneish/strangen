@@ -1,7 +1,7 @@
 #pragma once
+#include "strange__definition__abstraction.h"
 #include <string>
 #include <vector>
-#include "strange__definition__abstraction.h"
 
 namespace strange
 {

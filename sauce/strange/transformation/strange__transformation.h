@@ -1,8 +1,8 @@
 #pragma once
+#include "../definition/strange__definition__space.h"
 #include <ostream>
 #include <algorithm>
 #include <unordered_set>
-#include "../definition/strange__definition__space.h"
 
 namespace strange
 {

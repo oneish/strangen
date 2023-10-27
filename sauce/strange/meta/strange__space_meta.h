@@ -1,6 +1,5 @@
 /*~
 // meta code
-#include <iostream>
 #include "strange__space_definition.h"
 #include "../transformation/strange__transformation.h"
 */#pragma once

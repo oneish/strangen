@@ -1,8 +1,8 @@
 #pragma once
+#include "strange__definition__parameter.h"
 #include <string>
 #include <vector>
 #include <functional>
-#include "strange__definition__parameter.h"
 
 namespace strange
 {
