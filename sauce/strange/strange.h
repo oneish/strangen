@@ -1,5 +1,6 @@
 #pragma once
 #include "space/strange__space.h"
+#include <functional>
 
 namespace std
 {
@@ -49,6 +50,41 @@ struct std::hash<strange::operation_a>
             ^ std::hash<bool>{}(op.data());
     }
 };
+
+namespace std
+{
+inline auto operator==(strange::abstraction_a const & lhs, strange::abstraction_a const & rhs) -> bool
+{
+    return lhs.parameters() == rhs.parameters()
+        && lhs.name() == rhs.name()
+        && lhs.parents() == rhs.parents()
+        && lhs.operations() == rhs.operations();
+}
+}
+
+template<>
+struct std::hash<strange::abstraction_a>
+{
+    inline auto operator()(strange::abstraction_a const & op) const -> size_t
+    {
+        std::size_t h = 0;
+        for (auto const & param : op.parameters())
+        {
+            h ^= std::hash<strange::parameter_a>{}(param);
+        }
+        h ^= std::hash<std::string>{}(op.name());
+        for (auto const & paren : op.parents())
+        {
+            h ^= std::hash<std::string>{}(paren);
+        }
+        for (auto const & oper : op.operations())
+        {
+            h ^= std::hash<strange::operation_a>{}(oper);
+        }
+        return h;
+    }
+};
+
 #include "definition/strange__definition__parameter.h"
 
 namespace strange
@@ -70,4 +106,13 @@ inline auto make_operation(definition::operation oper) -> operation_a
 }
 
 #include "definition/strange__definition__abstraction.h"
+
+namespace strange
+{
+inline auto make_abstraction(definition::abstraction abs) -> abstraction_a
+{
+    return abstraction_a::_make<definition::abstraction>(abs);
+}
+}
+
 #include "definition/strange__definition__space.h"
