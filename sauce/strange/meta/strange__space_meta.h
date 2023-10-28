@@ -1,7 +1,6 @@
-/*~
-// meta code
+/*~// meta code
 #include "strange__space_definition.h"
-#include "../transformation/strange__transformation.h"
+#include "strange__transformation.h"
 */#pragma once
 #include "../common/strange__common.h"
 #include <string>

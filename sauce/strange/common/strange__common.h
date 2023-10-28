@@ -4,7 +4,6 @@
 
 namespace strange
 {
-
 // _common is the base class for all strange abstractions
 // _common does not have any virtual functions or a v-table itself
 // _common has a single data member, which is shared pointer to _common::_base
@@ -149,5 +148,4 @@ public:
         return Other{};
     }
 };
-
 }

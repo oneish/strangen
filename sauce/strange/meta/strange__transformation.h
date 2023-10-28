@@ -1,4 +1,5 @@
 #pragma once
+#include "../strange.h"
 #include "../definition/strange__definition__space.h"
 #include <ostream>
 #include <algorithm>
@@ -6,7 +7,6 @@
 
 namespace strange
 {
-
 struct transformation
 {
 protected:
@@ -243,12 +243,12 @@ public:
                 }
                 if (types)
                 {
-                    _out << parameter.type << R"#( )#";
+                    _out << parameter.type() << R"#( )#";
                 }
-                _out << parameter.name;
-                if (arguments && !parameter.argument.empty())
+                _out << parameter.name();
+                if (arguments && !parameter.argument().empty())
                 {
-                    _out << R"#( = )#" << parameter.argument;
+                    _out << R"#( = )#" << parameter.argument();
                 }
             }
             if (types)
@@ -515,17 +515,16 @@ inline )#";
             }
             if (types)
             {
-                _out << parameter.type << R"#( )#";
+                _out << parameter.type() << R"#( )#";
             }
-            _out << parameter.name;
-            if (arguments && !parameter.argument.empty())
+            _out << parameter.name();
+            if (arguments && !parameter.argument().empty())
             {
-                _out << R"#( = )#" << parameter.argument;
+                _out << R"#( = )#" << parameter.argument();
             }
         }
         _out << R"#())#";
     }
 
 };
-
 }

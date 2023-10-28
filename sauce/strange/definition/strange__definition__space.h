@@ -1,5 +1,5 @@
 #pragma once
-#include "strange__definition__abstraction.h"
+#include "../strange.h"
 #include <string>
 #include <vector>
 

@@ -1,10 +1,9 @@
 #pragma once
-#include "../../sauce/strange/definition/strange__definition__space.h"
+#include "../../sauce/strange/strange.h"
 
 /*
 namespace example
 {
-
 struct widget
 {
     virtual auto display(button b = button()) const -> void = 0;
@@ -35,144 +34,143 @@ struct numeric
     virtual auto x() const -> Data const & = 0;
     virtual auto x() -> Data & = 0;
 };
-
 }
 */
 
 namespace example
 {
-    strange::definition::space definition()
+strange::definition::space definition()
+{
+    return
     {
-        return
+        // space
+        .name = "example",
+        .abstractions =
         {
-            // space
-            .name = "example",
-            .abstractions =
             {
+                // abstraction
+                .name = "widget",
+                .operations =
                 {
-                    // abstraction
-                    .name = "widget",
-                    .operations =
                     {
+                        // operation
+                        .name = "display",
+                        .parameters =
                         {
-                            // operation
-                            .name = "display",
-                            .parameters =
-                            {
-                                {
-                                    // parameter
-                                    .type = "button",
-                                    .name = "b",
-                                    .argument = "button()",
-                                },
-                            },
-                            .constness = true,
-                            .result = "void",
+                            strange::make_parameter
+                            ({
+                                .type = "button",
+                                .name = "b",
+                                .argument = "button()",
+                            }),
                         },
-                        {
-                            // operation
-                            .name = "inc",
-                            .result = "void",
-                        },
-                        {
-                            // operation
-                            .name = "operator++",
-                            .result = "*this",
-                        },
-                        {
-                            // operation
-                            .name = "operator--",
-                            .parameters =
-                            {
-                                {
-                                    // parameter
-                                    .type = "int",
-                                    .name = "i",
-                                },
-                            },
-                            .result = "*that",
-                        },
+                        .constness = true,
+                        .result = "void",
                     },
-                },
-                {
-                    // abstraction
-                    .name = "button",
-                    .parents =
                     {
-                        "widget",
+                        // operation
+                        .name = "inc",
+                        .result = "void",
                     },
-                    .operations =
                     {
-                        {
-                            // operation
-                            .name = "push",
-                            .result = "void",
-                        },
+                        // operation
+                        .name = "operator++",
+                        .result = "*this",
                     },
-                },
-                {
-                    // abstraction
-                    .name = "number",
-                    .operations =
                     {
+                        // operation
+                        .name = "operator--",
+                        .parameters =
                         {
-                            // operation
-                            .name = "inc",
-                            .result = "void",
+                            strange::make_parameter
+                            ({
+                                .type = "int",
+                                .name = "i",
+                            }),
                         },
-                        {
-                            // operation
-                            .name = "dec",
-                            .result = "void",
-                        },
-                    },
-                },
-                {
-                    // abstraction
-                    .name = "widget_number",
-                    .parents =
-                    {
-                        "widget",
-                        "number",
-                    },
-                },
-                {
-                    // abstraction
-                    .parameters =
-                    {
-                        {
-                            // parameter
-                            .type = "typename",
-                            .name = "Data",
-                            .argument = "int",
-                        },
-                    },
-                    .name = "numeric",
-                    .parents =
-                    {
-                        "number",
-                    },
-                    .operations =
-                    {
-                        {
-                            .name = "get",
-                            .constness = true,
-                            .result = "Data",
-                        },
-                        {
-                            .name = "x",
-                            .constness = true,
-                            .result = "Data const &",
-                            .data = true,
-                        },
-                        {
-                            .name = "x",
-                            .result = "Data &",
-                            .data = true,
-                        },
+                        .result = "*that",
                     },
                 },
             },
-        };
-    }
+            {
+                // abstraction
+                .name = "button",
+                .parents =
+                {
+                    "widget",
+                },
+                .operations =
+                {
+                    {
+                        // operation
+                        .name = "push",
+                        .result = "void",
+                    },
+                },
+            },
+            {
+                // abstraction
+                .name = "number",
+                .operations =
+                {
+                    {
+                        // operation
+                        .name = "inc",
+                        .result = "void",
+                    },
+                    {
+                        // operation
+                        .name = "dec",
+                        .result = "void",
+                    },
+                },
+            },
+            {
+                // abstraction
+                .name = "widget_number",
+                .parents =
+                {
+                    "widget",
+                    "number",
+                },
+            },
+            {
+                // abstraction
+                .parameters =
+                {
+                    strange::make_parameter
+                    ({
+                        .type = "typename",
+                        .name = "Data",
+                        .argument = "int",
+                    }),
+                },
+                .name = "numeric",
+                .parents =
+                {
+                    "number",
+                },
+                .operations =
+                {
+                    {
+                        .name = "get",
+                        .constness = true,
+                        .result = "Data",
+                    },
+                    {
+                        .name = "x",
+                        .constness = true,
+                        .result = "Data const &",
+                        .data = true,
+                    },
+                    {
+                        .name = "x",
+                        .result = "Data &",
+                        .data = true,
+                    },
+                },
+            },
+        },
+    };
+}
 }

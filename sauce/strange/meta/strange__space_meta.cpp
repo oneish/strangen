@@ -1,7 +1,6 @@
-
 // meta code
 #include "strange__space_definition.h"
-#include "../transformation/strange__transformation.h"
+#include "strange__transformation.h"
 
 #include <iostream>
 int main()
