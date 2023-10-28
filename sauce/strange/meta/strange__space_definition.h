@@ -64,11 +64,10 @@ namespace strange
 {
 namespace meta
 {
-definition::space definition()
+auto definition() -> strange::space_a
 {
-    return
-    {
-        // space
+    return strange::make_space
+    ({
         .name = "strange",
         .abstractions =
         {
@@ -283,7 +282,7 @@ definition::space definition()
                 },
             }),
         },
-    };
+    });
 }
 }
 }

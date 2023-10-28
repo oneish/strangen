@@ -1,6 +1,5 @@
 #pragma once
 #include "../strange.h"
-#include "../definition/strange__definition__space.h"
 #include <ostream>
 #include <algorithm>
 #include <unordered_set>
@@ -10,11 +9,11 @@ namespace strange
 struct transformation
 {
 protected:
-    definition::space _space;
+    space_a _space;
     std::ostream & _out;
 
 public:
-    transformation(definition::space space, std::ostream & out)
+    transformation(space_a space, std::ostream & out)
     :_space(space)
     ,_out(out)
     {
@@ -33,7 +32,7 @@ protected:
     auto _namespace() -> void
     {
         _out << R"#(
-namespace )#" << _space.name << R"#(
+namespace )#" << _space.name() << R"#(
 {
 
 )#";
@@ -46,7 +45,7 @@ namespace )#" << _space.name << R"#(
 
     auto _forward_declarations() -> void
     {
-        for (auto const & abstraction : _space.abstractions)
+        for (auto const & abstraction : _space.abstractions())
         {
             _abstraction_parameters(abstraction, true, true);
             _out << R"#(struct )#" << abstraction.name() << R"#(;
@@ -57,7 +56,7 @@ namespace )#" << _space.name << R"#(
 
     auto _declarations() -> void
     {
-        for (auto const & abstraction : _space.abstractions)
+        for (auto const & abstraction : _space.abstractions())
         {
             _abstraction_parameters(abstraction, true, false);
             _out << R"#(struct )#" << abstraction.name() << R"#( : )#";
@@ -204,7 +203,7 @@ public:
 
     auto _definitions() -> void
     {
-        for (auto const & abstraction : _space.abstractions)
+        for (auto const & abstraction : _space.abstractions())
         {
             {
                 std::unordered_set<operation_a> unique;
@@ -314,9 +313,9 @@ public:
             // override base class operations as well
             for (auto const & parent : abstraction.parents())
             {
-                auto it = std::find_if(_space.abstractions.cbegin(), _space.abstractions.cend(),
+                auto it = std::find_if(_space.abstractions().cbegin(), _space.abstractions().cend(),
                     [& parent](abstraction_a const & candidate){return candidate.name() == parent;});
-                if (it != _space.abstractions.cend())
+                if (it != _space.abstractions().cend())
                 {
                     _abstraction_operations(*it, derived, inner, pure, definition, unique);
                 }

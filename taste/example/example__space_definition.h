@@ -39,11 +39,10 @@ struct numeric
 
 namespace example
 {
-strange::definition::space definition()
+auto definition() -> strange::space_a
 {
-    return
-    {
-        // space
+    return strange::make_space
+    ({
         .name = "example",
         .abstractions =
         {
@@ -174,6 +173,6 @@ strange::definition::space definition()
                 },
             }),
         },
-    };
+    });
 }
 }
