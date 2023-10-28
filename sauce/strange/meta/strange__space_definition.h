@@ -63,8 +63,8 @@ definition::space definition()
         .name = "strange",
         .abstractions =
         {
-            {
-                // abstraction
+            strange::make_abstraction
+            ({
                 .name = "parameter_a",
                 .operations =
                 {
@@ -108,9 +108,9 @@ definition::space definition()
                         .data = true,
                     }),
                 },
-            },
-            {
-                // abstraction
+            }),
+            strange::make_abstraction
+            ({
                 .name = "operation_a",
                 .operations =
                 {
@@ -180,9 +180,9 @@ definition::space definition()
                         .data = true,
                     }),
                 },
-            },
-            {
-                // abstraction
+            }),
+            strange::make_abstraction
+            ({
                 .name = "abstraction_a",
                 .operations =
                 {
@@ -239,7 +239,7 @@ definition::space definition()
                         .data = true,
                     }),
                 },
-            },
+            }),
         },
     };
 }

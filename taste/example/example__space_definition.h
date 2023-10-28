@@ -47,8 +47,8 @@ strange::definition::space definition()
         .name = "example",
         .abstractions =
         {
-            {
-                // abstraction
+            strange::make_abstraction
+            ({
                 .name = "widget",
                 .operations =
                 {
@@ -91,9 +91,9 @@ strange::definition::space definition()
                         .result = "*that",
                     }),
                 },
-            },
-            {
-                // abstraction
+            }),
+            strange::make_abstraction
+            ({
                 .name = "button",
                 .parents =
                 {
@@ -107,9 +107,9 @@ strange::definition::space definition()
                         .result = "void",
                     }),
                 },
-            },
-            {
-                // abstraction
+            }),
+            strange::make_abstraction
+            ({
                 .name = "number",
                 .operations =
                 {
@@ -124,18 +124,18 @@ strange::definition::space definition()
                         .result = "void",
                     }),
                 },
-            },
-            {
-                // abstraction
+            }),
+            strange::make_abstraction
+            ({
                 .name = "widget_number",
                 .parents =
                 {
                     "widget",
                     "number",
                 },
-            },
-            {
-                // abstraction
+            }),
+            strange::make_abstraction
+            ({
                 .parameters =
                 {
                     strange::make_parameter
@@ -172,7 +172,7 @@ strange::definition::space definition()
                         .data = true,
                     }),
                 },
-            },
+            }),
         },
     };
 }

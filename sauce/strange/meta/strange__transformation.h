@@ -49,7 +49,7 @@ namespace )#" << _space.name << R"#(
         for (auto const & abstraction : _space.abstractions)
         {
             _abstraction_parameters(abstraction, true, true);
-            _out << R"#(struct )#" << abstraction.name << R"#(;
+            _out << R"#(struct )#" << abstraction.name() << R"#(;
 
 )#";
         }
@@ -60,46 +60,46 @@ namespace )#" << _space.name << R"#(
         for (auto const & abstraction : _space.abstractions)
         {
             _abstraction_parameters(abstraction, true, false);
-            _out << R"#(struct )#" << abstraction.name << R"#( : )#";
+            _out << R"#(struct )#" << abstraction.name() << R"#( : )#";
             _abstraction_parents(abstraction, false);
             _out << R"#(
 {
-    inline )#" << abstraction.name << R"#(() = default;
+    inline )#" << abstraction.name() << R"#(() = default;
 
-    inline )#" << abstraction.name << R"#(()#" << abstraction.name << R"#( const & other)
+    inline )#" << abstraction.name() << R"#(()#" << abstraction.name() << R"#( const & other)
     :strange::_common{other}
 )#";
             _abstraction_default_construct_bases(abstraction);
             _out << R"#(    {
     }
 
-    inline )#" << abstraction.name << R"#(()#" << abstraction.name << R"#( && other)
+    inline )#" << abstraction.name() << R"#(()#" << abstraction.name() << R"#( && other)
     :strange::_common{std::move(other)}
 )#";
             _abstraction_default_construct_bases(abstraction);
             _out << R"#(    {
     }
 
-    inline auto operator=()#" << abstraction.name << R"#( const & other) -> )#" << abstraction.name << R"#( &
+    inline auto operator=()#" << abstraction.name() << R"#( const & other) -> )#" << abstraction.name() << R"#( &
     {
         strange::_common::operator=(other);
         return *this;
     }
 
-    inline auto operator=()#" << abstraction.name << R"#( && other) -> )#" << abstraction.name << R"#( &
+    inline auto operator=()#" << abstraction.name() << R"#( && other) -> )#" << abstraction.name() << R"#( &
     {
         strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline )#" << abstraction.name << R"#((std::shared_ptr<strange::_common::_base> const & shared)
+    explicit inline )#" << abstraction.name() << R"#((std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
 )#";
             _abstraction_default_construct_bases(abstraction);
             _out << R"#(    {
     }
 
-    explicit inline )#" << abstraction.name << R"#((std::shared_ptr<strange::_common::_base> && shared)
+    explicit inline )#" << abstraction.name() << R"#((std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
 )#";
             _abstraction_default_construct_bases(abstraction);
@@ -111,18 +111,18 @@ protected:
             _abstraction_parents(abstraction, true);
             _out << R"#(
     {
-        static inline auto _static_shared_to_base(std::shared_ptr<)#" << abstraction.name
+        static inline auto _static_shared_to_base(std::shared_ptr<)#" << abstraction.name()
                 << R"#(::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
 )#";
-            if (abstraction.parents.empty())
+            if (abstraction.parents().empty())
             {
                 _out << R"#(            return derived;
 )#";
             }
             else
             {
-                _out << R"#(            return )#" << abstraction.parents[0]
+                _out << R"#(            return )#" << abstraction.parents()[0]
                     << R"#(::_derived::_static_shared_to_base(derived);
 )#";
             }
@@ -136,11 +136,11 @@ protected:
 
 private:
     template<typename _Thing, bool _Copy>
-    struct _instance final : )#" << abstraction.name << R"#(::_derived
+    struct _instance final : )#" << abstraction.name() << R"#(::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :)#" << abstraction.name << R"#(::_derived{}
+        :)#" << abstraction.name() << R"#(::_derived{}
         ,_thing{std::forward<_Args>(_args) ...}
         {
         }
@@ -160,8 +160,8 @@ private:
             if constexpr (_Copy)
             {
 )#";
-            _out << R"#(                return )#" << abstraction.name << R"#(::_derived::_static_shared_to_base(std::make_shared<)#"
-                << abstraction.name << R"#(::_instance<_Thing, _Copy>>(_thing));
+            _out << R"#(                return )#" << abstraction.name() << R"#(::_derived::_static_shared_to_base(std::make_shared<)#"
+                << abstraction.name() << R"#(::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -180,16 +180,16 @@ private:
 
 public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> )#" << abstraction.name << R"#(
+    inline static auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(
     {
-        return )#" << abstraction.name << R"#({)#" << abstraction.name
-            << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name
+        return )#" << abstraction.name() << R"#({)#" << abstraction.name()
+            << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name()
             << R"#(::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<)#" << abstraction.name() << R"#(::_derived>(strange::_common::_shared).operator bool();
     }
 )#";
             {
@@ -217,9 +217,9 @@ public:
         }
     }
 
-    auto _abstraction_parameters(definition::abstraction const & abstraction, bool const types, bool const arguments) -> void
+    auto _abstraction_parameters(abstraction_a const & abstraction, bool const types, bool const arguments) -> void
     {
-        if (!abstraction.parameters.empty())
+        if (!abstraction.parameters().empty())
         {
             if (types)
             {
@@ -231,7 +231,7 @@ public:
                 _out << R"#(<)#";
             }
             bool first = true;
-            for (auto const & parameter : abstraction.parameters)
+            for (auto const & parameter : abstraction.parameters())
             {
                 if (first)
                 {
@@ -263,9 +263,9 @@ public:
         }
     }
 
-    auto _abstraction_parents(definition::abstraction const & abstraction, bool const inner) -> void
+    auto _abstraction_parents(abstraction_a const & abstraction, bool const inner) -> void
     {
-        if (abstraction.parents.empty())
+        if (abstraction.parents().empty())
         {
             if (inner)
             {
@@ -279,7 +279,7 @@ public:
         else
         {
             bool first = true;
-            for (auto const & parent : abstraction.parents)
+            for (auto const & parent : abstraction.parents())
             {
                 if (first)
                 {
@@ -298,33 +298,33 @@ public:
         }
     }
 
-    auto _abstraction_default_construct_bases(definition::abstraction const & abstraction) -> void
+    auto _abstraction_default_construct_bases(abstraction_a const & abstraction) -> void
     {
-        for (auto const & parent : abstraction.parents)
+        for (auto const & parent : abstraction.parents())
         {
             _out << R"#(    ,)#" << parent << R"#({}
 )#";
         }
     }
 
-    auto _abstraction_operations(definition::abstraction const & abstraction, definition::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<operation_a> & unique) -> void
+    auto _abstraction_operations(abstraction_a const & abstraction, abstraction_a const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<operation_a> & unique) -> void
     {
         if ((!inner) || (!pure))
         {
             // override base class operations as well
-            for (auto const & parent : abstraction.parents)
+            for (auto const & parent : abstraction.parents())
             {
                 auto it = std::find_if(_space.abstractions.cbegin(), _space.abstractions.cend(),
-                    [& parent](definition::abstraction const & candidate){return candidate.name == parent;});
+                    [& parent](abstraction_a const & candidate){return candidate.name() == parent;});
                 if (it != _space.abstractions.cend())
                 {
                     _abstraction_operations(*it, derived, inner, pure, definition, unique);
                 }
             }
         }
-        if (!abstraction.operations.empty())
+        if (!abstraction.operations().empty())
         {
-            for (auto const & operation : abstraction.operations)
+            for (auto const & operation : abstraction.operations())
             {
                 if (unique.count(operation))
                 {
@@ -368,7 +368,7 @@ inline )#";
                 }
                 else
                 {
-                    _out << R"#(auto )#" << derived.name;
+                    _out << R"#(auto )#" << derived.name();
                     _abstraction_parameters(derived, false, false);
                     if (inner)
                     {
@@ -400,7 +400,7 @@ inline )#";
                     }
                     else
                     {
-                        _out << derived.name;
+                        _out << derived.name();
                         if (!that)
                         {
                             _out << R"#( &)#";
@@ -459,11 +459,11 @@ inline )#";
                         }
                         if (this_or_that_or_void)
                         {
-                            _out << R"#(std::dynamic_pointer_cast<)#" << abstraction.name;
+                            _out << R"#(std::dynamic_pointer_cast<)#" << abstraction.name();
                         }
                         else
                         {
-                            _out << R"#(return std::dynamic_pointer_cast<)#" << abstraction.name;
+                            _out << R"#(return std::dynamic_pointer_cast<)#" << abstraction.name();
                         }
                         _abstraction_parameters(abstraction, false, false);
                         _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name();
