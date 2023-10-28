@@ -11,6 +11,8 @@ namespace strange
 
 struct parameter_a;
 
+struct operation_a;
+
 struct parameter_a : virtual strange::_common
 {
     inline parameter_a() = default;
@@ -142,6 +144,161 @@ public:
     inline auto argument() -> std::string &;
 };
 
+struct operation_a : virtual strange::_common
+{
+    inline operation_a() = default;
+
+    inline operation_a(operation_a const & other)
+    :strange::_common{other}
+    {
+    }
+
+    inline operation_a(operation_a && other)
+    :strange::_common{std::move(other)}
+    {
+    }
+
+    inline auto operator=(operation_a const & other) -> operation_a &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(operation_a && other) -> operation_a &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline operation_a(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    {
+    }
+
+    explicit inline operation_a(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    {
+    }
+
+protected:
+    struct _derived : strange::_common::_base
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<operation_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
+        virtual auto name() const -> std::string const & = 0;
+
+        virtual auto name() -> std::string & = 0;
+
+        virtual auto parameters() const -> std::vector<parameter_a> const & = 0;
+
+        virtual auto parameters() -> std::vector<parameter_a> & = 0;
+
+        virtual auto constness() const -> bool const & = 0;
+
+        virtual auto constness() -> bool & = 0;
+
+        virtual auto result() const -> std::string const & = 0;
+
+        virtual auto result() -> std::string & = 0;
+
+        virtual auto data() const -> bool const & = 0;
+
+        virtual auto data() -> bool & = 0;
+    };
+
+private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : operation_a::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :operation_a::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return operation_a::_derived::_static_shared_to_base(std::make_shared<operation_a::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto name() const -> std::string const & final;
+
+        inline auto name() -> std::string & final;
+
+        inline auto parameters() const -> std::vector<parameter_a> const & final;
+
+        inline auto parameters() -> std::vector<parameter_a> & final;
+
+        inline auto constness() const -> bool const & final;
+
+        inline auto constness() -> bool & final;
+
+        inline auto result() const -> std::string const & final;
+
+        inline auto result() -> std::string & final;
+
+        inline auto data() const -> bool const & final;
+
+        inline auto data() -> bool & final;
+
+    private:
+        _Thing _thing;
+    };
+
+public:
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> operation_a
+    {
+        return operation_a{operation_a::_derived::_static_shared_to_base(std::make_shared<operation_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto name() const -> std::string const &;
+
+    inline auto name() -> std::string &;
+
+    inline auto parameters() const -> std::vector<parameter_a> const &;
+
+    inline auto parameters() -> std::vector<parameter_a> &;
+
+    inline auto constness() const -> bool const &;
+
+    inline auto constness() -> bool &;
+
+    inline auto result() const -> std::string const &;
+
+    inline auto result() -> std::string &;
+
+    inline auto data() const -> bool const &;
+
+    inline auto data() -> bool &;
+};
+
 template<typename _Thing, bool _Copy>
 inline auto parameter_a::_instance<_Thing, _Copy>::type() const -> std::string const &
 {
@@ -209,6 +366,121 @@ inline auto parameter_a::argument() -> std::string &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<parameter_a::_derived>(strange::_common::_shared)->argument();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::name() const -> std::string const &
+{
+    return _thing.name;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::name() -> std::string &
+{
+    return _thing.name;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::parameters() const -> std::vector<parameter_a> const &
+{
+    return _thing.parameters;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::parameters() -> std::vector<parameter_a> &
+{
+    return _thing.parameters;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::constness() const -> bool const &
+{
+    return _thing.constness;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::constness() -> bool &
+{
+    return _thing.constness;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::result() const -> std::string const &
+{
+    return _thing.result;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::result() -> std::string &
+{
+    return _thing.result;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::data() const -> bool const &
+{
+    return _thing.data;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_a::_instance<_Thing, _Copy>::data() -> bool &
+{
+    return _thing.data;
+}
+
+inline auto operation_a::name() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->name();
+}
+
+inline auto operation_a::name() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->name();
+}
+
+inline auto operation_a::parameters() const -> std::vector<parameter_a> const &
+{
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->parameters();
+}
+
+inline auto operation_a::parameters() -> std::vector<parameter_a> &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->parameters();
+}
+
+inline auto operation_a::constness() const -> bool const &
+{
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->constness();
+}
+
+inline auto operation_a::constness() -> bool &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->constness();
+}
+
+inline auto operation_a::result() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->result();
+}
+
+inline auto operation_a::result() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->result();
+}
+
+inline auto operation_a::data() const -> bool const &
+{
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->data();
+}
+
+inline auto operation_a::data() -> bool &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->data();
 }
 
 }

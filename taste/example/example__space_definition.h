@@ -52,8 +52,8 @@ strange::definition::space definition()
                 .name = "widget",
                 .operations =
                 {
-                    {
-                        // operation
+                    strange::make_operation
+                    ({
                         .name = "display",
                         .parameters =
                         {
@@ -66,19 +66,19 @@ strange::definition::space definition()
                         },
                         .constness = true,
                         .result = "void",
-                    },
-                    {
-                        // operation
+                    }),
+                    strange::make_operation
+                    ({
                         .name = "inc",
                         .result = "void",
-                    },
-                    {
-                        // operation
+                    }),
+                    strange::make_operation
+                    ({
                         .name = "operator++",
                         .result = "*this",
-                    },
-                    {
-                        // operation
+                    }),
+                    strange::make_operation
+                    ({
                         .name = "operator--",
                         .parameters =
                         {
@@ -89,7 +89,7 @@ strange::definition::space definition()
                             }),
                         },
                         .result = "*that",
-                    },
+                    }),
                 },
             },
             {
@@ -101,11 +101,11 @@ strange::definition::space definition()
                 },
                 .operations =
                 {
-                    {
-                        // operation
+                    strange::make_operation
+                    ({
                         .name = "push",
                         .result = "void",
-                    },
+                    }),
                 },
             },
             {
@@ -113,16 +113,16 @@ strange::definition::space definition()
                 .name = "number",
                 .operations =
                 {
-                    {
-                        // operation
+                    strange::make_operation
+                    ({
                         .name = "inc",
                         .result = "void",
-                    },
-                    {
-                        // operation
+                    }),
+                    strange::make_operation
+                    ({
                         .name = "dec",
                         .result = "void",
-                    },
+                    }),
                 },
             },
             {
@@ -152,22 +152,25 @@ strange::definition::space definition()
                 },
                 .operations =
                 {
-                    {
+                    strange::make_operation
+                    ({
                         .name = "get",
                         .constness = true,
                         .result = "Data",
-                    },
-                    {
+                    }),
+                    strange::make_operation
+                    ({
                         .name = "x",
                         .constness = true,
                         .result = "Data const &",
                         .data = true,
-                    },
-                    {
+                    }),
+                    strange::make_operation
+                    ({
                         .name = "x",
                         .result = "Data &",
                         .data = true,
-                    },
+                    }),
                 },
             },
         },
