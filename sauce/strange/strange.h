@@ -65,21 +65,44 @@ inline auto operator==(strange::abstraction_a const & lhs, strange::abstraction_
 template<>
 struct std::hash<strange::abstraction_a>
 {
-    inline auto operator()(strange::abstraction_a const & op) const -> size_t
+    inline auto operator()(strange::abstraction_a const & abs) const -> size_t
     {
         std::size_t h = 0;
-        for (auto const & param : op.parameters())
+        for (auto const & param : abs.parameters())
         {
             h ^= std::hash<strange::parameter_a>{}(param);
         }
-        h ^= std::hash<std::string>{}(op.name());
-        for (auto const & paren : op.parents())
+        h ^= std::hash<std::string>{}(abs.name());
+        for (auto const & parent : abs.parents())
         {
-            h ^= std::hash<std::string>{}(paren);
+            h ^= std::hash<std::string>{}(parent);
         }
-        for (auto const & oper : op.operations())
+        for (auto const & oper : abs.operations())
         {
             h ^= std::hash<strange::operation_a>{}(oper);
+        }
+        return h;
+    }
+};
+
+namespace std
+{
+inline auto operator==(strange::space_a const & lhs, strange::space_a const & rhs) -> bool
+{
+    return lhs.name() == rhs.name()
+        && lhs.abstractions() == rhs.abstractions();
+}
+}
+
+template<>
+struct std::hash<strange::space_a>
+{
+    inline auto operator()(strange::space_a const & spc) const -> size_t
+    {
+        std::size_t h = std::hash<std::string>{}(spc.name());
+        for (auto const & abs : spc.abstractions())
+        {
+            h ^= std::hash<strange::abstraction_a>{}(abs);
         }
         return h;
     }
@@ -116,3 +139,11 @@ inline auto make_abstraction(definition::abstraction abs) -> abstraction_a
 }
 
 #include "definition/strange__definition__space.h"
+
+namespace strange
+{
+inline auto make_space(definition::space spc) -> space_a
+{
+    return space_a::_make<definition::space>(spc);
+}
+}

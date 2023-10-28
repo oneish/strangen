@@ -48,6 +48,15 @@ struct abstraction_a
     virtual auto operations() const -> std::vector<operation_a> const & = 0;
     virtual auto operations() -> std::vector<operation_a> & = 0;
 };
+
+struct space_a
+{
+    virtual auto name() const -> std::string const & = 0;
+    virtual auto name() -> std::string & = 0;
+
+    virtual auto abstractions() const -> std::vector<abstraction_a> const & = 0;
+    virtual auto abstractions() -> std::vector<abstraction_a> & = 0;
+}
 }
 */
 
@@ -236,6 +245,39 @@ definition::space definition()
                     ({
                         .name = "operations",
                         .result = "std::vector<operation_a> &",
+                        .data = true,
+                    }),
+                },
+            }),
+            strange::make_abstraction
+            ({
+                .name = "space_a",
+                .operations =
+                {
+                    strange::make_operation
+                    ({
+                        .name = "name",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "name",
+                        .result = "std::string &",
+                        .data = true,
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "abstractions",
+                        .constness = true,
+                        .result = "std::vector<abstraction_a> const &",
+                        .data = true,
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "abstractions",
+                        .result = "std::vector<abstraction_a> &",
                         .data = true,
                     }),
                 },

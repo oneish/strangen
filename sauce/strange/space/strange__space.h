@@ -15,6 +15,8 @@ struct operation_a;
 
 struct abstraction_a;
 
+struct space_a;
+
 struct parameter_a : virtual strange::_common
 {
     inline parameter_a() = default;
@@ -444,6 +446,125 @@ public:
     inline auto operations() -> std::vector<operation_a> &;
 };
 
+struct space_a : virtual strange::_common
+{
+    inline space_a() = default;
+
+    inline space_a(space_a const & other)
+    :strange::_common{other}
+    {
+    }
+
+    inline space_a(space_a && other)
+    :strange::_common{std::move(other)}
+    {
+    }
+
+    inline auto operator=(space_a const & other) -> space_a &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(space_a && other) -> space_a &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline space_a(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    {
+    }
+
+    explicit inline space_a(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    {
+    }
+
+protected:
+    struct _derived : strange::_common::_base
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<space_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
+        virtual auto name() const -> std::string const & = 0;
+
+        virtual auto name() -> std::string & = 0;
+
+        virtual auto abstractions() const -> std::vector<abstraction_a> const & = 0;
+
+        virtual auto abstractions() -> std::vector<abstraction_a> & = 0;
+    };
+
+private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : space_a::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :space_a::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return space_a::_derived::_static_shared_to_base(std::make_shared<space_a::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto name() const -> std::string const & final;
+
+        inline auto name() -> std::string & final;
+
+        inline auto abstractions() const -> std::vector<abstraction_a> const & final;
+
+        inline auto abstractions() -> std::vector<abstraction_a> & final;
+
+    private:
+        _Thing _thing;
+    };
+
+public:
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> space_a
+    {
+        return space_a{space_a::_derived::_static_shared_to_base(std::make_shared<space_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<space_a::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto name() const -> std::string const &;
+
+    inline auto name() -> std::string &;
+
+    inline auto abstractions() const -> std::vector<abstraction_a> const &;
+
+    inline auto abstractions() -> std::vector<abstraction_a> &;
+};
+
 template<typename _Thing, bool _Copy>
 inline auto parameter_a::_instance<_Thing, _Copy>::type() const -> std::string const &
 {
@@ -718,6 +839,52 @@ inline auto abstraction_a::operations() -> std::vector<operation_a> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared)->operations();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_a::_instance<_Thing, _Copy>::name() const -> std::string const &
+{
+    return _thing.name;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_a::_instance<_Thing, _Copy>::name() -> std::string &
+{
+    return _thing.name;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_a::_instance<_Thing, _Copy>::abstractions() const -> std::vector<abstraction_a> const &
+{
+    return _thing.abstractions;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_a::_instance<_Thing, _Copy>::abstractions() -> std::vector<abstraction_a> &
+{
+    return _thing.abstractions;
+}
+
+inline auto space_a::name() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<space_a::_derived>(strange::_common::_shared)->name();
+}
+
+inline auto space_a::name() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<space_a::_derived>(strange::_common::_shared)->name();
+}
+
+inline auto space_a::abstractions() const -> std::vector<abstraction_a> const &
+{
+    return std::dynamic_pointer_cast<space_a::_derived>(strange::_common::_shared)->abstractions();
+}
+
+inline auto space_a::abstractions() -> std::vector<abstraction_a> &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<space_a::_derived>(strange::_common::_shared)->abstractions();
 }
 
 }
