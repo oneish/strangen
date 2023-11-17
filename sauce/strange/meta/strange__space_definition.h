@@ -433,6 +433,112 @@ auto definition() -> strange::space_a
                         },
                         .result = "typename std::vector<T>::iterator",
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "erase",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "pos",
+                            }),
+                        },
+                        .result = "typename std::vector<T>::iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "erase",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "first",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "last",
+                            }),
+                        },
+                        .result = "typename std::vector<T>::iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "push_back",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "T const &",
+                                .name = "value",
+                            }),
+                        },
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "push_back",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "T &&",
+                                .name = "value",
+                            }),
+                        },
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "pop_back",
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "resize",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "size_t",
+                                .name = "count",
+                            }),
+                        },
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "resize",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "size_t",
+                                .name = "count",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "T const &",
+                                .name = "value",
+                            }),
+                        },
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "swap",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "std::vector<T> &",
+                                .name = "other",
+                            }),
+                        },
+                        .result = "void",
+                    }),
                 },
             }),
             strange::make_abstraction

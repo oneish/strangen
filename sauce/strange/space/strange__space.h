@@ -140,6 +140,22 @@ protected:
         virtual auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator = 0;
 
         virtual auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator = 0;
+
+        virtual auto erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator = 0;
+
+        virtual auto erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator = 0;
+
+        virtual auto push_back(T const & value) -> void = 0;
+
+        virtual auto push_back(T && value) -> void = 0;
+
+        virtual auto pop_back() -> void = 0;
+
+        virtual auto resize(size_t count) -> void = 0;
+
+        virtual auto resize(size_t count, T const & value) -> void = 0;
+
+        virtual auto swap(std::vector<T> & other) -> void = 0;
     };
 
 private:
@@ -251,6 +267,22 @@ private:
 
         inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator final;
 
+        inline auto erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator final;
+
+        inline auto erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator final;
+
+        inline auto push_back(T const & value) -> void final;
+
+        inline auto push_back(T && value) -> void final;
+
+        inline auto pop_back() -> void final;
+
+        inline auto resize(size_t count) -> void final;
+
+        inline auto resize(size_t count, T const & value) -> void final;
+
+        inline auto swap(std::vector<T> & other) -> void final;
+
     private:
         _Thing _thing;
     };
@@ -342,6 +374,22 @@ public:
     inline auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator;
 
     inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator;
+
+    inline auto erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator;
+
+    inline auto erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator;
+
+    inline auto push_back(T const & value) -> void;
+
+    inline auto push_back(T && value) -> void;
+
+    inline auto pop_back() -> void;
+
+    inline auto resize(size_t count) -> void;
+
+    inline auto resize(size_t count, T const & value) -> void;
+
+    inline auto swap(std::vector<T> & other) -> void;
 };
 
 struct parameter_a : virtual strange::_common
@@ -1159,6 +1207,62 @@ inline auto vector_a<T>::_instance<_Thing, _Copy>::insert(typename std::vector<T
 }
 
 template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+{
+    return _thing.erase(pos);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+{
+    return _thing.erase(first, last);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::push_back(T const & value) -> void
+{
+    _thing.push_back(value);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::push_back(T && value) -> void
+{
+    _thing.push_back(value);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::pop_back() -> void
+{
+    _thing.pop_back();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::resize(size_t count) -> void
+{
+    _thing.resize(count);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::resize(size_t count, T const & value) -> void
+{
+    _thing.resize(count, value);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::swap(std::vector<T> & other) -> void
+{
+    _thing.swap(other);
+}
+
+template<typename T>
 inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
 {
     strange::_common::_mutate();
@@ -1408,6 +1512,62 @@ inline auto vector_a<T>::insert(typename std::vector<T>::const_iterator pos, std
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
+}
+
+template<typename T>
+inline auto vector_a<T>::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->erase(pos);
+}
+
+template<typename T>
+inline auto vector_a<T>::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->erase(first, last);
+}
+
+template<typename T>
+inline auto vector_a<T>::push_back(T const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->push_back(value);
+}
+
+template<typename T>
+inline auto vector_a<T>::push_back(T && value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->push_back(value);
+}
+
+template<typename T>
+inline auto vector_a<T>::pop_back() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->pop_back();
+}
+
+template<typename T>
+inline auto vector_a<T>::resize(size_t count) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->resize(count);
+}
+
+template<typename T>
+inline auto vector_a<T>::resize(size_t count, T const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->resize(count, value);
+}
+
+template<typename T>
+inline auto vector_a<T>::swap(std::vector<T> & other) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->swap(other);
 }
 
 template<typename _Thing, bool _Copy>
