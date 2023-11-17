@@ -181,6 +181,33 @@ auto definition() -> strange::space_a
                         .constness = true,
                         .result = "T const &",
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "operator[]",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "size_t",
+                                .name = "pos",
+                            }),
+                        },
+                        .result = "T &",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "operator[]",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "size_t",
+                                .name = "pos",
+                            }),
+                        },
+                        .constness = true,
+                        .result = "T const &",
+                    }),
                 },
             }),
             strange::make_abstraction
