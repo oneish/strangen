@@ -118,6 +118,18 @@ protected:
         virtual auto rend() const -> typename std::vector<T>::const_reverse_iterator = 0;
 
         virtual auto crend() const -> typename std::vector<T>::const_reverse_iterator = 0;
+
+        virtual auto empty() const -> bool = 0;
+
+        virtual auto size() const -> size_t = 0;
+
+        virtual auto max_size() const -> size_t = 0;
+
+        virtual auto reserve(size_t new_cap) -> void = 0;
+
+        virtual auto capacity() const -> size_t = 0;
+
+        virtual auto shrink_to_fit() -> void = 0;
     };
 
 private:
@@ -207,6 +219,18 @@ private:
 
         inline auto crend() const -> typename std::vector<T>::const_reverse_iterator final;
 
+        inline auto empty() const -> bool final;
+
+        inline auto size() const -> size_t final;
+
+        inline auto max_size() const -> size_t final;
+
+        inline auto reserve(size_t new_cap) -> void final;
+
+        inline auto capacity() const -> size_t final;
+
+        inline auto shrink_to_fit() -> void final;
+
     private:
         _Thing _thing;
     };
@@ -276,6 +300,18 @@ public:
     inline auto rend() const -> typename std::vector<T>::const_reverse_iterator;
 
     inline auto crend() const -> typename std::vector<T>::const_reverse_iterator;
+
+    inline auto empty() const -> bool;
+
+    inline auto size() const -> size_t;
+
+    inline auto max_size() const -> size_t;
+
+    inline auto reserve(size_t new_cap) -> void;
+
+    inline auto capacity() const -> size_t;
+
+    inline auto shrink_to_fit() -> void;
 };
 
 struct parameter_a : virtual strange::_common
@@ -1016,6 +1052,48 @@ inline auto vector_a<T>::_instance<_Thing, _Copy>::crend() const -> typename std
 }
 
 template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::empty() const -> bool
+{
+    return _thing.empty();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::size() const -> size_t
+{
+    return _thing.size();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::max_size() const -> size_t
+{
+    return _thing.max_size();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::reserve(size_t new_cap) -> void
+{
+    _thing.reserve(new_cap);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::capacity() const -> size_t
+{
+    return _thing.capacity();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::shrink_to_fit() -> void
+{
+    _thing.shrink_to_fit();
+}
+
+template<typename T>
 inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
 {
     strange::_common::_mutate();
@@ -1192,6 +1270,44 @@ template<typename T>
 inline auto vector_a<T>::crend() const -> typename std::vector<T>::const_reverse_iterator
 {
     return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->crend();
+}
+
+template<typename T>
+inline auto vector_a<T>::empty() const -> bool
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->empty();
+}
+
+template<typename T>
+inline auto vector_a<T>::size() const -> size_t
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->size();
+}
+
+template<typename T>
+inline auto vector_a<T>::max_size() const -> size_t
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->max_size();
+}
+
+template<typename T>
+inline auto vector_a<T>::reserve(size_t new_cap) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->reserve(new_cap);
+}
+
+template<typename T>
+inline auto vector_a<T>::capacity() const -> size_t
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->capacity();
+}
+
+template<typename T>
+inline auto vector_a<T>::shrink_to_fit() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->shrink_to_fit();
 }
 
 template<typename _Thing, bool _Copy>

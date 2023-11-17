@@ -309,6 +309,48 @@ auto definition() -> strange::space_a
                         .constness = true,
                         .result = "typename std::vector<T>::const_reverse_iterator",
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "empty",
+                        .constness = true,
+                        .result = "bool",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "size",
+                        .constness = true,
+                        .result = "size_t",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "max_size",
+                        .constness = true,
+                        .result = "size_t",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "reserve",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "size_t",
+                                .name = "new_cap",
+                            }),
+                        },
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "capacity",
+                        .constness = true,
+                        .result = "size_t",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "shrink_to_fit",
+                        .result = "void",
+                    }),
                 },
             }),
             strange::make_abstraction
