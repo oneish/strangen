@@ -74,6 +74,10 @@ protected:
         virtual auto assign(size_t count, T const & value) -> void = 0;
 
         virtual auto assign(std::initializer_list<T> ilist) -> void = 0;
+
+        virtual auto at(size_t pos) -> T & = 0;
+
+        virtual auto at(size_t pos) const -> T const & = 0;
     };
 
 private:
@@ -119,6 +123,10 @@ private:
 
         inline auto assign(std::initializer_list<T> ilist) -> void final;
 
+        inline auto at(size_t pos) -> T & final;
+
+        inline auto at(size_t pos) const -> T const & final;
+
     private:
         _Thing _thing;
     };
@@ -144,6 +152,10 @@ public:
     inline auto assign(size_t count, T const & value) -> void;
 
     inline auto assign(std::initializer_list<T> ilist) -> void;
+
+    inline auto at(size_t pos) -> T &;
+
+    inline auto at(size_t pos) const -> T const &;
 };
 
 struct parameter_a : virtual strange::_common
@@ -730,6 +742,20 @@ inline auto vector_a<T>::_instance<_Thing, _Copy>::assign(std::initializer_list<
 }
 
 template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::at(size_t pos) -> T &
+{
+    return _thing.at(pos);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::at(size_t pos) const -> T const &
+{
+    return _thing.at(pos);
+}
+
+template<typename T>
 inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
 {
     strange::_common::_mutate();
@@ -765,6 +791,19 @@ inline auto vector_a<T>::assign(std::initializer_list<T> ilist) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->assign(ilist);
+}
+
+template<typename T>
+inline auto vector_a<T>::at(size_t pos) -> T &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->at(pos);
+}
+
+template<typename T>
+inline auto vector_a<T>::at(size_t pos) const -> T const &
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->at(pos);
 }
 
 template<typename _Thing, bool _Copy>
