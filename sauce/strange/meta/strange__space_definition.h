@@ -208,6 +208,39 @@ auto definition() -> strange::space_a
                         .constness = true,
                         .result = "T const &",
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "front",
+                        .result = "T &",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "front",
+                        .constness = true,
+                        .result = "T const &",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "back",
+                        .result = "T &",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "back",
+                        .constness = true,
+                        .result = "T const &",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "data",
+                        .result = "T *",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "data",
+                        .constness = true,
+                        .result = "T const *",
+                    }),
                 },
             }),
             strange::make_abstraction

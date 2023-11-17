@@ -82,6 +82,18 @@ protected:
         virtual auto operator[](size_t pos) -> T & = 0;
 
         virtual auto operator[](size_t pos) const -> T const & = 0;
+
+        virtual auto front() -> T & = 0;
+
+        virtual auto front() const -> T const & = 0;
+
+        virtual auto back() -> T & = 0;
+
+        virtual auto back() const -> T const & = 0;
+
+        virtual auto data() -> T * = 0;
+
+        virtual auto data() const -> T const * = 0;
     };
 
 private:
@@ -135,6 +147,18 @@ private:
 
         inline auto operator[](size_t pos) const -> T const & final;
 
+        inline auto front() -> T & final;
+
+        inline auto front() const -> T const & final;
+
+        inline auto back() -> T & final;
+
+        inline auto back() const -> T const & final;
+
+        inline auto data() -> T * final;
+
+        inline auto data() const -> T const * final;
+
     private:
         _Thing _thing;
     };
@@ -168,6 +192,18 @@ public:
     inline auto operator[](size_t pos) -> T &;
 
     inline auto operator[](size_t pos) const -> T const &;
+
+    inline auto front() -> T &;
+
+    inline auto front() const -> T const &;
+
+    inline auto back() -> T &;
+
+    inline auto back() const -> T const &;
+
+    inline auto data() -> T *;
+
+    inline auto data() const -> T const *;
 };
 
 struct parameter_a : virtual strange::_common
@@ -782,6 +818,48 @@ inline auto vector_a<T>::_instance<_Thing, _Copy>::operator[](size_t pos) const 
 }
 
 template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::front() -> T &
+{
+    return _thing.front();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::front() const -> T const &
+{
+    return _thing.front();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::back() -> T &
+{
+    return _thing.back();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::back() const -> T const &
+{
+    return _thing.back();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::data() -> T *
+{
+    return _thing.data();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::data() const -> T const *
+{
+    return _thing.data();
+}
+
+template<typename T>
 inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
 {
     strange::_common::_mutate();
@@ -843,6 +921,45 @@ template<typename T>
 inline auto vector_a<T>::operator[](size_t pos) const -> T const &
 {
     return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator[](pos);
+}
+
+template<typename T>
+inline auto vector_a<T>::front() -> T &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->front();
+}
+
+template<typename T>
+inline auto vector_a<T>::front() const -> T const &
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->front();
+}
+
+template<typename T>
+inline auto vector_a<T>::back() -> T &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->back();
+}
+
+template<typename T>
+inline auto vector_a<T>::back() const -> T const &
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->back();
+}
+
+template<typename T>
+inline auto vector_a<T>::data() -> T *
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->data();
+}
+
+template<typename T>
+inline auto vector_a<T>::data() const -> T const *
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->data();
 }
 
 template<typename _Thing, bool _Copy>
