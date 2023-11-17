@@ -73,6 +73,60 @@ auto definition() -> strange::space_a
         {
             strange::make_abstraction
             ({
+                .parameters =
+                {
+                    strange::make_parameter
+                    ({
+                        .type = "typename",
+                        .name = "T",
+                    }),
+                },
+                .name = "vector_a",
+                .operations =
+                {
+                    strange::make_operation
+                    ({
+                        .name = "operator=",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "std::vector<T> const &",
+                                .name = "other",
+                            }),
+                        },
+                        .result = "*this",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "operator=",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "std::vector<T> &&",
+                                .name = "other",
+                            }),
+                        },
+                        .result = "*this",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "operator=",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "std::initializer_list<T>",
+                                .name = "ilist",
+                            }),
+                        },
+                        .result = "*this",
+                    }),
+                },
+            }),
+            strange::make_abstraction
+            ({
                 .name = "parameter_a",
                 .operations =
                 {

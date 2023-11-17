@@ -1,4 +1,6 @@
+#include "../../sauce/strange/strange.h"
 #include "example__type_erasure.h"
+
 namespace temp
 {
 #include "example__space_transformation_3.h"
@@ -111,6 +113,8 @@ void increment(example::number & num)
 
 int main()
 {
+    auto v1 = strange::vector_a<int>::_make<std::vector<int>>();
+
     auto w1 = example::widget::_make<implementation>();
     w1.inc();
     auto w2 = ++w1;

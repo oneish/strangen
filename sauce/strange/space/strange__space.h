@@ -9,6 +9,9 @@
 namespace strange
 {
 
+template<typename T>
+struct vector_a;
+
 struct parameter_a;
 
 struct operation_a;
@@ -16,6 +19,120 @@ struct operation_a;
 struct abstraction_a;
 
 struct space_a;
+
+template<typename T>
+struct vector_a : virtual strange::_common
+{
+    inline vector_a() = default;
+
+    inline vector_a(vector_a const & other)
+    :strange::_common{other}
+    {
+    }
+
+    inline vector_a(vector_a && other)
+    :strange::_common{std::move(other)}
+    {
+    }
+
+    inline auto operator=(vector_a const & other) -> vector_a &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(vector_a && other) -> vector_a &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline vector_a(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    {
+    }
+
+    explicit inline vector_a(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    {
+    }
+
+protected:
+    struct _derived : strange::_common::_base
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<vector_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
+        virtual auto operator=(std::vector<T> const & other) -> void = 0;
+
+        virtual auto operator=(std::vector<T> && other) -> void = 0;
+
+        virtual auto operator=(std::initializer_list<T> ilist) -> void = 0;
+    };
+
+private:
+    template<typename _Thing, bool _Copy>
+    struct _instance final : vector_a::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :vector_a::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return vector_a::_derived::_static_shared_to_base(std::make_shared<vector_a::_instance<_Thing, _Copy>>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto operator=(std::vector<T> const & other) -> void final;
+
+        inline auto operator=(std::vector<T> && other) -> void final;
+
+        inline auto operator=(std::initializer_list<T> ilist) -> void final;
+
+    private:
+        _Thing _thing;
+    };
+
+public:
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> vector_a
+    {
+        return vector_a{vector_a::_derived::_static_shared_to_base(std::make_shared<vector_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<vector_a::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto operator=(std::vector<T> const & other) -> vector_a &;
+
+    inline auto operator=(std::vector<T> && other) -> vector_a &;
+
+    inline auto operator=(std::initializer_list<T> ilist) -> vector_a &;
+};
 
 struct parameter_a : virtual strange::_common
 {
@@ -564,6 +681,51 @@ public:
 
     inline auto abstractions() -> std::vector<abstraction_a> &;
 };
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::operator=(std::vector<T> const & other) -> void
+{
+    _thing.operator=(other);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::operator=(std::vector<T> && other) -> void
+{
+    _thing.operator=(other);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::operator=(std::initializer_list<T> ilist) -> void
+{
+    _thing.operator=(ilist);
+}
+
+template<typename T>
+inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator=(other);
+    return *this;
+}
+
+template<typename T>
+inline auto vector_a<T>::operator=(std::vector<T> && other) -> vector_a &
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator=(other);
+    return *this;
+}
+
+template<typename T>
+inline auto vector_a<T>::operator=(std::initializer_list<T> ilist) -> vector_a &
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator=(ilist);
+    return *this;
+}
 
 template<typename _Thing, bool _Copy>
 inline auto parameter_a::_instance<_Thing, _Copy>::type() const -> std::string const &
