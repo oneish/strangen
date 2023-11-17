@@ -70,6 +70,10 @@ protected:
         virtual auto operator=(std::vector<T> && other) -> void = 0;
 
         virtual auto operator=(std::initializer_list<T> ilist) -> void = 0;
+
+        virtual auto assign(size_t count, T const & value) -> void = 0;
+
+        virtual auto assign(std::initializer_list<T> ilist) -> void = 0;
     };
 
 private:
@@ -111,6 +115,10 @@ private:
 
         inline auto operator=(std::initializer_list<T> ilist) -> void final;
 
+        inline auto assign(size_t count, T const & value) -> void final;
+
+        inline auto assign(std::initializer_list<T> ilist) -> void final;
+
     private:
         _Thing _thing;
     };
@@ -132,6 +140,10 @@ public:
     inline auto operator=(std::vector<T> && other) -> vector_a &;
 
     inline auto operator=(std::initializer_list<T> ilist) -> vector_a &;
+
+    inline auto assign(size_t count, T const & value) -> void;
+
+    inline auto assign(std::initializer_list<T> ilist) -> void;
 };
 
 struct parameter_a : virtual strange::_common
@@ -704,6 +716,20 @@ inline auto vector_a<T>::_instance<_Thing, _Copy>::operator=(std::initializer_li
 }
 
 template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::assign(size_t count, T const & value) -> void
+{
+    _thing.assign(count, value);
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::assign(std::initializer_list<T> ilist) -> void
+{
+    _thing.assign(ilist);
+}
+
+template<typename T>
 inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
 {
     strange::_common::_mutate();
@@ -725,6 +751,20 @@ inline auto vector_a<T>::operator=(std::initializer_list<T> ilist) -> vector_a &
     strange::_common::_mutate();
     std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator=(ilist);
     return *this;
+}
+
+template<typename T>
+inline auto vector_a<T>::assign(size_t count, T const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->assign(count, value);
+}
+
+template<typename T>
+inline auto vector_a<T>::assign(std::initializer_list<T> ilist) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->assign(ilist);
 }
 
 template<typename _Thing, bool _Copy>

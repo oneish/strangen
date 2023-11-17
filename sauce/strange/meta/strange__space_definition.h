@@ -123,6 +123,37 @@ auto definition() -> strange::space_a
                         },
                         .result = "*this",
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "assign",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "size_t",
+                                .name = "count",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "T const &",
+                                .name = "value",
+                            }),
+                        },
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "assign",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "std::initializer_list<T>",
+                                .name = "ilist",
+                            }),
+                        },
+                        .result = "void",
+                    }),
                 },
             }),
             strange::make_abstraction
