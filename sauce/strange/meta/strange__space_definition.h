@@ -351,6 +351,88 @@ auto definition() -> strange::space_a
                         .name = "shrink_to_fit",
                         .result = "void",
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "clear",
+                        .result = "void",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "insert",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "pos",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "T const &",
+                                .name = "value",
+                            }),
+                        },
+                        .result = "typename std::vector<T>::iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "insert",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "pos",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "T &&",
+                                .name = "value",
+                            }),
+                        },
+                        .result = "typename std::vector<T>::iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "insert",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "pos",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "size_t",
+                                .name = "count",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "T const &",
+                                .name = "value",
+                            }),
+                        },
+                        .result = "typename std::vector<T>::iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "insert",
+                        .parameters =
+                        {
+                            strange::make_parameter
+                            ({
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "pos",
+                            }),
+                            strange::make_parameter
+                            ({
+                                .type = "std::initializer_list<T>",
+                                .name = "ilist",
+                            }),
+                        },
+                        .result = "typename std::vector<T>::iterator",
+                    }),
                 },
             }),
             strange::make_abstraction
