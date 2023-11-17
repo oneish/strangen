@@ -241,6 +241,74 @@ auto definition() -> strange::space_a
                         .constness = true,
                         .result = "T const *",
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "begin",
+                        .result = "typename std::vector<T>::iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "begin",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "cbegin",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "end",
+                        .result = "typename std::vector<T>::iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "end",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "cend",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "rbegin",
+                        .result = "typename std::vector<T>::reverse_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "rbegin",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_reverse_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "crbegin",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_reverse_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "rend",
+                        .result = "typename std::vector<T>::reverse_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "rend",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_reverse_iterator",
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "crend",
+                        .constness = true,
+                        .result = "typename std::vector<T>::const_reverse_iterator",
+                    }),
                 },
             }),
             strange::make_abstraction

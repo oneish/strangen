@@ -94,6 +94,30 @@ protected:
         virtual auto data() -> T * = 0;
 
         virtual auto data() const -> T const * = 0;
+
+        virtual auto begin() -> typename std::vector<T>::iterator = 0;
+
+        virtual auto begin() const -> typename std::vector<T>::const_iterator = 0;
+
+        virtual auto cbegin() const -> typename std::vector<T>::const_iterator = 0;
+
+        virtual auto end() -> typename std::vector<T>::iterator = 0;
+
+        virtual auto end() const -> typename std::vector<T>::const_iterator = 0;
+
+        virtual auto cend() const -> typename std::vector<T>::const_iterator = 0;
+
+        virtual auto rbegin() -> typename std::vector<T>::reverse_iterator = 0;
+
+        virtual auto rbegin() const -> typename std::vector<T>::const_reverse_iterator = 0;
+
+        virtual auto crbegin() const -> typename std::vector<T>::const_reverse_iterator = 0;
+
+        virtual auto rend() -> typename std::vector<T>::reverse_iterator = 0;
+
+        virtual auto rend() const -> typename std::vector<T>::const_reverse_iterator = 0;
+
+        virtual auto crend() const -> typename std::vector<T>::const_reverse_iterator = 0;
     };
 
 private:
@@ -159,6 +183,30 @@ private:
 
         inline auto data() const -> T const * final;
 
+        inline auto begin() -> typename std::vector<T>::iterator final;
+
+        inline auto begin() const -> typename std::vector<T>::const_iterator final;
+
+        inline auto cbegin() const -> typename std::vector<T>::const_iterator final;
+
+        inline auto end() -> typename std::vector<T>::iterator final;
+
+        inline auto end() const -> typename std::vector<T>::const_iterator final;
+
+        inline auto cend() const -> typename std::vector<T>::const_iterator final;
+
+        inline auto rbegin() -> typename std::vector<T>::reverse_iterator final;
+
+        inline auto rbegin() const -> typename std::vector<T>::const_reverse_iterator final;
+
+        inline auto crbegin() const -> typename std::vector<T>::const_reverse_iterator final;
+
+        inline auto rend() -> typename std::vector<T>::reverse_iterator final;
+
+        inline auto rend() const -> typename std::vector<T>::const_reverse_iterator final;
+
+        inline auto crend() const -> typename std::vector<T>::const_reverse_iterator final;
+
     private:
         _Thing _thing;
     };
@@ -204,6 +252,30 @@ public:
     inline auto data() -> T *;
 
     inline auto data() const -> T const *;
+
+    inline auto begin() -> typename std::vector<T>::iterator;
+
+    inline auto begin() const -> typename std::vector<T>::const_iterator;
+
+    inline auto cbegin() const -> typename std::vector<T>::const_iterator;
+
+    inline auto end() -> typename std::vector<T>::iterator;
+
+    inline auto end() const -> typename std::vector<T>::const_iterator;
+
+    inline auto cend() const -> typename std::vector<T>::const_iterator;
+
+    inline auto rbegin() -> typename std::vector<T>::reverse_iterator;
+
+    inline auto rbegin() const -> typename std::vector<T>::const_reverse_iterator;
+
+    inline auto crbegin() const -> typename std::vector<T>::const_reverse_iterator;
+
+    inline auto rend() -> typename std::vector<T>::reverse_iterator;
+
+    inline auto rend() const -> typename std::vector<T>::const_reverse_iterator;
+
+    inline auto crend() const -> typename std::vector<T>::const_reverse_iterator;
 };
 
 struct parameter_a : virtual strange::_common
@@ -860,6 +932,90 @@ inline auto vector_a<T>::_instance<_Thing, _Copy>::data() const -> T const *
 }
 
 template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::begin() -> typename std::vector<T>::iterator
+{
+    return _thing.begin();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::begin() const -> typename std::vector<T>::const_iterator
+{
+    return _thing.begin();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::cbegin() const -> typename std::vector<T>::const_iterator
+{
+    return _thing.cbegin();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::end() -> typename std::vector<T>::iterator
+{
+    return _thing.end();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::end() const -> typename std::vector<T>::const_iterator
+{
+    return _thing.end();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::cend() const -> typename std::vector<T>::const_iterator
+{
+    return _thing.cend();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::rbegin() -> typename std::vector<T>::reverse_iterator
+{
+    return _thing.rbegin();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::rbegin() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return _thing.rbegin();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::crbegin() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return _thing.crbegin();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::rend() -> typename std::vector<T>::reverse_iterator
+{
+    return _thing.rend();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::rend() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return _thing.rend();
+}
+
+template<typename T>
+template<typename _Thing, bool _Copy>
+inline auto vector_a<T>::_instance<_Thing, _Copy>::crend() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return _thing.crend();
+}
+
+template<typename T>
 inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
 {
     strange::_common::_mutate();
@@ -960,6 +1116,82 @@ template<typename T>
 inline auto vector_a<T>::data() const -> T const *
 {
     return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->data();
+}
+
+template<typename T>
+inline auto vector_a<T>::begin() -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->begin();
+}
+
+template<typename T>
+inline auto vector_a<T>::begin() const -> typename std::vector<T>::const_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->begin();
+}
+
+template<typename T>
+inline auto vector_a<T>::cbegin() const -> typename std::vector<T>::const_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->cbegin();
+}
+
+template<typename T>
+inline auto vector_a<T>::end() -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->end();
+}
+
+template<typename T>
+inline auto vector_a<T>::end() const -> typename std::vector<T>::const_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->end();
+}
+
+template<typename T>
+inline auto vector_a<T>::cend() const -> typename std::vector<T>::const_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->cend();
+}
+
+template<typename T>
+inline auto vector_a<T>::rbegin() -> typename std::vector<T>::reverse_iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rbegin();
+}
+
+template<typename T>
+inline auto vector_a<T>::rbegin() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rbegin();
+}
+
+template<typename T>
+inline auto vector_a<T>::crbegin() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->crbegin();
+}
+
+template<typename T>
+inline auto vector_a<T>::rend() -> typename std::vector<T>::reverse_iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rend();
+}
+
+template<typename T>
+inline auto vector_a<T>::rend() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rend();
+}
+
+template<typename T>
+inline auto vector_a<T>::crend() const -> typename std::vector<T>::const_reverse_iterator
+{
+    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->crend();
 }
 
 template<typename _Thing, bool _Copy>
