@@ -158,7 +158,7 @@ protected:
         virtual auto swap(std::vector<T> & other) -> void = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : vector_a::_derived
     {
@@ -283,7 +283,7 @@ private:
 
         inline auto swap(std::vector<T> & other) -> void final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -449,7 +449,7 @@ protected:
         virtual auto argument() -> std::string & = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : parameter_a::_derived
     {
@@ -494,7 +494,7 @@ private:
 
         inline auto argument() -> std::string & final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -588,7 +588,7 @@ protected:
         virtual auto data() -> bool & = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : operation_a::_derived
     {
@@ -641,7 +641,7 @@ private:
 
         inline auto data() -> bool & final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -739,7 +739,7 @@ protected:
         virtual auto operations() -> std::vector<operation_a> & = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : abstraction_a::_derived
     {
@@ -788,7 +788,7 @@ private:
 
         inline auto operations() -> std::vector<operation_a> & final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -874,7 +874,7 @@ protected:
         virtual auto abstractions() -> std::vector<abstraction_a> & = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : space_a::_derived
     {
@@ -915,7 +915,7 @@ private:
 
         inline auto abstractions() -> std::vector<abstraction_a> & final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 

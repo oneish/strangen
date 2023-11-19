@@ -133,7 +133,7 @@ protected:
             }
             _out << R"#(    };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : )#" << abstraction.name() << R"#(::_derived
     {
@@ -173,7 +173,7 @@ private:
                 _abstraction_operations(abstraction, abstraction, true, false, false, unique);
             }
             _out << R"#(
-    private:
+    //private:
         _Thing _thing;
     };
 

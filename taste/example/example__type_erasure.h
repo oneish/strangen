@@ -71,7 +71,7 @@ protected:
         virtual auto operator--(int i) -> void = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : widget::_derived
     {
@@ -112,7 +112,7 @@ private:
 
         inline auto operator--(int i) -> void final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -188,7 +188,7 @@ protected:
         virtual auto push() -> void = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : button::_derived
     {
@@ -231,7 +231,7 @@ private:
 
         inline auto push() -> void final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -307,7 +307,7 @@ protected:
         virtual auto dec() -> void = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : number::_derived
     {
@@ -344,7 +344,7 @@ private:
 
         inline auto dec() -> void final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -418,7 +418,7 @@ protected:
         }
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : widget_number::_derived
     {
@@ -461,7 +461,7 @@ private:
 
         inline auto dec() -> void final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 
@@ -544,7 +544,7 @@ protected:
         virtual auto x() -> Data & = 0;
     };
 
-private:
+//private:
     template<typename _Thing, bool _Copy>
     struct _instance final : numeric::_derived
     {
@@ -587,7 +587,7 @@ private:
 
         inline auto x() -> Data & final;
 
-    private:
+    //private:
         _Thing _thing;
     };
 

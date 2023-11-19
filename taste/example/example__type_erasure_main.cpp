@@ -111,9 +111,87 @@ void increment(example::number & num)
     num.inc();
 }
 
+namespace strange
+{
+
+template<typename _Thing, typename T = typename _Thing::value_type>
+struct vector_a_;
+
+template<typename _Thing, typename T>
+struct vector_a_ : vector_a<T>
+{
+private:
+    struct _tag_ {};
+
+    explicit inline vector_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
+    :strange::_common{std::move(shared)}
+    ,vector_a<T>{}
+    {
+    }
+
+public:
+    inline static auto _null() -> vector_a_
+    {
+        return vector_a_{_tag_{}};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> vector_a_
+    {
+        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito(_Args && ... _args) -> vector_a<T>
+    {
+        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<typename ... _Args>
+    explicit inline vector_a_(_Args && ... _args)
+    :strange::_common{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    ,vector_a<T>{}
+    {
+    }
+
+    inline auto operator=(vector_a_ const & other) -> vector_a_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(vector_a_ && other) -> vector_a_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+};
+
+}
+
 int main()
 {
-    auto v1 = strange::vector_a<int>::_make<std::vector<int>>();
+    auto v1 = strange::vector_a_<std::vector<int>>::_null();
+    auto v2 = strange::vector_a_<std::vector<int>>::_make();
+    auto v3 = strange::vector_a_<std::vector<int>>::_make(1,2,3);
+    auto v4 = strange::vector_a_<std::vector<int>>::_incognito();
+    auto v5 = strange::vector_a_<std::vector<int>>::_incognito(1,2,3);
+    auto v6 = strange::vector_a_<std::vector<int>>{};
+    auto v7 = strange::vector_a_<std::vector<int>>{1,2,3};
+    v2._thing().push_back(123);
+    v4.push_back(123);
+    v6._thing().push_back(123);
 
     auto w1 = example::widget::_make<implementation>();
     w1.inc();
