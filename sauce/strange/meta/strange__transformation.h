@@ -62,6 +62,7 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
+            // type-erased version
             _abstraction_parameters(abstraction, true, false, false);
             _out << R"#(struct )#" << abstraction.name() << R"#( : )#";
             _abstraction_parents(abstraction, false);
@@ -199,6 +200,18 @@ public:
                 std::unordered_set<operation_a> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, false, unique);
             }
+            _out << R"#(};
+
+)#";
+            // type-unerased version
+            _abstraction_parameters(abstraction, true, false, true);
+            _out << R"#(struct )#" << abstraction.name() << R"#(_ : )#" << abstraction.name();
+            _abstraction_parameters(abstraction, false, false, false);
+            _out << R"#(
+{
+)#";
+
+
             _out << R"#(};
 
 )#";

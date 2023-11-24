@@ -408,6 +408,11 @@ public:
     inline auto swap(std::vector<T> & other) -> void;
 };
 
+template<typename _Thing, typename T>
+struct vector_a_ : vector_a<T>
+{
+};
+
 struct parameter_a : virtual strange::_common
 {
     inline parameter_a() = default;
@@ -537,6 +542,11 @@ public:
     inline auto argument() const -> std::string const &;
 
     inline auto argument() -> std::string &;
+};
+
+template<typename _Thing>
+struct parameter_a_ : parameter_a
+{
 };
 
 struct operation_a : virtual strange::_common
@@ -694,6 +704,11 @@ public:
     inline auto data() -> bool &;
 };
 
+template<typename _Thing>
+struct operation_a_ : operation_a
+{
+};
+
 struct abstraction_a : virtual strange::_common
 {
     inline abstraction_a() = default;
@@ -837,6 +852,11 @@ public:
     inline auto operations() -> std::vector<operation_a> &;
 };
 
+template<typename _Thing>
+struct abstraction_a_ : abstraction_a
+{
+};
+
 struct space_a : virtual strange::_common
 {
     inline space_a() = default;
@@ -954,6 +974,11 @@ public:
     inline auto abstractions() const -> std::vector<abstraction_a> const &;
 
     inline auto abstractions() -> std::vector<abstraction_a> &;
+};
+
+template<typename _Thing>
+struct space_a_ : space_a
+{
 };
 
 template<typename T>

@@ -153,6 +153,11 @@ public:
     inline auto operator--(int i) -> widget;
 };
 
+template<typename _Thing>
+struct widget_ : widget
+{
+};
+
 struct button : widget
 {
     inline button() = default;
@@ -274,6 +279,11 @@ public:
     inline auto push() -> void;
 };
 
+template<typename _Thing>
+struct button_ : button
+{
+};
+
 struct number : virtual strange::_common
 {
     inline number() = default;
@@ -379,6 +389,11 @@ public:
     inline auto inc() -> void;
 
     inline auto dec() -> void;
+};
+
+template<typename _Thing>
+struct number_ : number
+{
 };
 
 struct widget_number : widget, number
@@ -502,6 +517,11 @@ public:
     inline auto operator--(int i) -> widget_number;
 
     inline auto dec() -> void;
+};
+
+template<typename _Thing>
+struct widget_number_ : widget_number
+{
 };
 
 template<typename Data>
@@ -628,6 +648,11 @@ public:
     inline auto x() const -> Data const &;
 
     inline auto x() -> Data &;
+};
+
+template<typename _Thing, typename Data>
+struct numeric_ : numeric<Data>
+{
 };
 
 template<typename _Thing, bool _Copy>
