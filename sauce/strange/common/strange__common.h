@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <unordered_set>
 
 namespace strange
 {
@@ -19,6 +20,16 @@ protected:
         virtual auto _address() const -> void const * = 0;
         virtual auto _sizeof() const -> size_t = 0;
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
+
+        virtual inline auto _name() const -> std::string
+        {
+            return std::string{};
+        }
+
+        virtual inline auto _cats() const -> std::unordered_set<std::string>
+        {
+            return std::unordered_set<std::string>{};
+        }
 
         virtual inline auto _error() const -> std::string
         {

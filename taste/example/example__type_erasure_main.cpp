@@ -114,8 +114,47 @@ void increment(example::number & num)
 namespace strange
 {
 
+template<typename>
+struct reflection;
+
+template<>
+struct reflection<int>
+{
+    inline static auto name() -> std::string
+    {
+        return "int";
+    }
+};
+
+template<typename T>
+struct reflection<std::vector<T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "std::vector<" + reflection<T>::name() + ">";
+    }
+};
+
+template<typename T>
+struct reflection<strange::vector_a<T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::vector_a<" + reflection<T>::name() + ">";
+    }
+};
+
 template<typename _Thing, typename T = typename _Thing::value_type>
 struct vector_a_;
+
+template<typename _Thing, typename T>
+struct reflection<strange::vector_a_<_Thing, T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::vector_a_<" + reflection<_Thing>::name() + ", " + reflection<T>::name() + ">";
+    }
+};
 
 template<typename _Thing, typename T>
 struct vector_a_ : vector_a<T>
@@ -176,12 +215,29 @@ public:
         strange::_common::_mutate();
         return std::dynamic_pointer_cast<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
     }
+
+    using _Abstraction_ = vector_a_;
+    using _Thing_ = _Thing;
+    using _Kind_ = vector_a<T>;
+
+    inline static std::string const _name_ = reflection<vector_a_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(reflection<_Kind_>::name());
+        return cats;
+    }();
 };
 
 }
 
 int main()
 {
+    std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
+    std::cout << strange::reflection<strange::vector_a_<std::vector<int>>>::name() << std::endl;
+    std::cout << strange::vector_a_<std::vector<int>>::_name_ << std::endl;
+
     auto v1 = strange::vector_a_<std::vector<int>>::_null();
     auto v2 = strange::vector_a_<std::vector<int>>::_make();
     auto v3 = strange::vector_a_<std::vector<int>>::_make(1,2,3);
@@ -192,6 +248,7 @@ int main()
     v2._thing().push_back(123);
     v4.push_back(123);
     v6._thing().push_back(123);
+    std::cout << v1._name_ << std::endl;
 
     auto w1 = example::widget::_make<implementation>();
     w1.inc();
