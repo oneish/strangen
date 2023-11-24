@@ -36,6 +36,106 @@ struct space_a;
 template<typename _Thing>
 struct space_a_;
 
+}
+
+namespace strange
+{
+
+template<typename T>
+struct reflection<strange::vector_a<T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::vector_a<" + reflection<T>::name() + ">";
+    }
+};
+
+template<typename _Thing, typename T>
+struct reflection<strange::vector_a_<_Thing, T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::vector_a_<" + reflection<_Thing>::name() + ", " + reflection<T>::name() + ">";
+    }
+};
+
+template<>
+struct reflection<strange::parameter_a>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::parameter_a";
+    }
+};
+
+template<typename _Thing>
+struct reflection<strange::parameter_a_<_Thing>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::parameter_a_<" + reflection<_Thing>::name() + ">";
+    }
+};
+
+template<>
+struct reflection<strange::operation_a>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::operation_a";
+    }
+};
+
+template<typename _Thing>
+struct reflection<strange::operation_a_<_Thing>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::operation_a_<" + reflection<_Thing>::name() + ">";
+    }
+};
+
+template<>
+struct reflection<strange::abstraction_a>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::abstraction_a";
+    }
+};
+
+template<typename _Thing>
+struct reflection<strange::abstraction_a_<_Thing>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::abstraction_a_<" + reflection<_Thing>::name() + ">";
+    }
+};
+
+template<>
+struct reflection<strange::space_a>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::space_a";
+    }
+};
+
+template<typename _Thing>
+struct reflection<strange::space_a_<_Thing>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::space_a_<" + reflection<_Thing>::name() + ">";
+    }
+};
+
+}
+
+namespace strange
+{
+
 template<typename T>
 struct vector_a : virtual strange::_common
 {
@@ -411,6 +511,75 @@ public:
 template<typename _Thing, typename T>
 struct vector_a_ : vector_a<T>
 {
+private:
+    struct _tag_ {};
+
+    explicit inline vector_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
+    :strange::_common{std::move(shared)}
+    ,vector_a<T>{}
+    {
+    }
+
+public:
+    inline static auto _null() -> vector_a_
+    {
+        return vector_a_{_tag_{}};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> vector_a_
+    {
+        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito(_Args && ... _args) -> vector_a<T>
+    {
+        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<typename ... _Args>
+    explicit inline vector_a_(_Args && ... _args)
+    :strange::_common{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    ,vector_a<T>{}
+    {
+    }
+
+    inline auto operator=(vector_a_ const & other) -> vector_a_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(vector_a_ && other) -> vector_a_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = vector_a_;
+    using _Thing_ = _Thing;
+    using _Kind_ = vector_a<T>;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
 };
 
 struct parameter_a : virtual strange::_common
@@ -547,6 +716,75 @@ public:
 template<typename _Thing>
 struct parameter_a_ : parameter_a
 {
+private:
+    struct _tag_ {};
+
+    explicit inline parameter_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
+    :strange::_common{std::move(shared)}
+    ,parameter_a{}
+    {
+    }
+
+public:
+    inline static auto _null() -> parameter_a_
+    {
+        return parameter_a_{_tag_{}};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> parameter_a_
+    {
+        return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito(_Args && ... _args) -> parameter_a
+    {
+        return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<typename ... _Args>
+    explicit inline parameter_a_(_Args && ... _args)
+    :strange::_common{parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    ,parameter_a{}
+    {
+    }
+
+    inline auto operator=(parameter_a_ const & other) -> parameter_a_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(parameter_a_ && other) -> parameter_a_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<typename parameter_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<typename parameter_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = parameter_a_;
+    using _Thing_ = _Thing;
+    using _Kind_ = parameter_a;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
 };
 
 struct operation_a : virtual strange::_common
@@ -707,6 +945,75 @@ public:
 template<typename _Thing>
 struct operation_a_ : operation_a
 {
+private:
+    struct _tag_ {};
+
+    explicit inline operation_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
+    :strange::_common{std::move(shared)}
+    ,operation_a{}
+    {
+    }
+
+public:
+    inline static auto _null() -> operation_a_
+    {
+        return operation_a_{_tag_{}};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> operation_a_
+    {
+        return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito(_Args && ... _args) -> operation_a
+    {
+        return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<typename ... _Args>
+    explicit inline operation_a_(_Args && ... _args)
+    :strange::_common{operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    ,operation_a{}
+    {
+    }
+
+    inline auto operator=(operation_a_ const & other) -> operation_a_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(operation_a_ && other) -> operation_a_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<typename operation_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<typename operation_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = operation_a_;
+    using _Thing_ = _Thing;
+    using _Kind_ = operation_a;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
 };
 
 struct abstraction_a : virtual strange::_common
@@ -855,6 +1162,75 @@ public:
 template<typename _Thing>
 struct abstraction_a_ : abstraction_a
 {
+private:
+    struct _tag_ {};
+
+    explicit inline abstraction_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
+    :strange::_common{std::move(shared)}
+    ,abstraction_a{}
+    {
+    }
+
+public:
+    inline static auto _null() -> abstraction_a_
+    {
+        return abstraction_a_{_tag_{}};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> abstraction_a_
+    {
+        return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito(_Args && ... _args) -> abstraction_a
+    {
+        return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<typename ... _Args>
+    explicit inline abstraction_a_(_Args && ... _args)
+    :strange::_common{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    ,abstraction_a{}
+    {
+    }
+
+    inline auto operator=(abstraction_a_ const & other) -> abstraction_a_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(abstraction_a_ && other) -> abstraction_a_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<typename abstraction_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<typename abstraction_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = abstraction_a_;
+    using _Thing_ = _Thing;
+    using _Kind_ = abstraction_a;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
 };
 
 struct space_a : virtual strange::_common
@@ -979,6 +1355,75 @@ public:
 template<typename _Thing>
 struct space_a_ : space_a
 {
+private:
+    struct _tag_ {};
+
+    explicit inline space_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
+    :strange::_common{std::move(shared)}
+    ,space_a{}
+    {
+    }
+
+public:
+    inline static auto _null() -> space_a_
+    {
+        return space_a_{_tag_{}};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> space_a_
+    {
+        return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito(_Args && ... _args) -> space_a
+    {
+        return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<typename ... _Args>
+    explicit inline space_a_(_Args && ... _args)
+    :strange::_common{space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    ,space_a{}
+    {
+    }
+
+    inline auto operator=(space_a_ const & other) -> space_a_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(space_a_ && other) -> space_a_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<typename space_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<typename space_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = space_a_;
+    using _Thing_ = _Thing;
+    using _Kind_ = space_a;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
 };
 
 template<typename T>

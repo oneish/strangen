@@ -1,10 +1,7 @@
 #include "../../sauce/strange/strange.h"
-#include "example__type_erasure.h"
-
-namespace temp
-{
+//#include "example__type_erasure.h"
 #include "example__space_transformation_3.h"
-}
+
 #include <iostream>
 
 struct implementation
@@ -121,15 +118,6 @@ struct vector_a_;
 
 namespace strange
 {
-
-template<typename T>
-struct reflection<strange::vector_a<T>>
-{
-    inline static auto name() -> std::string
-    {
-        return "strange::vector_a<" + reflection<T>::name() + ">";
-    }
-};
 
 template<typename _Thing, typename T>
 struct reflection<strangexxx::vector_a_<_Thing, T>>
