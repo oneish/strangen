@@ -1,4 +1,5 @@
 #pragma once
+#include "../../sauce/strange/reflection/strange__reflection.h"
 #include "../../sauce/strange/common/strange__common.h"
 
 #include <memory>
@@ -9,14 +10,29 @@ namespace example
 
 struct widget;
 
+template<typename _Thing>
+struct widget_;
+
 struct button;
+
+template<typename _Thing>
+struct button_;
 
 struct number;
 
+template<typename _Thing>
+struct number_;
+
 struct widget_number;
+
+template<typename _Thing>
+struct widget_number_;
 
 template<typename Data = int>
 struct numeric;
+
+template<typename _Thing, typename Data = int>
+struct numeric_;
 
 struct widget : virtual strange::_common
 {

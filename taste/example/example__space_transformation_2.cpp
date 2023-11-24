@@ -6,6 +6,7 @@
 int main()
 {
 std::cout << R"~(#pragma once
+#include "../../sauce/strange/reflection/strange__reflection.h"
 #include "../../sauce/strange/common/strange__common.h"
 )~";
 

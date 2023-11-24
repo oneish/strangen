@@ -47,8 +47,12 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
-            _abstraction_parameters(abstraction, true, true);
+            _abstraction_parameters(abstraction, true, true, false);
             _out << R"#(struct )#" << abstraction.name() << R"#(;
+
+)#";
+            _abstraction_parameters(abstraction, true, true, true);
+            _out << R"#(struct )#" << abstraction.name() << R"#(_;
 
 )#";
         }
@@ -58,7 +62,7 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
-            _abstraction_parameters(abstraction, true, false);
+            _abstraction_parameters(abstraction, true, false, false);
             _out << R"#(struct )#" << abstraction.name() << R"#( : )#";
             _abstraction_parents(abstraction, false);
             _out << R"#(
@@ -216,9 +220,9 @@ public:
         }
     }
 
-    auto _abstraction_parameters(abstraction_a const & abstraction, bool const types, bool const arguments) -> void
+    auto _abstraction_parameters(abstraction_a const & abstraction, bool const types, bool const arguments, bool const thing) -> void
     {
-        if (!abstraction.parameters().empty())
+        if (thing || !abstraction.parameters().empty())
         {
             if (types)
             {
@@ -230,6 +234,11 @@ public:
                 _out << R"#(<)#";
             }
             bool first = true;
+            if (thing)
+            {
+                first = false;
+                _out << R"#(typename _Thing)#";
+            }
             for (auto const & parameter : abstraction.parameters())
             {
                 if (first)
@@ -350,7 +359,7 @@ public:
                 }
                 else
                 {
-                    _abstraction_parameters(derived, true, false);
+                    _abstraction_parameters(derived, true, false, false);
                     if (inner)
                     {
                         _out << R"#(template<typename _Thing, bool _Copy>
@@ -368,7 +377,7 @@ inline )#";
                 else
                 {
                     _out << R"#(auto )#" << derived.name();
-                    _abstraction_parameters(derived, false, false);
+                    _abstraction_parameters(derived, false, false, false);
                     if (inner)
                     {
                         _out << R"#(::_instance<_Thing, _Copy>::)#";
@@ -464,7 +473,7 @@ inline )#";
                         {
                             _out << R"#(return std::dynamic_pointer_cast<)#" << abstraction.name();
                         }
-                        _abstraction_parameters(abstraction, false, false);
+                        _abstraction_parameters(abstraction, false, false, false);
                         _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name();
                     }
                     if ((!inner) || (!operation.data()))

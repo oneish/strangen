@@ -111,29 +111,16 @@ void increment(example::number & num)
     num.inc();
 }
 
+namespace strangexxx
+{
+
+template<typename _Thing, typename T = typename _Thing::value_type> //TODO default
+struct vector_a_;
+
+}
+
 namespace strange
 {
-
-template<typename>
-struct reflection;
-
-template<>
-struct reflection<int>
-{
-    inline static auto name() -> std::string
-    {
-        return "int";
-    }
-};
-
-template<typename T>
-struct reflection<std::vector<T>>
-{
-    inline static auto name() -> std::string
-    {
-        return "std::vector<" + reflection<T>::name() + ">";
-    }
-};
 
 template<typename T>
 struct reflection<strange::vector_a<T>>
@@ -144,17 +131,20 @@ struct reflection<strange::vector_a<T>>
     }
 };
 
-template<typename _Thing, typename T = typename _Thing::value_type>
-struct vector_a_;
-
 template<typename _Thing, typename T>
-struct reflection<strange::vector_a_<_Thing, T>>
+struct reflection<strangexxx::vector_a_<_Thing, T>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::vector_a_<" + reflection<_Thing>::name() + ", " + reflection<T>::name() + ">";
+        return "strangexxx::vector_a_<" + reflection<_Thing>::name() + ", " + reflection<T>::name() + ">";
     }
 };
+
+}
+
+namespace strangexxx
+{
+using namespace strange;
 
 template<typename _Thing, typename T>
 struct vector_a_ : vector_a<T>
@@ -220,7 +210,7 @@ public:
     using _Thing_ = _Thing;
     using _Kind_ = vector_a<T>;
 
-    inline static std::string const _name_ = reflection<vector_a_>::name();
+    inline static std::string const _name_ = reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -235,16 +225,16 @@ public:
 int main()
 {
     std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
-    std::cout << strange::reflection<strange::vector_a_<std::vector<int>>>::name() << std::endl;
-    std::cout << strange::vector_a_<std::vector<int>>::_name_ << std::endl;
+    std::cout << strange::reflection<strangexxx::vector_a_<std::vector<int>>>::name() << std::endl;
+    std::cout << strangexxx::vector_a_<std::vector<int>, int>::_name_ << std::endl;
 
-    auto v1 = strange::vector_a_<std::vector<int>>::_null();
-    auto v2 = strange::vector_a_<std::vector<int>>::_make();
-    auto v3 = strange::vector_a_<std::vector<int>>::_make(1,2,3);
-    auto v4 = strange::vector_a_<std::vector<int>>::_incognito();
-    auto v5 = strange::vector_a_<std::vector<int>>::_incognito(1,2,3);
-    auto v6 = strange::vector_a_<std::vector<int>>{};
-    auto v7 = strange::vector_a_<std::vector<int>>{1,2,3};
+    auto v1 = strangexxx::vector_a_<std::vector<int>, int>::_null();
+    auto v2 = strangexxx::vector_a_<std::vector<int>, int>::_make();
+    auto v3 = strangexxx::vector_a_<std::vector<int>, int>::_make(1,2,3);
+    auto v4 = strangexxx::vector_a_<std::vector<int>, int>::_incognito();
+    auto v5 = strangexxx::vector_a_<std::vector<int>, int>::_incognito(1,2,3);
+    auto v6 = strangexxx::vector_a_<std::vector<int>, int>{};
+    auto v7 = strangexxx::vector_a_<std::vector<int>, int>{1,2,3};
     v2._thing().push_back(123);
     v4.push_back(123);
     v6._thing().push_back(123);

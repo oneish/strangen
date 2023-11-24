@@ -2,6 +2,7 @@
 #include "example__space_definition.h"
 #include "../../sauce/strange/meta/strange__transformation.h"
 */#pragma once
+#include "../../sauce/strange/reflection/strange__reflection.h"
 #include "../../sauce/strange/common/strange__common.h"
 /*~
 // more meta code

@@ -1,4 +1,5 @@
 #pragma once
+#include "../reflection/strange__reflection.h"
 #include "../common/strange__common.h"
 #include <string>
 #include <vector>
@@ -12,13 +13,28 @@ namespace strange
 template<typename T>
 struct vector_a;
 
+template<typename _Thing, typename T>
+struct vector_a_;
+
 struct parameter_a;
+
+template<typename _Thing>
+struct parameter_a_;
 
 struct operation_a;
 
+template<typename _Thing>
+struct operation_a_;
+
 struct abstraction_a;
 
+template<typename _Thing>
+struct abstraction_a_;
+
 struct space_a;
+
+template<typename _Thing>
+struct space_a_;
 
 template<typename T>
 struct vector_a : virtual strange::_common
