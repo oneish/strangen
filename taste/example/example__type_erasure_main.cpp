@@ -108,127 +108,25 @@ void increment(example::number & num)
     num.inc();
 }
 
-namespace strangexxx
-{
-
-template<typename _Thing, typename T = typename _Thing::value_type> //TODO default
-struct vector_a_;
-
-}
-
-namespace strange
-{
-
-template<typename _Thing, typename T>
-struct reflection<strangexxx::vector_a_<_Thing, T>>
-{
-    inline static auto name() -> std::string
-    {
-        return "strangexxx::vector_a_<" + reflection<_Thing>::name() + ", " + reflection<T>::name() + ">";
-    }
-};
-
-}
-
-namespace strangexxx
-{
-using namespace strange;
-
-template<typename _Thing, typename T>
-struct vector_a_ : vector_a<T>
-{
-private:
-    struct _tag_ {};
-
-    explicit inline vector_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
-    :strange::_common{std::move(shared)}
-    ,vector_a<T>{}
-    {
-    }
-
-public:
-    inline static auto _null() -> vector_a_
-    {
-        return vector_a_{_tag_{}};
-    }
-
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> vector_a_
-    {
-        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> vector_a<T>
-    {
-        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    explicit inline vector_a_(_Args && ... _args)
-    :strange::_common{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
-    ,vector_a<T>{}
-    {
-    }
-
-    inline auto operator=(vector_a_ const & other) -> vector_a_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(vector_a_ && other) -> vector_a_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    inline auto _thing() const -> _Thing const &
-    {
-        return std::dynamic_pointer_cast<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
-    }
-
-    inline auto _thing() -> _Thing &
-    {
-        strange::_common::_mutate();
-        return std::dynamic_pointer_cast<typename vector_a_::template _instance<_Thing, std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
-    }
-
-    using _Abstraction_ = vector_a_;
-    using _Thing_ = _Thing;
-    using _Kind_ = vector_a<T>;
-
-    inline static std::string const _name_ = reflection<_Abstraction_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(reflection<_Kind_>::name());
-        return cats;
-    }();
-};
-
-}
-
 int main()
 {
     std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
-    std::cout << strange::reflection<strangexxx::vector_a_<std::vector<int>>>::name() << std::endl;
-    std::cout << strangexxx::vector_a_<std::vector<int>, int>::_name_ << std::endl;
+    std::cout << strange::reflection<strange::vector_a_<std::vector<int>, int>>::name() << std::endl;
+    std::cout << strange::vector_a_<std::vector<int>, int>::_name_ << std::endl;
 
-    auto v1 = strangexxx::vector_a_<std::vector<int>, int>::_null();
-    auto v2 = strangexxx::vector_a_<std::vector<int>, int>::_make();
-    auto v3 = strangexxx::vector_a_<std::vector<int>, int>::_make(1,2,3);
-    auto v4 = strangexxx::vector_a_<std::vector<int>, int>::_incognito();
-    auto v5 = strangexxx::vector_a_<std::vector<int>, int>::_incognito(1,2,3);
-    auto v6 = strangexxx::vector_a_<std::vector<int>, int>{};
-    auto v7 = strangexxx::vector_a_<std::vector<int>, int>{1,2,3};
+    auto v1 = strange::vector_a_<std::vector<int>, int>::_null_();
+    auto v2 = strange::vector_a_<std::vector<int>, int>::_make_();
+    auto v3 = strange::vector_a_<std::vector<int>, int>::_make(1,2,3);
+    auto v4 = strange::vector_a_<std::vector<int>, int>::_incognito_();
+    auto v5 = strange::vector_a_<std::vector<int>, int>::_incognito(1,2,3);
+    auto v6 = strange::vector_a_<std::vector<int>, int>{};
+    auto v7 = strange::vector_a_<std::vector<int>, int>{1,2,3};
     v2._thing().push_back(123);
     v4.push_back(123);
     v6._thing().push_back(123);
     std::cout << v1._name_ << std::endl;
 
-    auto w1 = example::widget::_make<implementation>();
+    auto w1 = example::widget_<implementation>::_make();
     w1.inc();
     auto w2 = ++w1;
     w1.display();
@@ -237,7 +135,7 @@ int main()
     w1.display();
     w2.display();
 
-    auto b1 = example::button::_make<implementation>()--;
+    auto b1 = example::button_<implementation>::_make()--;
     if (b1._something())
     {
         std::cout << "yes" << b1._error() << std::endl;
@@ -280,11 +178,11 @@ int main()
     std::cout << w1._error("help!") << std::endl;
     std::cout << w1._error() << std::endl;
 
-    auto n1 = example::number::_make<implementation>();
+    auto n1 = example::number_<implementation>::_make();
     n1.inc();
     n1.dec();
 
-    auto wn1 = example::widget_number::_make<implementation>();
+    auto wn1 = example::widget_number_<implementation>::_make();
     wn1.inc();
     wn1.display();
 
@@ -301,17 +199,17 @@ int main()
 
     increment(wn2);
 
-    auto ni1 = example::numeric<int>::_make<implementation>();
+    auto ni1 = example::numeric_<implementation, int>::_make();
     ni1.inc();
     auto ni2 = ni1;
     ni2.x() = 2;
     std::cout << ni1.get() << ni1.x() << ni2.x() << std::endl;
 
-    auto wt = example::widget::_make<implementation_template<int>>();
-    auto bt = example::button::_make<implementation_template<int>>()--;
-    auto nt = example::number::_make<implementation_template<int>>();
-    auto wnt = example::widget_number::_make<implementation_template<int>>();
-    auto nit = example::numeric<int>::_make<implementation_template<int>>();
+    auto wt = example::widget_<implementation_template<int>>::_make();
+    auto bt = example::button_<implementation_template<int>>::_make()--;
+    auto nt = example::number_<implementation_template<int>>::_make();
+    auto wnt = example::widget_number_<implementation_template<int>>::_make();
+    auto nit = example::numeric_<implementation_template<int>, int>::_make();
 
     return 0;
 }

@@ -52,7 +52,7 @@ namespace )#" << _space.name() << R"#(
             _out << R"#(struct )#" << abstraction.name() << R"#(;
 
 )#";
-            _abstraction_parameters(abstraction, true, true, true, false);
+            _abstraction_parameters(abstraction, true, true, true, false); //TODO default = typename _Thing::value_type
             _out << R"#(struct )#" << abstraction.name() << R"#(_;
 
 )#";
@@ -232,14 +232,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(
-    {
-        return )#" << abstraction.name() << R"#({)#" << abstraction.name()
-            << R"#(::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name()
-            << R"#(::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<)#" << abstraction.name() << R"#(::_derived>(strange::_common::_shared).operator bool();
@@ -270,13 +262,32 @@ private:
     }
 
 public:
-    inline static auto _null() -> )#" << abstraction.name() << R"#(_
+    inline static auto _null() -> )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#(
+    {
+        return )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#({};
+    }
+
+    inline static auto _null_() -> )#" << abstraction.name() << R"#(_
     {
         return )#" << abstraction.name() << R"#(_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
+    inline static auto _make(_Args && ... _args) -> )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#(
+    {
+        return )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#({)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<typename )#" << abstraction.name() << R"#(_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
     {
         return )#" << abstraction.name() << R"#(_{_tag_{}, )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<typename )#" << abstraction.name() << R"#(_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -289,6 +300,12 @@ public:
         return )#";
             _abstraction_name_and_parameters(abstraction);
             _out << R"#({)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<typename )#" << abstraction.name() << R"#(_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
+    {
+        return )#" << abstraction.name() << R"#(_{_tag_{}, )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<typename )#" << abstraction.name() << R"#(_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>

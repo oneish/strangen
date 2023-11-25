@@ -114,7 +114,7 @@ namespace strange
 {
 inline auto make_parameter(definition::parameter param) -> parameter_a
 {
-    return parameter_a::_make<definition::parameter>(param);
+    return parameter_a_<definition::parameter>::_make(param);
 }
 }
 
@@ -124,7 +124,7 @@ namespace strange
 {
 inline auto make_operation(definition::operation oper) -> operation_a
 {
-    return operation_a::_make<definition::operation>(oper);
+    return operation_a_<definition::operation>::_make(oper);
 }
 }
 
@@ -134,7 +134,7 @@ namespace strange
 {
 inline auto make_abstraction(definition::abstraction abs) -> abstraction_a
 {
-    return abstraction_a::_make<definition::abstraction>(abs);
+    return abstraction_a_<definition::abstraction>::_make(abs);
 }
 }
 
@@ -144,6 +144,6 @@ namespace strange
 {
 inline auto make_space(definition::space spc) -> space_a
 {
-    return space_a::_make<definition::space>(spc);
+    return space_a_<definition::space>::_make(spc);
 }
 }

@@ -233,12 +233,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget
-    {
-        return widget{widget::_derived::_static_shared_to_base(std::make_shared<widget::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared).operator bool();
@@ -266,13 +260,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> widget_
+    inline static auto _null() -> widget
+    {
+        return widget{};
+    }
+
+    inline static auto _null_() -> widget_
     {
         return widget_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget_
+    inline static auto _make(_Args && ... _args) -> widget
+    {
+        return widget{widget_::_derived::_static_shared_to_base(std::make_shared<typename widget_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> widget_
     {
         return widget_{_tag_{}, widget_::_derived::_static_shared_to_base(std::make_shared<typename widget_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -281,6 +286,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> widget
     {
         return widget{widget_::_derived::_static_shared_to_base(std::make_shared<typename widget_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> widget_
+    {
+        return widget_{_tag_{}, widget_::_derived::_static_shared_to_base(std::make_shared<typename widget_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -426,12 +437,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> button
-    {
-        return button{button::_derived::_static_shared_to_base(std::make_shared<button::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<button::_derived>(strange::_common::_shared).operator bool();
@@ -461,13 +466,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> button_
+    inline static auto _null() -> button
+    {
+        return button{};
+    }
+
+    inline static auto _null_() -> button_
     {
         return button_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> button_
+    inline static auto _make(_Args && ... _args) -> button
+    {
+        return button{button_::_derived::_static_shared_to_base(std::make_shared<typename button_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> button_
     {
         return button_{_tag_{}, button_::_derived::_static_shared_to_base(std::make_shared<typename button_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -476,6 +492,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> button
     {
         return button{button_::_derived::_static_shared_to_base(std::make_shared<typename button_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> button_
+    {
+        return button_{_tag_{}, button_::_derived::_static_shared_to_base(std::make_shared<typename button_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -613,12 +635,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> number
-    {
-        return number{number::_derived::_static_shared_to_base(std::make_shared<number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared).operator bool();
@@ -642,13 +658,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> number_
+    inline static auto _null() -> number
+    {
+        return number{};
+    }
+
+    inline static auto _null_() -> number_
     {
         return number_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> number_
+    inline static auto _make(_Args && ... _args) -> number
+    {
+        return number{number_::_derived::_static_shared_to_base(std::make_shared<typename number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> number_
     {
         return number_{_tag_{}, number_::_derived::_static_shared_to_base(std::make_shared<typename number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -657,6 +684,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> number
     {
         return number{number_::_derived::_static_shared_to_base(std::make_shared<typename number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> number_
+    {
+        return number_{_tag_{}, number_::_derived::_static_shared_to_base(std::make_shared<typename number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -804,12 +837,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget_number
-    {
-        return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<widget_number::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<widget_number::_derived>(strange::_common::_shared).operator bool();
@@ -839,13 +866,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> widget_number_
+    inline static auto _null() -> widget_number
+    {
+        return widget_number{};
+    }
+
+    inline static auto _null_() -> widget_number_
     {
         return widget_number_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget_number_
+    inline static auto _make(_Args && ... _args) -> widget_number
+    {
+        return widget_number{widget_number_::_derived::_static_shared_to_base(std::make_shared<typename widget_number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> widget_number_
     {
         return widget_number_{_tag_{}, widget_number_::_derived::_static_shared_to_base(std::make_shared<typename widget_number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -854,6 +892,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> widget_number
     {
         return widget_number{widget_number_::_derived::_static_shared_to_base(std::make_shared<typename widget_number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> widget_number_
+    {
+        return widget_number_{_tag_{}, widget_number_::_derived::_static_shared_to_base(std::make_shared<typename widget_number_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -1004,12 +1048,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> numeric
-    {
-        return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<numeric::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<numeric::_derived>(strange::_common::_shared).operator bool();
@@ -1039,13 +1077,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> numeric_
+    inline static auto _null() -> numeric<Data>
+    {
+        return numeric<Data>{};
+    }
+
+    inline static auto _null_() -> numeric_
     {
         return numeric_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> numeric_
+    inline static auto _make(_Args && ... _args) -> numeric<Data>
+    {
+        return numeric<Data>{numeric_::_derived::_static_shared_to_base(std::make_shared<typename numeric_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> numeric_
     {
         return numeric_{_tag_{}, numeric_::_derived::_static_shared_to_base(std::make_shared<typename numeric_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -1054,6 +1103,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> numeric<Data>
     {
         return numeric<Data>{numeric_::_derived::_static_shared_to_base(std::make_shared<typename numeric_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> numeric_
+    {
+        return numeric_{_tag_{}, numeric_::_derived::_static_shared_to_base(std::make_shared<typename numeric_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>

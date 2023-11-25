@@ -404,12 +404,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> vector_a
-    {
-        return vector_a{vector_a::_derived::_static_shared_to_base(std::make_shared<vector_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<vector_a::_derived>(strange::_common::_shared).operator bool();
@@ -521,13 +515,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> vector_a_
+    inline static auto _null() -> vector_a<T>
+    {
+        return vector_a<T>{};
+    }
+
+    inline static auto _null_() -> vector_a_
     {
         return vector_a_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> vector_a_
+    inline static auto _make(_Args && ... _args) -> vector_a<T>
+    {
+        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> vector_a_
     {
         return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -536,6 +541,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> vector_a<T>
     {
         return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> vector_a_
+    {
+        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -689,12 +700,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> parameter_a
-    {
-        return parameter_a{parameter_a::_derived::_static_shared_to_base(std::make_shared<parameter_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<parameter_a::_derived>(strange::_common::_shared).operator bool();
@@ -726,13 +731,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> parameter_a_
+    inline static auto _null() -> parameter_a
+    {
+        return parameter_a{};
+    }
+
+    inline static auto _null_() -> parameter_a_
     {
         return parameter_a_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> parameter_a_
+    inline static auto _make(_Args && ... _args) -> parameter_a
+    {
+        return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> parameter_a_
     {
         return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -741,6 +757,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> parameter_a
     {
         return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> parameter_a_
+    {
+        return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -910,12 +932,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> operation_a
-    {
-        return operation_a{operation_a::_derived::_static_shared_to_base(std::make_shared<operation_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared).operator bool();
@@ -955,13 +971,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> operation_a_
+    inline static auto _null() -> operation_a
+    {
+        return operation_a{};
+    }
+
+    inline static auto _null_() -> operation_a_
     {
         return operation_a_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> operation_a_
+    inline static auto _make(_Args && ... _args) -> operation_a
+    {
+        return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> operation_a_
     {
         return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -970,6 +997,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> operation_a
     {
         return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> operation_a_
+    {
+        return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -1131,12 +1164,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> abstraction_a
-    {
-        return abstraction_a{abstraction_a::_derived::_static_shared_to_base(std::make_shared<abstraction_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared).operator bool();
@@ -1172,13 +1199,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> abstraction_a_
+    inline static auto _null() -> abstraction_a
+    {
+        return abstraction_a{};
+    }
+
+    inline static auto _null_() -> abstraction_a_
     {
         return abstraction_a_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> abstraction_a_
+    inline static auto _make(_Args && ... _args) -> abstraction_a
+    {
+        return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> abstraction_a_
     {
         return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -1187,6 +1225,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> abstraction_a
     {
         return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> abstraction_a_
+    {
+        return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
@@ -1332,12 +1376,6 @@ protected:
     };
 
 public:
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> space_a
-    {
-        return space_a{space_a::_derived::_static_shared_to_base(std::make_shared<space_a::_instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
-    }
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<space_a::_derived>(strange::_common::_shared).operator bool();
@@ -1365,13 +1403,24 @@ private:
     }
 
 public:
-    inline static auto _null() -> space_a_
+    inline static auto _null() -> space_a
+    {
+        return space_a{};
+    }
+
+    inline static auto _null_() -> space_a_
     {
         return space_a_{_tag_{}};
     }
 
     template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> space_a_
+    inline static auto _make(_Args && ... _args) -> space_a
+    {
+        return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> space_a_
     {
         return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
@@ -1380,6 +1429,12 @@ public:
     inline static auto _incognito(_Args && ... _args) -> space_a
     {
         return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
+    }
+
+    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _incognito_(_Args && ... _args) -> space_a_
+    {
+        return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Thing, _Copy>>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
