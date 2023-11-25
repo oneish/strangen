@@ -205,7 +205,7 @@ public:
 template<typename _Thing>
 struct widget_ : widget
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : widget_::_derived
     {
@@ -250,7 +250,6 @@ struct widget_ : widget
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline widget_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -409,7 +408,7 @@ public:
 template<typename _Thing>
 struct button_ : button
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : button_::_derived
     {
@@ -456,7 +455,6 @@ struct button_ : button
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline button_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -607,7 +605,7 @@ public:
 template<typename _Thing>
 struct number_ : number
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : number_::_derived
     {
@@ -648,7 +646,6 @@ struct number_ : number
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline number_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -809,7 +806,7 @@ public:
 template<typename _Thing>
 struct widget_number_ : widget_number
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : widget_number_::_derived
     {
@@ -856,7 +853,6 @@ struct widget_number_ : widget_number
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline widget_number_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -1020,7 +1016,7 @@ public:
 template<typename _Thing, typename Data>
 struct numeric_ : numeric<Data>
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : numeric_::_derived
     {
@@ -1067,7 +1063,6 @@ struct numeric_ : numeric<Data>
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline numeric_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})

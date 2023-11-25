@@ -376,7 +376,7 @@ public:
 template<typename _Thing, typename T>
 struct vector_a_ : vector_a<T>
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : vector_a_::_derived
     {
@@ -505,7 +505,6 @@ struct vector_a_ : vector_a<T>
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline vector_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -672,7 +671,7 @@ public:
 template<typename _Thing>
 struct parameter_a_ : parameter_a
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : parameter_a_::_derived
     {
@@ -721,7 +720,6 @@ struct parameter_a_ : parameter_a
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline parameter_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -904,7 +902,7 @@ public:
 template<typename _Thing>
 struct operation_a_ : operation_a
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : operation_a_::_derived
     {
@@ -961,7 +959,6 @@ struct operation_a_ : operation_a
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline operation_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -1136,7 +1133,7 @@ public:
 template<typename _Thing>
 struct abstraction_a_ : abstraction_a
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : abstraction_a_::_derived
     {
@@ -1189,7 +1186,6 @@ struct abstraction_a_ : abstraction_a
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline abstraction_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
@@ -1348,7 +1344,7 @@ public:
 template<typename _Thing>
 struct space_a_ : space_a
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : space_a_::_derived
     {
@@ -1393,7 +1389,6 @@ struct space_a_ : space_a
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline space_a_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})

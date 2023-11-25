@@ -206,7 +206,7 @@ public:
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(
 {
-//private:
+private:
     template<bool _Copy>
     struct _instance final : )#" << abstraction.name() << R"#(_::_derived
     {
@@ -250,7 +250,6 @@ public:
         _Thing _thing;
     };
 
-private:
     struct _tag_ {};
 
     explicit inline )#" << abstraction.name() << R"#(_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
