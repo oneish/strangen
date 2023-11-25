@@ -187,8 +187,26 @@ protected:
         virtual auto operator--(int i) -> void = 0;
     };
 
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto display(button b) const -> void;
+
+    inline auto inc() -> void;
+
+    inline auto operator++() -> widget &;
+
+    inline auto operator--(int i) -> widget;
+};
+
+template<typename _Thing>
+struct widget_ : widget
+{
 //private:
-    template<typename _Thing, bool _Copy>
+    template<typename _Thing_, bool _Copy>
     struct _instance final : widget::_derived
     {
         template<typename ... _Args>
@@ -212,7 +230,7 @@ protected:
         {
             if constexpr (_Copy)
             {
-                return widget::_derived::_static_shared_to_base(std::make_shared<widget::_instance<_Thing, _Copy>>(_thing));
+                return widget::_derived::_static_shared_to_base(std::make_shared<widget_::_instance<_Thing, _Copy>>(_thing));
             }
             else
             {
@@ -229,27 +247,9 @@ protected:
         inline auto operator--(int i) -> void final;
 
     //private:
-        _Thing _thing;
+        _Thing_ _thing;
     };
 
-public:
-    inline auto _valid() const -> bool
-    {
-        return std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared).operator bool();
-    }
-
-    inline auto display(button b) const -> void;
-
-    inline auto inc() -> void;
-
-    inline auto operator++() -> widget &;
-
-    inline auto operator--(int i) -> widget;
-};
-
-template<typename _Thing>
-struct widget_ : widget
-{
 private:
     struct _tag_ {};
 
@@ -1155,26 +1155,30 @@ public:
     }();
 };
 
-template<typename _Thing, bool _Copy>
-inline auto widget::_instance<_Thing, _Copy>::display(button b) const -> void
+template<typename _Thing>
+template<typename _Thing_, bool _Copy>
+inline auto widget_<_Thing>::_instance<_Thing_, _Copy>::display(button b) const -> void
 {
     _thing.display(b);
 }
 
-template<typename _Thing, bool _Copy>
-inline auto widget::_instance<_Thing, _Copy>::inc() -> void
+template<typename _Thing>
+template<typename _Thing_, bool _Copy>
+inline auto widget_<_Thing>::_instance<_Thing_, _Copy>::inc() -> void
 {
     _thing.inc();
 }
 
-template<typename _Thing, bool _Copy>
-inline auto widget::_instance<_Thing, _Copy>::operator++() -> void
+template<typename _Thing>
+template<typename _Thing_, bool _Copy>
+inline auto widget_<_Thing>::_instance<_Thing_, _Copy>::operator++() -> void
 {
     _thing.operator++();
 }
 
-template<typename _Thing, bool _Copy>
-inline auto widget::_instance<_Thing, _Copy>::operator--(int i) -> void
+template<typename _Thing>
+template<typename _Thing_, bool _Copy>
+inline auto widget_<_Thing>::_instance<_Thing_, _Copy>::operator--(int i) -> void
 {
     _thing.operator--(i);
 }
