@@ -13,27 +13,27 @@ namespace strange
 template<typename T>
 struct vector_a;
 
-template<typename _Thing, typename T>
+template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct vector_a_;
 
 struct parameter_a;
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct parameter_a_;
 
 struct operation_a;
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct operation_a_;
 
 struct abstraction_a;
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct abstraction_a_;
 
 struct space_a;
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct space_a_;
 
 }
@@ -50,12 +50,12 @@ struct reflection<strange::vector_a<T>>
     }
 };
 
-template<typename _Thing, typename T>
-struct reflection<strange::vector_a_<_Thing, T>>
+template<typename T, typename _Thing, bool _Copy>
+struct reflection<strange::vector_a_<T, _Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::vector_a_<" + reflection<_Thing>::name() + ", " + reflection<T>::name() + ">";
+        return "strange::vector_a_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -68,12 +68,12 @@ struct reflection<strange::parameter_a>
     }
 };
 
-template<typename _Thing>
-struct reflection<strange::parameter_a_<_Thing>>
+template<typename _Thing, bool _Copy>
+struct reflection<strange::parameter_a_<_Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::parameter_a_<" + reflection<_Thing>::name() + ">";
+        return "strange::parameter_a_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -86,12 +86,12 @@ struct reflection<strange::operation_a>
     }
 };
 
-template<typename _Thing>
-struct reflection<strange::operation_a_<_Thing>>
+template<typename _Thing, bool _Copy>
+struct reflection<strange::operation_a_<_Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::operation_a_<" + reflection<_Thing>::name() + ">";
+        return "strange::operation_a_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -104,12 +104,12 @@ struct reflection<strange::abstraction_a>
     }
 };
 
-template<typename _Thing>
-struct reflection<strange::abstraction_a_<_Thing>>
+template<typename _Thing, bool _Copy>
+struct reflection<strange::abstraction_a_<_Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::abstraction_a_<" + reflection<_Thing>::name() + ">";
+        return "strange::abstraction_a_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -122,12 +122,12 @@ struct reflection<strange::space_a>
     }
 };
 
-template<typename _Thing>
-struct reflection<strange::space_a_<_Thing>>
+template<typename _Thing, bool _Copy>
+struct reflection<strange::space_a_<_Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::space_a_<" + reflection<_Thing>::name() + ">";
+        return "strange::space_a_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -373,11 +373,10 @@ public:
     inline auto swap(std::vector<T> & other) -> void;
 };
 
-template<typename _Thing, typename T>
+template<typename T, typename _Thing, bool _Copy>
 struct vector_a_ : vector_a<T>
 {
 private:
-    template<bool _Copy>
     struct _instance final : vector_a_::_derived
     {
         template<typename ... _Args>
@@ -401,7 +400,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance<_Copy>>(_thing));
+                return vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(_thing));
             }
             else
             {
@@ -524,33 +523,33 @@ public:
         return vector_a_{_tag_{}};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make(_Args && ... _args) -> vector_a<T>
     {
-        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> vector_a_
     {
-        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito(_Args && ... _args) -> vector_a<T>
     {
-        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito_(_Args && ... _args) -> vector_a_
     {
-        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
     explicit inline vector_a_(_Args && ... _args)
-    :strange::_common{vector_a_::_derived::_static_shared_to_base(std::make_shared<typename vector_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    :strange::_common{vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))}
     ,vector_a<T>{}
     {
     }
@@ -569,13 +568,13 @@ public:
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<typename vector_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<vector_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<typename vector_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<vector_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     using _Abstraction_ = vector_a_;
@@ -668,11 +667,10 @@ public:
     inline auto argument() -> std::string &;
 };
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy>
 struct parameter_a_ : parameter_a
 {
 private:
-    template<bool _Copy>
     struct _instance final : parameter_a_::_derived
     {
         template<typename ... _Args>
@@ -696,7 +694,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance<_Copy>>(_thing));
+                return parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(_thing));
             }
             else
             {
@@ -739,33 +737,33 @@ public:
         return parameter_a_{_tag_{}};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make(_Args && ... _args) -> parameter_a
     {
-        return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> parameter_a_
     {
-        return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito(_Args && ... _args) -> parameter_a
     {
-        return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito_(_Args && ... _args) -> parameter_a_
     {
-        return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
     explicit inline parameter_a_(_Args && ... _args)
-    :strange::_common{parameter_a_::_derived::_static_shared_to_base(std::make_shared<typename parameter_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    :strange::_common{parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))}
     ,parameter_a{}
     {
     }
@@ -784,13 +782,13 @@ public:
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<typename parameter_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<parameter_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<typename parameter_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<parameter_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     using _Abstraction_ = parameter_a_;
@@ -899,11 +897,10 @@ public:
     inline auto data() -> bool &;
 };
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy>
 struct operation_a_ : operation_a
 {
 private:
-    template<bool _Copy>
     struct _instance final : operation_a_::_derived
     {
         template<typename ... _Args>
@@ -927,7 +924,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance<_Copy>>(_thing));
+                return operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(_thing));
             }
             else
             {
@@ -978,33 +975,33 @@ public:
         return operation_a_{_tag_{}};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make(_Args && ... _args) -> operation_a
     {
-        return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> operation_a_
     {
-        return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito(_Args && ... _args) -> operation_a
     {
-        return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito_(_Args && ... _args) -> operation_a_
     {
-        return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
     explicit inline operation_a_(_Args && ... _args)
-    :strange::_common{operation_a_::_derived::_static_shared_to_base(std::make_shared<typename operation_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    :strange::_common{operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))}
     ,operation_a{}
     {
     }
@@ -1023,13 +1020,13 @@ public:
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<typename operation_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<operation_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<typename operation_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<operation_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     using _Abstraction_ = operation_a_;
@@ -1130,11 +1127,10 @@ public:
     inline auto operations() -> std::vector<operation_a> &;
 };
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy>
 struct abstraction_a_ : abstraction_a
 {
 private:
-    template<bool _Copy>
     struct _instance final : abstraction_a_::_derived
     {
         template<typename ... _Args>
@@ -1158,7 +1154,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance<_Copy>>(_thing));
+                return abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(_thing));
             }
             else
             {
@@ -1205,33 +1201,33 @@ public:
         return abstraction_a_{_tag_{}};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make(_Args && ... _args) -> abstraction_a
     {
-        return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> abstraction_a_
     {
-        return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito(_Args && ... _args) -> abstraction_a
     {
-        return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito_(_Args && ... _args) -> abstraction_a_
     {
-        return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
     explicit inline abstraction_a_(_Args && ... _args)
-    :strange::_common{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<typename abstraction_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    :strange::_common{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))}
     ,abstraction_a{}
     {
     }
@@ -1250,13 +1246,13 @@ public:
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<typename abstraction_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<abstraction_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<typename abstraction_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<abstraction_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     using _Abstraction_ = abstraction_a_;
@@ -1341,11 +1337,10 @@ public:
     inline auto abstractions() -> std::vector<abstraction_a> &;
 };
 
-template<typename _Thing>
+template<typename _Thing, bool _Copy>
 struct space_a_ : space_a
 {
 private:
-    template<bool _Copy>
     struct _instance final : space_a_::_derived
     {
         template<typename ... _Args>
@@ -1369,7 +1364,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance<_Copy>>(_thing));
+                return space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(_thing));
             }
             else
             {
@@ -1408,33 +1403,33 @@ public:
         return space_a_{_tag_{}};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make(_Args && ... _args) -> space_a
     {
-        return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> space_a_
     {
-        return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito(_Args && ... _args) -> space_a
     {
-        return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename ... _Args>
     inline static auto _incognito_(_Args && ... _args) -> space_a_
     {
-        return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<_Copy>>(std::forward<_Args>(_args) ...))};
+        return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     template<typename ... _Args>
     explicit inline space_a_(_Args && ... _args)
-    :strange::_common{space_a_::_derived::_static_shared_to_base(std::make_shared<typename space_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(std::forward<_Args>(_args) ...))}
+    :strange::_common{space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))}
     ,space_a{}
     {
     }
@@ -1453,13 +1448,13 @@ public:
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<typename space_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<space_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<typename space_a_::template _instance<std::is_copy_constructible_v<_Thing>>>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<space_a_::_instance>(strange::_common::_shared)->_thing;
     }
 
     using _Abstraction_ = space_a_;
@@ -1476,324 +1471,278 @@ public:
     }();
 };
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::operator=(std::vector<T> const & other) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> const & other) -> void
 {
     _thing.operator=(other);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::operator=(std::vector<T> && other) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> && other) -> void
 {
     _thing.operator=(other);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::operator=(std::initializer_list<T> ilist) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::operator=(std::initializer_list<T> ilist) -> void
 {
     _thing.operator=(ilist);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::assign(size_t count, T const & value) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::assign(size_t count, T const & value) -> void
 {
     _thing.assign(count, value);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::assign(std::initializer_list<T> ilist) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::assign(std::initializer_list<T> ilist) -> void
 {
     _thing.assign(ilist);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::at(size_t pos) -> T &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::at(size_t pos) -> T &
 {
     return _thing.at(pos);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::at(size_t pos) const -> T const &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::at(size_t pos) const -> T const &
 {
     return _thing.at(pos);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::operator[](size_t pos) -> T &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::operator[](size_t pos) -> T &
 {
     return _thing.operator[](pos);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::operator[](size_t pos) const -> T const &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::operator[](size_t pos) const -> T const &
 {
     return _thing.operator[](pos);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::front() -> T &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::front() -> T &
 {
     return _thing.front();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::front() const -> T const &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::front() const -> T const &
 {
     return _thing.front();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::back() -> T &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::back() -> T &
 {
     return _thing.back();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::back() const -> T const &
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::back() const -> T const &
 {
     return _thing.back();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::data() -> T *
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::data() -> T *
 {
     return _thing.data();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::data() const -> T const *
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::data() const -> T const *
 {
     return _thing.data();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::begin() -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::begin() -> typename std::vector<T>::iterator
 {
     return _thing.begin();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::begin() const -> typename std::vector<T>::const_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::begin() const -> typename std::vector<T>::const_iterator
 {
     return _thing.begin();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::cbegin() const -> typename std::vector<T>::const_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::cbegin() const -> typename std::vector<T>::const_iterator
 {
     return _thing.cbegin();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::end() -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::end() -> typename std::vector<T>::iterator
 {
     return _thing.end();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::end() const -> typename std::vector<T>::const_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::end() const -> typename std::vector<T>::const_iterator
 {
     return _thing.end();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::cend() const -> typename std::vector<T>::const_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::cend() const -> typename std::vector<T>::const_iterator
 {
     return _thing.cend();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::rbegin() -> typename std::vector<T>::reverse_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::rbegin() -> typename std::vector<T>::reverse_iterator
 {
     return _thing.rbegin();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::rbegin() const -> typename std::vector<T>::const_reverse_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::rbegin() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.rbegin();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::crbegin() const -> typename std::vector<T>::const_reverse_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::crbegin() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.crbegin();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::rend() -> typename std::vector<T>::reverse_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::rend() -> typename std::vector<T>::reverse_iterator
 {
     return _thing.rend();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::rend() const -> typename std::vector<T>::const_reverse_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::rend() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.rend();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::crend() const -> typename std::vector<T>::const_reverse_iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::crend() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.crend();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::empty() const -> bool
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::empty() const -> bool
 {
     return _thing.empty();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::size() const -> size_t
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::size() const -> size_t
 {
     return _thing.size();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::max_size() const -> size_t
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::max_size() const -> size_t
 {
     return _thing.max_size();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::reserve(size_t new_cap) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::reserve(size_t new_cap) -> void
 {
     _thing.reserve(new_cap);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::capacity() const -> size_t
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::capacity() const -> size_t
 {
     return _thing.capacity();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::shrink_to_fit() -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::shrink_to_fit() -> void
 {
     _thing.shrink_to_fit();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::clear() -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::clear() -> void
 {
     _thing.clear();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, value);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, value);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, count, value);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, ilist);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
 {
     return _thing.erase(pos);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
 {
     return _thing.erase(first, last);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::push_back(T const & value) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::push_back(T const & value) -> void
 {
     _thing.push_back(value);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::push_back(T && value) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::push_back(T && value) -> void
 {
     _thing.push_back(value);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::pop_back() -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::pop_back() -> void
 {
     _thing.pop_back();
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::resize(size_t count) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::resize(size_t count) -> void
 {
     _thing.resize(count);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::resize(size_t count, T const & value) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::resize(size_t count, T const & value) -> void
 {
     _thing.resize(count, value);
 }
 
-template<typename _Thing, typename T>
-template<bool _Copy>
-inline auto vector_a_<_Thing, T>::_instance<_Copy>::swap(std::vector<T> & other) -> void
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_a_<T, _Thing, _Copy>::_instance::swap(std::vector<T> & other) -> void
 {
     _thing.swap(other);
 }
@@ -2106,44 +2055,38 @@ inline auto vector_a<T>::swap(std::vector<T> & other) -> void
     std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->swap(other);
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto parameter_a_<_Thing>::_instance<_Copy>::type() const -> std::string const &
+template<typename _Thing, bool _Copy>
+inline auto parameter_a_<_Thing, _Copy>::_instance::type() const -> std::string const &
 {
     return _thing.type;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto parameter_a_<_Thing>::_instance<_Copy>::type() -> std::string &
+template<typename _Thing, bool _Copy>
+inline auto parameter_a_<_Thing, _Copy>::_instance::type() -> std::string &
 {
     return _thing.type;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto parameter_a_<_Thing>::_instance<_Copy>::name() const -> std::string const &
+template<typename _Thing, bool _Copy>
+inline auto parameter_a_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto parameter_a_<_Thing>::_instance<_Copy>::name() -> std::string &
+template<typename _Thing, bool _Copy>
+inline auto parameter_a_<_Thing, _Copy>::_instance::name() -> std::string &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto parameter_a_<_Thing>::_instance<_Copy>::argument() const -> std::string const &
+template<typename _Thing, bool _Copy>
+inline auto parameter_a_<_Thing, _Copy>::_instance::argument() const -> std::string const &
 {
     return _thing.argument;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto parameter_a_<_Thing>::_instance<_Copy>::argument() -> std::string &
+template<typename _Thing, bool _Copy>
+inline auto parameter_a_<_Thing, _Copy>::_instance::argument() -> std::string &
 {
     return _thing.argument;
 }
@@ -2181,72 +2124,62 @@ inline auto parameter_a::argument() -> std::string &
     return std::dynamic_pointer_cast<parameter_a::_derived>(strange::_common::_shared)->argument();
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::name() const -> std::string const &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::name() -> std::string &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::name() -> std::string &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::parameters() const -> std::vector<parameter_a> const &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::parameters() const -> std::vector<parameter_a> const &
 {
     return _thing.parameters;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::parameters() -> std::vector<parameter_a> &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::parameters() -> std::vector<parameter_a> &
 {
     return _thing.parameters;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::constness() const -> bool const &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::constness() const -> bool const &
 {
     return _thing.constness;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::constness() -> bool &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::constness() -> bool &
 {
     return _thing.constness;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::result() const -> std::string const &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::result() const -> std::string const &
 {
     return _thing.result;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::result() -> std::string &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::result() -> std::string &
 {
     return _thing.result;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::data() const -> bool const &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::data() const -> bool const &
 {
     return _thing.data;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto operation_a_<_Thing>::_instance<_Copy>::data() -> bool &
+template<typename _Thing, bool _Copy>
+inline auto operation_a_<_Thing, _Copy>::_instance::data() -> bool &
 {
     return _thing.data;
 }
@@ -2306,58 +2239,50 @@ inline auto operation_a::data() -> bool &
     return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared)->data();
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::parameters() const -> std::vector<parameter_a> const &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::parameters() const -> std::vector<parameter_a> const &
 {
     return _thing.parameters;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::parameters() -> std::vector<parameter_a> &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::parameters() -> std::vector<parameter_a> &
 {
     return _thing.parameters;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::name() const -> std::string const &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::name() -> std::string &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::name() -> std::string &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::parents() const -> std::vector<std::string> const &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::parents() const -> std::vector<std::string> const &
 {
     return _thing.parents;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::parents() -> std::vector<std::string> &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::parents() -> std::vector<std::string> &
 {
     return _thing.parents;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::operations() const -> std::vector<operation_a> const &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::operations() const -> std::vector<operation_a> const &
 {
     return _thing.operations;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto abstraction_a_<_Thing>::_instance<_Copy>::operations() -> std::vector<operation_a> &
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::operations() -> std::vector<operation_a> &
 {
     return _thing.operations;
 }
@@ -2406,30 +2331,26 @@ inline auto abstraction_a::operations() -> std::vector<operation_a> &
     return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared)->operations();
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto space_a_<_Thing>::_instance<_Copy>::name() const -> std::string const &
+template<typename _Thing, bool _Copy>
+inline auto space_a_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto space_a_<_Thing>::_instance<_Copy>::name() -> std::string &
+template<typename _Thing, bool _Copy>
+inline auto space_a_<_Thing, _Copy>::_instance::name() -> std::string &
 {
     return _thing.name;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto space_a_<_Thing>::_instance<_Copy>::abstractions() const -> std::vector<abstraction_a> const &
+template<typename _Thing, bool _Copy>
+inline auto space_a_<_Thing, _Copy>::_instance::abstractions() const -> std::vector<abstraction_a> const &
 {
     return _thing.abstractions;
 }
 
-template<typename _Thing>
-template<bool _Copy>
-inline auto space_a_<_Thing>::_instance<_Copy>::abstractions() -> std::vector<abstraction_a> &
+template<typename _Thing, bool _Copy>
+inline auto space_a_<_Thing, _Copy>::_instance::abstractions() -> std::vector<abstraction_a> &
 {
     return _thing.abstractions;
 }

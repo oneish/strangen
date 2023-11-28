@@ -9,6 +9,15 @@ template<typename>
 struct reflection;
 
 template<>
+struct reflection<bool>
+{
+    inline static auto name() -> std::string
+    {
+        return "bool";
+    }
+};
+
+template<>
 struct reflection<int>
 {
     inline static auto name() -> std::string

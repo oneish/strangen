@@ -111,16 +111,16 @@ void increment(example::number & num)
 int main()
 {
     std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
-    std::cout << strange::reflection<strange::vector_a_<std::vector<int>, int>>::name() << std::endl;
-    std::cout << strange::vector_a_<std::vector<int>, int>::_name_ << std::endl;
+    std::cout << strange::reflection<strange::vector_a_<int, std::vector<int>>>::name() << std::endl;
+    std::cout << strange::vector_a_<int, std::vector<int>>::_name_ << std::endl;
 
-    auto v1 = strange::vector_a_<std::vector<int>, int>::_null_();
-    auto v2 = strange::vector_a_<std::vector<int>, int>::_make_();
-    auto v3 = strange::vector_a_<std::vector<int>, int>::_make(1,2,3);
-    auto v4 = strange::vector_a_<std::vector<int>, int>::_incognito_();
-    auto v5 = strange::vector_a_<std::vector<int>, int>::_incognito(1,2,3);
-    auto v6 = strange::vector_a_<std::vector<int>, int>{};
-    auto v7 = strange::vector_a_<std::vector<int>, int>{1,2,3};
+    auto v1 = strange::vector_a_<int, std::vector<int>>::_null_();
+    auto v2 = strange::vector_a_<int, std::vector<int>>::_make_();
+    auto v3 = strange::vector_a_<int, std::vector<int>>::_make(1,2,3);
+    auto v4 = strange::vector_a_<int, std::vector<int>>::_incognito_();
+    auto v5 = strange::vector_a_<int, std::vector<int>>::_incognito(1,2,3);
+    auto v6 = strange::vector_a_<int, std::vector<int>>{};
+    auto v7 = strange::vector_a_<int, std::vector<int>>{1,2,3};
     v2._thing().push_back(123);
     v4.push_back(123);
     v6._thing().push_back(123);
@@ -199,7 +199,7 @@ int main()
 
     increment(wn2);
 
-    auto ni1 = example::numeric_<implementation, int>::_make();
+    auto ni1 = example::numeric_<int, implementation>::_make();
     ni1.inc();
     auto ni2 = ni1;
     ni2.x() = 2;
@@ -209,7 +209,7 @@ int main()
     auto bt = example::button_<implementation_template<int>>::_make()--;
     auto nt = example::number_<implementation_template<int>>::_make();
     auto wnt = example::widget_number_<implementation_template<int>>::_make();
-    auto nit = example::numeric_<implementation_template<int>, int>::_make();
+    auto nit = example::numeric_<int, implementation_template<int>>::_make();
 
     return 0;
 }
