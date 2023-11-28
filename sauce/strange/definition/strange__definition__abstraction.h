@@ -15,4 +15,14 @@ struct abstraction
     std::vector<operation_a> operations;
 };
 }
+
+template<>
+struct reflection<strange::definition::abstraction>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::definition::abstraction";
+    }
+};
+
 }

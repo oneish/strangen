@@ -239,13 +239,23 @@ private:
                 throw true;
             }
         }
+
+        inline auto _name() const -> std::string final
+        {
+            return )#" << abstraction.name() << R"#(_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return )#" << abstraction.name() << R"#(_::_cats_;
+        }
 )#";
             {
                 std::unordered_set<operation_a> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, false, unique);
             }
             _out << R"#(
-    //private:
+
         _Thing _thing;
     };
 
@@ -286,22 +296,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
-    {
-        return )#" << abstraction.name() << R"#(_{_tag_{}, )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#(
-    {
-        return )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
     {
         return )#" << abstraction.name() << R"#(_{_tag_{}, )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
     }

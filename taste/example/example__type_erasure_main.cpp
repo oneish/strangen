@@ -108,6 +108,29 @@ void increment(example::number & num)
     num.inc();
 }
 
+namespace strange
+{
+
+template<>
+struct reflection<implementation>
+{
+    inline static auto name() -> std::string
+    {
+        return "implementation";
+    }
+};
+
+template<typename Datatype>
+struct reflection<implementation_template<Datatype>>
+{
+    inline static auto name() -> std::string
+    {
+        return "implementation_template<" + reflection<Datatype>::name() + ">";
+    }
+};
+
+}
+
 int main()
 {
     std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
@@ -117,13 +140,11 @@ int main()
     auto v1 = strange::vector_a_<int, std::vector<int>>::_null_();
     auto v2 = strange::vector_a_<int, std::vector<int>>::_make_();
     auto v3 = strange::vector_a_<int, std::vector<int>>::_make(1,2,3);
-    auto v4 = strange::vector_a_<int, std::vector<int>>::_incognito_();
-    auto v5 = strange::vector_a_<int, std::vector<int>>::_incognito(1,2,3);
-    auto v6 = strange::vector_a_<int, std::vector<int>>{};
-    auto v7 = strange::vector_a_<int, std::vector<int>>{1,2,3};
+    auto v4 = strange::vector_a_<int, std::vector<int>>{};
+    auto v5 = strange::vector_a_<int, std::vector<int>>{1,2,3};
     v2._thing().push_back(123);
     v4.push_back(123);
-    v6._thing().push_back(123);
+    v5._thing().push_back(123);
     std::cout << v1._name_ << std::endl;
 
     auto w1 = example::widget_<implementation>::_make();

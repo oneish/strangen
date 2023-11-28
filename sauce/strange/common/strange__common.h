@@ -20,16 +20,8 @@ protected:
         virtual auto _address() const -> void const * = 0;
         virtual auto _sizeof() const -> size_t = 0;
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
-
-        virtual inline auto _name() const -> std::string
-        {
-            return std::string{};
-        }
-
-        virtual inline auto _cats() const -> std::unordered_set<std::string>
-        {
-            return std::unordered_set<std::string>{};
-        }
+        virtual inline auto _name() const -> std::string = 0;
+        virtual inline auto _cats() const -> std::unordered_set<std::string> = 0;
 
         virtual inline auto _error() const -> std::string
         {
@@ -93,6 +85,16 @@ private:
             throw false;
         }
 
+        virtual inline auto _name() const -> std::string final
+        {
+            return "strange::_message";
+        }
+
+        virtual inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return std::unordered_set<std::string>{};
+        }
+
         inline auto _error() const -> std::string final
         {
             return message;
@@ -119,6 +121,24 @@ public:
             return _shared->_sizeof();
         }
         return static_cast<size_t>(0);
+    }
+
+    inline auto _name() const -> std::string
+    {
+        if (_shared)
+        {
+            return _shared->_name();
+        }
+        return std::string{};
+    }
+
+    inline auto _cats() const -> std::unordered_set<std::string>
+    {
+        if (_shared)
+        {
+            return _shared->_cats();
+        }
+        return std::unordered_set<std::string>{};
     }
 
     inline auto _something() const -> bool

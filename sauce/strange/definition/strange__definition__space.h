@@ -13,4 +13,14 @@ struct space
     std::vector<abstraction_a> abstractions;
 };
 }
+
+template<>
+struct reflection<strange::definition::space>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::definition::space";
+    }
+};
+
 }

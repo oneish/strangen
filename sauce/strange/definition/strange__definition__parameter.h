@@ -12,4 +12,14 @@ struct parameter
     std::string argument;
 };
 }
+
+template<>
+struct reflection<strange::definition::parameter>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::definition::parameter";
+    }
+};
+
 }

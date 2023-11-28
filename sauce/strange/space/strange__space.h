@@ -408,6 +408,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return vector_a_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return vector_a_::_cats_;
+        }
+
         inline auto operator=(std::vector<T> const & other) -> void final;
 
         inline auto operator=(std::vector<T> && other) -> void final;
@@ -500,7 +510,7 @@ private:
 
         inline auto swap(std::vector<T> & other) -> void final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -531,18 +541,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> vector_a_
-    {
-        return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> vector_a<T>
-    {
-        return vector_a<T>{vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> vector_a_
     {
         return vector_a_{_tag_{}, vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -702,6 +700,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return parameter_a_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return parameter_a_::_cats_;
+        }
+
         inline auto type() const -> std::string const & final;
 
         inline auto type() -> std::string & final;
@@ -714,7 +722,7 @@ private:
 
         inline auto argument() -> std::string & final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -745,18 +753,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> parameter_a_
-    {
-        return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> parameter_a
-    {
-        return parameter_a{parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> parameter_a_
     {
         return parameter_a_{_tag_{}, parameter_a_::_derived::_static_shared_to_base(std::make_shared<parameter_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -932,6 +928,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return operation_a_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return operation_a_::_cats_;
+        }
+
         inline auto name() const -> std::string const & final;
 
         inline auto name() -> std::string & final;
@@ -952,7 +958,7 @@ private:
 
         inline auto data() -> bool & final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -983,18 +989,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> operation_a_
-    {
-        return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> operation_a
-    {
-        return operation_a{operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> operation_a_
     {
         return operation_a_{_tag_{}, operation_a_::_derived::_static_shared_to_base(std::make_shared<operation_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -1162,6 +1156,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return abstraction_a_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return abstraction_a_::_cats_;
+        }
+
         inline auto parameters() const -> std::vector<parameter_a> const & final;
 
         inline auto parameters() -> std::vector<parameter_a> & final;
@@ -1178,7 +1182,7 @@ private:
 
         inline auto operations() -> std::vector<operation_a> & final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -1209,18 +1213,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> abstraction_a_
-    {
-        return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> abstraction_a
-    {
-        return abstraction_a{abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> abstraction_a_
     {
         return abstraction_a_{_tag_{}, abstraction_a_::_derived::_static_shared_to_base(std::make_shared<abstraction_a_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -1372,6 +1364,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return space_a_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return space_a_::_cats_;
+        }
+
         inline auto name() const -> std::string const & final;
 
         inline auto name() -> std::string & final;
@@ -1380,7 +1382,7 @@ private:
 
         inline auto abstractions() -> std::vector<abstraction_a> & final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -1411,18 +1413,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> space_a_
-    {
-        return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> space_a
-    {
-        return space_a{space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> space_a_
     {
         return space_a_{_tag_{}, space_a_::_derived::_static_shared_to_base(std::make_shared<space_a_::_instance>(std::forward<_Args>(_args) ...))};
     }

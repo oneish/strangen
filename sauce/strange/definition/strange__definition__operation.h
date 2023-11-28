@@ -16,4 +16,14 @@ struct operation
     bool data = false;
 };
 }
+
+template<>
+struct reflection<strange::definition::operation>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::definition::operation";
+    }
+};
+
 }

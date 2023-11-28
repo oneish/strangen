@@ -237,6 +237,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return widget_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return widget_::_cats_;
+        }
+
         inline auto display(button b) const -> void final;
 
         inline auto inc() -> void final;
@@ -245,7 +255,7 @@ private:
 
         inline auto operator--(int i) -> void final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -276,18 +286,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> widget_
-    {
-        return widget_{_tag_{}, widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> widget
-    {
-        return widget{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> widget_
     {
         return widget_{_tag_{}, widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -439,6 +437,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return button_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return button_::_cats_;
+        }
+
         inline auto display(button b) const -> void final;
 
         inline auto inc() -> void final;
@@ -449,7 +457,7 @@ private:
 
         inline auto push() -> void final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -480,18 +488,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> button_
-    {
-        return button_{_tag_{}, button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> button
-    {
-        return button{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> button_
     {
         return button_{_tag_{}, button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -635,11 +631,21 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return number_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return number_::_cats_;
+        }
+
         inline auto inc() -> void final;
 
         inline auto dec() -> void final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -670,18 +676,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> number_
-    {
-        return number_{_tag_{}, number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> number
-    {
-        return number{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> number_
     {
         return number_{_tag_{}, number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -835,6 +829,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return widget_number_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return widget_number_::_cats_;
+        }
+
         inline auto display(button b) const -> void final;
 
         inline auto inc() -> void final;
@@ -845,7 +849,7 @@ private:
 
         inline auto dec() -> void final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -876,18 +880,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> widget_number_
-    {
-        return widget_number_{_tag_{}, widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> widget_number
-    {
-        return widget_number{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> widget_number_
     {
         return widget_number_{_tag_{}, widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -1044,6 +1036,16 @@ private:
             }
         }
 
+        inline auto _name() const -> std::string final
+        {
+            return numeric_::_name_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return numeric_::_cats_;
+        }
+
         inline auto inc() -> void final;
 
         inline auto dec() -> void final;
@@ -1054,7 +1056,7 @@ private:
 
         inline auto x() -> Data & final;
 
-    //private:
+
         _Thing _thing;
     };
 
@@ -1085,18 +1087,6 @@ public:
 
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> numeric_
-    {
-        return numeric_{_tag_{}, numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito(_Args && ... _args) -> numeric<Data>
-    {
-        return numeric<Data>{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    template<typename ... _Args>
-    inline static auto _incognito_(_Args && ... _args) -> numeric_
     {
         return numeric_{_tag_{}, numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
     }
