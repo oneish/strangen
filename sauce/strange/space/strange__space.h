@@ -13,7 +13,7 @@ namespace strange
 template<typename T>
 struct vector_a;
 
-template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct vector_a_;
 
 struct parameter_a;
@@ -280,8 +280,7 @@ public:
         return std::dynamic_pointer_cast<vector_a::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> vector_a
     {
         return vector_a{vector_a::_derived::_static_shared_to_base(std::make_shared<typename vector_a_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -662,7 +661,6 @@ public:
         return std::dynamic_pointer_cast<parameter_a::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> parameter_a
     {
@@ -892,7 +890,6 @@ public:
         return std::dynamic_pointer_cast<operation_a::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> operation_a
     {
@@ -1138,7 +1135,6 @@ public:
         return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> abstraction_a
     {
@@ -1372,7 +1368,6 @@ public:
         return std::dynamic_pointer_cast<space_a::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> space_a
     {

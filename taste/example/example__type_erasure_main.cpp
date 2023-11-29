@@ -134,12 +134,12 @@ struct reflection<implementation_template<Datatype>>
 int main()
 {
     std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
-    std::cout << strange::reflection<strange::vector_a_<int, std::vector<int>>>::name() << std::endl;
-    std::cout << strange::vector_a_<int, std::vector<int>>::_name_ << std::endl;
+    std::cout << strange::reflection<strange::vector_a_<int>>::name() << std::endl;
+    std::cout << strange::vector_a_<int>::_name_ << std::endl;
 
-    auto v1 = strange::vector_a_<int, std::vector<int>>::_make_();
-    auto v2 = strange::vector_a<int>::_make<std::vector<int>>(1,2,3);
-    auto v3 = strange::vector_a_<double, std::vector<double>>::_make_(1.0,2.0,3.0);
+    auto v1 = strange::vector_a_<int>::_make_();
+    auto v2 = strange::vector_a<int>::_make(1,2,3);
+    auto v3 = strange::vector_a_<double>::_make_(1.0,2.0,3.0);
     v1._thing().push_back(123);
     v2.push_back(123);
     v3._thing().push_back(123.0);
@@ -221,7 +221,7 @@ int main()
 
     increment(wn2);
 
-    auto ni1 = example::numeric<int>::_make<implementation>();
+    auto ni1 = example::numeric<>::_make<implementation>();
     ni1.inc();
     auto ni2 = ni1;
     ni2.x() = 2;
@@ -231,7 +231,7 @@ int main()
     auto bt = example::button::_make<implementation_template<int>>()--;
     auto nt = example::number::_make<implementation_template<int>>();
     auto wnt = example::widget_number::_make<implementation_template<int>>();
-    auto nit = example::numeric<int>::_make<implementation_template<int>>();
+    auto nit = example::numeric<>::_make<implementation_template<int>>();
 
     return 0;
 }

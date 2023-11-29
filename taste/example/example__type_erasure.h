@@ -193,7 +193,6 @@ public:
         return std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget
     {
@@ -401,7 +400,6 @@ public:
         return std::dynamic_pointer_cast<button::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> button
     {
@@ -612,7 +610,6 @@ public:
         return std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> number
     {
@@ -814,7 +811,6 @@ public:
         return std::dynamic_pointer_cast<widget_number::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> widget_number
     {
@@ -1033,7 +1029,6 @@ public:
         return std::dynamic_pointer_cast<numeric::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> numeric
     {

@@ -590,7 +590,6 @@ auto definition() -> strange::space_a
                         .data = true,
                     }),
                 },
-                .thing = "strange::definition::parameter",
             }),
             strange::make_abstraction
             ({
@@ -663,7 +662,6 @@ auto definition() -> strange::space_a
                         .data = true,
                     }),
                 },
-                .thing = "strange::definition::operation",
             }),
             strange::make_abstraction
             ({
@@ -736,7 +734,6 @@ auto definition() -> strange::space_a
                         .data = true,
                     }),
                 },
-                .thing = "strange::definition::abstraction",
             }),
             strange::make_abstraction
             ({
@@ -770,7 +767,6 @@ auto definition() -> strange::space_a
                         .data = true,
                     }),
                 },
-                .thing = "strange::definition::space",
             }),
         },
     });

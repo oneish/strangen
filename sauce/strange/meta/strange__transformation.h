@@ -193,8 +193,12 @@ public:
         return std::dynamic_pointer_cast<)#" << abstraction.name() << R"#(::_derived>(strange::_common::_shared).operator bool();
     }
 
-    //TODO default _Thing
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing)#";
+    if (!abstraction.thing().empty())
+    {
+        _out << R"#( = )#" << abstraction.thing();
+    }
+    _out << R"#(, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(
     {
         return )#" << abstraction.name() << R"#({)#" << abstraction.name() << R"#(::_derived::_static_shared_to_base(std::make_shared<typename )#"
@@ -427,7 +431,7 @@ public:
                 {
                     _out << R"#(>::name() + ")#";
                 }
-                else if (arguments && !thing && !parameter.argument().empty()) //TODO default _Thing allows other default template arguments
+                else if (arguments && (!thing || !abstraction.thing().empty()) && !parameter.argument().empty())
                 {
                     _out << R"#( = )#" << parameter.argument();
                 }
@@ -440,7 +444,12 @@ public:
                 }
                 if (arguments)
                 {
-                    _out << R"#(typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>)#"; //TODO default _Thing
+                    _out << R"#(typename _Thing)#";
+                    if (!abstraction.thing().empty())
+                    {
+                        _out << R"#( = )#" << abstraction.thing();
+                    }
+                    _out << R"#(, bool _Copy = std::is_copy_constructible_v<_Thing>)#";
                 }
                 else if (types)
                 {
