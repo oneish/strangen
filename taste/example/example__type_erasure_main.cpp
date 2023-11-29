@@ -137,19 +137,18 @@ int main()
     std::cout << strange::reflection<strange::vector_a_<int, std::vector<int>>>::name() << std::endl;
     std::cout << strange::vector_a_<int, std::vector<int>>::_name_ << std::endl;
 
-    auto v1 = strange::vector_a_<int, std::vector<int>>::_null_();
-    auto v2 = strange::vector_a_<int, std::vector<int>>::_make_();
-    auto v3 = strange::vector_a_<int, std::vector<int>>::_make(1,2,3);
-    auto v4 = strange::vector_a_<int, std::vector<int>>{};
-    auto v5 = strange::vector_a_<int, std::vector<int>>{1,2,3};
-    auto v6 = strange::vector_a_<double, std::vector<double>>{1.0,2.0,3.0};
-    v2._thing().push_back(123);
-    v4.push_back(123);
-    v5._thing().push_back(123);
+    auto v1 = strange::vector_a_<int, std::vector<int>>::_make_();
+    auto v2 = strange::vector_a<int>::_make<std::vector<int>>(1,2,3);
+    auto v3 = strange::vector_a_<double, std::vector<double>>::_make_(1.0,2.0,3.0);
+    v1._thing().push_back(123);
+    v2.push_back(123);
+    v3._thing().push_back(123.0);
     std::cout << v1._name_ << std::endl;
-    std::cout << v6._name_ << std::endl;
+    std::cout << v2._name() << std::endl;
+    std::cout << v3._name() << std::endl;
+    v3._cats();
 
-    auto w1 = example::widget_<implementation>::_make();
+    auto w1 = example::widget::_make<implementation>();
     w1.inc();
     auto w2 = ++w1;
     w1.display();
@@ -158,7 +157,7 @@ int main()
     w1.display();
     w2.display();
 
-    auto b1 = example::button_<implementation>::_make()--;
+    auto b1 = example::button::_make<implementation>()--;
     if (b1._something())
     {
         std::cout << "yes" << b1._error() << std::endl;
@@ -201,11 +200,11 @@ int main()
     std::cout << w1._error("help!") << std::endl;
     std::cout << w1._error() << std::endl;
 
-    auto n1 = example::number_<implementation>::_make();
+    auto n1 = example::number::_make<implementation>();
     n1.inc();
     n1.dec();
 
-    auto wn1 = example::widget_number_<implementation>::_make();
+    auto wn1 = example::widget_number::_make<implementation>();
     wn1.inc();
     wn1.display();
 
@@ -222,17 +221,17 @@ int main()
 
     increment(wn2);
 
-    auto ni1 = example::numeric_<int, implementation>::_make();
+    auto ni1 = example::numeric<int>::_make<implementation>();
     ni1.inc();
     auto ni2 = ni1;
     ni2.x() = 2;
     std::cout << ni1.get() << ni1.x() << ni2.x() << std::endl;
 
-    auto wt = example::widget_<implementation_template<int>>::_make();
-    auto bt = example::button_<implementation_template<int>>::_make()--;
-    auto nt = example::number_<implementation_template<int>>::_make();
-    auto wnt = example::widget_number_<implementation_template<int>>::_make();
-    auto nit = example::numeric_<int, implementation_template<int>>::_make();
+    auto wt = example::widget::_make<implementation_template<int>>();
+    auto bt = example::button::_make<implementation_template<int>>()--;
+    auto nt = example::number::_make<implementation_template<int>>();
+    auto wnt = example::widget_number::_make<implementation_template<int>>();
+    auto nit = example::numeric<int>::_make<implementation_template<int>>();
 
     return 0;
 }

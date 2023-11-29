@@ -192,6 +192,32 @@ public:
     {
         return std::dynamic_pointer_cast<)#" << abstraction.name() << R"#(::_derived>(strange::_common::_shared).operator bool();
     }
+
+    //TODO default _Thing
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(
+    {
+        return )#" << abstraction.name() << R"#({)#" << abstraction.name() << R"#(::_derived::_static_shared_to_base(std::make_shared<typename )#"
+            << abstraction.name() << R"#(_)#";
+            _abstraction_parameters(abstraction, false, false, true, false);
+            _out << R"#(::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = )#" << abstraction.name() << R"#(;
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+)#";
+            for (auto const & parent : abstraction.parents())
+            {
+                _out << R"#(        cats.insert()#" << parent << R"#(::_cats_.cbegin(), )#" << parent << R"#(::_cats_.cend());
+)#";
+            }
+            _out << R"#(        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
+
 )#";
             {
                 std::unordered_set<operation_a> unique;
@@ -206,7 +232,57 @@ public:
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(
 {
+    inline )#" << abstraction.name() << R"#(_() = default;
+
+    inline )#" << abstraction.name() << R"#(_()#" << abstraction.name() << R"#(_ const & other)
+    :strange::_common{other}
+    ,)#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#({}
+    {
+    }
+
+    inline )#" << abstraction.name() << R"#(_()#" << abstraction.name() << R"#(_ && other)
+    :strange::_common{std::move(other)}
+    ,)#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#({}
+    {
+    }
+
+    inline auto operator=()#" << abstraction.name() << R"#(_ const & other) -> )#" << abstraction.name() << R"#(_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=()#" << abstraction.name() << R"#(_ && other) -> )#" << abstraction.name() << R"#(_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline )#" << abstraction.name() << R"#(_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,)#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#({}
+    {
+    }
+
+    explicit inline )#" << abstraction.name() << R"#(_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,)#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#({}
+    {
+    }
+
 private:
+    friend struct )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#(;
+
     struct _instance final : )#" << abstraction.name() << R"#(_::_derived
     {
         template<typename ... _Args>
@@ -247,7 +323,9 @@ private:
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return )#" << abstraction.name() << R"#(_::_cats_;
+            return )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#(::_cats_;
         }
 )#";
             {
@@ -255,70 +333,19 @@ private:
                 _abstraction_operations(abstraction, abstraction, true, false, false, unique);
             }
             _out << R"#(
-
         _Thing _thing;
     };
 
-    struct _tag_ {};
-
-    explicit inline )#" << abstraction.name() << R"#(_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
-    :strange::_common{std::move(shared)}
-    ,)#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({}
-    {
-    }
-
 public:
-    inline static auto _null() -> )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#(
-    {
-        return )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({};
-    }
-
-    inline static auto _null_() -> )#" << abstraction.name() << R"#(_
-    {
-        return )#" << abstraction.name() << R"#(_{_tag_{}};
-    }
-
-    template<typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#(
-    {
-        return )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
     {
-        return )#" << abstraction.name() << R"#(_{_tag_{}, )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
+        return )#" << abstraction.name() << R"#(_{)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<typename ... _Args>
-    explicit inline )#" << abstraction.name() << R"#(_(_Args && ... _args)
-    :strange::_common{)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))}
-    ,)#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({}
+    inline auto _valid() const -> bool
     {
-    }
-
-    inline auto operator=()#" << abstraction.name() << R"#(_ const & other) -> )#" << abstraction.name() << R"#(_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=()#" << abstraction.name() << R"#(_ && other) -> )#" << abstraction.name() << R"#(_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
+        return std::dynamic_pointer_cast<)#" << abstraction.name() << R"#(_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
@@ -334,18 +361,8 @@ public:
 
     using _Abstraction_ = )#" << abstraction.name() << R"#(_;
     using _Thing_ = _Thing;
-    using _Kind_ = )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#(;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
-        return cats;
-    }();
 };
 
 )#";

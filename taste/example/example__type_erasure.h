@@ -193,6 +193,23 @@ public:
         return std::dynamic_pointer_cast<widget::_derived>(strange::_common::_shared).operator bool();
     }
 
+    //TODO default _Thing
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> widget
+    {
+        return widget{widget::_derived::_static_shared_to_base(std::make_shared<typename widget_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = widget;
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
+
+
     inline auto display(button b) const -> void;
 
     inline auto inc() -> void;
@@ -205,7 +222,47 @@ public:
 template<typename _Thing, bool _Copy>
 struct widget_ : widget
 {
+    inline widget_() = default;
+
+    inline widget_(widget_ const & other)
+    :strange::_common{other}
+    ,widget{}
+    {
+    }
+
+    inline widget_(widget_ && other)
+    :strange::_common{std::move(other)}
+    ,widget{}
+    {
+    }
+
+    inline auto operator=(widget_ const & other) -> widget_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(widget_ && other) -> widget_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline widget_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,widget{}
+    {
+    }
+
+    explicit inline widget_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,widget{}
+    {
+    }
+
 private:
+    friend struct widget;
+
     struct _instance final : widget_::_derived
     {
         template<typename ... _Args>
@@ -244,7 +301,7 @@ private:
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return widget_::_cats_;
+            return widget::_cats_;
         }
 
         inline auto display(button b) const -> void final;
@@ -255,58 +312,19 @@ private:
 
         inline auto operator--(int i) -> void final;
 
-
         _Thing _thing;
     };
 
-    struct _tag_ {};
-
-    explicit inline widget_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
-    :strange::_common{std::move(shared)}
-    ,widget{}
-    {
-    }
-
 public:
-    inline static auto _null() -> widget
-    {
-        return widget{};
-    }
-
-    inline static auto _null_() -> widget_
-    {
-        return widget_{_tag_{}};
-    }
-
-    template<typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget
-    {
-        return widget{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> widget_
     {
-        return widget_{_tag_{}, widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
+        return widget_{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<typename ... _Args>
-    explicit inline widget_(_Args && ... _args)
-    :strange::_common{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))}
-    ,widget{}
+    inline auto _valid() const -> bool
     {
-    }
-
-    inline auto operator=(widget_ const & other) -> widget_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(widget_ && other) -> widget_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
+        return std::dynamic_pointer_cast<widget_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
@@ -322,16 +340,8 @@ public:
 
     using _Abstraction_ = widget_;
     using _Thing_ = _Thing;
-    using _Kind_ = widget;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
-        return cats;
-    }();
 };
 
 struct button : widget
@@ -391,6 +401,24 @@ public:
         return std::dynamic_pointer_cast<button::_derived>(strange::_common::_shared).operator bool();
     }
 
+    //TODO default _Thing
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> button
+    {
+        return button{button::_derived::_static_shared_to_base(std::make_shared<typename button_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = button;
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(widget::_cats_.cbegin(), widget::_cats_.cend());
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
+
+
     inline auto display(button b) const -> void;
 
     inline auto inc() -> void;
@@ -405,7 +433,47 @@ public:
 template<typename _Thing, bool _Copy>
 struct button_ : button
 {
+    inline button_() = default;
+
+    inline button_(button_ const & other)
+    :strange::_common{other}
+    ,button{}
+    {
+    }
+
+    inline button_(button_ && other)
+    :strange::_common{std::move(other)}
+    ,button{}
+    {
+    }
+
+    inline auto operator=(button_ const & other) -> button_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(button_ && other) -> button_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline button_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,button{}
+    {
+    }
+
+    explicit inline button_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,button{}
+    {
+    }
+
 private:
+    friend struct button;
+
     struct _instance final : button_::_derived
     {
         template<typename ... _Args>
@@ -444,7 +512,7 @@ private:
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return button_::_cats_;
+            return button::_cats_;
         }
 
         inline auto display(button b) const -> void final;
@@ -457,58 +525,19 @@ private:
 
         inline auto push() -> void final;
 
-
         _Thing _thing;
     };
 
-    struct _tag_ {};
-
-    explicit inline button_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
-    :strange::_common{std::move(shared)}
-    ,button{}
-    {
-    }
-
 public:
-    inline static auto _null() -> button
-    {
-        return button{};
-    }
-
-    inline static auto _null_() -> button_
-    {
-        return button_{_tag_{}};
-    }
-
-    template<typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> button
-    {
-        return button{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> button_
     {
-        return button_{_tag_{}, button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
+        return button_{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<typename ... _Args>
-    explicit inline button_(_Args && ... _args)
-    :strange::_common{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))}
-    ,button{}
+    inline auto _valid() const -> bool
     {
-    }
-
-    inline auto operator=(button_ const & other) -> button_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(button_ && other) -> button_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
+        return std::dynamic_pointer_cast<button_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
@@ -524,16 +553,8 @@ public:
 
     using _Abstraction_ = button_;
     using _Thing_ = _Thing;
-    using _Kind_ = button;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
-        return cats;
-    }();
 };
 
 struct number : virtual strange::_common
@@ -591,6 +612,23 @@ public:
         return std::dynamic_pointer_cast<number::_derived>(strange::_common::_shared).operator bool();
     }
 
+    //TODO default _Thing
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> number
+    {
+        return number{number::_derived::_static_shared_to_base(std::make_shared<typename number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = number;
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
+
+
     inline auto inc() -> void;
 
     inline auto dec() -> void;
@@ -599,7 +637,47 @@ public:
 template<typename _Thing, bool _Copy>
 struct number_ : number
 {
+    inline number_() = default;
+
+    inline number_(number_ const & other)
+    :strange::_common{other}
+    ,number{}
+    {
+    }
+
+    inline number_(number_ && other)
+    :strange::_common{std::move(other)}
+    ,number{}
+    {
+    }
+
+    inline auto operator=(number_ const & other) -> number_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(number_ && other) -> number_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline number_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,number{}
+    {
+    }
+
+    explicit inline number_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,number{}
+    {
+    }
+
 private:
+    friend struct number;
+
     struct _instance final : number_::_derived
     {
         template<typename ... _Args>
@@ -638,65 +716,26 @@ private:
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return number_::_cats_;
+            return number::_cats_;
         }
 
         inline auto inc() -> void final;
 
         inline auto dec() -> void final;
 
-
         _Thing _thing;
     };
 
-    struct _tag_ {};
-
-    explicit inline number_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
-    :strange::_common{std::move(shared)}
-    ,number{}
-    {
-    }
-
 public:
-    inline static auto _null() -> number
-    {
-        return number{};
-    }
-
-    inline static auto _null_() -> number_
-    {
-        return number_{_tag_{}};
-    }
-
-    template<typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> number
-    {
-        return number{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> number_
     {
-        return number_{_tag_{}, number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
+        return number_{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<typename ... _Args>
-    explicit inline number_(_Args && ... _args)
-    :strange::_common{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))}
-    ,number{}
+    inline auto _valid() const -> bool
     {
-    }
-
-    inline auto operator=(number_ const & other) -> number_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(number_ && other) -> number_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
+        return std::dynamic_pointer_cast<number_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
@@ -712,16 +751,8 @@ public:
 
     using _Abstraction_ = number_;
     using _Thing_ = _Thing;
-    using _Kind_ = number;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
-        return cats;
-    }();
 };
 
 struct widget_number : widget, number
@@ -783,6 +814,25 @@ public:
         return std::dynamic_pointer_cast<widget_number::_derived>(strange::_common::_shared).operator bool();
     }
 
+    //TODO default _Thing
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> widget_number
+    {
+        return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<typename widget_number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = widget_number;
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(widget::_cats_.cbegin(), widget::_cats_.cend());
+        cats.insert(number::_cats_.cbegin(), number::_cats_.cend());
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
+
+
     inline auto display(button b) const -> void;
 
     inline auto inc() -> void;
@@ -797,7 +847,47 @@ public:
 template<typename _Thing, bool _Copy>
 struct widget_number_ : widget_number
 {
+    inline widget_number_() = default;
+
+    inline widget_number_(widget_number_ const & other)
+    :strange::_common{other}
+    ,widget_number{}
+    {
+    }
+
+    inline widget_number_(widget_number_ && other)
+    :strange::_common{std::move(other)}
+    ,widget_number{}
+    {
+    }
+
+    inline auto operator=(widget_number_ const & other) -> widget_number_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(widget_number_ && other) -> widget_number_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline widget_number_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,widget_number{}
+    {
+    }
+
+    explicit inline widget_number_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,widget_number{}
+    {
+    }
+
 private:
+    friend struct widget_number;
+
     struct _instance final : widget_number_::_derived
     {
         template<typename ... _Args>
@@ -836,7 +926,7 @@ private:
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return widget_number_::_cats_;
+            return widget_number::_cats_;
         }
 
         inline auto display(button b) const -> void final;
@@ -849,58 +939,19 @@ private:
 
         inline auto dec() -> void final;
 
-
         _Thing _thing;
     };
 
-    struct _tag_ {};
-
-    explicit inline widget_number_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
-    :strange::_common{std::move(shared)}
-    ,widget_number{}
-    {
-    }
-
 public:
-    inline static auto _null() -> widget_number
-    {
-        return widget_number{};
-    }
-
-    inline static auto _null_() -> widget_number_
-    {
-        return widget_number_{_tag_{}};
-    }
-
-    template<typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget_number
-    {
-        return widget_number{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> widget_number_
     {
-        return widget_number_{_tag_{}, widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
+        return widget_number_{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<typename ... _Args>
-    explicit inline widget_number_(_Args && ... _args)
-    :strange::_common{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))}
-    ,widget_number{}
+    inline auto _valid() const -> bool
     {
-    }
-
-    inline auto operator=(widget_number_ const & other) -> widget_number_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(widget_number_ && other) -> widget_number_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
+        return std::dynamic_pointer_cast<widget_number_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
@@ -916,16 +967,8 @@ public:
 
     using _Abstraction_ = widget_number_;
     using _Thing_ = _Thing;
-    using _Kind_ = widget_number;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
-        return cats;
-    }();
 };
 
 template<typename Data>
@@ -990,6 +1033,24 @@ public:
         return std::dynamic_pointer_cast<numeric::_derived>(strange::_common::_shared).operator bool();
     }
 
+    //TODO default _Thing
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> numeric
+    {
+        return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<Data, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = numeric;
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(number::_cats_.cbegin(), number::_cats_.cend());
+        cats.insert(strange::reflection<_Kind_>::name());
+        return cats;
+    }();
+
+
     inline auto inc() -> void;
 
     inline auto dec() -> void;
@@ -1004,7 +1065,47 @@ public:
 template<typename Data, typename _Thing, bool _Copy>
 struct numeric_ : numeric<Data>
 {
+    inline numeric_() = default;
+
+    inline numeric_(numeric_ const & other)
+    :strange::_common{other}
+    ,numeric<Data>{}
+    {
+    }
+
+    inline numeric_(numeric_ && other)
+    :strange::_common{std::move(other)}
+    ,numeric<Data>{}
+    {
+    }
+
+    inline auto operator=(numeric_ const & other) -> numeric_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(numeric_ && other) -> numeric_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline numeric_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,numeric<Data>{}
+    {
+    }
+
+    explicit inline numeric_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,numeric<Data>{}
+    {
+    }
+
 private:
+    friend struct numeric<Data>;
+
     struct _instance final : numeric_::_derived
     {
         template<typename ... _Args>
@@ -1043,7 +1144,7 @@ private:
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return numeric_::_cats_;
+            return numeric<Data>::_cats_;
         }
 
         inline auto inc() -> void final;
@@ -1056,58 +1157,19 @@ private:
 
         inline auto x() -> Data & final;
 
-
         _Thing _thing;
     };
 
-    struct _tag_ {};
-
-    explicit inline numeric_(_tag_, std::shared_ptr<strange::_common::_base> && shared = std::shared_ptr<strange::_common::_base>{})
-    :strange::_common{std::move(shared)}
-    ,numeric<Data>{}
-    {
-    }
-
 public:
-    inline static auto _null() -> numeric<Data>
-    {
-        return numeric<Data>{};
-    }
-
-    inline static auto _null_() -> numeric_
-    {
-        return numeric_{_tag_{}};
-    }
-
-    template<typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> numeric<Data>
-    {
-        return numeric<Data>{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
     template<typename ... _Args>
     inline static auto _make_(_Args && ... _args) -> numeric_
     {
-        return numeric_{_tag_{}, numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
+        return numeric_{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    template<typename ... _Args>
-    explicit inline numeric_(_Args && ... _args)
-    :strange::_common{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))}
-    ,numeric<Data>{}
+    inline auto _valid() const -> bool
     {
-    }
-
-    inline auto operator=(numeric_ const & other) -> numeric_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(numeric_ && other) -> numeric_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
+        return std::dynamic_pointer_cast<numeric_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
@@ -1123,16 +1185,8 @@ public:
 
     using _Abstraction_ = numeric_;
     using _Thing_ = _Thing;
-    using _Kind_ = numeric<Data>;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
-        return cats;
-    }();
 };
 
 template<typename _Thing, bool _Copy>
