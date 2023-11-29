@@ -1126,6 +1126,10 @@ protected:
         virtual auto operations() const -> std::vector<operation_a> const & = 0;
 
         virtual auto operations() -> std::vector<operation_a> & = 0;
+
+        virtual auto thing() const -> std::string const & = 0;
+
+        virtual auto thing() -> std::string & = 0;
     };
 
 public:
@@ -1166,6 +1170,10 @@ public:
     inline auto operations() const -> std::vector<operation_a> const &;
 
     inline auto operations() -> std::vector<operation_a> &;
+
+    inline auto thing() const -> std::string const &;
+
+    inline auto thing() -> std::string &;
 };
 
 template<typename _Thing, bool _Copy>
@@ -1268,6 +1276,10 @@ private:
         inline auto operations() const -> std::vector<operation_a> const & final;
 
         inline auto operations() -> std::vector<operation_a> & final;
+
+        inline auto thing() const -> std::string const & final;
+
+        inline auto thing() -> std::string & final;
 
         _Thing _thing;
     };
@@ -2327,6 +2339,18 @@ inline auto abstraction_a_<_Thing, _Copy>::_instance::operations() -> std::vecto
     return _thing.operations;
 }
 
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::thing() const -> std::string const &
+{
+    return _thing.thing;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_a_<_Thing, _Copy>::_instance::thing() -> std::string &
+{
+    return _thing.thing;
+}
+
 inline auto abstraction_a::parameters() const -> std::vector<parameter_a> const &
 {
     return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared)->parameters();
@@ -2369,6 +2393,17 @@ inline auto abstraction_a::operations() -> std::vector<operation_a> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared)->operations();
+}
+
+inline auto abstraction_a::thing() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared)->thing();
+}
+
+inline auto abstraction_a::thing() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<abstraction_a::_derived>(strange::_common::_shared)->thing();
 }
 
 template<typename _Thing, bool _Copy>

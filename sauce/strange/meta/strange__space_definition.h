@@ -47,6 +47,9 @@ struct abstraction_a
 
     virtual auto operations() const -> std::vector<operation_a> const & = 0;
     virtual auto operations() -> std::vector<operation_a> & = 0;
+
+    virtual auto thing() const -> std::string const & = 0;
+    virtual auto thing() -> std::string & = 0;
 };
 
 struct space_a
@@ -540,6 +543,7 @@ auto definition() -> strange::space_a
                         .result = "void",
                     }),
                 },
+                .thing = "std::vector<T>",
             }),
             strange::make_abstraction
             ({
@@ -586,6 +590,7 @@ auto definition() -> strange::space_a
                         .data = true,
                     }),
                 },
+                .thing = "strange::definition::parameter",
             }),
             strange::make_abstraction
             ({
@@ -658,6 +663,7 @@ auto definition() -> strange::space_a
                         .data = true,
                     }),
                 },
+                .thing = "strange::definition::operation",
             }),
             strange::make_abstraction
             ({
@@ -716,7 +722,21 @@ auto definition() -> strange::space_a
                         .result = "std::vector<operation_a> &",
                         .data = true,
                     }),
+                    strange::make_operation
+                    ({
+                        .name = "thing",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    }),
+                    strange::make_operation
+                    ({
+                        .name = "thing",
+                        .result = "std::string &",
+                        .data = true,
+                    }),
                 },
+                .thing = "strange::definition::abstraction",
             }),
             strange::make_abstraction
             ({
@@ -750,6 +770,7 @@ auto definition() -> strange::space_a
                         .data = true,
                     }),
                 },
+                .thing = "strange::definition::space",
             }),
         },
     });

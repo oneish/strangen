@@ -13,6 +13,7 @@ struct abstraction
     std::string name;
     std::vector<std::string> parents;
     std::vector<operation_a> operations;
+    std::string thing;
 };
 }
 
