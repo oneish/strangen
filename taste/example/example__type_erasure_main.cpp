@@ -142,10 +142,12 @@ int main()
     auto v3 = strange::vector_a_<int, std::vector<int>>::_make(1,2,3);
     auto v4 = strange::vector_a_<int, std::vector<int>>{};
     auto v5 = strange::vector_a_<int, std::vector<int>>{1,2,3};
+    auto v6 = strange::vector_a_<double, std::vector<double>>{1.0,2.0,3.0};
     v2._thing().push_back(123);
     v4.push_back(123);
     v5._thing().push_back(123);
     std::cout << v1._name_ << std::endl;
+    std::cout << v6._name_ << std::endl;
 
     auto w1 = example::widget_<implementation>::_make();
     w1.inc();

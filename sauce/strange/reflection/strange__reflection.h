@@ -6,7 +6,13 @@ namespace strange
 {
 
 template<typename>
-struct reflection;
+struct reflection
+{
+    inline static auto name() -> std::string
+    {
+        return "=UNKNOWN=";
+    }
+};
 
 template<>
 struct reflection<bool>
