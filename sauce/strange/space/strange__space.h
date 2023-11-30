@@ -288,10 +288,12 @@ public:
 
     using _Kind_ = vector_a;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -464,14 +466,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return vector_a_::_name_;
+            return vector_a<T>::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return vector_a<T>::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return vector_a_::_name_;
         }
 
         inline auto operator=(std::vector<T> const & other) -> void final;
@@ -669,10 +676,12 @@ public:
 
     using _Kind_ = parameter_a;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -765,14 +774,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return parameter_a_::_name_;
+            return parameter_a::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return parameter_a::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return parameter_a_::_name_;
         }
 
         inline auto type() const -> std::string const & final;
@@ -898,10 +912,12 @@ public:
 
     using _Kind_ = operation_a;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -1002,14 +1018,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return operation_a_::_name_;
+            return operation_a::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return operation_a::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return operation_a_::_name_;
         }
 
         inline auto name() const -> std::string const & final;
@@ -1143,10 +1164,12 @@ public:
 
     using _Kind_ = abstraction_a;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -1247,14 +1270,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return abstraction_a_::_name_;
+            return abstraction_a::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return abstraction_a::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return abstraction_a_::_name_;
         }
 
         inline auto parameters() const -> std::vector<parameter_a> const & final;
@@ -1376,10 +1404,12 @@ public:
 
     using _Kind_ = space_a;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -1468,14 +1498,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return space_a_::_name_;
+            return space_a::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return space_a::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return space_a_::_name_;
         }
 
         inline auto name() const -> std::string const & final;

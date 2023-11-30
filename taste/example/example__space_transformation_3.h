@@ -201,10 +201,12 @@ public:
 
     using _Kind_ = widget;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -293,14 +295,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return widget_::_name_;
+            return widget::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return widget::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return widget_::_name_;
         }
 
         inline auto display(button b) const -> void final;
@@ -408,11 +415,13 @@ public:
 
     using _Kind_ = button;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(widget::_cats_.cbegin(), widget::_cats_.cend());
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -503,14 +512,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return button_::_name_;
+            return button::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return button::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return button_::_name_;
         }
 
         inline auto display(button b) const -> void final;
@@ -618,10 +632,12 @@ public:
 
     using _Kind_ = number;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -706,14 +722,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return number_::_name_;
+            return number::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return number::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return number_::_name_;
         }
 
         inline auto inc() -> void final;
@@ -819,12 +840,14 @@ public:
 
     using _Kind_ = widget_number;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(widget::_cats_.cbegin(), widget::_cats_.cend());
         cats.insert(number::_cats_.cbegin(), number::_cats_.cend());
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -915,14 +938,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return widget_number_::_name_;
+            return widget_number::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return widget_number::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return widget_number_::_name_;
         }
 
         inline auto display(button b) const -> void final;
@@ -1037,11 +1065,13 @@ public:
 
     using _Kind_ = numeric;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(number::_cats_.cbegin(), number::_cats_.cend());
-        cats.insert(strange::reflection<_Kind_>::name());
+        cats.insert(_cat_);
         return cats;
     }();
 
@@ -1132,14 +1162,19 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return numeric_::_name_;
+            return numeric<Data>::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return numeric<Data>::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return numeric_::_name_;
         }
 
         inline auto inc() -> void final;

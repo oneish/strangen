@@ -209,6 +209,8 @@ public:
 
     using _Kind_ = )#" << abstraction.name() << R"#(;
 
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
@@ -218,7 +220,7 @@ public:
                 _out << R"#(        cats.insert()#" << parent << R"#(::_cats_.cbegin(), )#" << parent << R"#(::_cats_.cend());
 )#";
             }
-            _out << R"#(        cats.insert(strange::reflection<_Kind_>::name());
+            _out << R"#(        cats.insert(_cat_);
         return cats;
     }();
 
@@ -320,9 +322,11 @@ private:
             }
         }
 
-        inline auto _name() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
-            return )#" << abstraction.name() << R"#(_::_name_;
+            return )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#(::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
@@ -330,6 +334,11 @@ private:
             return )#";
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return )#" << abstraction.name() << R"#(_::_name_;
         }
 )#";
             {

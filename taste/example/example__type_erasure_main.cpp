@@ -136,6 +136,7 @@ int main()
     std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
     std::cout << strange::reflection<strange::vector_a_<int>>::name() << std::endl;
     std::cout << strange::vector_a_<int>::_name_ << std::endl;
+    std::cout << strange::vector_a_<int>::_cat_ << std::endl;
 
     auto v1 = strange::vector_a_<int>::_make_();
     auto v2 = strange::vector_a<int>::_make(1,2,3);
@@ -144,8 +145,11 @@ int main()
     v2.push_back(123);
     v3._thing().push_back(123.0);
     std::cout << v1._name_ << std::endl;
+    std::cout << v1._cat_ << std::endl;
     std::cout << v2._name() << std::endl;
+    std::cout << v2._cat() << std::endl;
     std::cout << v3._name() << std::endl;
+    std::cout << v3._cat() << std::endl;
     v3._cats();
 
     auto w1 = example::widget::_make<implementation>();

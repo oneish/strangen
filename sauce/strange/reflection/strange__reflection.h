@@ -10,7 +10,7 @@ struct reflection
 {
     inline static auto name() -> std::string
     {
-        return "=UNKNOWN=";
+        return "???";
     }
 };
 
