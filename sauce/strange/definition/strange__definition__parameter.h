@@ -1,4 +1,5 @@
 #pragma once
+#include "../reflection/strange__reflection.h"
 #include <string>
 
 namespace strange

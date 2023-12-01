@@ -58,7 +58,8 @@ inline auto operator==(strange::abstraction_a const & lhs, strange::abstraction_
     return lhs.parameters() == rhs.parameters()
         && lhs.name() == rhs.name()
         && lhs.parents() == rhs.parents()
-        && lhs.operations() == rhs.operations();
+        && lhs.operations() == rhs.operations()
+        && lhs.thing() == rhs.thing();
 }
 }
 
@@ -81,6 +82,7 @@ struct std::hash<strange::abstraction_a>
         {
             h ^= std::hash<strange::operation_a>{}(oper);
         }
+        h ^= std::hash<std::string>{}(abs.thing());
         return h;
     }
 };
