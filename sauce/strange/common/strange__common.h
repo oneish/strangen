@@ -9,7 +9,7 @@ namespace strange
 // _common does not have any virtual functions or a v-table itself
 // _common has a single data member, which is shared pointer to _common::_base
 // _common::_base encapsulates the polymorphism and has virtual functions and a v-table
-// _common has some boilerplate functions for casting, copy-on-write, memory and error handling
+// _common has some boilerplate functions for casting, copy-on-write, reflection, memory and error handling
 struct _common
 {
 protected:

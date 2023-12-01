@@ -1,5 +1,5 @@
 #pragma once
-#include "../../sauce/strange/strange.h"
+#include "../../sauce/strange/definition/strange__definition__space.h"
 
 /*
 namespace example
@@ -41,58 +41,58 @@ namespace example
 {
 auto definition() -> strange::definition::space
 {
-    return strange::make_space
-    ({
+    return strange::definition::space
+    {
         .name = "example",
         .abstractions =
         {
-            strange::make_abstraction
-            ({
+            strange::definition::abstraction
+            {
                 .name = "widget",
                 .operations =
                 {
-                    strange::make_operation
-                    ({
+                    strange::definition::operation
+                    {
                         .name = "display",
                         .parameters =
                         {
-                            strange::make_parameter
-                            ({
+                            strange::definition::parameter
+                            {
                                 .type = "button",
                                 .name = "b",
                                 .argument = "button()",
-                            }),
+                            },
                         },
                         .constness = true,
                         .result = "void",
-                    }),
-                    strange::make_operation
-                    ({
+                    },
+                    strange::definition::operation
+                    {
                         .name = "inc",
                         .result = "void",
-                    }),
-                    strange::make_operation
-                    ({
+                    },
+                    strange::definition::operation
+                    {
                         .name = "operator++",
                         .result = "*this",
-                    }),
-                    strange::make_operation
-                    ({
+                    },
+                    strange::definition::operation
+                    {
                         .name = "operator--",
                         .parameters =
                         {
-                            strange::make_parameter
-                            ({
+                            strange::definition::parameter
+                            {
                                 .type = "int",
                                 .name = "i",
-                            }),
+                            },
                         },
                         .result = "*that",
-                    }),
+                    },
                 },
-            }),
-            strange::make_abstraction
-            ({
+            },
+            strange::definition::abstraction
+            {
                 .name = "button",
                 .parents =
                 {
@@ -100,49 +100,49 @@ auto definition() -> strange::definition::space
                 },
                 .operations =
                 {
-                    strange::make_operation
-                    ({
+                    strange::definition::operation
+                    {
                         .name = "push",
                         .result = "void",
-                    }),
+                    },
                 },
-            }),
-            strange::make_abstraction
-            ({
+            },
+            strange::definition::abstraction
+            {
                 .name = "number",
                 .operations =
                 {
-                    strange::make_operation
-                    ({
+                    strange::definition::operation
+                    {
                         .name = "inc",
                         .result = "void",
-                    }),
-                    strange::make_operation
-                    ({
+                    },
+                    strange::definition::operation
+                    {
                         .name = "dec",
                         .result = "void",
-                    }),
+                    },
                 },
-            }),
-            strange::make_abstraction
-            ({
+            },
+            strange::definition::abstraction
+            {
                 .name = "widget_number",
                 .parents =
                 {
                     "widget",
                     "number",
                 },
-            }),
-            strange::make_abstraction
-            ({
+            },
+            strange::definition::abstraction
+            {
                 .parameters =
                 {
-                    strange::make_parameter
-                    ({
+                    strange::definition::parameter
+                    {
                         .type = "typename",
                         .name = "Data",
                         .argument = "int",
-                    }),
+                    },
                 },
                 .name = "numeric",
                 .parents =
@@ -151,28 +151,28 @@ auto definition() -> strange::definition::space
                 },
                 .operations =
                 {
-                    strange::make_operation
-                    ({
+                    strange::definition::operation
+                    {
                         .name = "get",
                         .constness = true,
                         .result = "Data",
-                    }),
-                    strange::make_operation
-                    ({
+                    },
+                    strange::definition::operation
+                    {
                         .name = "x",
                         .constness = true,
                         .result = "Data const &",
                         .data = true,
-                    }),
-                    strange::make_operation
-                    ({
+                    },
+                    strange::definition::operation
+                    {
                         .name = "x",
                         .result = "Data &",
                         .data = true,
-                    }),
+                    },
                 },
-            }),
+            },
         },
-    });
+    };
 }
 }
