@@ -1,5 +1,7 @@
 #pragma once
-#include "../strange.h"
+#include "strange__definition__parameter.h"
+#include "strange__definition__operation.h"
+#include "../reflection/strange__reflection.h"
 #include <string>
 #include <vector>
 
@@ -9,10 +11,10 @@ namespace definition
 {
 struct abstraction
 {
-    std::vector<parameter_a> parameters;
+    std::vector<parameter> parameters;
     std::string name;
     std::vector<std::string> parents;
-    std::vector<operation_a> operations;
+    std::vector<operation> operations;
     std::string thing;
 };
 
@@ -46,7 +48,7 @@ struct std::hash<strange::definition::abstraction>
         std::size_t h = 0;
         for (auto const & param : abs.parameters)
         {
-            h ^= std::hash<strange::parameter_a>{}(param);
+            h ^= std::hash<strange::definition::parameter>{}(param);
         }
         h ^= std::hash<std::string>{}(abs.name);
         for (auto const & parent : abs.parents)
@@ -55,7 +57,7 @@ struct std::hash<strange::definition::abstraction>
         }
         for (auto const & oper : abs.operations)
         {
-            h ^= std::hash<strange::operation_a>{}(oper);
+            h ^= std::hash<strange::definition::operation>{}(oper);
         }
         h ^= std::hash<std::string>{}(abs.thing);
         return h;

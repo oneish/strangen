@@ -1,5 +1,6 @@
 #pragma once
-#include "../strange.h"
+#include "strange__definition__parameter.h"
+#include "../reflection/strange__reflection.h"
 #include <string>
 #include <vector>
 
@@ -10,7 +11,7 @@ namespace definition
 struct operation
 {
     std::string name;
-    std::vector<parameter_a> parameters;
+    std::vector<parameter> parameters;
     bool constness = false;
     std::string result;
     bool data = false;
@@ -46,7 +47,7 @@ struct std::hash<strange::definition::operation>
         std::size_t h = std::hash<std::string>{}(op.name);
         for (auto const & param : op.parameters)
         {
-            h ^= std::hash<strange::parameter_a>{}(param);
+            h ^= std::hash<strange::definition::parameter>{}(param);
         }
         return h ^ std::hash<bool>{}(op.constness)
             ^ std::hash<std::string>{}(op.result)

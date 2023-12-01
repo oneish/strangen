@@ -182,7 +182,7 @@ protected:
             _out << R"#(        }
 )#";
             {
-                std::unordered_set<operation_a> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, true, false, unique);
             }
             _out << R"#(    };
@@ -226,7 +226,7 @@ public:
 
 )#";
             {
-                std::unordered_set<operation_a> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, false, unique);
             }
             _out << R"#(};
@@ -344,7 +344,7 @@ private:
         }
 )#";
             {
-                std::unordered_set<operation_a> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, false, unique);
             }
             _out << R"#(
@@ -389,11 +389,11 @@ public:
         for (auto const & abstraction : _space.abstractions)
         {
             {
-                std::unordered_set<operation_a> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, true, unique);
             }
             {
-                std::unordered_set<operation_a> unique;
+                std::unordered_set<definition::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, true, unique);
             }
         }
@@ -431,20 +431,20 @@ public:
                 }
                 if (types)
                 {
-                    _out << parameter.type() << R"#( )#";
+                    _out << parameter.type << R"#( )#";
                 }
                 else if (reflection)
                 {
                     _out << R"#(" + reflection<)#";
                 }
-                _out << parameter.name();
+                _out << parameter.name;
                 if (reflection && !types)
                 {
                     _out << R"#(>::name() + ")#";
                 }
-                else if (arguments && (!thing || !abstraction.thing.empty()) && !parameter.argument().empty())
+                else if (arguments && (!thing || !abstraction.thing.empty()) && !parameter.argument.empty())
                 {
-                    _out << R"#( = )#" << parameter.argument();
+                    _out << R"#( = )#" << parameter.argument;
                 }
             }
             if (thing)
@@ -531,7 +531,7 @@ public:
         }
     }
 
-    auto _abstraction_operations(definition::abstraction const & abstraction, definition::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<operation_a> & unique) -> void
+    auto _abstraction_operations(definition::abstraction const & abstraction, definition::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<definition::operation> & unique) -> void
     {
         if ((!inner) || (!pure))
         {
@@ -580,7 +580,7 @@ public:
                 }
                 if (!definition)
                 {
-                    _out << R"#(auto )#" << operation.name();
+                    _out << R"#(auto )#" << operation.name;
                 }
                 else
                 {
@@ -598,10 +598,10 @@ public:
                     {
                         _out << R"#(::)#";
                     }
-                    _out << operation.name();
+                    _out << operation.name;
                 }
                 _operation_parameters(operation, true, definition && !inner);
-                if (operation.constness())
+                if (operation.constness)
                 {
                     _out << R"#( const -> )#";
                 }
@@ -609,9 +609,9 @@ public:
                 {
                     _out << R"#( -> )#";
                 }
-                bool const that = (operation.result() == "*that");
-                bool const this_or_that = (that || operation.result() == "*this");
-                bool const this_or_that_or_void = (this_or_that || operation.result() == "void");
+                bool const that = (operation.result == "*that");
+                bool const this_or_that = (that || operation.result == "*this");
+                bool const this_or_that_or_void = (this_or_that || operation.result == "void");
                 if (this_or_that)
                 {
                     if (inner || pure)
@@ -629,7 +629,7 @@ public:
                 }
                 else
                 {
-                    _out << operation.result();
+                    _out << operation.result;
                 }
                 if (!definition)
                 {
@@ -658,11 +658,11 @@ public:
                     {
                         if (this_or_that_or_void)
                         {
-                            _out << R"#(_thing.)#" << operation.name();
+                            _out << R"#(_thing.)#" << operation.name;
                         }
                         else
                         {
-                            _out << R"#(return _thing.)#" << operation.name();
+                            _out << R"#(return _thing.)#" << operation.name;
                         }
                     }
                     else
@@ -672,7 +672,7 @@ public:
                             _out << R"#(auto _result = *this;
     )#";
                         }
-                        if (!operation.constness())
+                        if (!operation.constness)
                         {
                             _out << R"#(strange::_common::_mutate();
     )#";
@@ -686,9 +686,9 @@ public:
                             _out << R"#(return std::dynamic_pointer_cast<)#" << abstraction.name;
                         }
                         _abstraction_parameters(abstraction, false, false, false, false);
-                        _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name();
+                        _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
                     }
-                    if ((!inner) || (!operation.data()))
+                    if ((!inner) || (!operation.data))
                     {
                         _operation_parameters(operation, false, false);
                     }
@@ -719,11 +719,11 @@ public:
         }
     }
 
-    auto _operation_parameters(operation_a const & operation, bool const types, bool const arguments) -> void
+    auto _operation_parameters(definition::operation const & operation, bool const types, bool const arguments) -> void
     {
         _out << R"#(()#";
         bool first = true;
-        for (auto const & parameter : operation.parameters())
+        for (auto const & parameter : operation.parameters)
         {
             if (first)
             {
@@ -735,12 +735,12 @@ public:
             }
             if (types)
             {
-                _out << parameter.type() << R"#( )#";
+                _out << parameter.type << R"#( )#";
             }
-            _out << parameter.name();
-            if (arguments && !parameter.argument().empty())
+            _out << parameter.name;
+            if (arguments && !parameter.argument.empty())
             {
-                _out << R"#( = )#" << parameter.argument();
+                _out << R"#( = )#" << parameter.argument;
             }
         }
         _out << R"#())#";

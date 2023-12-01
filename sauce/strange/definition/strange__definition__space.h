@@ -1,5 +1,6 @@
 #pragma once
 #include "strange__definition__abstraction.h"
+#include "../reflection/strange__reflection.h"
 #include <string>
 #include <vector>
 
