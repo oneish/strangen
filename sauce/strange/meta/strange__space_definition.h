@@ -4,7 +4,12 @@
 /*
 namespace strange
 {
-struct parameter_a
+
+struct any_a
+{
+};
+
+struct parameter_a : any_a
 {
     virtual auto type() const -> std::string const & = 0;
     virtual auto type() -> std::string & = 0;
@@ -16,7 +21,7 @@ struct parameter_a
     virtual auto argument() -> std::string & = 0;
 };
 
-struct operation_a
+struct operation_a : any_a
 {
     virtual auto name() const -> std::string const & = 0;
     virtual auto name() -> std::string & = 0;
@@ -34,7 +39,7 @@ struct operation_a
     virtual auto data() -> bool & = 0;
 };
 
-struct abstraction_a
+struct abstraction_a : any_a
 {
     virtual auto parameters() const -> std::vector<parameter_a> const & = 0;
     virtual auto parameters() -> std::vector<parameter_a> & = 0;
@@ -52,7 +57,7 @@ struct abstraction_a
     virtual auto thing() -> std::string & = 0;
 };
 
-struct space_a
+struct space_a : any_a
 {
     virtual auto name() const -> std::string const & = 0;
     virtual auto name() -> std::string & = 0;
