@@ -1,8 +1,9 @@
 #pragma once
+
 #include "space/strange__space.h"
 #include <functional>
 
-namespace std
+namespace strange
 {
 inline auto operator==(strange::parameter_a const & lhs, strange::parameter_a const & rhs) -> bool
 {
@@ -23,7 +24,7 @@ struct std::hash<strange::parameter_a>
     }
 };
 
-namespace std
+namespace strange
 {
 inline auto operator==(strange::operation_a const & lhs, strange::operation_a const & rhs) -> bool
 {
@@ -51,7 +52,7 @@ struct std::hash<strange::operation_a>
     }
 };
 
-namespace std
+namespace strange
 {
 inline auto operator==(strange::abstraction_a const & lhs, strange::abstraction_a const & rhs) -> bool
 {
@@ -87,7 +88,7 @@ struct std::hash<strange::abstraction_a>
     }
 };
 
-namespace std
+namespace strange
 {
 inline auto operator==(strange::space_a const & lhs, strange::space_a const & rhs) -> bool
 {
