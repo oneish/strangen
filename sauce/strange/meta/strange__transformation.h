@@ -289,7 +289,9 @@ private:
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(;
 
-    struct _instance final : )#" << abstraction.name() << R"#(_::_derived
+    struct _instance final : )#";
+            _abstraction_name_and_parameters(abstraction);
+            _out << R"#(::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)

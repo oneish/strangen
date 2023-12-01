@@ -435,7 +435,7 @@ struct vector_a_ : vector_a<T>
 private:
     friend struct vector_a<T>;
 
-    struct _instance final : vector_a_::_derived
+    struct _instance final : vector_a<T>::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -743,7 +743,7 @@ struct parameter_a_ : parameter_a
 private:
     friend struct parameter_a;
 
-    struct _instance final : parameter_a_::_derived
+    struct _instance final : parameter_a::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -987,7 +987,7 @@ struct operation_a_ : operation_a
 private:
     friend struct operation_a;
 
-    struct _instance final : operation_a_::_derived
+    struct _instance final : operation_a::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -1239,7 +1239,7 @@ struct abstraction_a_ : abstraction_a
 private:
     friend struct abstraction_a;
 
-    struct _instance final : abstraction_a_::_derived
+    struct _instance final : abstraction_a::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -1467,7 +1467,7 @@ struct space_a_ : space_a
 private:
     friend struct space_a;
 
-    struct _instance final : space_a_::_derived
+    struct _instance final : space_a::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)

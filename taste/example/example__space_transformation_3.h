@@ -264,7 +264,7 @@ struct widget_ : widget
 private:
     friend struct widget;
 
-    struct _instance final : widget_::_derived
+    struct _instance final : widget::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -481,7 +481,7 @@ struct button_ : button
 private:
     friend struct button;
 
-    struct _instance final : button_::_derived
+    struct _instance final : button::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -691,7 +691,7 @@ struct number_ : number
 private:
     friend struct number;
 
-    struct _instance final : number_::_derived
+    struct _instance final : number::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -907,7 +907,7 @@ struct widget_number_ : widget_number
 private:
     friend struct widget_number;
 
-    struct _instance final : widget_number_::_derived
+    struct _instance final : widget_number::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
@@ -1131,7 +1131,7 @@ struct numeric_ : numeric<Data>
 private:
     friend struct numeric<Data>;
 
-    struct _instance final : numeric_::_derived
+    struct _instance final : numeric<Data>::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
