@@ -10,6 +10,11 @@
 namespace strange
 {
 
+struct any_a;
+
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct any_a_;
+
 template<typename T>
 struct vector_a;
 
@@ -40,6 +45,24 @@ struct space_a_;
 
 namespace strange
 {
+
+template<>
+struct reflection<strange::any_a>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::any_a";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::any_a_<_Thing, _Copy>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::any_a_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
 
 template<typename T>
 struct reflection<strange::vector_a<T>>
@@ -136,18 +159,212 @@ struct reflection<strange::space_a_<_Thing, _Copy>>
 namespace strange
 {
 
+struct any_a : virtual strange::_common
+{
+    inline any_a() = default;
+
+    inline any_a(any_a const & other)
+    :strange::_common{other}
+    {
+    }
+
+    inline any_a(any_a && other)
+    :strange::_common{std::move(other)}
+    {
+    }
+
+    inline auto operator=(any_a const & other) -> any_a &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(any_a && other) -> any_a &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline any_a(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    {
+    }
+
+    explicit inline any_a(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    {
+    }
+
+protected:
+    struct _derived : strange::_common::_base
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<any_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<any_a::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> any_a
+    {
+        return any_a{any_a::_derived::_static_shared_to_base(std::make_shared<typename any_a_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = any_a;
+
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+};
+
+template<typename _Thing, bool _Copy>
+struct any_a_ : any_a
+{
+    inline any_a_() = default;
+
+    inline any_a_(any_a_ const & other)
+    :strange::_common{other}
+    ,any_a{}
+    {
+    }
+
+    inline any_a_(any_a_ && other)
+    :strange::_common{std::move(other)}
+    ,any_a{}
+    {
+    }
+
+    inline auto operator=(any_a_ const & other) -> any_a_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(any_a_ && other) -> any_a_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline any_a_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any_a{}
+    {
+    }
+
+    explicit inline any_a_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any_a{}
+    {
+    }
+
+private:
+    friend struct any_a;
+
+    struct _instance final : any_a::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :any_a_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return any_a_::_derived::_static_shared_to_base(std::make_shared<any_a_::_instance>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return any_a::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return any_a::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return any_a_::_name_;
+        }
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> any_a_
+    {
+        return any_a_{any_a_::_derived::_static_shared_to_base(std::make_shared<any_a_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<any_a_::_instance>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<any_a_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<any_a_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = any_a_;
+    using _Thing_ = _Thing;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+};
+
 template<typename T>
-struct vector_a : virtual strange::_common
+struct vector_a : any_a
 {
     inline vector_a() = default;
 
     inline vector_a(vector_a const & other)
     :strange::_common{other}
+    ,any_a{}
     {
     }
 
     inline vector_a(vector_a && other)
     :strange::_common{std::move(other)}
+    ,any_a{}
     {
     }
 
@@ -165,20 +382,22 @@ struct vector_a : virtual strange::_common
 
     explicit inline vector_a(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
+    ,any_a{}
     {
     }
 
     explicit inline vector_a(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
+    ,any_a{}
     {
     }
 
 protected:
-    struct _derived : strange::_common::_base
+    struct _derived : any_a::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<vector_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return derived;
+            return any_a::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto operator=(std::vector<T> const & other) -> void = 0;
@@ -293,6 +512,7 @@ public:
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
+        cats.insert(any_a::_cats_.cbegin(), any_a::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
@@ -605,17 +825,19 @@ public:
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
-struct parameter_a : virtual strange::_common
+struct parameter_a : any_a
 {
     inline parameter_a() = default;
 
     inline parameter_a(parameter_a const & other)
     :strange::_common{other}
+    ,any_a{}
     {
     }
 
     inline parameter_a(parameter_a && other)
     :strange::_common{std::move(other)}
+    ,any_a{}
     {
     }
 
@@ -633,20 +855,22 @@ struct parameter_a : virtual strange::_common
 
     explicit inline parameter_a(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
+    ,any_a{}
     {
     }
 
     explicit inline parameter_a(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
+    ,any_a{}
     {
     }
 
 protected:
-    struct _derived : strange::_common::_base
+    struct _derived : any_a::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<parameter_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return derived;
+            return any_a::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto type() const -> std::string const & = 0;
@@ -681,6 +905,7 @@ public:
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
+        cats.insert(any_a::_cats_.cbegin(), any_a::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
@@ -833,17 +1058,19 @@ public:
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
-struct operation_a : virtual strange::_common
+struct operation_a : any_a
 {
     inline operation_a() = default;
 
     inline operation_a(operation_a const & other)
     :strange::_common{other}
+    ,any_a{}
     {
     }
 
     inline operation_a(operation_a && other)
     :strange::_common{std::move(other)}
+    ,any_a{}
     {
     }
 
@@ -861,20 +1088,22 @@ struct operation_a : virtual strange::_common
 
     explicit inline operation_a(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
+    ,any_a{}
     {
     }
 
     explicit inline operation_a(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
+    ,any_a{}
     {
     }
 
 protected:
-    struct _derived : strange::_common::_base
+    struct _derived : any_a::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<operation_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return derived;
+            return any_a::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto name() const -> std::string const & = 0;
@@ -917,6 +1146,7 @@ public:
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
+        cats.insert(any_a::_cats_.cbegin(), any_a::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
@@ -1085,17 +1315,19 @@ public:
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
-struct abstraction_a : virtual strange::_common
+struct abstraction_a : any_a
 {
     inline abstraction_a() = default;
 
     inline abstraction_a(abstraction_a const & other)
     :strange::_common{other}
+    ,any_a{}
     {
     }
 
     inline abstraction_a(abstraction_a && other)
     :strange::_common{std::move(other)}
+    ,any_a{}
     {
     }
 
@@ -1113,20 +1345,22 @@ struct abstraction_a : virtual strange::_common
 
     explicit inline abstraction_a(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
+    ,any_a{}
     {
     }
 
     explicit inline abstraction_a(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
+    ,any_a{}
     {
     }
 
 protected:
-    struct _derived : strange::_common::_base
+    struct _derived : any_a::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<abstraction_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return derived;
+            return any_a::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto parameters() const -> std::vector<parameter_a> const & = 0;
@@ -1169,6 +1403,7 @@ public:
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
+        cats.insert(any_a::_cats_.cbegin(), any_a::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
@@ -1337,17 +1572,19 @@ public:
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
-struct space_a : virtual strange::_common
+struct space_a : any_a
 {
     inline space_a() = default;
 
     inline space_a(space_a const & other)
     :strange::_common{other}
+    ,any_a{}
     {
     }
 
     inline space_a(space_a && other)
     :strange::_common{std::move(other)}
+    ,any_a{}
     {
     }
 
@@ -1365,20 +1602,22 @@ struct space_a : virtual strange::_common
 
     explicit inline space_a(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
+    ,any_a{}
     {
     }
 
     explicit inline space_a(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
+    ,any_a{}
     {
     }
 
 protected:
-    struct _derived : strange::_common::_base
+    struct _derived : any_a::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<space_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return derived;
+            return any_a::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto name() const -> std::string const & = 0;
@@ -1409,6 +1648,7 @@ public:
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
+        cats.insert(any_a::_cats_.cbegin(), any_a::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();

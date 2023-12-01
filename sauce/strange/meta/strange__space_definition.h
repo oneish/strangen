@@ -76,6 +76,10 @@ auto definition() -> strange::space_a
         {
             strange::make_abstraction
             ({
+                .name = "any_a",
+            }),
+             strange::make_abstraction
+            ({
                 .parameters =
                 {
                     strange::make_parameter
@@ -85,6 +89,10 @@ auto definition() -> strange::space_a
                     }),
                 },
                 .name = "vector_a",
+                .parents =
+                {
+                    "any_a",
+                },
                 .operations =
                 {
                     strange::make_operation
@@ -548,6 +556,10 @@ auto definition() -> strange::space_a
             strange::make_abstraction
             ({
                 .name = "parameter_a",
+                .parents =
+                {
+                    "any_a",
+                },
                 .operations =
                 {
                     strange::make_operation
@@ -594,6 +606,10 @@ auto definition() -> strange::space_a
             strange::make_abstraction
             ({
                 .name = "operation_a",
+                .parents =
+                {
+                    "any_a",
+                },
                 .operations =
                 {
                     strange::make_operation
@@ -666,6 +682,10 @@ auto definition() -> strange::space_a
             strange::make_abstraction
             ({
                 .name = "abstraction_a",
+                .parents =
+                {
+                    "any_a",
+                },
                 .operations =
                 {
                     strange::make_operation
@@ -738,6 +758,10 @@ auto definition() -> strange::space_a
             strange::make_abstraction
             ({
                 .name = "space_a",
+                .parents =
+                {
+                    "any_a",
+                },
                 .operations =
                 {
                     strange::make_operation
