@@ -39,7 +39,7 @@ struct numeric
 
 namespace example
 {
-auto definition() -> strange::space_a
+auto definition() -> strange::definition::space
 {
     return strange::make_space
     ({

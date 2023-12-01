@@ -1,5 +1,5 @@
 #pragma once
-#include "../strange.h"
+#include "strange__definition__abstraction.h"
 #include <string>
 #include <vector>
 
@@ -10,7 +10,7 @@ namespace definition
 struct space
 {
     std::string name;
-    std::vector<abstraction_a> abstractions;
+    std::vector<abstraction> abstractions;
 };
 
 inline auto operator==(space const & lhs, space const & rhs) -> bool
@@ -40,7 +40,7 @@ struct std::hash<strange::definition::space>
         std::size_t h = std::hash<std::string>{}(spc.name);
         for (auto const & abs : spc.abstractions)
         {
-            h ^= std::hash<strange::abstraction_a>{}(abs);
+            h ^= std::hash<strange::definition::abstraction>{}(abs);
         }
         return h;
     }

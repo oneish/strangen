@@ -135,9 +135,9 @@ inline auto make_operation(definition::operation oper) -> operation_a
 
 namespace strange
 {
-inline auto make_abstraction(definition::abstraction abs) -> abstraction_a
+inline auto make_abstraction(definition::abstraction abs) -> definition::abstraction
 {
-    return abstraction_a::_make<definition::abstraction>(abs);
+    return abs;
 }
 }
 
@@ -145,8 +145,8 @@ inline auto make_abstraction(definition::abstraction abs) -> abstraction_a
 
 namespace strange
 {
-inline auto make_space(definition::space spc) -> space_a
+inline auto make_space(definition::space spc) -> definition::space
 {
-    return space_a::_make<definition::space>(spc);
+    return spc;
 }
 }
