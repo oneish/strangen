@@ -39,24 +39,29 @@ struct numeric
 
 namespace example
 {
-auto definition() -> strange::definition::space
+using strange::definition::space;
+using strange::definition::abstraction;
+using strange::definition::operation;
+using strange::definition::parameter;
+
+auto definition() -> space
 {
-    return strange::definition::space
+    return space
     {
         .name = "example",
         .abstractions =
         {
-            strange::definition::abstraction
+            abstraction
             {
                 .name = "widget",
                 .operations =
                 {
-                    strange::definition::operation
+                    operation
                     {
                         .name = "display",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "button",
                                 .name = "b",
@@ -66,22 +71,22 @@ auto definition() -> strange::definition::space
                         .constness = true,
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "inc",
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "operator++",
                         .result = "*this",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "operator--",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "int",
                                 .name = "i",
@@ -91,7 +96,7 @@ auto definition() -> strange::definition::space
                     },
                 },
             },
-            strange::definition::abstraction
+            abstraction
             {
                 .name = "button",
                 .parents =
@@ -100,31 +105,31 @@ auto definition() -> strange::definition::space
                 },
                 .operations =
                 {
-                    strange::definition::operation
+                    operation
                     {
                         .name = "push",
                         .result = "void",
                     },
                 },
             },
-            strange::definition::abstraction
+            abstraction
             {
                 .name = "number",
                 .operations =
                 {
-                    strange::definition::operation
+                    operation
                     {
                         .name = "inc",
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "dec",
                         .result = "void",
                     },
                 },
             },
-            strange::definition::abstraction
+            abstraction
             {
                 .name = "widget_number",
                 .parents =
@@ -133,11 +138,11 @@ auto definition() -> strange::definition::space
                     "number",
                 },
             },
-            strange::definition::abstraction
+            abstraction
             {
                 .parameters =
                 {
-                    strange::definition::parameter
+                    parameter
                     {
                         .type = "typename",
                         .name = "Data",
@@ -151,20 +156,20 @@ auto definition() -> strange::definition::space
                 },
                 .operations =
                 {
-                    strange::definition::operation
+                    operation
                     {
                         .name = "get",
                         .constness = true,
                         .result = "Data",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "x",
                         .constness = true,
                         .result = "Data const &",
                         .data = true,
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "x",
                         .result = "Data &",

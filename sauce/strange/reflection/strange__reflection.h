@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstdint>
 #include <vector>
 
 namespace strange
@@ -24,11 +25,20 @@ struct reflection<bool>
 };
 
 template<>
-struct reflection<int>
+struct reflection<int32_t>
 {
     inline static auto name() -> std::string
     {
-        return "int";
+        return "int32_t";
+    }
+};
+
+template<>
+struct reflection<int64_t>
+{
+    inline static auto name() -> std::string
+    {
+        return "int64_t";
     }
 };
 

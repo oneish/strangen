@@ -5,22 +5,27 @@ namespace strange
 {
 namespace meta
 {
-auto definition() -> strange::definition::space
+using strange::definition::space;
+using strange::definition::abstraction;
+using strange::definition::operation;
+using strange::definition::parameter;
+
+auto definition() -> space
 {
-    return strange::definition::space
+    return space
     {
         .name = "strange",
         .abstractions =
         {
-            strange::definition::abstraction
+            abstraction
             {
                 .name = "any_a",
             },
-             strange::definition::abstraction
+            abstraction
             {
                 .parameters =
                 {
-                    strange::definition::parameter
+                    parameter
                     {
                         .type = "typename",
                         .name = "T",
@@ -33,12 +38,12 @@ auto definition() -> strange::definition::space
                 },
                 .operations =
                 {
-                    strange::definition::operation
+                    operation
                     {
                         .name = "operator=",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "std::vector<T> const &",
                                 .name = "other",
@@ -46,12 +51,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "*this",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "operator=",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "std::vector<T> &&",
                                 .name = "other",
@@ -59,12 +64,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "*this",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "operator=",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "std::initializer_list<T>",
                                 .name = "ilist",
@@ -72,17 +77,17 @@ auto definition() -> strange::definition::space
                         },
                         .result = "*this",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "assign",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "count",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "T const &",
                                 .name = "value",
@@ -90,12 +95,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "assign",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "std::initializer_list<T>",
                                 .name = "ilist",
@@ -103,12 +108,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "at",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "pos",
@@ -116,12 +121,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "T &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "at",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "pos",
@@ -130,12 +135,12 @@ auto definition() -> strange::definition::space
                         .constness = true,
                         .result = "T const &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "operator[]",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "pos",
@@ -143,12 +148,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "T &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "operator[]",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "pos",
@@ -157,131 +162,131 @@ auto definition() -> strange::definition::space
                         .constness = true,
                         .result = "T const &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "front",
                         .result = "T &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "front",
                         .constness = true,
                         .result = "T const &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "back",
                         .result = "T &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "back",
                         .constness = true,
                         .result = "T const &",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "data",
                         .result = "T *",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "data",
                         .constness = true,
                         .result = "T const *",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "begin",
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "begin",
                         .constness = true,
                         .result = "typename std::vector<T>::const_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "cbegin",
                         .constness = true,
                         .result = "typename std::vector<T>::const_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "end",
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "end",
                         .constness = true,
                         .result = "typename std::vector<T>::const_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "cend",
                         .constness = true,
                         .result = "typename std::vector<T>::const_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "rbegin",
                         .result = "typename std::vector<T>::reverse_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "rbegin",
                         .constness = true,
                         .result = "typename std::vector<T>::const_reverse_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "crbegin",
                         .constness = true,
                         .result = "typename std::vector<T>::const_reverse_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "rend",
                         .result = "typename std::vector<T>::reverse_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "rend",
                         .constness = true,
                         .result = "typename std::vector<T>::const_reverse_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "crend",
                         .constness = true,
                         .result = "typename std::vector<T>::const_reverse_iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "empty",
                         .constness = true,
                         .result = "bool",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "size",
                         .constness = true,
                         .result = "size_t",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "max_size",
                         .constness = true,
                         .result = "size_t",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "reserve",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "new_cap",
@@ -289,33 +294,33 @@ auto definition() -> strange::definition::space
                         },
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "capacity",
                         .constness = true,
                         .result = "size_t",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "shrink_to_fit",
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "clear",
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "insert",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "typename std::vector<T>::const_iterator",
                                 .name = "pos",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "T const &",
                                 .name = "value",
@@ -323,17 +328,17 @@ auto definition() -> strange::definition::space
                         },
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "insert",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "typename std::vector<T>::const_iterator",
                                 .name = "pos",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "T &&",
                                 .name = "value",
@@ -341,22 +346,22 @@ auto definition() -> strange::definition::space
                         },
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "insert",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "typename std::vector<T>::const_iterator",
                                 .name = "pos",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "count",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "T const &",
                                 .name = "value",
@@ -364,17 +369,17 @@ auto definition() -> strange::definition::space
                         },
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "insert",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "typename std::vector<T>::const_iterator",
                                 .name = "pos",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "std::initializer_list<T>",
                                 .name = "ilist",
@@ -382,12 +387,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "erase",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "typename std::vector<T>::const_iterator",
                                 .name = "pos",
@@ -395,17 +400,17 @@ auto definition() -> strange::definition::space
                         },
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "erase",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "typename std::vector<T>::const_iterator",
                                 .name = "first",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "typename std::vector<T>::const_iterator",
                                 .name = "last",
@@ -413,12 +418,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "typename std::vector<T>::iterator",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "push_back",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "T const &",
                                 .name = "value",
@@ -426,12 +431,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "push_back",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "T &&",
                                 .name = "value",
@@ -439,17 +444,17 @@ auto definition() -> strange::definition::space
                         },
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "pop_back",
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "resize",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "count",
@@ -457,17 +462,17 @@ auto definition() -> strange::definition::space
                         },
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "resize",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "size_t",
                                 .name = "count",
                             },
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "T const &",
                                 .name = "value",
@@ -475,12 +480,12 @@ auto definition() -> strange::definition::space
                         },
                         .result = "void",
                     },
-                    strange::definition::operation
+                    operation
                     {
                         .name = "swap",
                         .parameters =
                         {
-                            strange::definition::parameter
+                            parameter
                             {
                                 .type = "std::vector<T> &",
                                 .name = "other",
