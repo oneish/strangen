@@ -19,7 +19,7 @@ auto definition() -> space
         {
             abstraction
             {
-                .name = "any_a",
+                .name = "any",
             },
             abstraction
             {
@@ -31,10 +31,10 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
-                .name = "vector_a",
+                .name = "vector",
                 .parents =
                 {
-                    "any_a",
+                    "any",
                 },
                 .operations =
                 {

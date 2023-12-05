@@ -49,6 +49,15 @@ struct reflection<std::vector<T>>
     {
         return "std::vector<" + reflection<T>::name() + ">";
     }
+
+    inline static auto operations() -> std::vector<std::string>
+    {
+        return
+        {
+            "auto operator=(" + name() + " const &) -> " + name() + " &",
+            "auto operator=(" + name() + " &&) -> " + name() + " &",
+        };
+    }
 };
 
 }

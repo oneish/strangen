@@ -2,9 +2,9 @@
 #include "example__space_definition.h"
 #include "../../sauce/strange/meta/strange__transformation.h"
 */#pragma once
-#include "../../sauce/strange/reflection/strange__reflection.h"
 #include "../../sauce/strange/common/strange__common.h"
+#include "../../sauce/strange/reflection/strange__reflection.h"
 /*~
 // more meta code
-strange::transformation(example::definition(), std::cout).transform();
+strange::transformation(example::meta::definition(), std::cout).transform();
 */

@@ -1,6 +1,6 @@
 #pragma once
-#include "../reflection/strange__reflection.h"
 #include "../common/strange__common.h"
+#include "../reflection/strange__reflection.h"
 #include <string>
 #include <vector>
 
@@ -10,16 +10,16 @@
 namespace strange
 {
 
-struct any_a;
+struct any;
 
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
-struct any_a_;
+struct any_;
 
 template<typename T>
-struct vector_a;
+struct vector;
 
 template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
-struct vector_a_;
+struct vector_;
 
 }
 
@@ -27,38 +27,38 @@ namespace strange
 {
 
 template<>
-struct reflection<strange::any_a>
+struct reflection<strange::any>
 {
     inline static auto name() -> std::string
     {
-        return "strange::any_a";
+        return "strange::any";
     }
 };
 
 template<typename _Thing, bool _Copy>
-struct reflection<strange::any_a_<_Thing, _Copy>>
+struct reflection<strange::any_<_Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::any_a_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+        return "strange::any_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
 template<typename T>
-struct reflection<strange::vector_a<T>>
+struct reflection<strange::vector<T>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::vector_a<" + reflection<T>::name() + ">";
+        return "strange::vector<" + reflection<T>::name() + ">";
     }
 };
 
 template<typename T, typename _Thing, bool _Copy>
-struct reflection<strange::vector_a_<T, _Thing, _Copy>>
+struct reflection<strange::vector_<T, _Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::vector_a_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+        return "strange::vector_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -67,38 +67,38 @@ struct reflection<strange::vector_a_<T, _Thing, _Copy>>
 namespace strange
 {
 
-struct any_a : virtual strange::_common
+struct any : virtual strange::_common
 {
-    inline any_a() = default;
+    inline any() = default;
 
-    inline any_a(any_a const & other)
+    inline any(any const & other)
     :strange::_common{other}
     {
     }
 
-    inline any_a(any_a && other)
+    inline any(any && other)
     :strange::_common{std::move(other)}
     {
     }
 
-    inline auto operator=(any_a const & other) -> any_a &
+    inline auto operator=(any const & other) -> any &
     {
         strange::_common::operator=(other);
         return *this;
     }
 
-    inline auto operator=(any_a && other) -> any_a &
+    inline auto operator=(any && other) -> any &
     {
         strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline any_a(std::shared_ptr<strange::_common::_base> const & shared)
+    explicit inline any(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
     {
     }
 
-    explicit inline any_a(std::shared_ptr<strange::_common::_base> && shared)
+    explicit inline any(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
     {
     }
@@ -106,7 +106,7 @@ struct any_a : virtual strange::_common
 protected:
     struct _derived : strange::_common::_base
     {
-        static inline auto _static_shared_to_base(std::shared_ptr<any_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        static inline auto _static_shared_to_base(std::shared_ptr<any::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
             return derived;
         }
@@ -115,16 +115,16 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<any_a::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<any::_derived>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> any_a
+    inline static auto _make(_Args && ... _args) -> any
     {
-        return any_a{any_a::_derived::_static_shared_to_base(std::make_shared<typename any_a_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return any{any::_derived::_static_shared_to_base(std::make_shared<typename any_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = any_a;
+    using _Kind_ = any;
 
     inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
 
@@ -138,54 +138,54 @@ public:
 };
 
 template<typename _Thing, bool _Copy>
-struct any_a_ : any_a
+struct any_ : any
 {
-    inline any_a_() = default;
+    inline any_() = default;
 
-    inline any_a_(any_a_ const & other)
+    inline any_(any_ const & other)
     :strange::_common{other}
-    ,any_a{}
+    ,any{}
     {
     }
 
-    inline any_a_(any_a_ && other)
+    inline any_(any_ && other)
     :strange::_common{std::move(other)}
-    ,any_a{}
+    ,any{}
     {
     }
 
-    inline auto operator=(any_a_ const & other) -> any_a_ &
+    inline auto operator=(any_ const & other) -> any_ &
     {
         strange::_common::operator=(other);
         return *this;
     }
 
-    inline auto operator=(any_a_ && other) -> any_a_ &
+    inline auto operator=(any_ && other) -> any_ &
     {
         strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline any_a_(std::shared_ptr<strange::_common::_base> const & shared)
+    explicit inline any_(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any_a{}
+    ,any{}
     {
     }
 
-    explicit inline any_a_(std::shared_ptr<strange::_common::_base> && shared)
+    explicit inline any_(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any_a{}
+    ,any{}
     {
     }
 
 private:
-    friend struct any_a;
+    friend struct any;
 
-    struct _instance final : any_a::_derived
+    struct _instance final : any::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :any_a_::_derived{}
+        :any_::_derived{}
         ,_thing{std::forward<_Args>(_args) ...}
         {
         }
@@ -204,7 +204,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return any_a_::_derived::_static_shared_to_base(std::make_shared<any_a_::_instance>(_thing));
+                return any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>(_thing));
             }
             else
             {
@@ -214,17 +214,17 @@ private:
 
         inline auto _cat() const -> std::string final
         {
-            return any_a::_cat_;
+            return any::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return any_a::_cats_;
+            return any::_cats_;
         }
 
         inline auto _name() const -> std::string final
         {
-            return any_a_::_name_;
+            return any_::_name_;
         }
 
         _Thing _thing;
@@ -232,80 +232,80 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> any_a_
+    inline static auto _make_(_Args && ... _args) -> any_
     {
-        return any_a_{any_a_::_derived::_static_shared_to_base(std::make_shared<any_a_::_instance>(std::forward<_Args>(_args) ...))};
+        return any_{any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<any_a_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<any_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<any_a_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<any_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<any_a_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<any_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = any_a_;
+    using _Abstraction_ = any_;
     using _Thing_ = _Thing;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
 template<typename T>
-struct vector_a : any_a
+struct vector : any
 {
-    inline vector_a() = default;
+    inline vector() = default;
 
-    inline vector_a(vector_a const & other)
+    inline vector(vector const & other)
     :strange::_common{other}
-    ,any_a{}
+    ,any{}
     {
     }
 
-    inline vector_a(vector_a && other)
+    inline vector(vector && other)
     :strange::_common{std::move(other)}
-    ,any_a{}
+    ,any{}
     {
     }
 
-    inline auto operator=(vector_a const & other) -> vector_a &
+    inline auto operator=(vector const & other) -> vector &
     {
         strange::_common::operator=(other);
         return *this;
     }
 
-    inline auto operator=(vector_a && other) -> vector_a &
+    inline auto operator=(vector && other) -> vector &
     {
         strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline vector_a(std::shared_ptr<strange::_common::_base> const & shared)
+    explicit inline vector(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any_a{}
+    ,any{}
     {
     }
 
-    explicit inline vector_a(std::shared_ptr<strange::_common::_base> && shared)
+    explicit inline vector(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any_a{}
+    ,any{}
     {
     }
 
 protected:
-    struct _derived : any_a::_derived
+    struct _derived : any::_derived
     {
-        static inline auto _static_shared_to_base(std::shared_ptr<vector_a::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        static inline auto _static_shared_to_base(std::shared_ptr<vector::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any_a::_derived::_static_shared_to_base(derived);
+            return any::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto operator=(std::vector<T> const & other) -> void = 0;
@@ -404,33 +404,33 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<vector_a::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<vector::_derived>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> vector_a
+    inline static auto _make(_Args && ... _args) -> vector
     {
-        return vector_a{vector_a::_derived::_static_shared_to_base(std::make_shared<typename vector_a_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return vector{vector::_derived::_static_shared_to_base(std::make_shared<typename vector_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = vector_a;
+    using _Kind_ = vector;
 
     inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any_a::_cats_.cbegin(), any_a::_cats_.cend());
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
 
 
-    inline auto operator=(std::vector<T> const & other) -> vector_a &;
+    inline auto operator=(std::vector<T> const & other) -> vector &;
 
-    inline auto operator=(std::vector<T> && other) -> vector_a &;
+    inline auto operator=(std::vector<T> && other) -> vector &;
 
-    inline auto operator=(std::initializer_list<T> ilist) -> vector_a &;
+    inline auto operator=(std::initializer_list<T> ilist) -> vector &;
 
     inline auto assign(size_t count, T const & value) -> void;
 
@@ -520,54 +520,54 @@ public:
 };
 
 template<typename T, typename _Thing, bool _Copy>
-struct vector_a_ : vector_a<T>
+struct vector_ : vector<T>
 {
-    inline vector_a_() = default;
+    inline vector_() = default;
 
-    inline vector_a_(vector_a_ const & other)
+    inline vector_(vector_ const & other)
     :strange::_common{other}
-    ,vector_a<T>{}
+    ,vector<T>{}
     {
     }
 
-    inline vector_a_(vector_a_ && other)
+    inline vector_(vector_ && other)
     :strange::_common{std::move(other)}
-    ,vector_a<T>{}
+    ,vector<T>{}
     {
     }
 
-    inline auto operator=(vector_a_ const & other) -> vector_a_ &
+    inline auto operator=(vector_ const & other) -> vector_ &
     {
         strange::_common::operator=(other);
         return *this;
     }
 
-    inline auto operator=(vector_a_ && other) -> vector_a_ &
+    inline auto operator=(vector_ && other) -> vector_ &
     {
         strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline vector_a_(std::shared_ptr<strange::_common::_base> const & shared)
+    explicit inline vector_(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,vector_a<T>{}
+    ,vector<T>{}
     {
     }
 
-    explicit inline vector_a_(std::shared_ptr<strange::_common::_base> && shared)
+    explicit inline vector_(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,vector_a<T>{}
+    ,vector<T>{}
     {
     }
 
 private:
-    friend struct vector_a<T>;
+    friend struct vector<T>;
 
-    struct _instance final : vector_a<T>::_derived
+    struct _instance final : vector<T>::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :vector_a_::_derived{}
+        :vector_::_derived{}
         ,_thing{std::forward<_Args>(_args) ...}
         {
         }
@@ -586,7 +586,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(_thing));
+                return vector_::_derived::_static_shared_to_base(std::make_shared<vector_::_instance>(_thing));
             }
             else
             {
@@ -596,17 +596,17 @@ private:
 
         inline auto _cat() const -> std::string final
         {
-            return vector_a<T>::_cat_;
+            return vector<T>::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return vector_a<T>::_cats_;
+            return vector<T>::_cats_;
         }
 
         inline auto _name() const -> std::string final
         {
-            return vector_a_::_name_;
+            return vector_::_name_;
         }
 
         inline auto operator=(std::vector<T> const & other) -> void final;
@@ -706,615 +706,615 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> vector_a_
+    inline static auto _make_(_Args && ... _args) -> vector_
     {
-        return vector_a_{vector_a_::_derived::_static_shared_to_base(std::make_shared<vector_a_::_instance>(std::forward<_Args>(_args) ...))};
+        return vector_{vector_::_derived::_static_shared_to_base(std::make_shared<vector_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<vector_a_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<vector_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<vector_a_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<vector_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<vector_a_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<vector_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = vector_a_;
+    using _Abstraction_ = vector_;
     using _Thing_ = _Thing;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> const & other) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> const & other) -> void
 {
     _thing.operator=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> && other) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> && other) -> void
 {
     _thing.operator=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::operator=(std::initializer_list<T> ilist) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::initializer_list<T> ilist) -> void
 {
     _thing.operator=(ilist);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::assign(size_t count, T const & value) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(size_t count, T const & value) -> void
 {
     _thing.assign(count, value);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::assign(std::initializer_list<T> ilist) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(std::initializer_list<T> ilist) -> void
 {
     _thing.assign(ilist);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::at(size_t pos) -> T &
+inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) -> T &
 {
     return _thing.at(pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::at(size_t pos) const -> T const &
+inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) const -> T const &
 {
     return _thing.at(pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::operator[](size_t pos) -> T &
+inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) -> T &
 {
     return _thing.operator[](pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::operator[](size_t pos) const -> T const &
+inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) const -> T const &
 {
     return _thing.operator[](pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::front() -> T &
+inline auto vector_<T, _Thing, _Copy>::_instance::front() -> T &
 {
     return _thing.front();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::front() const -> T const &
+inline auto vector_<T, _Thing, _Copy>::_instance::front() const -> T const &
 {
     return _thing.front();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::back() -> T &
+inline auto vector_<T, _Thing, _Copy>::_instance::back() -> T &
 {
     return _thing.back();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::back() const -> T const &
+inline auto vector_<T, _Thing, _Copy>::_instance::back() const -> T const &
 {
     return _thing.back();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::data() -> T *
+inline auto vector_<T, _Thing, _Copy>::_instance::data() -> T *
 {
     return _thing.data();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::data() const -> T const *
+inline auto vector_<T, _Thing, _Copy>::_instance::data() const -> T const *
 {
     return _thing.data();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::begin() -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::begin() -> typename std::vector<T>::iterator
 {
     return _thing.begin();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::begin() const -> typename std::vector<T>::const_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::begin() const -> typename std::vector<T>::const_iterator
 {
     return _thing.begin();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::cbegin() const -> typename std::vector<T>::const_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::cbegin() const -> typename std::vector<T>::const_iterator
 {
     return _thing.cbegin();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::end() -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::end() -> typename std::vector<T>::iterator
 {
     return _thing.end();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::end() const -> typename std::vector<T>::const_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::end() const -> typename std::vector<T>::const_iterator
 {
     return _thing.end();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::cend() const -> typename std::vector<T>::const_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::cend() const -> typename std::vector<T>::const_iterator
 {
     return _thing.cend();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::rbegin() -> typename std::vector<T>::reverse_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() -> typename std::vector<T>::reverse_iterator
 {
     return _thing.rbegin();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::rbegin() const -> typename std::vector<T>::const_reverse_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.rbegin();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::crbegin() const -> typename std::vector<T>::const_reverse_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::crbegin() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.crbegin();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::rend() -> typename std::vector<T>::reverse_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::rend() -> typename std::vector<T>::reverse_iterator
 {
     return _thing.rend();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::rend() const -> typename std::vector<T>::const_reverse_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::rend() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.rend();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::crend() const -> typename std::vector<T>::const_reverse_iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::crend() const -> typename std::vector<T>::const_reverse_iterator
 {
     return _thing.crend();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::empty() const -> bool
+inline auto vector_<T, _Thing, _Copy>::_instance::empty() const -> bool
 {
     return _thing.empty();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::size() const -> size_t
+inline auto vector_<T, _Thing, _Copy>::_instance::size() const -> size_t
 {
     return _thing.size();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::max_size() const -> size_t
+inline auto vector_<T, _Thing, _Copy>::_instance::max_size() const -> size_t
 {
     return _thing.max_size();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::reserve(size_t new_cap) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::reserve(size_t new_cap) -> void
 {
     _thing.reserve(new_cap);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::capacity() const -> size_t
+inline auto vector_<T, _Thing, _Copy>::_instance::capacity() const -> size_t
 {
     return _thing.capacity();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::shrink_to_fit() -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::shrink_to_fit() -> void
 {
     _thing.shrink_to_fit();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::clear() -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::clear() -> void
 {
     _thing.clear();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, value);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, value);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, count, value);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, ilist);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
 {
     return _thing.erase(pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
 {
     return _thing.erase(first, last);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::push_back(T const & value) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T const & value) -> void
 {
     _thing.push_back(value);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::push_back(T && value) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T && value) -> void
 {
     _thing.push_back(value);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::pop_back() -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::pop_back() -> void
 {
     _thing.pop_back();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::resize(size_t count) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count) -> void
 {
     _thing.resize(count);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::resize(size_t count, T const & value) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count, T const & value) -> void
 {
     _thing.resize(count, value);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_a_<T, _Thing, _Copy>::_instance::swap(std::vector<T> & other) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::swap(std::vector<T> & other) -> void
 {
     _thing.swap(other);
 }
 
 template<typename T>
-inline auto vector_a<T>::operator=(std::vector<T> const & other) -> vector_a &
+inline auto vector<T>::operator=(std::vector<T> const & other) -> vector &
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator=(other);
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->operator=(other);
     return *this;
 }
 
 template<typename T>
-inline auto vector_a<T>::operator=(std::vector<T> && other) -> vector_a &
+inline auto vector<T>::operator=(std::vector<T> && other) -> vector &
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator=(other);
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->operator=(other);
     return *this;
 }
 
 template<typename T>
-inline auto vector_a<T>::operator=(std::initializer_list<T> ilist) -> vector_a &
+inline auto vector<T>::operator=(std::initializer_list<T> ilist) -> vector &
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator=(ilist);
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->operator=(ilist);
     return *this;
 }
 
 template<typename T>
-inline auto vector_a<T>::assign(size_t count, T const & value) -> void
+inline auto vector<T>::assign(size_t count, T const & value) -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->assign(count, value);
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->assign(count, value);
 }
 
 template<typename T>
-inline auto vector_a<T>::assign(std::initializer_list<T> ilist) -> void
+inline auto vector<T>::assign(std::initializer_list<T> ilist) -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->assign(ilist);
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->assign(ilist);
 }
 
 template<typename T>
-inline auto vector_a<T>::at(size_t pos) -> T &
+inline auto vector<T>::at(size_t pos) -> T &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->at(pos);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->at(pos);
 }
 
 template<typename T>
-inline auto vector_a<T>::at(size_t pos) const -> T const &
+inline auto vector<T>::at(size_t pos) const -> T const &
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->at(pos);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->at(pos);
 }
 
 template<typename T>
-inline auto vector_a<T>::operator[](size_t pos) -> T &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator[](pos);
-}
-
-template<typename T>
-inline auto vector_a<T>::operator[](size_t pos) const -> T const &
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->operator[](pos);
-}
-
-template<typename T>
-inline auto vector_a<T>::front() -> T &
+inline auto vector<T>::operator[](size_t pos) -> T &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->front();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->operator[](pos);
 }
 
 template<typename T>
-inline auto vector_a<T>::front() const -> T const &
+inline auto vector<T>::operator[](size_t pos) const -> T const &
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->front();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->operator[](pos);
 }
 
 template<typename T>
-inline auto vector_a<T>::back() -> T &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->back();
-}
-
-template<typename T>
-inline auto vector_a<T>::back() const -> T const &
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->back();
-}
-
-template<typename T>
-inline auto vector_a<T>::data() -> T *
+inline auto vector<T>::front() -> T &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->data();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->front();
 }
 
 template<typename T>
-inline auto vector_a<T>::data() const -> T const *
+inline auto vector<T>::front() const -> T const &
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->data();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->front();
 }
 
 template<typename T>
-inline auto vector_a<T>::begin() -> typename std::vector<T>::iterator
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->begin();
-}
-
-template<typename T>
-inline auto vector_a<T>::begin() const -> typename std::vector<T>::const_iterator
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->begin();
-}
-
-template<typename T>
-inline auto vector_a<T>::cbegin() const -> typename std::vector<T>::const_iterator
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->cbegin();
-}
-
-template<typename T>
-inline auto vector_a<T>::end() -> typename std::vector<T>::iterator
+inline auto vector<T>::back() -> T &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->end();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->back();
 }
 
 template<typename T>
-inline auto vector_a<T>::end() const -> typename std::vector<T>::const_iterator
+inline auto vector<T>::back() const -> T const &
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->end();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->back();
 }
 
 template<typename T>
-inline auto vector_a<T>::cend() const -> typename std::vector<T>::const_iterator
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->cend();
-}
-
-template<typename T>
-inline auto vector_a<T>::rbegin() -> typename std::vector<T>::reverse_iterator
+inline auto vector<T>::data() -> T *
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rbegin();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->data();
 }
 
 template<typename T>
-inline auto vector_a<T>::rbegin() const -> typename std::vector<T>::const_reverse_iterator
+inline auto vector<T>::data() const -> T const *
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rbegin();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->data();
 }
 
 template<typename T>
-inline auto vector_a<T>::crbegin() const -> typename std::vector<T>::const_reverse_iterator
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->crbegin();
-}
-
-template<typename T>
-inline auto vector_a<T>::rend() -> typename std::vector<T>::reverse_iterator
+inline auto vector<T>::begin() -> typename std::vector<T>::iterator
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rend();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->begin();
 }
 
 template<typename T>
-inline auto vector_a<T>::rend() const -> typename std::vector<T>::const_reverse_iterator
+inline auto vector<T>::begin() const -> typename std::vector<T>::const_iterator
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->rend();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->begin();
 }
 
 template<typename T>
-inline auto vector_a<T>::crend() const -> typename std::vector<T>::const_reverse_iterator
+inline auto vector<T>::cbegin() const -> typename std::vector<T>::const_iterator
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->crend();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->cbegin();
 }
 
 template<typename T>
-inline auto vector_a<T>::empty() const -> bool
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->empty();
-}
-
-template<typename T>
-inline auto vector_a<T>::size() const -> size_t
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->size();
-}
-
-template<typename T>
-inline auto vector_a<T>::max_size() const -> size_t
-{
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->max_size();
-}
-
-template<typename T>
-inline auto vector_a<T>::reserve(size_t new_cap) -> void
+inline auto vector<T>::end() -> typename std::vector<T>::iterator
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->reserve(new_cap);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->end();
 }
 
 template<typename T>
-inline auto vector_a<T>::capacity() const -> size_t
+inline auto vector<T>::end() const -> typename std::vector<T>::const_iterator
 {
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->capacity();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->end();
 }
 
 template<typename T>
-inline auto vector_a<T>::shrink_to_fit() -> void
+inline auto vector<T>::cend() const -> typename std::vector<T>::const_iterator
 {
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->shrink_to_fit();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->cend();
 }
 
 template<typename T>
-inline auto vector_a<T>::clear() -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->clear();
-}
-
-template<typename T>
-inline auto vector_a<T>::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
+inline auto vector<T>::rbegin() -> typename std::vector<T>::reverse_iterator
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->insert(pos, value);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->rbegin();
 }
 
 template<typename T>
-inline auto vector_a<T>::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
+inline auto vector<T>::rbegin() const -> typename std::vector<T>::const_reverse_iterator
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->insert(pos, value);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->rbegin();
 }
 
 template<typename T>
-inline auto vector_a<T>::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
+inline auto vector<T>::crbegin() const -> typename std::vector<T>::const_reverse_iterator
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->crbegin();
 }
 
 template<typename T>
-inline auto vector_a<T>::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
+inline auto vector<T>::rend() -> typename std::vector<T>::reverse_iterator
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->rend();
 }
 
 template<typename T>
-inline auto vector_a<T>::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+inline auto vector<T>::rend() const -> typename std::vector<T>::const_reverse_iterator
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->erase(pos);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->rend();
 }
 
 template<typename T>
-inline auto vector_a<T>::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+inline auto vector<T>::crend() const -> typename std::vector<T>::const_reverse_iterator
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->erase(first, last);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->crend();
 }
 
 template<typename T>
-inline auto vector_a<T>::push_back(T const & value) -> void
+inline auto vector<T>::empty() const -> bool
 {
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->push_back(value);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->empty();
 }
 
 template<typename T>
-inline auto vector_a<T>::push_back(T && value) -> void
+inline auto vector<T>::size() const -> size_t
 {
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->push_back(value);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->size();
 }
 
 template<typename T>
-inline auto vector_a<T>::pop_back() -> void
+inline auto vector<T>::max_size() const -> size_t
 {
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->pop_back();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->max_size();
 }
 
 template<typename T>
-inline auto vector_a<T>::resize(size_t count) -> void
+inline auto vector<T>::reserve(size_t new_cap) -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->resize(count);
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->reserve(new_cap);
 }
 
 template<typename T>
-inline auto vector_a<T>::resize(size_t count, T const & value) -> void
+inline auto vector<T>::capacity() const -> size_t
 {
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->resize(count, value);
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->capacity();
 }
 
 template<typename T>
-inline auto vector_a<T>::swap(std::vector<T> & other) -> void
+inline auto vector<T>::shrink_to_fit() -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<vector_a<T>::_derived>(strange::_common::_shared)->swap(other);
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->shrink_to_fit();
+}
+
+template<typename T>
+inline auto vector<T>::clear() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->clear();
+}
+
+template<typename T>
+inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
+}
+
+template<typename T>
+inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
+}
+
+template<typename T>
+inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
+}
+
+template<typename T>
+inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
+}
+
+template<typename T>
+inline auto vector<T>::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->erase(pos);
+}
+
+template<typename T>
+inline auto vector<T>::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->erase(first, last);
+}
+
+template<typename T>
+inline auto vector<T>::push_back(T const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->push_back(value);
+}
+
+template<typename T>
+inline auto vector<T>::push_back(T && value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->push_back(value);
+}
+
+template<typename T>
+inline auto vector<T>::pop_back() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->pop_back();
+}
+
+template<typename T>
+inline auto vector<T>::resize(size_t count) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->resize(count);
+}
+
+template<typename T>
+inline auto vector<T>::resize(size_t count, T const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->resize(count, value);
+}
+
+template<typename T>
+inline auto vector<T>::swap(std::vector<T> & other) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->swap(other);
 }
 
 }

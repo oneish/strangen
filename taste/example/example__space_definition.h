@@ -39,6 +39,8 @@ struct numeric
 
 namespace example
 {
+namespace meta
+{
 using strange::definition::space;
 using strange::definition::abstraction;
 using strange::definition::operation;
@@ -179,5 +181,6 @@ auto definition() -> space
             },
         },
     };
+}
 }
 }

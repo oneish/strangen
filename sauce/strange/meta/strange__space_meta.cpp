@@ -6,8 +6,8 @@
 int main()
 {
 std::cout << R"~(#pragma once
-#include "../reflection/strange__reflection.h"
 #include "../common/strange__common.h"
+#include "../reflection/strange__reflection.h"
 #include <string>
 #include <vector>
 )~";

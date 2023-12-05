@@ -1,6 +1,6 @@
 #pragma once
-#include "../../sauce/strange/reflection/strange__reflection.h"
 #include "../../sauce/strange/common/strange__common.h"
+#include "../../sauce/strange/reflection/strange__reflection.h"
 
 #include <memory>
 #include <type_traits>

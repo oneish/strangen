@@ -6,12 +6,12 @@
 int main()
 {
 std::cout << R"~(#pragma once
-#include "../../sauce/strange/reflection/strange__reflection.h"
 #include "../../sauce/strange/common/strange__common.h"
+#include "../../sauce/strange/reflection/strange__reflection.h"
 )~";
 
 // more meta code
-strange::transformation(example::definition(), std::cout).transform();
+strange::transformation(example::meta::definition(), std::cout).transform();
 
 std::cout << R"~()~";
 
