@@ -14,6 +14,7 @@ struct abstraction
     std::vector<parameter> parameters;
     std::string name;
     std::vector<std::string> parents;
+    std::vector<parameter> types;
     std::vector<operation> operations;
     std::string thing;
 };

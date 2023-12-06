@@ -16,6 +16,18 @@ template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct any_;
 
 template<typename T>
+struct iterator;
+
+template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct iterator_;
+
+template<typename T>
+struct input_iterator;
+
+template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct input_iterator_;
+
+template<typename T>
 struct vector;
 
 template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
@@ -41,6 +53,42 @@ struct reflection<strange::any_<_Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::any_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<typename T>
+struct reflection<strange::iterator<T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::iterator<" + reflection<T>::name() + ">";
+    }
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct reflection<strange::iterator_<T, _Thing, _Copy>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<typename T>
+struct reflection<strange::input_iterator<T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::input_iterator<" + reflection<T>::name() + ">";
+    }
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct reflection<strange::input_iterator_<T, _Thing, _Copy>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::input_iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -254,6 +302,410 @@ public:
     }
 
     using _Abstraction_ = any_;
+    using _Thing_ = _Thing;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+};
+
+template<typename T>
+struct iterator : any
+{
+    inline iterator() = default;
+
+    inline iterator(iterator const & other)
+    :strange::_common{other}
+    ,any{}
+    {
+    }
+
+    inline iterator(iterator && other)
+    :strange::_common{std::move(other)}
+    ,any{}
+    {
+    }
+
+    inline auto operator=(iterator const & other) -> iterator &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(iterator && other) -> iterator &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline iterator(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any{}
+    {
+    }
+
+    explicit inline iterator(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any{}
+    {
+    }
+
+protected:
+    struct _derived : any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<iterator::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return any::_derived::_static_shared_to_base(derived);
+        }
+    };
+
+public:
+    using value_type = T;
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<iterator::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> iterator
+    {
+        return iterator{iterator::_derived::_static_shared_to_base(std::make_shared<typename iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = iterator;
+
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct iterator_ : iterator<T>
+{
+    inline iterator_() = default;
+
+    inline iterator_(iterator_ const & other)
+    :strange::_common{other}
+    ,iterator<T>{}
+    {
+    }
+
+    inline iterator_(iterator_ && other)
+    :strange::_common{std::move(other)}
+    ,iterator<T>{}
+    {
+    }
+
+    inline auto operator=(iterator_ const & other) -> iterator_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(iterator_ && other) -> iterator_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline iterator_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,iterator<T>{}
+    {
+    }
+
+    explicit inline iterator_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,iterator<T>{}
+    {
+    }
+
+private:
+    friend struct iterator<T>;
+
+    struct _instance final : iterator<T>::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :iterator_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return iterator_::_derived::_static_shared_to_base(std::make_shared<iterator_::_instance>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return iterator<T>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return iterator<T>::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return iterator_::_name_;
+        }
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> iterator_
+    {
+        return iterator_{iterator_::_derived::_static_shared_to_base(std::make_shared<iterator_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<iterator_::_instance>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = iterator_;
+    using _Thing_ = _Thing;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+};
+
+template<typename T>
+struct input_iterator : iterator<T>
+{
+    inline input_iterator() = default;
+
+    inline input_iterator(input_iterator const & other)
+    :strange::_common{other}
+    ,iterator<T>{}
+    {
+    }
+
+    inline input_iterator(input_iterator && other)
+    :strange::_common{std::move(other)}
+    ,iterator<T>{}
+    {
+    }
+
+    inline auto operator=(input_iterator const & other) -> input_iterator &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(input_iterator && other) -> input_iterator &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline input_iterator(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,iterator<T>{}
+    {
+    }
+
+    explicit inline input_iterator(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,iterator<T>{}
+    {
+    }
+
+protected:
+    struct _derived : iterator<T>::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<input_iterator::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return iterator<T>::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto operator==(input_iterator<T> const & other) -> bool = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<input_iterator::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> input_iterator
+    {
+        return input_iterator{input_iterator::_derived::_static_shared_to_base(std::make_shared<typename input_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = input_iterator;
+
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(iterator<T>::_cats_.cbegin(), iterator<T>::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+
+    inline auto operator==(input_iterator<T> const & other) -> bool;
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct input_iterator_ : input_iterator<T>
+{
+    inline input_iterator_() = default;
+
+    inline input_iterator_(input_iterator_ const & other)
+    :strange::_common{other}
+    ,input_iterator<T>{}
+    {
+    }
+
+    inline input_iterator_(input_iterator_ && other)
+    :strange::_common{std::move(other)}
+    ,input_iterator<T>{}
+    {
+    }
+
+    inline auto operator=(input_iterator_ const & other) -> input_iterator_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(input_iterator_ && other) -> input_iterator_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline input_iterator_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,input_iterator<T>{}
+    {
+    }
+
+    explicit inline input_iterator_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,input_iterator<T>{}
+    {
+    }
+
+private:
+    friend struct input_iterator<T>;
+
+    struct _instance final : input_iterator<T>::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :input_iterator_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return input_iterator_::_derived::_static_shared_to_base(std::make_shared<input_iterator_::_instance>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return input_iterator<T>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return input_iterator<T>::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return input_iterator_::_name_;
+        }
+
+        inline auto operator==(input_iterator<T> const & other) -> bool final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> input_iterator_
+    {
+        return input_iterator_{input_iterator_::_derived::_static_shared_to_base(std::make_shared<input_iterator_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<input_iterator_::_instance>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<input_iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<input_iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = input_iterator_;
     using _Thing_ = _Thing;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
@@ -732,6 +1184,19 @@ public:
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator==(input_iterator<T> const & other) -> bool
+{
+    return _thing.operator==(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing());
+}
+
+template<typename T>
+inline auto input_iterator<T>::operator==(input_iterator<T> const & other) -> bool
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<input_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+}
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> const & other) -> void

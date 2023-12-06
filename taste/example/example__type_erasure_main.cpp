@@ -3,6 +3,7 @@
 #include "example__space_transformation_3.h"
 
 #include <iostream>
+#include <algorithm>
 
 struct implementation
 {
@@ -133,6 +134,10 @@ struct reflection<implementation_template<Datatype>>
 
 int main()
 {
+    auto i1 = strange::iterator<int>{};
+    auto i2 = strange::iterator<int>{};
+    i1._static<strange::iterator<int>>();
+    std::swap(i1, i2);
     for (auto op : strange::reflection<std::vector<int>>::operations())
     {
         std::cout << op << std::endl;

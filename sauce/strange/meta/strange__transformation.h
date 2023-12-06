@@ -189,7 +189,9 @@ protected:
             _out << R"#(    };
 
 public:
-    inline auto _valid() const -> bool
+)#";
+            _abstraction_types(abstraction);
+            _out << R"#(    inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
     }
@@ -657,7 +659,11 @@ public:
     )#";
                     if (inner)
                     {
-                        if (this_or_that_or_void)
+                        if (!operation.customisation.empty())
+                        {
+                            _out << operation.customisation;
+                        }
+                        else if (this_or_that_or_void)
                         {
                             _out << R"#(_thing.)#" << operation.name;
                         }
@@ -689,11 +695,11 @@ public:
                         _abstraction_parameters(abstraction, false, false, false, false);
                         _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
                     }
-                    if ((!inner) || (!operation.data))
+                    if ((!inner) || (operation.customisation.empty() && !operation.data))
                     {
                         _operation_parameters(operation, false, false);
                     }
-                    if ((!inner) && this_or_that)
+                    if (this_or_that && !inner)
                     {
                         if (that)
                         {
@@ -747,5 +753,14 @@ public:
         _out << R"#())#";
     }
 
+    auto _abstraction_types(definition::abstraction const & abstraction) -> void
+    {
+        for (auto const & type : abstraction.types)
+        {
+            _out << R"#(    )#" << type.type << R"#( )#" << type.name << R"#( = )#" << type.argument << R"#(;
+
+)#";
+        }
+    }
 };
 }

@@ -31,6 +31,64 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
+                .name = "iterator",
+                .parents =
+                {
+                    "any",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "value_type",
+                        .argument = "T",
+                    },
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
+                    {
+                        .type = "typename",
+                        .name = "T",
+                    },
+                },
+                .name = "input_iterator",
+                .parents =
+                {
+                    "iterator<T>",
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "input_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .result = "bool",
+                        .customisation = "return _thing.operator==(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing())",
+                    },
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
+                    {
+                        .type = "typename",
+                        .name = "T",
+                    },
+                },
                 .name = "vector",
                 .parents =
                 {

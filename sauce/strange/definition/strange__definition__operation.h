@@ -15,6 +15,7 @@ struct operation
     bool constness = false;
     std::string result;
     bool data = false;
+    std::string customisation;
 };
 
 inline auto operator==(operation const & lhs, operation const & rhs) -> bool
