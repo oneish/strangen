@@ -222,6 +222,30 @@ auto definition() -> space
                         .name = "const_pointer",
                         .argument = "value_type const *",
                     },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator",
+                        .argument = "typename std::vector<T>::iterator",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "const_iterator",
+                        .argument = "typename std::vector<T>::const_iterator",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "reverse_iterator",
+                        .argument = "typename std::vector<T>::reverse_iterator",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "const_reverse_iterator",
+                        .argument = "typename std::vector<T>::const_reverse_iterator",
+                    },
                 },
                 .operations =
                 {
@@ -573,6 +597,29 @@ auto definition() -> space
                             },
                         },
                         .result = "typename std::vector<T>::iterator",
+                    },
+                    operation
+                    {
+                        .name = "insert",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "typename std::vector<T>::const_iterator",
+                                .name = "pos",
+                            },
+                            parameter
+                            {
+                                .type = "input_iterator<T>",
+                                .name = "first",
+                            },
+                            parameter
+                            {
+                                .type = "input_iterator<T>",
+                                .name = "last",
+                            },
+                        },
+                        .result = "void",
                     },
                     operation
                     {

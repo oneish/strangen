@@ -886,6 +886,8 @@ protected:
 
         virtual auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator = 0;
 
+        virtual auto insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void = 0;
+
         virtual auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator = 0;
 
         virtual auto erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator = 0;
@@ -919,6 +921,14 @@ public:
     using pointer = value_type *;
 
     using const_pointer = value_type const *;
+
+    using iterator = typename std::vector<T>::iterator;
+
+    using const_iterator = typename std::vector<T>::const_iterator;
+
+    using reverse_iterator = typename std::vector<T>::reverse_iterator;
+
+    using const_reverse_iterator = typename std::vector<T>::const_reverse_iterator;
 
     inline auto _valid() const -> bool
     {
@@ -1019,6 +1029,8 @@ public:
     inline auto insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator;
 
     inline auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator;
+
+    inline auto insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void;
 
     inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator;
 
@@ -1204,6 +1216,8 @@ private:
         inline auto insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator final;
 
         inline auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator final;
+
+        inline auto insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void final;
 
         inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator final;
 
@@ -1589,6 +1603,12 @@ inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>
 }
 
 template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void
+{
+    _thing.insert(pos, first, last);
+}
+
+template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
 {
     return _thing.insert(pos, ilist);
@@ -1892,6 +1912,13 @@ inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, size_
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
+}
+
+template<typename T>
+inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);
 }
 
 template<typename T>
