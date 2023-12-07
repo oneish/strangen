@@ -599,6 +599,8 @@ protected:
         }
 
         virtual auto operator==(input_iterator<T> const & other) -> bool = 0;
+
+        virtual auto operator!=(input_iterator<T> const & other) -> bool = 0;
     };
 
 public:
@@ -629,6 +631,8 @@ public:
 
 
     inline auto operator==(input_iterator<T> const & other) -> bool;
+
+    inline auto operator!=(input_iterator<T> const & other) -> bool;
 };
 
 template<typename T, typename _Thing, bool _Copy>
@@ -723,6 +727,8 @@ private:
 
         inline auto operator==(input_iterator<T> const & other) -> bool final;
 
+        inline auto operator!=(input_iterator<T> const & other) -> bool final;
+
         _Thing _thing;
     };
 
@@ -812,6 +818,8 @@ protected:
 
         virtual auto assign(size_t count, T const & value) -> void = 0;
 
+        virtual auto assign(input_iterator<T> first, input_iterator<T> last) -> void = 0;
+
         virtual auto assign(std::initializer_list<T> ilist) -> void = 0;
 
         virtual auto at(size_t pos) -> T & = 0;
@@ -898,6 +906,20 @@ protected:
     };
 
 public:
+    using value_type = T;
+
+    using size_type = std::size_t;
+
+    using difference_type = std::ptrdiff_t;
+
+    using reference = value_type &;
+
+    using const_reference = value_type const &;
+
+    using pointer = value_type *;
+
+    using const_pointer = value_type const *;
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<vector::_derived>(strange::_common::_shared).operator bool();
@@ -929,6 +951,8 @@ public:
     inline auto operator=(std::initializer_list<T> ilist) -> vector &;
 
     inline auto assign(size_t count, T const & value) -> void;
+
+    inline auto assign(input_iterator<T> first, input_iterator<T> last) -> void;
 
     inline auto assign(std::initializer_list<T> ilist) -> void;
 
@@ -1112,6 +1136,8 @@ private:
         inline auto operator=(std::initializer_list<T> ilist) -> void final;
 
         inline auto assign(size_t count, T const & value) -> void final;
+
+        inline auto assign(input_iterator<T> first, input_iterator<T> last) -> void final;
 
         inline auto assign(std::initializer_list<T> ilist) -> void final;
 
@@ -1314,11 +1340,24 @@ inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator==(input_itera
     return _thing.operator==(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing());
 }
 
+template<typename T, typename _Thing, bool _Copy>
+inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator!=(input_iterator<T> const & other) -> bool
+{
+    return _thing.operator!=(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing());
+}
+
 template<typename T>
 inline auto input_iterator<T>::operator==(input_iterator<T> const & other) -> bool
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<input_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+}
+
+template<typename T>
+inline auto input_iterator<T>::operator!=(input_iterator<T> const & other) -> bool
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<input_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -1343,6 +1382,12 @@ template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::assign(size_t count, T const & value) -> void
 {
     _thing.assign(count, value);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(input_iterator<T> first, input_iterator<T> last) -> void
+{
+    _thing.assign(first, last);
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -1626,6 +1671,13 @@ inline auto vector<T>::assign(size_t count, T const & value) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->assign(count, value);
+}
+
+template<typename T>
+inline auto vector<T>::assign(input_iterator<T> first, input_iterator<T> last) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->assign(first, last);
 }
 
 template<typename T>

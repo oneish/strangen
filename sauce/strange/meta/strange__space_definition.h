@@ -147,6 +147,20 @@ auto definition() -> space
                         .result = "bool",
                         .customisation = "return _thing.operator==(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing())",
                     },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "input_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .result = "bool",
+                        .customisation = "return _thing.operator!=(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing())",
+                    },
                 },
             },
             abstraction
@@ -163,6 +177,51 @@ auto definition() -> space
                 .parents =
                 {
                     "any",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "value_type",
+                        .argument = "T",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "size_type",
+                        .argument = "std::size_t",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "difference_type",
+                        .argument = "std::ptrdiff_t",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "reference",
+                        .argument = "value_type &",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "const_reference",
+                        .argument = "value_type const &",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "pointer",
+                        .argument = "value_type *",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "const_pointer",
+                        .argument = "value_type const *",
+                    },
                 },
                 .operations =
                 {
@@ -219,6 +278,24 @@ auto definition() -> space
                             {
                                 .type = "T const &",
                                 .name = "value",
+                            },
+                        },
+                        .result = "void",
+                    },
+                    operation
+                    {
+                        .name = "assign",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "input_iterator<T>",
+                                .name = "first",
+                            },
+                            parameter
+                            {
+                                .type = "input_iterator<T>",
+                                .name = "last",
                             },
                         },
                         .result = "void",
