@@ -44,6 +44,67 @@ auto definition() -> space
                         .name = "value_type",
                         .argument = "T",
                     },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "difference_type",
+                        .argument = "std::ptrdiff_t",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "reference",
+                        .argument = "value_type &",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "pointer",
+                        .argument = "value_type *",
+                    },
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "operator*",
+                        .result = "T &",
+                    },
+                    operation
+                    {
+                        .name = "operator*",
+                        .constness = true,
+                        .result = "T const &",
+                    },
+                    operation
+                    {
+                        .name = "operator->",
+                        .result = "T *",
+                    },
+                    operation
+                    {
+                        .name = "operator->",
+                        .constness = true,
+                        .result = "T const *",
+                    },
+                    operation
+                    {
+                        .name = "operator++",
+                        .result = "*this",
+                    },
+                    operation
+                    {
+                        .name = "operator++",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "int",
+                                .name = "i",
+                            },
+                        },
+                        .result = "*that",
+                    },
                 },
             },
             abstraction
@@ -60,6 +121,15 @@ auto definition() -> space
                 .parents =
                 {
                     "iterator<T>",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator_category",
+                        .argument = "std::input_iterator_tag",
+                    },
                 },
                 .operations =
                 {

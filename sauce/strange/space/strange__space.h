@@ -355,10 +355,28 @@ protected:
         {
             return any::_derived::_static_shared_to_base(derived);
         }
+
+        virtual auto operator*() -> T & = 0;
+
+        virtual auto operator*() const -> T const & = 0;
+
+        virtual auto operator->() -> T * = 0;
+
+        virtual auto operator->() const -> T const * = 0;
+
+        virtual auto operator++() -> void = 0;
+
+        virtual auto operator++(int i) -> void = 0;
     };
 
 public:
     using value_type = T;
+
+    using difference_type = std::ptrdiff_t;
+
+    using reference = value_type &;
+
+    using pointer = value_type *;
 
     inline auto _valid() const -> bool
     {
@@ -383,6 +401,18 @@ public:
         return cats;
     }();
 
+
+    inline auto operator*() -> T &;
+
+    inline auto operator*() const -> T const &;
+
+    inline auto operator->() -> T *;
+
+    inline auto operator->() const -> T const *;
+
+    inline auto operator++() -> iterator &;
+
+    inline auto operator++(int i) -> iterator;
 };
 
 template<typename T, typename _Thing, bool _Copy>
@@ -475,6 +505,18 @@ private:
             return iterator_::_name_;
         }
 
+        inline auto operator*() -> T & final;
+
+        inline auto operator*() const -> T const & final;
+
+        inline auto operator->() -> T * final;
+
+        inline auto operator->() const -> T const * final;
+
+        inline auto operator++() -> void final;
+
+        inline auto operator++(int i) -> void final;
+
         _Thing _thing;
     };
 
@@ -560,6 +602,8 @@ protected:
     };
 
 public:
+    using iterator_category = std::input_iterator_tag;
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<input_iterator::_derived>(strange::_common::_shared).operator bool();
@@ -1184,6 +1228,85 @@ public:
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto iterator_<T, _Thing, _Copy>::_instance::operator*() -> T &
+{
+    return _thing.operator*();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
+{
+    return _thing.operator*();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
+{
+    return _thing.operator->();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
+{
+    return _thing.operator->();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
+{
+    _thing.operator++();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
+{
+    _thing.operator++(i);
+}
+
+template<typename T>
+inline auto iterator<T>::operator*() -> T &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<iterator<T>::_derived>(strange::_common::_shared)->operator*();
+}
+
+template<typename T>
+inline auto iterator<T>::operator*() const -> T const &
+{
+    return std::dynamic_pointer_cast<iterator<T>::_derived>(strange::_common::_shared)->operator*();
+}
+
+template<typename T>
+inline auto iterator<T>::operator->() -> T *
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<iterator<T>::_derived>(strange::_common::_shared)->operator->();
+}
+
+template<typename T>
+inline auto iterator<T>::operator->() const -> T const *
+{
+    return std::dynamic_pointer_cast<iterator<T>::_derived>(strange::_common::_shared)->operator->();
+}
+
+template<typename T>
+inline auto iterator<T>::operator++() -> iterator &
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<iterator<T>::_derived>(strange::_common::_shared)->operator++();
+    return *this;
+}
+
+template<typename T>
+inline auto iterator<T>::operator++(int i) -> iterator
+{
+    auto _result = *this;
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<iterator<T>::_derived>(strange::_common::_shared)->operator++(i);
+    return _result;
+}
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator==(input_iterator<T> const & other) -> bool
