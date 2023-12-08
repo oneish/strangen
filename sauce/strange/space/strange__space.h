@@ -875,6 +875,8 @@ protected:
         virtual auto operator-(std::ptrdiff_t n) const -> random_access_iterator<T> = 0;
 
         virtual auto operator-(random_access_iterator<T> other) const -> std::ptrdiff_t = 0;
+
+        virtual auto operator[](std::ptrdiff_t n) const -> T & = 0;
     };
 
 public:
@@ -915,6 +917,8 @@ public:
     inline auto operator-(std::ptrdiff_t n) const -> random_access_iterator<T>;
 
     inline auto operator-(random_access_iterator<T> other) const -> std::ptrdiff_t;
+
+    inline auto operator[](std::ptrdiff_t n) const -> T &;
 };
 
 template<typename T, typename _Thing, bool _Copy>
@@ -1020,6 +1024,8 @@ private:
         inline auto operator-(std::ptrdiff_t n) const -> random_access_iterator<T> final;
 
         inline auto operator-(random_access_iterator<T> other) const -> std::ptrdiff_t final;
+
+        inline auto operator[](std::ptrdiff_t n) const -> T & final;
 
         _Thing _thing;
     };
@@ -1759,6 +1765,12 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(rand
     return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing();
 }
 
+template<typename T, typename _Thing, bool _Copy>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator[](std::ptrdiff_t n) const -> T &
+{
+    return _thing.operator[](n);
+}
+
 template<typename T>
 inline auto random_access_iterator<T>::operator==(random_access_iterator<T> const & other) const -> bool
 {
@@ -1803,6 +1815,12 @@ template<typename T>
 inline auto random_access_iterator<T>::operator-(random_access_iterator<T> other) const -> std::ptrdiff_t
 {
     return std::dynamic_pointer_cast<random_access_iterator<T>::_derived>(strange::_common::_shared)->operator-(other);
+}
+
+template<typename T>
+inline auto random_access_iterator<T>::operator[](std::ptrdiff_t n) const -> T &
+{
+    return std::dynamic_pointer_cast<random_access_iterator<T>::_derived>(strange::_common::_shared)->operator[](n);
 }
 
 template<typename T, typename _Thing, bool _Copy>

@@ -346,6 +346,20 @@ auto definition() -> space
                         .result = "std::ptrdiff_t",
                         .customisation = "return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
                     },
+                    operation
+                    {
+                        .name = "operator[]",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .constness = true,
+                        .result = "T &",
+                    },
                 },
             },
             abstraction
