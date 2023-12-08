@@ -134,9 +134,9 @@ struct reflection<implementation_template<Datatype>>
 
 int main()
 {
-    auto i1 = strange::iterator<int>{};
-    auto i2 = strange::iterator<int>{};
-    i1._static<strange::iterator<int>>();
+    auto i1 = strange::forward_iterator<int>{};
+    auto i2 = strange::forward_iterator<int>{};
+    i1._static<strange::forward_iterator<int>>();
     std::swap(i1, i2);
     for (auto op : strange::reflection<std::vector<int>>::operations())
     {

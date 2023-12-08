@@ -31,7 +31,7 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
-                .name = "iterator",
+                .name = "forward_iterator",
                 .parents =
                 {
                     "any",
@@ -61,6 +61,12 @@ auto definition() -> space
                         .type = "using",
                         .name = "pointer",
                         .argument = "value_type *",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator_category",
+                        .argument = "std::forward_iterator_tag",
                     },
                 },
                 .operations =
@@ -105,34 +111,6 @@ auto definition() -> space
                         },
                         .result = "*that",
                     },
-                },
-            },
-            abstraction
-            {
-                .parameters =
-                {
-                    parameter
-                    {
-                        .type = "typename",
-                        .name = "T",
-                    },
-                },
-                .name = "forward_iterator",
-                .parents =
-                {
-                    "iterator<T>",
-                },
-                .types =
-                {
-                    parameter
-                    {
-                        .type = "using",
-                        .name = "iterator_category",
-                        .argument = "std::forward_iterator_tag",
-                    },
-                },
-                .operations =
-                {
                     operation
                     {
                         .name = "operator==",
