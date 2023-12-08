@@ -600,9 +600,9 @@ protected:
             return iterator<T>::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto operator==(input_iterator<T> const & other) -> bool = 0;
+        virtual auto operator==(input_iterator<T> const & other) const -> bool = 0;
 
-        virtual auto operator!=(input_iterator<T> const & other) -> bool = 0;
+        virtual auto operator!=(input_iterator<T> const & other) const -> bool = 0;
     };
 
 public:
@@ -630,9 +630,9 @@ public:
     }();
 
 
-    inline auto operator==(input_iterator<T> const & other) -> bool;
+    inline auto operator==(input_iterator<T> const & other) const -> bool;
 
-    inline auto operator!=(input_iterator<T> const & other) -> bool;
+    inline auto operator!=(input_iterator<T> const & other) const -> bool;
 };
 
 template<typename T, typename _Thing, bool _Copy>
@@ -725,9 +725,9 @@ private:
             return input_iterator_::_name_;
         }
 
-        inline auto operator==(input_iterator<T> const & other) -> bool final;
+        inline auto operator==(input_iterator<T> const & other) const -> bool final;
 
-        inline auto operator!=(input_iterator<T> const & other) -> bool final;
+        inline auto operator!=(input_iterator<T> const & other) const -> bool final;
 
         _Thing _thing;
     };
@@ -1349,28 +1349,27 @@ inline auto iterator<T>::operator++(int i) -> iterator
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator==(input_iterator<T> const & other) -> bool
+inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator==(input_iterator<T> const & other) const -> bool
 {
-    return _thing.operator==(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing());
+    auto ot = other.template _static<input_iterator_<T, _Thing, _Copy>>();
+    return ot._valid() && _thing == ot._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator!=(input_iterator<T> const & other) -> bool
+inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator!=(input_iterator<T> const & other) const -> bool
 {
-    return _thing.operator!=(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing());
+    return !operator==(other);
 }
 
 template<typename T>
-inline auto input_iterator<T>::operator==(input_iterator<T> const & other) -> bool
+inline auto input_iterator<T>::operator==(input_iterator<T> const & other) const -> bool
 {
-    strange::_common::_mutate();
     return std::dynamic_pointer_cast<input_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
-inline auto input_iterator<T>::operator!=(input_iterator<T> const & other) -> bool
+inline auto input_iterator<T>::operator!=(input_iterator<T> const & other) const -> bool
 {
-    strange::_common::_mutate();
     return std::dynamic_pointer_cast<input_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
 }
 

@@ -144,8 +144,10 @@ auto definition() -> space
                                 .name = "other",
                             },
                         },
+                        .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing.operator==(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing())",
+                        .customisation = R"#(auto ot = other.template _static<input_iterator_<T, _Thing, _Copy>>();
+    return ot._valid() && _thing == ot._thing())#",
                     },
                     operation
                     {
@@ -158,8 +160,9 @@ auto definition() -> space
                                 .name = "other",
                             },
                         },
+                        .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing.operator!=(other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing())",
+                        .customisation = "return !operator==(other)",
                     },
                 },
             },
