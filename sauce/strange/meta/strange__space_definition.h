@@ -277,6 +277,66 @@ auto definition() -> space
                     },
                     operation
                     {
+                        .name = "operator<",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator<=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
                         .name = "operator+=",
                         .parameters =
                         {
