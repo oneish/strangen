@@ -199,6 +199,86 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
+                .name = "random_access_iterator",
+                .parents =
+                {
+                    "bidirectional_iterator<T>",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator_category",
+                        .argument = "std::random_access_iterator_tag",
+                    },
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "operator+=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .result = "*this",
+                    },
+                    operation
+                    {
+                        .name = "operator-=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .result = "*this",
+                    },
+                    operation
+                    {
+                        .name = "operator+",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .result = "*that",
+                    },
+                    operation
+                    {
+                        .name = "operator-",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .result = "*that",
+                    },
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
+                    {
+                        .type = "typename",
+                        .name = "T",
+                    },
+                },
                 .name = "vector",
                 .parents =
                 {

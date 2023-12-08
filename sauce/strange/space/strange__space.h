@@ -28,6 +28,12 @@ template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<
 struct bidirectional_iterator_;
 
 template<typename T>
+struct random_access_iterator;
+
+template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct random_access_iterator_;
+
+template<typename T>
 struct vector;
 
 template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
@@ -89,6 +95,24 @@ struct reflection<strange::bidirectional_iterator_<T, _Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::bidirectional_iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<typename T>
+struct reflection<strange::random_access_iterator<T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::random_access_iterator<" + reflection<T>::name() + ">";
+    }
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct reflection<strange::random_access_iterator_<T, _Thing, _Copy>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::random_access_iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -776,6 +800,230 @@ public:
 };
 
 template<typename T>
+struct random_access_iterator : bidirectional_iterator<T>
+{
+    inline random_access_iterator() = default;
+
+    inline random_access_iterator(random_access_iterator const & other)
+    :strange::_common{other}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+    inline random_access_iterator(random_access_iterator && other)
+    :strange::_common{std::move(other)}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+    inline auto operator=(random_access_iterator const & other) -> random_access_iterator &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(random_access_iterator && other) -> random_access_iterator &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline random_access_iterator(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+    explicit inline random_access_iterator(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+    using iterator_category = std::random_access_iterator_tag;
+
+protected:
+    struct _derived : bidirectional_iterator<T>::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<random_access_iterator::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return bidirectional_iterator<T>::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto operator+=(std::ptrdiff_t n) -> void = 0;
+
+        virtual auto operator-=(std::ptrdiff_t n) -> void = 0;
+
+        virtual auto operator+(std::ptrdiff_t n) -> void = 0;
+
+        virtual auto operator-(std::ptrdiff_t n) -> void = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<random_access_iterator::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> random_access_iterator
+    {
+        return random_access_iterator{random_access_iterator::_derived::_static_shared_to_base(std::make_shared<typename random_access_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = random_access_iterator;
+
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(bidirectional_iterator<T>::_cats_.cbegin(), bidirectional_iterator<T>::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+
+    inline auto operator+=(std::ptrdiff_t n) -> random_access_iterator &;
+
+    inline auto operator-=(std::ptrdiff_t n) -> random_access_iterator &;
+
+    inline auto operator+(std::ptrdiff_t n) -> random_access_iterator;
+
+    inline auto operator-(std::ptrdiff_t n) -> random_access_iterator;
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct random_access_iterator_ : random_access_iterator<T>
+{
+    inline random_access_iterator_() = default;
+
+    inline random_access_iterator_(random_access_iterator_ const & other)
+    :strange::_common{other}
+    ,random_access_iterator<T>{}
+    {
+    }
+
+    inline random_access_iterator_(random_access_iterator_ && other)
+    :strange::_common{std::move(other)}
+    ,random_access_iterator<T>{}
+    {
+    }
+
+    inline auto operator=(random_access_iterator_ const & other) -> random_access_iterator_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(random_access_iterator_ && other) -> random_access_iterator_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline random_access_iterator_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,random_access_iterator<T>{}
+    {
+    }
+
+    explicit inline random_access_iterator_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,random_access_iterator<T>{}
+    {
+    }
+
+private:
+    friend struct random_access_iterator<T>;
+
+    struct _instance final : random_access_iterator<T>::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :random_access_iterator_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return random_access_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_iterator_::_instance>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return random_access_iterator<T>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return random_access_iterator<T>::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return random_access_iterator_::_name_;
+        }
+
+        inline auto operator+=(std::ptrdiff_t n) -> void final;
+
+        inline auto operator-=(std::ptrdiff_t n) -> void final;
+
+        inline auto operator+(std::ptrdiff_t n) -> void final;
+
+        inline auto operator-(std::ptrdiff_t n) -> void final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> random_access_iterator_
+    {
+        return random_access_iterator_{random_access_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_iterator_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<random_access_iterator_::_instance>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<random_access_iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<random_access_iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = random_access_iterator_;
+    using _Thing_ = _Thing;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+};
+
+template<typename T>
 struct vector : any
 {
     inline vector() = default;
@@ -1412,6 +1660,64 @@ inline auto bidirectional_iterator<T>::operator--(int i) -> bidirectional_iterat
     auto _result = *this;
     strange::_common::_mutate();
     std::dynamic_pointer_cast<bidirectional_iterator<T>::_derived>(strange::_common::_shared)->operator--(i);
+    return _result;
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+=(std::ptrdiff_t n) -> void
+{
+    _thing.operator+=(n);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-=(std::ptrdiff_t n) -> void
+{
+    _thing.operator-=(n);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+(std::ptrdiff_t n) -> void
+{
+    _thing.operator+(n);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(std::ptrdiff_t n) -> void
+{
+    _thing.operator-(n);
+}
+
+template<typename T>
+inline auto random_access_iterator<T>::operator+=(std::ptrdiff_t n) -> random_access_iterator &
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<random_access_iterator<T>::_derived>(strange::_common::_shared)->operator+=(n);
+    return *this;
+}
+
+template<typename T>
+inline auto random_access_iterator<T>::operator-=(std::ptrdiff_t n) -> random_access_iterator &
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<random_access_iterator<T>::_derived>(strange::_common::_shared)->operator-=(n);
+    return *this;
+}
+
+template<typename T>
+inline auto random_access_iterator<T>::operator+(std::ptrdiff_t n) -> random_access_iterator
+{
+    auto _result = *this;
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<random_access_iterator<T>::_derived>(strange::_common::_shared)->operator+(n);
+    return _result;
+}
+
+template<typename T>
+inline auto random_access_iterator<T>::operator-(std::ptrdiff_t n) -> random_access_iterator
+{
+    auto _result = *this;
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<random_access_iterator<T>::_derived>(strange::_common::_shared)->operator-(n);
     return _result;
 }
 
