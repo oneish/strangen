@@ -1,11 +1,11 @@
 #pragma once
 #include "../common/strange__common.h"
 #include "../reflection/strange__reflection.h"
-#include <string>
 #include <vector>
-
 #include <memory>
+#include <string>
 #include <type_traits>
+#include <unordered_set>
 
 namespace strange
 {
@@ -348,6 +348,14 @@ struct iterator : any
     {
     }
 
+    using value_type = T;
+
+    using difference_type = std::ptrdiff_t;
+
+    using reference = value_type &;
+
+    using pointer = value_type *;
+
 protected:
     struct _derived : any::_derived
     {
@@ -370,14 +378,6 @@ protected:
     };
 
 public:
-    using value_type = T;
-
-    using difference_type = std::ptrdiff_t;
-
-    using reference = value_type &;
-
-    using pointer = value_type *;
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<iterator::_derived>(strange::_common::_shared).operator bool();
@@ -590,6 +590,8 @@ struct input_iterator : iterator<T>
     {
     }
 
+    using iterator_category = std::input_iterator_tag;
+
 protected:
     struct _derived : iterator<T>::_derived
     {
@@ -604,8 +606,6 @@ protected:
     };
 
 public:
-    using iterator_category = std::input_iterator_tag;
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<input_iterator::_derived>(strange::_common::_shared).operator bool();
@@ -802,6 +802,28 @@ struct vector : any
     {
     }
 
+    using value_type = T;
+
+    using size_type = std::size_t;
+
+    using difference_type = std::ptrdiff_t;
+
+    using reference = value_type &;
+
+    using const_reference = value_type const &;
+
+    using pointer = value_type *;
+
+    using const_pointer = value_type const *;
+
+    using iterator = typename std::vector<T>::iterator;
+
+    using const_iterator = typename std::vector<T>::const_iterator;
+
+    using reverse_iterator = typename std::vector<T>::reverse_iterator;
+
+    using const_reverse_iterator = typename std::vector<T>::const_reverse_iterator;
+
 protected:
     struct _derived : any::_derived
     {
@@ -908,28 +930,6 @@ protected:
     };
 
 public:
-    using value_type = T;
-
-    using size_type = std::size_t;
-
-    using difference_type = std::ptrdiff_t;
-
-    using reference = value_type &;
-
-    using const_reference = value_type const &;
-
-    using pointer = value_type *;
-
-    using const_pointer = value_type const *;
-
-    using iterator = typename std::vector<T>::iterator;
-
-    using const_iterator = typename std::vector<T>::const_iterator;
-
-    using reverse_iterator = typename std::vector<T>::reverse_iterator;
-
-    using const_reverse_iterator = typename std::vector<T>::const_reverse_iterator;
-
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<vector::_derived>(strange::_common::_shared).operator bool();

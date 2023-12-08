@@ -1,9 +1,10 @@
 #pragma once
 #include "../../sauce/strange/common/strange__common.h"
 #include "../../sauce/strange/reflection/strange__reflection.h"
-
 #include <memory>
+#include <string>
 #include <type_traits>
+#include <unordered_set>
 
 namespace example
 {

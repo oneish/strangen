@@ -1,5 +1,4 @@
 #pragma once
-#include "../strange.h"
 #include "../definition/strange__definition__space.h"
 #include <ostream>
 #include <algorithm>
@@ -22,9 +21,10 @@ public:
 
     auto transform() -> void
     {
-        _out << R"#(
-#include <memory>
+        _out << R"#(#include <memory>
+#include <string>
 #include <type_traits>
+#include <unordered_set>
 )#";
         _namespace();
     }
@@ -160,7 +160,9 @@ namespace )#" << _space.name << R"#(
             _out << R"#(    {
     }
 
-protected:
+)#";
+            _abstraction_types(abstraction);
+            _out << R"#(protected:
     struct _derived : )#";
             _abstraction_parents(abstraction, true);
             _out << R"#(
@@ -189,9 +191,7 @@ protected:
             _out << R"#(    };
 
 public:
-)#";
-            _abstraction_types(abstraction);
-            _out << R"#(    inline auto _valid() const -> bool
+    inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
     }
