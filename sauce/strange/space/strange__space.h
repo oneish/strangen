@@ -22,6 +22,12 @@ template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<
 struct forward_iterator_;
 
 template<typename T>
+struct bidirectional_iterator;
+
+template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct bidirectional_iterator_;
+
+template<typename T>
 struct vector;
 
 template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
@@ -65,6 +71,24 @@ struct reflection<strange::forward_iterator_<T, _Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::forward_iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<typename T>
+struct reflection<strange::bidirectional_iterator<T>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::bidirectional_iterator<" + reflection<T>::name() + ">";
+    }
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct reflection<strange::bidirectional_iterator_<T, _Thing, _Copy>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::bidirectional_iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -534,6 +558,218 @@ public:
     }
 
     using _Abstraction_ = forward_iterator_;
+    using _Thing_ = _Thing;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+};
+
+template<typename T>
+struct bidirectional_iterator : forward_iterator<T>
+{
+    inline bidirectional_iterator() = default;
+
+    inline bidirectional_iterator(bidirectional_iterator const & other)
+    :strange::_common{other}
+    ,forward_iterator<T>{}
+    {
+    }
+
+    inline bidirectional_iterator(bidirectional_iterator && other)
+    :strange::_common{std::move(other)}
+    ,forward_iterator<T>{}
+    {
+    }
+
+    inline auto operator=(bidirectional_iterator const & other) -> bidirectional_iterator &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(bidirectional_iterator && other) -> bidirectional_iterator &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline bidirectional_iterator(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,forward_iterator<T>{}
+    {
+    }
+
+    explicit inline bidirectional_iterator(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,forward_iterator<T>{}
+    {
+    }
+
+    using iterator_category = std::bidirectional_iterator_tag;
+
+protected:
+    struct _derived : forward_iterator<T>::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<bidirectional_iterator::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return forward_iterator<T>::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto operator--() -> void = 0;
+
+        virtual auto operator--(int i) -> void = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<bidirectional_iterator::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> bidirectional_iterator
+    {
+        return bidirectional_iterator{bidirectional_iterator::_derived::_static_shared_to_base(std::make_shared<typename bidirectional_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = bidirectional_iterator;
+
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(forward_iterator<T>::_cats_.cbegin(), forward_iterator<T>::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+
+    inline auto operator--() -> bidirectional_iterator &;
+
+    inline auto operator--(int i) -> bidirectional_iterator;
+};
+
+template<typename T, typename _Thing, bool _Copy>
+struct bidirectional_iterator_ : bidirectional_iterator<T>
+{
+    inline bidirectional_iterator_() = default;
+
+    inline bidirectional_iterator_(bidirectional_iterator_ const & other)
+    :strange::_common{other}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+    inline bidirectional_iterator_(bidirectional_iterator_ && other)
+    :strange::_common{std::move(other)}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+    inline auto operator=(bidirectional_iterator_ const & other) -> bidirectional_iterator_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(bidirectional_iterator_ && other) -> bidirectional_iterator_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline bidirectional_iterator_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+    explicit inline bidirectional_iterator_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,bidirectional_iterator<T>{}
+    {
+    }
+
+private:
+    friend struct bidirectional_iterator<T>;
+
+    struct _instance final : bidirectional_iterator<T>::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :bidirectional_iterator_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return bidirectional_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_iterator_::_instance>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return bidirectional_iterator<T>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return bidirectional_iterator<T>::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return bidirectional_iterator_::_name_;
+        }
+
+        inline auto operator--() -> void final;
+
+        inline auto operator--(int i) -> void final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> bidirectional_iterator_
+    {
+        return bidirectional_iterator_{bidirectional_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_iterator_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<bidirectional_iterator_::_instance>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<bidirectional_iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<bidirectional_iterator_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = bidirectional_iterator_;
     using _Thing_ = _Thing;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
@@ -1148,6 +1384,35 @@ template<typename T>
 inline auto forward_iterator<T>::operator!=(forward_iterator<T> const & other) const -> bool
 {
     return std::dynamic_pointer_cast<forward_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
+{
+    _thing.operator--();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
+{
+    _thing.operator--(i);
+}
+
+template<typename T>
+inline auto bidirectional_iterator<T>::operator--() -> bidirectional_iterator &
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<bidirectional_iterator<T>::_derived>(strange::_common::_shared)->operator--();
+    return *this;
+}
+
+template<typename T>
+inline auto bidirectional_iterator<T>::operator--(int i) -> bidirectional_iterator
+{
+    auto _result = *this;
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<bidirectional_iterator<T>::_derived>(strange::_common::_shared)->operator--(i);
+    return _result;
 }
 
 template<typename T, typename _Thing, bool _Copy>

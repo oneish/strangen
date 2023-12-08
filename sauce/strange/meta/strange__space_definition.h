@@ -153,6 +153,52 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
+                .name = "bidirectional_iterator",
+                .parents =
+                {
+                    "forward_iterator<T>",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator_category",
+                        .argument = "std::bidirectional_iterator_tag",
+                    },
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "operator--",
+                        .result = "*this",
+                    },
+                    operation
+                    {
+                        .name = "operator--",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "int",
+                                .name = "i",
+                            },
+                        },
+                        .result = "*that",
+                    },
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
+                    {
+                        .type = "typename",
+                        .name = "T",
+                    },
+                },
                 .name = "vector",
                 .parents =
                 {
