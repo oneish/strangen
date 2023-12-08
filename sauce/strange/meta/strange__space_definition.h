@@ -146,8 +146,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = R"#(auto ot = other.template _static<input_iterator_<T, _Thing, _Copy>>();
-    return ot._valid() && _thing == ot._thing())#",
+                        .customisation = "return _thing == other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing()",
                     },
                     operation
                     {

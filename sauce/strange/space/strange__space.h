@@ -1351,8 +1351,7 @@ inline auto iterator<T>::operator++(int i) -> iterator
 template<typename T, typename _Thing, bool _Copy>
 inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator==(input_iterator<T> const & other) const -> bool
 {
-    auto ot = other.template _static<input_iterator_<T, _Thing, _Copy>>();
-    return ot._valid() && _thing == ot._thing();
+    return _thing == other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
