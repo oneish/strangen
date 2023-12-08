@@ -432,6 +432,169 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
+                .name = "contiguous_iterator",
+                .parents =
+                {
+                    "random_access_iterator<T>",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "// (not in C++17) using", // in C++20
+                        .name = "iterator_category",
+                        .argument = "std::contiguous_iterator_tag",
+                    },
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "contiguous_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing == other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "contiguous_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                    operation
+                    {
+                        .name = "operator<",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "contiguous_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing < other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "contiguous_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing > other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator<=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "contiguous_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing <= other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "contiguous_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing >= other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator+",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .constness = true,
+                        .result = "contiguous_iterator<T>",
+                        .customisation = "return contiguous_iterator<T>::template _make<_Thing, _Copy>(_thing + n)",
+                    },
+                    operation
+                    {
+                        .name = "operator-",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .constness = true,
+                        .result = "contiguous_iterator<T>",
+                        .customisation = "return contiguous_iterator<T>::template _make<_Thing, _Copy>(_thing - n)",
+                    },
+                    operation
+                    {
+                        .name = "operator-",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "contiguous_iterator<T>",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "std::ptrdiff_t",
+                        .customisation = "return _thing - other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
+                    {
+                        .type = "typename",
+                        .name = "T",
+                    },
+                },
                 .name = "vector",
                 .parents =
                 {
