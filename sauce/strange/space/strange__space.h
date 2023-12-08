@@ -22,10 +22,10 @@ template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<
 struct iterator_;
 
 template<typename T>
-struct input_iterator;
+struct forward_iterator;
 
 template<typename T, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
-struct input_iterator_;
+struct forward_iterator_;
 
 template<typename T>
 struct vector;
@@ -75,20 +75,20 @@ struct reflection<strange::iterator_<T, _Thing, _Copy>>
 };
 
 template<typename T>
-struct reflection<strange::input_iterator<T>>
+struct reflection<strange::forward_iterator<T>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::input_iterator<" + reflection<T>::name() + ">";
+        return "strange::forward_iterator<" + reflection<T>::name() + ">";
     }
 };
 
 template<typename T, typename _Thing, bool _Copy>
-struct reflection<strange::input_iterator_<T, _Thing, _Copy>>
+struct reflection<strange::forward_iterator_<T, _Thing, _Copy>>
 {
     inline static auto name() -> std::string
     {
-        return "strange::input_iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+        return "strange::forward_iterator_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -550,74 +550,74 @@ public:
 };
 
 template<typename T>
-struct input_iterator : iterator<T>
+struct forward_iterator : iterator<T>
 {
-    inline input_iterator() = default;
+    inline forward_iterator() = default;
 
-    inline input_iterator(input_iterator const & other)
+    inline forward_iterator(forward_iterator const & other)
     :strange::_common{other}
     ,iterator<T>{}
     {
     }
 
-    inline input_iterator(input_iterator && other)
+    inline forward_iterator(forward_iterator && other)
     :strange::_common{std::move(other)}
     ,iterator<T>{}
     {
     }
 
-    inline auto operator=(input_iterator const & other) -> input_iterator &
+    inline auto operator=(forward_iterator const & other) -> forward_iterator &
     {
         strange::_common::operator=(other);
         return *this;
     }
 
-    inline auto operator=(input_iterator && other) -> input_iterator &
+    inline auto operator=(forward_iterator && other) -> forward_iterator &
     {
         strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline input_iterator(std::shared_ptr<strange::_common::_base> const & shared)
+    explicit inline forward_iterator(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
     ,iterator<T>{}
     {
     }
 
-    explicit inline input_iterator(std::shared_ptr<strange::_common::_base> && shared)
+    explicit inline forward_iterator(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
     ,iterator<T>{}
     {
     }
 
-    using iterator_category = std::input_iterator_tag;
+    using iterator_category = std::forward_iterator_tag;
 
 protected:
     struct _derived : iterator<T>::_derived
     {
-        static inline auto _static_shared_to_base(std::shared_ptr<input_iterator::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        static inline auto _static_shared_to_base(std::shared_ptr<forward_iterator::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
             return iterator<T>::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto operator==(input_iterator<T> const & other) const -> bool = 0;
+        virtual auto operator==(forward_iterator<T> const & other) const -> bool = 0;
 
-        virtual auto operator!=(input_iterator<T> const & other) const -> bool = 0;
+        virtual auto operator!=(forward_iterator<T> const & other) const -> bool = 0;
     };
 
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<input_iterator::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<forward_iterator::_derived>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> input_iterator
+    inline static auto _make(_Args && ... _args) -> forward_iterator
     {
-        return input_iterator{input_iterator::_derived::_static_shared_to_base(std::make_shared<typename input_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return forward_iterator{forward_iterator::_derived::_static_shared_to_base(std::make_shared<typename forward_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = input_iterator;
+    using _Kind_ = forward_iterator;
 
     inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
 
@@ -630,60 +630,60 @@ public:
     }();
 
 
-    inline auto operator==(input_iterator<T> const & other) const -> bool;
+    inline auto operator==(forward_iterator<T> const & other) const -> bool;
 
-    inline auto operator!=(input_iterator<T> const & other) const -> bool;
+    inline auto operator!=(forward_iterator<T> const & other) const -> bool;
 };
 
 template<typename T, typename _Thing, bool _Copy>
-struct input_iterator_ : input_iterator<T>
+struct forward_iterator_ : forward_iterator<T>
 {
-    inline input_iterator_() = default;
+    inline forward_iterator_() = default;
 
-    inline input_iterator_(input_iterator_ const & other)
+    inline forward_iterator_(forward_iterator_ const & other)
     :strange::_common{other}
-    ,input_iterator<T>{}
+    ,forward_iterator<T>{}
     {
     }
 
-    inline input_iterator_(input_iterator_ && other)
+    inline forward_iterator_(forward_iterator_ && other)
     :strange::_common{std::move(other)}
-    ,input_iterator<T>{}
+    ,forward_iterator<T>{}
     {
     }
 
-    inline auto operator=(input_iterator_ const & other) -> input_iterator_ &
+    inline auto operator=(forward_iterator_ const & other) -> forward_iterator_ &
     {
         strange::_common::operator=(other);
         return *this;
     }
 
-    inline auto operator=(input_iterator_ && other) -> input_iterator_ &
+    inline auto operator=(forward_iterator_ && other) -> forward_iterator_ &
     {
         strange::_common::operator=(std::move(other));
         return *this;
     }
 
-    explicit inline input_iterator_(std::shared_ptr<strange::_common::_base> const & shared)
+    explicit inline forward_iterator_(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,input_iterator<T>{}
+    ,forward_iterator<T>{}
     {
     }
 
-    explicit inline input_iterator_(std::shared_ptr<strange::_common::_base> && shared)
+    explicit inline forward_iterator_(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,input_iterator<T>{}
+    ,forward_iterator<T>{}
     {
     }
 
 private:
-    friend struct input_iterator<T>;
+    friend struct forward_iterator<T>;
 
-    struct _instance final : input_iterator<T>::_derived
+    struct _instance final : forward_iterator<T>::_derived
     {
         template<typename ... _Args>
         inline _instance(_Args && ... _args)
-        :input_iterator_::_derived{}
+        :forward_iterator_::_derived{}
         ,_thing{std::forward<_Args>(_args) ...}
         {
         }
@@ -702,7 +702,7 @@ private:
         {
             if constexpr (_Copy)
             {
-                return input_iterator_::_derived::_static_shared_to_base(std::make_shared<input_iterator_::_instance>(_thing));
+                return forward_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_iterator_::_instance>(_thing));
             }
             else
             {
@@ -712,50 +712,50 @@ private:
 
         inline auto _cat() const -> std::string final
         {
-            return input_iterator<T>::_cat_;
+            return forward_iterator<T>::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return input_iterator<T>::_cats_;
+            return forward_iterator<T>::_cats_;
         }
 
         inline auto _name() const -> std::string final
         {
-            return input_iterator_::_name_;
+            return forward_iterator_::_name_;
         }
 
-        inline auto operator==(input_iterator<T> const & other) const -> bool final;
+        inline auto operator==(forward_iterator<T> const & other) const -> bool final;
 
-        inline auto operator!=(input_iterator<T> const & other) const -> bool final;
+        inline auto operator!=(forward_iterator<T> const & other) const -> bool final;
 
         _Thing _thing;
     };
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> input_iterator_
+    inline static auto _make_(_Args && ... _args) -> forward_iterator_
     {
-        return input_iterator_{input_iterator_::_derived::_static_shared_to_base(std::make_shared<input_iterator_::_instance>(std::forward<_Args>(_args) ...))};
+        return forward_iterator_{forward_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<input_iterator_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<forward_iterator_::_instance>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<input_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<forward_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
     {
         strange::_common::_mutate();
-        return std::dynamic_pointer_cast<input_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<forward_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = input_iterator_;
+    using _Abstraction_ = forward_iterator_;
     using _Thing_ = _Thing;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
@@ -840,7 +840,7 @@ protected:
 
         virtual auto assign(size_t count, T const & value) -> void = 0;
 
-        virtual auto assign(input_iterator<T> first, input_iterator<T> last) -> void = 0;
+        virtual auto assign(forward_iterator<T> first, forward_iterator<T> last) -> void = 0;
 
         virtual auto assign(std::initializer_list<T> ilist) -> void = 0;
 
@@ -908,7 +908,7 @@ protected:
 
         virtual auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator = 0;
 
-        virtual auto insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void = 0;
+        virtual auto insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void = 0;
 
         virtual auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator = 0;
 
@@ -962,7 +962,7 @@ public:
 
     inline auto assign(size_t count, T const & value) -> void;
 
-    inline auto assign(input_iterator<T> first, input_iterator<T> last) -> void;
+    inline auto assign(forward_iterator<T> first, forward_iterator<T> last) -> void;
 
     inline auto assign(std::initializer_list<T> ilist) -> void;
 
@@ -1030,7 +1030,7 @@ public:
 
     inline auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator;
 
-    inline auto insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void;
+    inline auto insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void;
 
     inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator;
 
@@ -1149,7 +1149,7 @@ private:
 
         inline auto assign(size_t count, T const & value) -> void final;
 
-        inline auto assign(input_iterator<T> first, input_iterator<T> last) -> void final;
+        inline auto assign(forward_iterator<T> first, forward_iterator<T> last) -> void final;
 
         inline auto assign(std::initializer_list<T> ilist) -> void final;
 
@@ -1217,7 +1217,7 @@ private:
 
         inline auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator final;
 
-        inline auto insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void final;
+        inline auto insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void final;
 
         inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator final;
 
@@ -1349,27 +1349,27 @@ inline auto iterator<T>::operator++(int i) -> iterator
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator==(input_iterator<T> const & other) const -> bool
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy>>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto input_iterator_<T, _Thing, _Copy>::_instance::operator!=(input_iterator<T> const & other) const -> bool
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T>
-inline auto input_iterator<T>::operator==(input_iterator<T> const & other) const -> bool
+inline auto forward_iterator<T>::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<input_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<forward_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
-inline auto input_iterator<T>::operator!=(input_iterator<T> const & other) const -> bool
+inline auto forward_iterator<T>::operator!=(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<input_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<forward_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -1397,7 +1397,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::assign(size_t count, T const &
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::assign(input_iterator<T> first, input_iterator<T> last) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(forward_iterator<T> first, forward_iterator<T> last) -> void
 {
     _thing.assign(first, last);
 }
@@ -1601,7 +1601,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void
 {
     _thing.insert(pos, first, last);
 }
@@ -1692,7 +1692,7 @@ inline auto vector<T>::assign(size_t count, T const & value) -> void
 }
 
 template<typename T>
-inline auto vector<T>::assign(input_iterator<T> first, input_iterator<T> last) -> void
+inline auto vector<T>::assign(forward_iterator<T> first, forward_iterator<T> last) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->assign(first, last);
@@ -1913,7 +1913,7 @@ inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, size_
 }
 
 template<typename T>
-inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, input_iterator<T> first, input_iterator<T> last) -> void
+inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);

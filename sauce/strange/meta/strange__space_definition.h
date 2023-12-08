@@ -117,7 +117,7 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
-                .name = "input_iterator",
+                .name = "forward_iterator",
                 .parents =
                 {
                     "iterator<T>",
@@ -128,7 +128,7 @@ auto definition() -> space
                     {
                         .type = "using",
                         .name = "iterator_category",
-                        .argument = "std::input_iterator_tag",
+                        .argument = "std::forward_iterator_tag",
                     },
                 },
                 .operations =
@@ -140,13 +140,13 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "input_iterator<T> const &",
+                                .type = "forward_iterator<T> const &",
                                 .name = "other",
                             },
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<input_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy>>()._thing()",
                     },
                     operation
                     {
@@ -155,7 +155,7 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "input_iterator<T> const &",
+                                .type = "forward_iterator<T> const &",
                                 .name = "other",
                             },
                         },
@@ -315,12 +315,12 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "input_iterator<T>",
+                                .type = "forward_iterator<T>",
                                 .name = "first",
                             },
                             parameter
                             {
-                                .type = "input_iterator<T>",
+                                .type = "forward_iterator<T>",
                                 .name = "last",
                             },
                         },
@@ -612,12 +612,12 @@ auto definition() -> space
                             },
                             parameter
                             {
-                                .type = "input_iterator<T>",
+                                .type = "forward_iterator<T>",
                                 .name = "first",
                             },
                             parameter
                             {
-                                .type = "input_iterator<T>",
+                                .type = "forward_iterator<T>",
                                 .name = "last",
                             },
                         },
