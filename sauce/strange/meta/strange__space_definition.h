@@ -171,6 +171,36 @@ auto definition() -> space
                 {
                     operation
                     {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "bidirectional_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "bidirectional_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                    operation
+                    {
                         .name = "operator--",
                         .result = "*this",
                     },
@@ -217,6 +247,36 @@ auto definition() -> space
                 {
                     operation
                     {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                    operation
+                    {
                         .name = "operator+=",
                         .parameters =
                         {
@@ -252,7 +312,9 @@ auto definition() -> space
                                 .name = "n",
                             },
                         },
-                        .result = "*that",
+                        .constness = true,
+                        .result = "random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing + n)",
                     },
                     operation
                     {
@@ -265,7 +327,24 @@ auto definition() -> space
                                 .name = "n",
                             },
                         },
-                        .result = "*that",
+                        .constness = true,
+                        .result = "random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing - n)",
+                    },
+                    operation
+                    {
+                        .name = "operator-",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_iterator<T>",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "std::ptrdiff_t",
+                        .customisation = "return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
                     },
                 },
             },
