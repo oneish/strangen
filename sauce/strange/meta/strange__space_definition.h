@@ -810,6 +810,7 @@ auto definition() -> space
                                 .name = "n",
                             },
                         },
+// hack                        .constness = true,
                         .result = "T &",
                     },
                 },
@@ -1209,7 +1210,7 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "pos",
                             },
                             parameter
@@ -1218,7 +1219,8 @@ auto definition() -> space
                                 .name = "value",
                             },
                         },
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value))",
                     },
                     operation
                     {
@@ -1227,7 +1229,7 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "pos",
                             },
                             parameter
@@ -1236,7 +1238,8 @@ auto definition() -> space
                                 .name = "value",
                             },
                         },
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)))",
                     },
                     operation
                     {
@@ -1245,7 +1248,7 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "pos",
                             },
                             parameter
@@ -1259,7 +1262,8 @@ auto definition() -> space
                                 .name = "value",
                             },
                         },
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value))",
                     },
                     operation
                     {
@@ -1268,21 +1272,22 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "pos",
                             },
                             parameter
                             {
-                                .type = "forward_iterator<T>",
+                                .type = "forward_const_iterator<T>",
                                 .name = "first",
                             },
                             parameter
                             {
-                                .type = "forward_iterator<T>",
+                                .type = "forward_const_iterator<T>",
                                 .name = "last",
                             },
                         },
-                        .result = "void",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last))",
                     },
                     operation
                     {
@@ -1291,7 +1296,7 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "pos",
                             },
                             parameter
@@ -1300,7 +1305,8 @@ auto definition() -> space
                                 .name = "ilist",
                             },
                         },
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist))",
                     },
                     operation
                     {
@@ -1309,11 +1315,12 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "pos",
                             },
                         },
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()))",
                     },
                     operation
                     {
@@ -1322,16 +1329,17 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "first",
                             },
                             parameter
                             {
-                                .type = "typename std::vector<T>::const_iterator",
+                                .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "last",
                             },
                         },
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()))",
                     },
                     operation
                     {

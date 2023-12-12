@@ -2278,19 +2278,19 @@ protected:
 
         virtual auto clear() -> void = 0;
 
-        virtual auto insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator = 0;
+        virtual auto insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T> = 0;
 
-        virtual auto insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator = 0;
+        virtual auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T> = 0;
 
-        virtual auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator = 0;
+        virtual auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T> = 0;
 
-        virtual auto insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void = 0;
+        virtual auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T> = 0;
 
-        virtual auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator = 0;
+        virtual auto insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T> = 0;
 
-        virtual auto erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator = 0;
+        virtual auto erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T> = 0;
 
-        virtual auto erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator = 0;
+        virtual auto erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T> = 0;
 
         virtual auto push_back(T const & value) -> void = 0;
 
@@ -2400,19 +2400,19 @@ public:
 
     inline auto clear() -> void;
 
-    inline auto insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator;
+    inline auto insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>;
 
-    inline auto insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator;
+    inline auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>;
 
-    inline auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator;
+    inline auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>;
 
-    inline auto insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void;
+    inline auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>;
 
-    inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator;
+    inline auto insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>;
 
-    inline auto erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator;
+    inline auto erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>;
 
-    inline auto erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator;
+    inline auto erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>;
 
     inline auto push_back(T const & value) -> void;
 
@@ -2587,19 +2587,19 @@ private:
 
         inline auto clear() -> void final;
 
-        inline auto insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator final;
+        inline auto insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T> final;
 
-        inline auto insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator final;
+        inline auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T> final;
 
-        inline auto insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator final;
+        inline auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T> final;
 
-        inline auto insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void final;
+        inline auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T> final;
 
-        inline auto insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator final;
+        inline auto insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T> final;
 
-        inline auto erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator final;
+        inline auto erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T> final;
 
-        inline auto erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator final;
+        inline auto erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T> final;
 
         inline auto push_back(T const & value) -> void final;
 
@@ -4147,45 +4147,45 @@ inline auto vector_<T, _Thing, _Copy>::_instance::clear() -> void
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
 {
-    return _thing.insert(pos, value);
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value));
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
 {
-    return _thing.insert(pos, value);
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)));
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
-    return _thing.insert(pos, count, value);
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value));
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    _thing.insert(pos, first, last);
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last));
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
 {
-    return _thing.insert(pos, ilist);
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist));
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
 {
-    return _thing.erase(pos);
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    return _thing.erase(first, last);
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -4456,49 +4456,49 @@ inline auto vector<T>::clear() -> void
 }
 
 template<typename T>
-inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, T const & value) -> typename std::vector<T>::iterator
+inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
 }
 
 template<typename T>
-inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, T && value) -> typename std::vector<T>::iterator
+inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
 }
 
 template<typename T>
-inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, size_t count, T const & value) -> typename std::vector<T>::iterator
+inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
 }
 
 template<typename T>
-inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, forward_iterator<T> first, forward_iterator<T> last) -> void
+inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);
 }
 
 template<typename T>
-inline auto vector<T>::insert(typename std::vector<T>::const_iterator pos, std::initializer_list<T> ilist) -> typename std::vector<T>::iterator
+inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
 }
 
 template<typename T>
-inline auto vector<T>::erase(typename std::vector<T>::const_iterator pos) -> typename std::vector<T>::iterator
+inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);
 }
 
 template<typename T>
-inline auto vector<T>::erase(typename std::vector<T>::const_iterator first, typename std::vector<T>::const_iterator last) -> typename std::vector<T>::iterator
+inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);
