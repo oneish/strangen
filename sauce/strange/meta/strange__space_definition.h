@@ -908,32 +908,6 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "std::vector<T> const &",
-                                .name = "other",
-                            },
-                        },
-                        .result = "*this",
-                    },
-                    operation
-                    {
-                        .name = "operator=",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "std::vector<T> &&",
-                                .name = "other",
-                            },
-                        },
-                        .result = "*this",
-                    },
-                    operation
-                    {
-                        .name = "operator=",
-                        .parameters =
-                        {
-                            parameter
-                            {
                                 .type = "std::initializer_list<T>",
                                 .name = "ilist",
                             },

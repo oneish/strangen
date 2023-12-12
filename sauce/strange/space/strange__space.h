@@ -2208,10 +2208,6 @@ protected:
             return any::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto operator=(std::vector<T> const & other) -> void = 0;
-
-        virtual auto operator=(std::vector<T> && other) -> void = 0;
-
         virtual auto operator=(std::initializer_list<T> ilist) -> void = 0;
 
         virtual auto assign(size_t count, T const & value) -> void = 0;
@@ -2341,10 +2337,6 @@ public:
         return cats;
     }();
 
-
-    inline auto operator=(std::vector<T> const & other) -> vector &;
-
-    inline auto operator=(std::vector<T> && other) -> vector &;
 
     inline auto operator=(std::initializer_list<T> ilist) -> vector &;
 
@@ -2540,10 +2532,6 @@ private:
         {
             return vector_::_name_;
         }
-
-        inline auto operator=(std::vector<T> const & other) -> void final;
-
-        inline auto operator=(std::vector<T> && other) -> void final;
 
         inline auto operator=(std::initializer_list<T> ilist) -> void final;
 
@@ -3973,18 +3961,6 @@ inline auto random_access_iterator<T>::operator[](std::ptrdiff_t n) -> T &
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> const & other) -> void
-{
-    _thing.operator=(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::vector<T> && other) -> void
-{
-    _thing.operator=(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::initializer_list<T> ilist) -> void
 {
     _thing.operator=(ilist);
@@ -4294,22 +4270,6 @@ template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator>=(vector<T> const & other) const -> bool
 {
     return _thing >= other.template _static<vector_<T, _Thing, _Copy>>()._thing();
-}
-
-template<typename T>
-inline auto vector<T>::operator=(std::vector<T> const & other) -> vector &
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator=(other);
-    return *this;
-}
-
-template<typename T>
-inline auto vector<T>::operator=(std::vector<T> && other) -> vector &
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator=(other);
-    return *this;
 }
 
 template<typename T>
