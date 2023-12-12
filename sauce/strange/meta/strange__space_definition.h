@@ -31,7 +31,7 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
-                .name = "forward_iterator",
+                .name = "forward_const_iterator",
                 .parents =
                 {
                     "any",
@@ -74,18 +74,8 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator*",
-                        .result = "T &",
-                    },
-                    operation
-                    {
-                        .name = "operator*",
                         .constness = true,
                         .result = "T const &",
-                    },
-                    operation
-                    {
-                        .name = "operator->",
-                        .result = "T *",
                     },
                     operation
                     {
@@ -110,6 +100,100 @@ auto definition() -> space
                             },
                         },
                         .result = "*that",
+                    },
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "forward_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "forward_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
+                    {
+                        .type = "typename",
+                        .name = "T",
+                    },
+                },
+                .name = "forward_iterator",
+                .parents =
+                {
+                    "forward_const_iterator<T>",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "value_type",
+                        .argument = "T",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "difference_type",
+                        .argument = "std::ptrdiff_t",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "reference",
+                        .argument = "value_type &",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "pointer",
+                        .argument = "value_type *",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator_category",
+                        .argument = "std::forward_iterator_tag",
+                    },
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "operator*",
+// hack                        .constness = true,
+                        .result = "T &",
+                    },
+                    operation
+                    {
+                        .name = "operator->",
+// hack                        .constness = true,
+                        .result = "T *",
                     },
                     operation
                     {
@@ -153,13 +237,114 @@ auto definition() -> space
                         .name = "T",
                     },
                 },
+                .name = "bidirectional_const_iterator",
+                .parents =
+                {
+                    "forward_const_iterator<T>",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator_category",
+                        .argument = "std::bidirectional_iterator_tag",
+                    },
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "bidirectional_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "bidirectional_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                    operation
+                    {
+                        .name = "operator--",
+                        .result = "*this",
+                    },
+                    operation
+                    {
+                        .name = "operator--",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "int",
+                                .name = "i",
+                            },
+                        },
+                        .result = "*that",
+                    },
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
+                    {
+                        .type = "typename",
+                        .name = "T",
+                    },
+                },
                 .name = "bidirectional_iterator",
                 .parents =
                 {
                     "forward_iterator<T>",
+                    "bidirectional_const_iterator<T>",
                 },
                 .types =
                 {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "value_type",
+                        .argument = "T",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "difference_type",
+                        .argument = "std::ptrdiff_t",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "reference",
+                        .argument = "value_type &",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "pointer",
+                        .argument = "value_type *",
+                    },
                     parameter
                     {
                         .type = "using",
@@ -199,23 +384,232 @@ auto definition() -> space
                         .result = "bool",
                         .customisation = "return !operator==(other)",
                     },
-                    operation
+                },
+            },
+            abstraction
+            {
+                .parameters =
+                {
+                    parameter
                     {
-                        .name = "operator--",
-                        .result = "*this",
+                        .type = "typename",
+                        .name = "T",
                     },
+                },
+                .name = "random_access_const_iterator",
+                .parents =
+                {
+                    "bidirectional_const_iterator<T>",
+                },
+                .types =
+                {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "value_type",
+                        .argument = "T",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "difference_type",
+                        .argument = "std::ptrdiff_t",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "reference",
+                        .argument = "value_type &",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "pointer",
+                        .argument = "value_type *",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "iterator_category",
+                        .argument = "std::random_access_iterator_tag",
+                    },
+                },
+                .operations =
+                {
                     operation
                     {
-                        .name = "operator--",
+                        .name = "operator==",
                         .parameters =
                         {
                             parameter
                             {
-                                .type = "int",
-                                .name = "i",
+                                .type = "random_access_const_iterator<T> const &",
+                                .name = "other",
                             },
                         },
-                        .result = "*that",
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                    operation
+                    {
+                        .name = "operator<",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator<=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_const_iterator<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator+=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .result = "*this",
+                    },
+                    operation
+                    {
+                        .name = "operator-=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .result = "*this",
+                    },
+                    operation
+                    {
+                        .name = "operator+",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .constness = true,
+                        .result = "random_access_const_iterator<T>",
+                        .customisation = "return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing + n)",
+                    },
+                    operation
+                    {
+                        .name = "operator-",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .constness = true,
+                        .result = "random_access_const_iterator<T>",
+                        .customisation = "return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing - n)",
+                    },
+                    operation
+                    {
+                        .name = "operator-",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "random_access_const_iterator<T>",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "std::ptrdiff_t",
+                        .customisation = "return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator[]",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "std::ptrdiff_t",
+                                .name = "n",
+                            },
+                        },
+                        .constness = true,
+                        .result = "T const &",
                     },
                 },
             },
@@ -233,9 +627,34 @@ auto definition() -> space
                 .parents =
                 {
                     "bidirectional_iterator<T>",
+                    "random_access_const_iterator<T>",
                 },
                 .types =
                 {
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "value_type",
+                        .argument = "T",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "difference_type",
+                        .argument = "std::ptrdiff_t",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "reference",
+                        .argument = "value_type &",
+                    },
+                    parameter
+                    {
+                        .type = "using",
+                        .name = "pointer",
+                        .argument = "value_type *",
+                    },
                     parameter
                     {
                         .type = "using",
@@ -337,32 +756,6 @@ auto definition() -> space
                     },
                     operation
                     {
-                        .name = "operator+=",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "std::ptrdiff_t",
-                                .name = "n",
-                            },
-                        },
-                        .result = "*this",
-                    },
-                    operation
-                    {
-                        .name = "operator-=",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "std::ptrdiff_t",
-                                .name = "n",
-                            },
-                        },
-                        .result = "*this",
-                    },
-                    operation
-                    {
                         .name = "operator+",
                         .parameters =
                         {
@@ -372,7 +765,7 @@ auto definition() -> space
                                 .name = "n",
                             },
                         },
-                        .constness = true,
+// hack                        .constness = true,
                         .result = "random_access_iterator<T>",
                         .customisation = "return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing + n)",
                     },
@@ -387,7 +780,7 @@ auto definition() -> space
                                 .name = "n",
                             },
                         },
-                        .constness = true,
+// hack                        .constness = true,
                         .result = "random_access_iterator<T>",
                         .customisation = "return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing - n)",
                     },
@@ -417,171 +810,7 @@ auto definition() -> space
                                 .name = "n",
                             },
                         },
-                        .constness = true,
                         .result = "T &",
-                    },
-                },
-            },
-            abstraction
-            {
-                .parameters =
-                {
-                    parameter
-                    {
-                        .type = "typename",
-                        .name = "T",
-                    },
-                },
-                .name = "contiguous_iterator",
-                .parents =
-                {
-                    "random_access_iterator<T>",
-                },
-                .types =
-                {
-                    parameter
-                    {
-                        .type = "// (not in C++17) using", // in C++20
-                        .name = "iterator_category",
-                        .argument = "std::contiguous_iterator_tag",
-                    },
-                },
-                .operations =
-                {
-                    operation
-                    {
-                        .name = "operator==",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "contiguous_iterator<T> const &",
-                                .name = "other",
-                            },
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = "return _thing == other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
-                    },
-                    operation
-                    {
-                        .name = "operator!=",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "contiguous_iterator<T> const &",
-                                .name = "other",
-                            },
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = "return !operator==(other)",
-                    },
-                    operation
-                    {
-                        .name = "operator<",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "contiguous_iterator<T> const &",
-                                .name = "other",
-                            },
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = "return _thing < other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
-                    },
-                    operation
-                    {
-                        .name = "operator>",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "contiguous_iterator<T> const &",
-                                .name = "other",
-                            },
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = "return _thing > other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
-                    },
-                    operation
-                    {
-                        .name = "operator<=",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "contiguous_iterator<T> const &",
-                                .name = "other",
-                            },
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = "return _thing <= other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
-                    },
-                    operation
-                    {
-                        .name = "operator>=",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "contiguous_iterator<T> const &",
-                                .name = "other",
-                            },
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = "return _thing >= other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
-                    },
-                    operation
-                    {
-                        .name = "operator+",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "std::ptrdiff_t",
-                                .name = "n",
-                            },
-                        },
-                        .constness = true,
-                        .result = "contiguous_iterator<T>",
-                        .customisation = "return contiguous_iterator<T>::template _make<_Thing, _Copy>(_thing + n)",
-                    },
-                    operation
-                    {
-                        .name = "operator-",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "std::ptrdiff_t",
-                                .name = "n",
-                            },
-                        },
-                        .constness = true,
-                        .result = "contiguous_iterator<T>",
-                        .customisation = "return contiguous_iterator<T>::template _make<_Thing, _Copy>(_thing - n)",
-                    },
-                    operation
-                    {
-                        .name = "operator-",
-                        .parameters =
-                        {
-                            parameter
-                            {
-                                .type = "contiguous_iterator<T>",
-                                .name = "other",
-                            },
-                        },
-                        .constness = true,
-                        .result = "std::ptrdiff_t",
-                        .customisation = "return _thing - other.template _static<contiguous_iterator_<T, _Thing, _Copy>>()._thing()",
                     },
                 },
             },
@@ -648,25 +877,25 @@ auto definition() -> space
                     {
                         .type = "using",
                         .name = "iterator",
-                        .argument = "typename std::vector<T>::iterator",
+                        .argument = "typename strange::random_access_iterator<T>",
                     },
                     parameter
                     {
                         .type = "using",
                         .name = "const_iterator",
-                        .argument = "typename std::vector<T>::const_iterator",
+                        .argument = "typename strange::random_access_const_iterator<T>",
                     },
                     parameter
                     {
                         .type = "using",
                         .name = "reverse_iterator",
-                        .argument = "typename std::vector<T>::reverse_iterator",
+                        .argument = "typename std::reverse_iterator<iterator>",
                     },
                     parameter
                     {
                         .type = "using",
                         .name = "const_reverse_iterator",
-                        .argument = "typename std::vector<T>::const_reverse_iterator",
+                        .argument = "typename std::reverse_iterator<const_iterator>",
                     },
                 },
                 .operations =
@@ -735,12 +964,12 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "forward_iterator<T>",
+                                .type = "forward_const_iterator<T>",
                                 .name = "first",
                             },
                             parameter
                             {
-                                .type = "forward_iterator<T>",
+                                .type = "forward_const_iterator<T>",
                                 .name = "last",
                             },
                         },
@@ -849,70 +1078,82 @@ auto definition() -> space
                     operation
                     {
                         .name = "begin",
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())",
                     },
                     operation
                     {
                         .name = "begin",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_iterator",
+                        .result = "typename strange::random_access_const_iterator<T>",
+                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())",
                     },
                     operation
                     {
                         .name = "cbegin",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_iterator",
+                        .result = "typename strange::random_access_const_iterator<T>",
+                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())",
                     },
                     operation
                     {
                         .name = "end",
-                        .result = "typename std::vector<T>::iterator",
+                        .result = "typename strange::random_access_iterator<T>",
+                        .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())",
                     },
                     operation
                     {
                         .name = "end",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_iterator",
+                        .result = "typename strange::random_access_const_iterator<T>",
+                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())",
                     },
                     operation
                     {
                         .name = "cend",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_iterator",
+                        .result = "typename strange::random_access_const_iterator<T>",
+                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())",
                     },
                     operation
                     {
                         .name = "rbegin",
-                        .result = "typename std::vector<T>::reverse_iterator",
+                        .result = "typename std::reverse_iterator<strange::random_access_iterator<T>>",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())}",
                     },
                     operation
                     {
                         .name = "rbegin",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_reverse_iterator",
+                        .result = "typename std::reverse_iterator<strange::random_access_const_iterator<T>>",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())}",
                     },
                     operation
                     {
                         .name = "crbegin",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_reverse_iterator",
+                        .result = "typename std::reverse_iterator<strange::random_access_const_iterator<T>>",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())}",
                     },
                     operation
                     {
                         .name = "rend",
-                        .result = "typename std::vector<T>::reverse_iterator",
+                        .result = "typename std::reverse_iterator<strange::random_access_iterator<T>>",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())}",
                     },
                     operation
                     {
                         .name = "rend",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_reverse_iterator",
+                        .result = "typename std::reverse_iterator<strange::random_access_const_iterator<T>>",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())}",
                     },
                     operation
                     {
                         .name = "crend",
                         .constness = true,
-                        .result = "typename std::vector<T>::const_reverse_iterator",
+                        .result = "typename std::reverse_iterator<strange::random_access_const_iterator<T>>",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())}",
                     },
                     operation
                     {

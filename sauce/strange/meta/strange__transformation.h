@@ -167,7 +167,7 @@ namespace )#" << _space.name << R"#(
             _abstraction_parents(abstraction, true);
             _out << R"#(
     {
-        static inline auto _static_shared_to_base(std::shared_ptr<)#" << abstraction.name
+        static inline auto _static_shared_to_base(std::shared_ptr<typename )#" << abstraction.name
                 << R"#(::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
 )#";
@@ -193,7 +193,7 @@ namespace )#" << _space.name << R"#(
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename )#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing)#";
@@ -542,7 +542,10 @@ public:
             for (auto const & parent : abstraction.parents)
             {
                 auto it = std::find_if(_space.abstractions.cbegin(), _space.abstractions.cend(),
-                    [& parent](definition::abstraction const & candidate){return candidate.name == parent;});
+                    [& parent](definition::abstraction const & candidate)
+                    {
+                        return candidate.name == parent.substr(0, parent.find('<'));
+                    });
                 if (it != _space.abstractions.cend())
                 {
                     _abstraction_operations(*it, derived, inner, pure, definition, unique);
@@ -686,11 +689,11 @@ public:
                         }
                         if (this_or_that_or_void)
                         {
-                            _out << R"#(std::dynamic_pointer_cast<)#" << abstraction.name;
+                            _out << R"#(std::dynamic_pointer_cast<typename )#" << abstraction.name;
                         }
                         else
                         {
-                            _out << R"#(return std::dynamic_pointer_cast<)#" << abstraction.name;
+                            _out << R"#(return std::dynamic_pointer_cast<typename )#" << abstraction.name;
                         }
                         _abstraction_parameters(abstraction, false, false, false, false);
                         _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
