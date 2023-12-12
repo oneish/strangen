@@ -2302,7 +2302,19 @@ protected:
 
         virtual auto resize(size_t count, T const & value) -> void = 0;
 
-        virtual auto swap(std::vector<T> & other) -> void = 0;
+        virtual auto swap(vector<T> & other) -> void = 0;
+
+        virtual auto operator==(vector<T> const & other) const -> bool = 0;
+
+        virtual auto operator!=(vector<T> const & other) const -> bool = 0;
+
+        virtual auto operator<(vector<T> const & other) const -> bool = 0;
+
+        virtual auto operator>(vector<T> const & other) const -> bool = 0;
+
+        virtual auto operator<=(vector<T> const & other) const -> bool = 0;
+
+        virtual auto operator>=(vector<T> const & other) const -> bool = 0;
     };
 
 public:
@@ -2424,7 +2436,19 @@ public:
 
     inline auto resize(size_t count, T const & value) -> void;
 
-    inline auto swap(std::vector<T> & other) -> void;
+    inline auto swap(vector<T> & other) -> void;
+
+    inline auto operator==(vector<T> const & other) const -> bool;
+
+    inline auto operator!=(vector<T> const & other) const -> bool;
+
+    inline auto operator<(vector<T> const & other) const -> bool;
+
+    inline auto operator>(vector<T> const & other) const -> bool;
+
+    inline auto operator<=(vector<T> const & other) const -> bool;
+
+    inline auto operator>=(vector<T> const & other) const -> bool;
 };
 
 template<typename T, typename _Thing, bool _Copy>
@@ -2611,7 +2635,19 @@ private:
 
         inline auto resize(size_t count, T const & value) -> void final;
 
-        inline auto swap(std::vector<T> & other) -> void final;
+        inline auto swap(vector<T> & other) -> void final;
+
+        inline auto operator==(vector<T> const & other) const -> bool final;
+
+        inline auto operator!=(vector<T> const & other) const -> bool final;
+
+        inline auto operator<(vector<T> const & other) const -> bool final;
+
+        inline auto operator>(vector<T> const & other) const -> bool final;
+
+        inline auto operator<=(vector<T> const & other) const -> bool final;
+
+        inline auto operator>=(vector<T> const & other) const -> bool final;
 
         _Thing _thing;
     };
@@ -4219,9 +4255,45 @@ inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count, T const &
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::swap(std::vector<T> & other) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::swap(vector<T> & other) -> void
 {
-    _thing.swap(other);
+    _thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator==(vector<T> const & other) const -> bool
+{
+    return _thing == other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator!=(vector<T> const & other) const -> bool
+{
+    return _thing != other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator<(vector<T> const & other) const -> bool
+{
+    return _thing < other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator>(vector<T> const & other) const -> bool
+{
+    return _thing > other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator<=(vector<T> const & other) const -> bool
+{
+    return _thing <= other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator>=(vector<T> const & other) const -> bool
+{
+    return _thing >= other.template _static<vector_<T, _Thing, _Copy>>()._thing();
 }
 
 template<typename T>
@@ -4540,10 +4612,46 @@ inline auto vector<T>::resize(size_t count, T const & value) -> void
 }
 
 template<typename T>
-inline auto vector<T>::swap(std::vector<T> & other) -> void
+inline auto vector<T>::swap(vector<T> & other) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->swap(other);
+}
+
+template<typename T>
+inline auto vector<T>::operator==(vector<T> const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator==(other);
+}
+
+template<typename T>
+inline auto vector<T>::operator!=(vector<T> const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator!=(other);
+}
+
+template<typename T>
+inline auto vector<T>::operator<(vector<T> const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator<(other);
+}
+
+template<typename T>
+inline auto vector<T>::operator>(vector<T> const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator>(other);
+}
+
+template<typename T>
+inline auto vector<T>::operator<=(vector<T> const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator<=(other);
+}
+
+template<typename T>
+inline auto vector<T>::operator>=(vector<T> const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator>=(other);
 }
 
 }

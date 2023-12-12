@@ -1410,11 +1410,102 @@ auto definition() -> space
                         {
                             parameter
                             {
-                                .type = "std::vector<T> &",
+                                .type = "vector<T> &",
                                 .name = "other",
                             },
                         },
                         .result = "void",
+                        .customisation = "_thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing())"
+                    },
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "vector<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing == other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "vector<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing != other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator<",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "vector<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing < other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "vector<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing > other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator<=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "vector<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing <= other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                    },
+                    operation
+                    {
+                        .name = "operator>=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "vector<T> const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return _thing >= other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
                     },
                 },
                 .thing = "std::vector<T>",
