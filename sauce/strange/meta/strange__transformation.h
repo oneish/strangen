@@ -749,12 +749,19 @@ public:
             }
             if (types)
             {
-                _out << parameter.type << R"#( )#"; //TODO std::move
+                _out << parameter.type << R"#( )#" << parameter.name;
+                if (arguments && !parameter.argument.empty())
+                {
+                    _out << R"#( = )#" << parameter.argument;
+                }
             }
-            _out << parameter.name;
-            if (arguments && !parameter.argument.empty())
+            else if (parameter.type.size() >= 2 && parameter.type.substr(parameter.type.size() - 2) == "&&")
             {
-                _out << R"#( = )#" << parameter.argument;
+                _out << R"#(std::move()#" << parameter.name << R"#())#";
+            }
+            else
+            {
+                _out << parameter.name;
             }
         }
         _out << R"#())#";

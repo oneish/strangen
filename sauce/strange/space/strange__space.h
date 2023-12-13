@@ -4209,7 +4209,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T const & value) -> 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T && value) -> void
 {
-    _thing.push_back(value);
+    _thing.push_back(std::move(value));
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -4563,7 +4563,7 @@ template<typename T>
 inline auto vector<T>::push_back(T && value) -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->push_back(value);
+    std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->push_back(std::move(value));
 }
 
 template<typename T>
