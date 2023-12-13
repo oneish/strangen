@@ -48,20 +48,6 @@ protected:
     {
     }
 
-    inline auto _mutate() -> void
-    {
-        if (_shared.use_count() > 1)
-        {
-            try
-            {
-                _shared = _shared->_clone();
-            }
-            catch(bool const &)
-            {
-            }
-        }
-    }
-
 private:
     struct _message final : _common::_base
     {
@@ -111,6 +97,20 @@ private:
     };
 
 public:
+    inline auto _mutate() -> void
+    {
+        if (_shared.use_count() > 1)
+        {
+            try
+            {
+                _shared = _shared->_clone();
+            }
+            catch(bool const &)
+            {
+            }
+        }
+    }
+
     inline auto _address() const -> void const *
     {
         if (_shared)

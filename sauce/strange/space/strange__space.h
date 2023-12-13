@@ -4490,49 +4490,65 @@ inline auto vector<T>::clear() -> void
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
 {
-    strange::_common::_mutate();
+    auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
+    auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
-    strange::_common::_mutate();
+    auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    strange::_common::_mutate();
+    auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
 {
-    strange::_common::_mutate();
+    auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
 }
 
 template<typename T>
 inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
 {
-    strange::_common::_mutate();
+    auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);
 }
 
 template<typename T>
 inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    strange::_common::_mutate();
+    auto const first_index = first - cbegin();
+    auto const last_index = last - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    first = cbegin() + first_index;
+    last = cbegin() + last_index;
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);
 }
 

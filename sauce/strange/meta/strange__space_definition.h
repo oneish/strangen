@@ -1194,6 +1194,10 @@ auto definition() -> space
                             },
                         },
                         .result = "typename strange::random_access_iterator<T>",
+                        .modification = R"#(auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);)#",
                         .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value))",
                     },
                     operation
@@ -1213,6 +1217,10 @@ auto definition() -> space
                             },
                         },
                         .result = "typename strange::random_access_iterator<T>",
+                        .modification = R"#(auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));)#",
                         .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)))",
                     },
                     operation
@@ -1237,6 +1245,10 @@ auto definition() -> space
                             },
                         },
                         .result = "typename strange::random_access_iterator<T>",
+                        .modification = R"#(auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);)#",
                         .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value))",
                     },
                     operation
@@ -1261,6 +1273,10 @@ auto definition() -> space
                             },
                         },
                         .result = "typename strange::random_access_iterator<T>",
+                        .modification = R"#(auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);)#",
                         .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last))",
                     },
                     operation
@@ -1280,6 +1296,10 @@ auto definition() -> space
                             },
                         },
                         .result = "typename strange::random_access_iterator<T>",
+                        .modification = R"#(auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);)#",
                         .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist))",
                     },
                     operation
@@ -1294,6 +1314,10 @@ auto definition() -> space
                             },
                         },
                         .result = "typename strange::random_access_iterator<T>",
+                        .modification = R"#(auto const index = pos - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    pos = cbegin() + index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);)#",
                         .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()))",
                     },
                     operation
@@ -1313,6 +1337,12 @@ auto definition() -> space
                             },
                         },
                         .result = "typename strange::random_access_iterator<T>",
+                        .modification = R"#(auto const first_index = first - cbegin();
+    auto const last_index = last - cbegin();
+    strange::_common::_mutate(); // could invalidate iterators
+    first = cbegin() + first_index;
+    last = cbegin() + last_index;
+    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);)#",
                         .customisation = "return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()))",
                     },
                     operation

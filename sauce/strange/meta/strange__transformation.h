@@ -675,7 +675,7 @@ public:
                             _out << R"#(return _thing.)#" << operation.name;
                         }
                     }
-                    else
+                    else if (operation.modification.empty())
                     {
                         if (that)
                         {
@@ -698,11 +698,15 @@ public:
                         _abstraction_parameters(abstraction, false, false, false, false);
                         _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
                     }
-                    if ((!inner) || (operation.customisation.empty() && !operation.data))
+                    if ((operation.modification.empty() && !inner) || (operation.customisation.empty() && !operation.data))
                     {
                         _operation_parameters(operation, false, false);
                     }
-                    if (this_or_that && !inner)
+                    if ((!inner) && !operation.modification.empty())
+                    {
+                        _out << operation.modification;
+                    }
+                    else if (this_or_that && !inner)
                     {
                         if (that)
                         {
@@ -745,7 +749,7 @@ public:
             }
             if (types)
             {
-                _out << parameter.type << R"#( )#";
+                _out << parameter.type << R"#( )#"; //TODO std::move
             }
             _out << parameter.name;
             if (arguments && !parameter.argument.empty())

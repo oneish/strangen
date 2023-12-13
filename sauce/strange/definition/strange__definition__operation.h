@@ -15,7 +15,9 @@ struct operation
     bool constness = false;
     std::string result;
     bool data = false;
+    std::string modification;
     std::string customisation;
+    std::string implementation;
 };
 
 inline auto operator==(operation const & lhs, operation const & rhs) -> bool
@@ -24,7 +26,10 @@ inline auto operator==(operation const & lhs, operation const & rhs) -> bool
         && lhs.parameters == rhs.parameters
         && lhs.constness == rhs.constness
         && lhs.result == rhs.result
-        && lhs.data == rhs.data;
+        && lhs.data == rhs.data
+        && lhs.modification == rhs.modification
+        && lhs.customisation == rhs.customisation
+        && lhs.implementation == rhs.implementation;
 }
 
 }
@@ -52,6 +57,9 @@ struct std::hash<strange::definition::operation>
         }
         return h ^ std::hash<bool>{}(op.constness)
             ^ std::hash<std::string>{}(op.result)
-            ^ std::hash<bool>{}(op.data);
+            ^ std::hash<bool>{}(op.data)
+            ^ std::hash<std::string>{}(op.modification)
+            ^ std::hash<std::string>{}(op.customisation)
+            ^ std::hash<std::string>{}(op.implementation);
     }
 };
