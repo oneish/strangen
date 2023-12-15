@@ -1,9 +1,11 @@
 #include "../../sauce/strange/strange.h"
+#include "../../sauce/strange/comprehension/token.h"
 //#include "example__type_erasure.h"
 #include "example__space_transformation_3.h"
 
 #include <iostream>
 #include <algorithm>
+#include <fstream>
 
 struct implementation
 {
@@ -245,6 +247,15 @@ int main()
     auto nt = example::number::_make<implementation_template<int>>();
     auto wnt = example::widget_number::_make<implementation_template<int>>();
     auto nit = example::numeric<>::_make<implementation_template<int>>();
+
+    std::ifstream ifs{"tokens.h", std::ios::binary};
+    std::istreambuf_iterator<char> it{ifs};
+    strange::comprehension::tokenization tokenizer(it);
+    while (!tokenizer.end)
+    {
+        auto token = tokenizer.increment();
+        std::cout << "token:" << token.text << std::endl;
+    }
 
     return 0;
 }

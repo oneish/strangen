@@ -445,7 +445,7 @@ public:
                 {
                     _out << R"#(>::name() + ")#";
                 }
-                else if (arguments && (!thing || !abstraction.thing.empty()) && !parameter.argument.empty())
+                else if (arguments && ((!thing) || !abstraction.thing.empty()) && !parameter.argument.empty())
                 {
                     _out << R"#( = )#" << parameter.argument;
                 }
@@ -536,7 +536,7 @@ public:
 
     auto _abstraction_operations(definition::abstraction const & abstraction, definition::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<definition::operation> & unique) -> void
     {
-        if ((!inner) || (!pure))
+        if ((!inner) || !pure)
         {
             // override base class operations as well
             for (auto const & parent : abstraction.parents)
@@ -616,8 +616,8 @@ public:
                     _out << R"#( -> )#";
                 }
                 bool const that = (operation.result == "*that");
-                bool const this_or_that = (that || operation.result == "*this");
-                bool const this_or_that_or_void = (this_or_that || operation.result == "void");
+                bool const this_or_that = (that || (operation.result == "*this"));
+                bool const this_or_that_or_void = (this_or_that || (operation.result == "void"));
                 if (this_or_that)
                 {
                     if (inner || pure)
@@ -755,7 +755,7 @@ public:
                     _out << R"#( = )#" << parameter.argument;
                 }
             }
-            else if (parameter.type.size() >= 2 && parameter.type.substr(parameter.type.size() - 2) == "&&")
+            else if ((parameter.type.size() >= 2) && (parameter.type.substr(parameter.type.size() - 2) == "&&"))
             {
                 _out << R"#(std::move()#" << parameter.name << R"#())#";
             }
