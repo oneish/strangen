@@ -2,3 +2,7 @@ namespace stu
 {
 
 }
+
+//line
+/*block
+*/

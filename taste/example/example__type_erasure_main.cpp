@@ -254,7 +254,33 @@ int main()
     while (!tokenizer.end)
     {
         auto token = tokenizer.increment();
-        std::cout << "token:" << token.text << std::endl;
+        switch (token.classification)
+        {
+            case strange::comprehension::cls::character:
+                std::cout << "character:";
+                break;
+            case strange::comprehension::cls::comment:
+                std::cout << "comment:";
+                break;
+            case strange::comprehension::cls::mistake:
+                std::cout << "mistake:";
+                break;
+            case strange::comprehension::cls::name:
+                std::cout << "name:";
+                break;
+            case strange::comprehension::cls::number:
+                std::cout << "number:";
+                break;
+            case strange::comprehension::cls::punctuation:
+                std::cout << "punctuation:";
+                break;
+            case strange::comprehension::cls::string:
+                std::cout << "string:";
+                break;
+            default:
+                std::cout << "token:";
+        }
+        std::cout << token.text << std::endl;
     }
 
     return 0;
