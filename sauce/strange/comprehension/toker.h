@@ -28,7 +28,7 @@ struct token
     std::string text;
 };
 
-struct tokenization
+struct toker
 {
     std::istreambuf_iterator<char> it;
     bool end;
@@ -40,7 +40,7 @@ struct tokenization
     bool dot;
     char use;
 
-    tokenization(std::istreambuf_iterator<char> sit)
+    toker(std::istreambuf_iterator<char> sit)
     :it{sit}
     ,end{it == std::istreambuf_iterator<char>{}}
     ,filename{}

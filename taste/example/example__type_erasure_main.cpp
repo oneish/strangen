@@ -1,5 +1,6 @@
 #include "../../sauce/strange/strange.h"
-#include "../../sauce/strange/comprehension/token.h"
+#include "../../sauce/strange/comprehension/toker.h"
+#include "../../sauce/strange/comprehension/parser.h"
 //#include "example__type_erasure.h"
 #include "example__space_transformation_3.h"
 
@@ -13,7 +14,7 @@ struct implementation
     // implementation(implementation const&) = delete;
 
     int x = 0;
- 
+
     inline void display(example::button b) const
     {
         std::cout << "display: " << x << std::endl;
@@ -63,7 +64,7 @@ struct implementation_template
     // implementation(implementation const&) = delete;
 
     Datatype x = 0;
- 
+
     inline void display(example::button b) const
     {
         std::cout << "display: " << x << std::endl;
@@ -248,40 +249,16 @@ int main()
     auto wnt = example::widget_number::_make<implementation_template<int>>();
     auto nit = example::numeric<>::_make<implementation_template<int>>();
 
-    std::ifstream ifs{"tokens.h", std::ios::binary};
+    std::ifstream ifs{"example__parser_input.h", std::ios::binary};
     std::istreambuf_iterator<char> it{ifs};
-    strange::comprehension::tokenization tokenizer(it);
-    while (!tokenizer.end)
-    {
-        auto token = tokenizer.increment();
-        switch (token.classification)
-        {
-            case strange::comprehension::cls::character:
-                std::cout << "character:";
-                break;
-            case strange::comprehension::cls::comment:
-                std::cout << "comment:";
-                break;
-            case strange::comprehension::cls::mistake:
-                std::cout << "mistake:";
-                break;
-            case strange::comprehension::cls::name:
-                std::cout << "name:";
-                break;
-            case strange::comprehension::cls::number:
-                std::cout << "number:";
-                break;
-            case strange::comprehension::cls::punctuation:
-                std::cout << "punctuation:";
-                break;
-            case strange::comprehension::cls::string:
-                std::cout << "string:";
-                break;
-            default:
-                std::cout << "token:";
-        }
-        std::cout << token.text << std::endl;
-    }
+    strange::comprehension::toker toker(it);
+    strange::comprehension::parser parser(toker);
+    auto space = parser.parse();
 
     return 0;
+}
+
+namespace syntax
+{
+#include "example__parser_input.h"
 }

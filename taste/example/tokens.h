@@ -1,8 +1,0 @@
-namespace stu
-{
-
-}
-
-//line
-/*block
-*/
