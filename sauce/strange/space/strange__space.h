@@ -16,11 +16,6 @@ struct any;
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct any_;
 
-struct parameter;
-
-template<typename _Thing = strange::definition::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>>
-struct parameter_;
-
 template<typename T>
 struct forward_const_iterator;
 
@@ -63,6 +58,11 @@ struct vector;
 template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct vector_;
 
+struct parameter;
+
+template<typename _Thing = strange::definition::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct parameter_;
+
 }
 
 namespace strange
@@ -83,24 +83,6 @@ struct reflection<strange::any_<_Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::any_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
-    }
-};
-
-template<>
-struct reflection<strange::parameter>
-{
-    inline static auto name() -> std::string
-    {
-        return "strange::parameter";
-    }
-};
-
-template<typename _Thing, bool _Copy>
-struct reflection<strange::parameter_<_Thing, _Copy>>
-{
-    inline static auto name() -> std::string
-    {
-        return "strange::parameter_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -227,6 +209,24 @@ struct reflection<strange::vector_<T, _Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::vector_<" + reflection<T>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::parameter>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::parameter";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::parameter_<_Thing, _Copy>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::parameter_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -422,251 +422,6 @@ public:
     }
 
     using _Abstraction_ = any_;
-    using _Thing_ = _Thing;
-
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
-};
-
-struct parameter : any
-{
-    inline parameter() = default;
-
-    inline parameter(parameter const & other)
-    :strange::_common{other}
-    ,any{}
-    {
-    }
-
-    inline parameter(parameter && other)
-    :strange::_common{std::move(other)}
-    ,any{}
-    {
-    }
-
-    inline auto operator=(parameter const & other) -> parameter &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(parameter && other) -> parameter &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline parameter(std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-    ,any{}
-    {
-    }
-
-    explicit inline parameter(std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-    ,any{}
-    {
-    }
-
-protected:
-    struct _derived : any::_derived
-    {
-        static inline auto _static_shared_to_base(std::shared_ptr<typename parameter::_derived> derived) -> std::shared_ptr<strange::_common::_base>
-        {
-            return any::_derived::_static_shared_to_base(derived);
-        }
-
-        virtual auto type() const -> std::string const & = 0;
-
-        virtual auto type() -> std::string & = 0;
-
-        virtual auto name() const -> std::string const & = 0;
-
-        virtual auto name() -> std::string & = 0;
-
-        virtual auto argument() const -> std::string const & = 0;
-
-        virtual auto argument() -> std::string & = 0;
-
-        virtual auto operator==(parameter const & other) const -> bool = 0;
-
-        virtual auto operator!=(parameter const & other) const -> bool = 0;
-    };
-
-public:
-    inline auto _valid() const -> bool
-    {
-        return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared).operator bool();
-    }
-
-    template<typename _Thing = strange::definition::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> parameter
-    {
-        return parameter{parameter::_derived::_static_shared_to_base(std::make_shared<typename parameter_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    using _Kind_ = parameter;
-
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
-
-    inline static std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
-        cats.insert(_cat_);
-        return cats;
-    }();
-
-
-    inline auto type() const -> std::string const &;
-
-    inline auto type() -> std::string &;
-
-    inline auto name() const -> std::string const &;
-
-    inline auto name() -> std::string &;
-
-    inline auto argument() const -> std::string const &;
-
-    inline auto argument() -> std::string &;
-
-    inline auto operator==(parameter const & other) const -> bool;
-
-    inline auto operator!=(parameter const & other) const -> bool;
-};
-
-template<typename _Thing, bool _Copy>
-struct parameter_ : parameter
-{
-    inline parameter_() = default;
-
-    inline parameter_(parameter_ const & other)
-    :strange::_common{other}
-    ,parameter{}
-    {
-    }
-
-    inline parameter_(parameter_ && other)
-    :strange::_common{std::move(other)}
-    ,parameter{}
-    {
-    }
-
-    inline auto operator=(parameter_ const & other) -> parameter_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(parameter_ && other) -> parameter_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline parameter_(std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-    ,parameter{}
-    {
-    }
-
-    explicit inline parameter_(std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-    ,parameter{}
-    {
-    }
-
-private:
-    friend struct parameter;
-
-    struct _instance final : parameter::_derived
-    {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
-        :parameter_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
-        {
-        }
-
-        inline auto _address() const -> void const * final
-        {
-            return &_thing;
-        }
-
-        inline auto _sizeof() const -> size_t final
-        {
-            return sizeof(_thing);
-        }
-
-        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
-        {
-            if constexpr (_Copy)
-            {
-                return parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>(_thing));
-            }
-            else
-            {
-                throw true;
-            }
-        }
-
-        inline auto _cat() const -> std::string final
-        {
-            return parameter::_cat_;
-        }
-
-        inline auto _cats() const -> std::unordered_set<std::string> final
-        {
-            return parameter::_cats_;
-        }
-
-        inline auto _name() const -> std::string final
-        {
-            return parameter_::_name_;
-        }
-
-        inline auto type() const -> std::string const & final;
-
-        inline auto type() -> std::string & final;
-
-        inline auto name() const -> std::string const & final;
-
-        inline auto name() -> std::string & final;
-
-        inline auto argument() const -> std::string const & final;
-
-        inline auto argument() -> std::string & final;
-
-        inline auto operator==(parameter const & other) const -> bool final;
-
-        inline auto operator!=(parameter const & other) const -> bool final;
-
-        _Thing _thing;
-    };
-
-public:
-    template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> parameter_
-    {
-        return parameter_{parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    inline auto _valid() const -> bool
-    {
-        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared).operator bool();
-    }
-
-    inline auto _thing() const -> _Thing const &
-    {
-        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared)->_thing;
-    }
-
-    inline auto _thing() -> _Thing &
-    {
-        strange::_common::_mutate();
-        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared)->_thing;
-    }
-
-    using _Abstraction_ = parameter_;
     using _Thing_ = _Thing;
 
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
@@ -2938,98 +2693,250 @@ public:
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
-template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::type() const -> std::string const &
+struct parameter : any
 {
-    return _thing.type;
-}
+    inline parameter() = default;
+
+    inline parameter(parameter const & other)
+    :strange::_common{other}
+    ,any{}
+    {
+    }
+
+    inline parameter(parameter && other)
+    :strange::_common{std::move(other)}
+    ,any{}
+    {
+    }
+
+    inline auto operator=(parameter const & other) -> parameter &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(parameter && other) -> parameter &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline parameter(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any{}
+    {
+    }
+
+    explicit inline parameter(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any{}
+    {
+    }
+
+protected:
+    struct _derived : any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename parameter::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto type() const -> std::string const & = 0;
+
+        virtual auto type() -> std::string & = 0;
+
+        virtual auto name() const -> std::string const & = 0;
+
+        virtual auto name() -> std::string & = 0;
+
+        virtual auto argument() const -> std::string const & = 0;
+
+        virtual auto argument() -> std::string & = 0;
+
+        virtual auto operator==(parameter const & other) const -> bool = 0;
+
+        virtual auto operator!=(parameter const & other) const -> bool = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing = strange::definition::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> parameter
+    {
+        return parameter{parameter::_derived::_static_shared_to_base(std::make_shared<typename parameter_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = parameter;
+
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+
+    inline auto type() const -> std::string const &;
+
+    inline auto type() -> std::string &;
+
+    inline auto name() const -> std::string const &;
+
+    inline auto name() -> std::string &;
+
+    inline auto argument() const -> std::string const &;
+
+    inline auto argument() -> std::string &;
+
+    inline auto operator==(parameter const & other) const -> bool;
+
+    inline auto operator!=(parameter const & other) const -> bool;
+};
 
 template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::type() -> std::string &
+struct parameter_ : parameter
 {
-    return _thing.type;
-}
+    inline parameter_() = default;
 
-template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::name() const -> std::string const &
-{
-    return _thing.name;
-}
+    inline parameter_(parameter_ const & other)
+    :strange::_common{other}
+    ,parameter{}
+    {
+    }
 
-template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::name() -> std::string &
-{
-    return _thing.name;
-}
+    inline parameter_(parameter_ && other)
+    :strange::_common{std::move(other)}
+    ,parameter{}
+    {
+    }
 
-template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::argument() const -> std::string const &
-{
-    return _thing.argument;
-}
+    inline auto operator=(parameter_ const & other) -> parameter_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
 
-template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::argument() -> std::string &
-{
-    return _thing.argument;
-}
+    inline auto operator=(parameter_ && other) -> parameter_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
 
-template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::operator==(parameter const & other) const -> bool
-{
-    return type() == other.type()
-        && name() == other.name()
-        && argument() == other.argument();
-}
+    explicit inline parameter_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,parameter{}
+    {
+    }
 
-template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::operator!=(parameter const & other) const -> bool
-{
-    return !operator==(other);
-}
+    explicit inline parameter_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,parameter{}
+    {
+    }
 
-inline auto parameter::type() const -> std::string const &
-{
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
-}
+private:
+    friend struct parameter;
 
-inline auto parameter::type() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
-}
+    struct _instance final : parameter::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :parameter_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
 
-inline auto parameter::name() const -> std::string const &
-{
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->name();
-}
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
 
-inline auto parameter::name() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->name();
-}
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
 
-inline auto parameter::argument() const -> std::string const &
-{
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
-}
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
 
-inline auto parameter::argument() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
-}
+        inline auto _cat() const -> std::string final
+        {
+            return parameter::_cat_;
+        }
 
-inline auto parameter::operator==(parameter const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator==(other);
-}
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return parameter::_cats_;
+        }
 
-inline auto parameter::operator!=(parameter const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator!=(other);
-}
+        inline auto _name() const -> std::string final
+        {
+            return parameter_::_name_;
+        }
+
+        inline auto type() const -> std::string const & final;
+
+        inline auto type() -> std::string & final;
+
+        inline auto name() const -> std::string const & final;
+
+        inline auto name() -> std::string & final;
+
+        inline auto argument() const -> std::string const & final;
+
+        inline auto argument() -> std::string & final;
+
+        inline auto operator==(parameter const & other) const -> bool final;
+
+        inline auto operator!=(parameter const & other) const -> bool final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> parameter_
+    {
+        return parameter_{parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = parameter_;
+    using _Thing_ = _Thing;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+};
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
@@ -4990,6 +4897,99 @@ template<typename T>
 inline auto vector<T>::operator>=(vector<T> const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator>=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::type() const -> std::string const &
+{
+    return _thing.type;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::type() -> std::string &
+{
+    return _thing.type;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::name() const -> std::string const &
+{
+    return _thing.name;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::name() -> std::string &
+{
+    return _thing.name;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::argument() const -> std::string const &
+{
+    return _thing.argument;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::argument() -> std::string &
+{
+    return _thing.argument;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::operator==(parameter const & other) const -> bool
+{
+    return type() == other.type()
+        && name() == other.name()
+        && argument() == other.argument();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::operator!=(parameter const & other) const -> bool
+{
+    return !operator==(other);
+}
+
+inline auto parameter::type() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
+}
+
+inline auto parameter::type() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
+}
+
+inline auto parameter::name() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->name();
+}
+
+inline auto parameter::name() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->name();
+}
+
+inline auto parameter::argument() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
+}
+
+inline auto parameter::argument() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
+}
+
+inline auto parameter::operator==(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator==(other);
+}
+
+inline auto parameter::operator!=(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator!=(other);
 }
 
 }

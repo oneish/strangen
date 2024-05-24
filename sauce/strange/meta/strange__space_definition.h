@@ -27,89 +27,6 @@ auto definition() -> space
             },
             abstraction
             {
-                .name = "parameter",
-                .parents =
-                {
-                    "any",
-                },
-                .operations =
-                {
-                    operation
-                    {
-                        .name = "type",
-                        .constness = true,
-                        .result = "std::string const &",
-                        .data = true,
-                    },
-                    operation
-                    {
-                        .name = "type",
-                        .result = "std::string &",
-                        .data = true,
-                    },
-                    operation
-                    {
-                        .name = "name",
-                        .constness = true,
-                        .result = "std::string const &",
-                        .data = true,
-                    },
-                    operation
-                    {
-                        .name = "name",
-                        .result = "std::string &",
-                        .data = true,
-                    },
-                    operation
-                    {
-                        .name = "argument",
-                        .constness = true,
-                        .result = "std::string const &",
-                        .data = true,
-                    },
-                    operation
-                    {
-                        .name = "argument",
-                        .result = "std::string &",
-                        .data = true,
-                    },
-                    operation
-                    {
-                        .name = "operator==",
-                        .parameters =
-                        {
-                            parameter
-                            ({
-                                .type = "parameter const &",
-                                .name = "other",
-                            }),
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = R"#(return type() == other.type()
-        && name() == other.name()
-        && argument() == other.argument())#",
-                    },
-                    operation
-                    {
-                        .name = "operator!=",
-                        .parameters =
-                        {
-                            parameter
-                            ({
-                                .type = "parameter const &",
-                                .name = "other",
-                            }),
-                        },
-                        .constness = true,
-                        .result = "bool",
-                        .customisation = "return !operator==(other)",
-                    },
-                },
-                .thing = "strange::definition::parameter",
-            },
-            abstraction
-            {
                 .parameters =
                 {
                     parameter
@@ -1600,6 +1517,89 @@ auto definition() -> space
                     },
                 },
                 .thing = "std::vector<T>",
+            },
+            abstraction
+            {
+                .name = "parameter",
+                .parents =
+                {
+                    "any",
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "type",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "type",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "name",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "name",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "argument",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "argument",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            ({
+                                .type = "parameter const &",
+                                .name = "other",
+                            }),
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return type() == other.type()
+        && name() == other.name()
+        && argument() == other.argument())#",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            ({
+                                .type = "parameter const &",
+                                .name = "other",
+                            }),
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                },
+                .thing = "strange::definition::parameter",
             },
         },
     };
