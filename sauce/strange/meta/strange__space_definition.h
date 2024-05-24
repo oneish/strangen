@@ -1598,6 +1598,68 @@ auto definition() -> space
                         .result = "bool",
                         .customisation = "return !operator==(other)",
                     },
+                    operation
+                    {
+                        .name = "operator<",
+                        .parameters =
+                        {
+                            parameter
+                            ({
+                                .type = "parameter const &",
+                                .name = "other",
+                            }),
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return type() < other.type()
+        || (type() == other.type() && (name() < other.name()
+        || (name() == other.name() && argument() < other.argument()))))#",
+                    },
+                    operation
+                    {
+                        .name = "operator<=",
+                        .parameters =
+                        {
+                            parameter
+                            ({
+                                .type = "parameter const &",
+                                .name = "other",
+                            }),
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return operator<(other) || operator==(other))#",
+                    },
+                    operation
+                    {
+                        .name = "operator>",
+                        .parameters =
+                        {
+                            parameter
+                            ({
+                                .type = "parameter const &",
+                                .name = "other",
+                            }),
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<=(other))#",
+                    },
+                    operation
+                    {
+                        .name = "operator>=",
+                        .parameters =
+                        {
+                            parameter
+                            ({
+                                .type = "parameter const &",
+                                .name = "other",
+                            }),
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<(other))#",
+                    },
                 },
                 .thing = "strange::definition::parameter",
             },
