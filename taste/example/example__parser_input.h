@@ -4,6 +4,14 @@ namespace strange
     {
     };
 
+    struct [[strange::thing("strange::definition::parameter")]]
+    parameter
+    {
+        std::string type{};
+        std::string name{};
+        std::string argument{};
+    };
+
     template<typename T>
     struct forward_const_iterator : any
     {

@@ -24,6 +24,7 @@ inline auto operator==(abstraction const & lhs, abstraction const & rhs) -> bool
     return lhs.parameters == rhs.parameters
         && lhs.name == rhs.name
         && lhs.parents == rhs.parents
+        && lhs.types == rhs.types
         && lhs.operations == rhs.operations
         && lhs.thing == rhs.thing;
 }
@@ -55,6 +56,10 @@ struct std::hash<strange::definition::abstraction>
         for (auto const & parent : abs.parents)
         {
             h ^= std::hash<std::string>{}(parent);
+        }
+        for (auto const & type : abs.types)
+        {
+            h ^= std::hash<strange::definition::parameter>{}(type);
         }
         for (auto const & oper : abs.operations)
         {

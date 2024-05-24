@@ -23,6 +23,57 @@ auto definition() -> space
             },
             abstraction
             {
+                .name = "parameter",
+                .parents =
+                {
+                    "any",
+                },
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "type",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "type",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "name",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "name",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "argument",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "argument",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                },
+                .thing = "strange::definition::parameter",
+            },
+            abstraction
+            {
                 .parameters =
                 {
                     parameter

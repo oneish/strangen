@@ -258,6 +258,7 @@ int main()
     return 0;
 }
 
+#include <string>
 namespace syntax
 {
 #include "example__parser_input.h"

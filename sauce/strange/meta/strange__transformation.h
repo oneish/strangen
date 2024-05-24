@@ -1,5 +1,6 @@
 #pragma once
 #include "../definition/strange__definition__space.h"
+#include "../strange.h"
 #include <ostream>
 #include <algorithm>
 #include <unordered_set>
