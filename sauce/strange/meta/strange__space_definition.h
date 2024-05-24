@@ -69,6 +69,38 @@ auto definition() -> space
                         .result = "std::string &",
                         .data = true,
                     },
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "parameter const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return type() == other.type()
+        && name() == other.name()
+        && argument() == other.argument())#",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters =
+                        {
+                            parameter
+                            {
+                                .type = "parameter const &",
+                                .name = "other",
+                            },
+                        },
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
                 },
                 .thing = "strange::definition::parameter",
             },

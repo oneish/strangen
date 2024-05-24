@@ -489,6 +489,10 @@ protected:
         virtual auto argument() const -> std::string const & = 0;
 
         virtual auto argument() -> std::string & = 0;
+
+        virtual auto operator==(parameter const & other) const -> bool = 0;
+
+        virtual auto operator!=(parameter const & other) const -> bool = 0;
     };
 
 public:
@@ -527,6 +531,10 @@ public:
     inline auto argument() const -> std::string const &;
 
     inline auto argument() -> std::string &;
+
+    inline auto operator==(parameter const & other) const -> bool;
+
+    inline auto operator!=(parameter const & other) const -> bool;
 };
 
 template<typename _Thing, bool _Copy>
@@ -630,6 +638,10 @@ private:
         inline auto argument() const -> std::string const & final;
 
         inline auto argument() -> std::string & final;
+
+        inline auto operator==(parameter const & other) const -> bool final;
+
+        inline auto operator!=(parameter const & other) const -> bool final;
 
         _Thing _thing;
     };
@@ -2965,6 +2977,20 @@ inline auto parameter_<_Thing, _Copy>::_instance::argument() -> std::string &
     return _thing.argument;
 }
 
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::operator==(parameter const & other) const -> bool
+{
+    return type() == other.type()
+        && name() == other.name()
+        && argument() == other.argument();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::operator!=(parameter const & other) const -> bool
+{
+    return !operator==(other);
+}
+
 inline auto parameter::type() const -> std::string const &
 {
     return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
@@ -2996,6 +3022,16 @@ inline auto parameter::argument() -> std::string &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
+}
+
+inline auto parameter::operator==(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator==(other);
+}
+
+inline auto parameter::operator!=(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
