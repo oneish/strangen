@@ -435,20 +435,20 @@ public:
                 }
                 if (types)
                 {
-                    _out << parameter.type << R"#( )#";
+                    _out << parameter.type() << R"#( )#";
                 }
                 else if (reflection)
                 {
                     _out << R"#(" + reflection<)#";
                 }
-                _out << parameter.name;
+                _out << parameter.name();
                 if (reflection && !types)
                 {
                     _out << R"#(>::name() + ")#";
                 }
-                else if (arguments && ((!thing) || !abstraction.thing.empty()) && !parameter.argument.empty())
+                else if (arguments && ((!thing) || !abstraction.thing.empty()) && !parameter.argument().empty())
                 {
-                    _out << R"#( = )#" << parameter.argument;
+                    _out << R"#( = )#" << parameter.argument();
                 }
             }
             if (thing)
@@ -750,19 +750,19 @@ public:
             }
             if (types)
             {
-                _out << parameter.type << R"#( )#" << parameter.name;
-                if (arguments && !parameter.argument.empty())
+                _out << parameter.type() << R"#( )#" << parameter.name();
+                if (arguments && !parameter.argument().empty())
                 {
-                    _out << R"#( = )#" << parameter.argument;
+                    _out << R"#( = )#" << parameter.argument();
                 }
             }
-            else if ((parameter.type.size() >= 2) && (parameter.type.substr(parameter.type.size() - 2) == "&&"))
+            else if ((parameter.type().size() >= 2) && (parameter.type().substr(parameter.type().size() - 2) == "&&"))
             {
-                _out << R"#(std::move()#" << parameter.name << R"#())#";
+                _out << R"#(std::move()#" << parameter.name() << R"#())#";
             }
             else
             {
-                _out << parameter.name;
+                _out << parameter.name();
             }
         }
         _out << R"#())#";
@@ -772,7 +772,7 @@ public:
     {
         for (auto const & type : abstraction.types)
         {
-            _out << R"#(    )#" << type.type << R"#( )#" << type.name << R"#( = )#" << type.argument << R"#(;
+            _out << R"#(    )#" << type.type() << R"#( )#" << type.name() << R"#( = )#" << type.argument() << R"#(;
 
 )#";
         }

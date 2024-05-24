@@ -44,7 +44,11 @@ namespace meta
 using strange::definition::space;
 using strange::definition::abstraction;
 using strange::definition::operation;
-using strange::definition::parameter;
+
+inline auto parameter(strange::definition::parameter param) -> strange::parameter
+{
+    return strange::parameter::_make(param);
+}
 
 auto definition() -> space
 {
@@ -64,11 +68,11 @@ auto definition() -> space
                         .parameters =
                         {
                             parameter
-                            {
+                            ({
                                 .type = "button",
                                 .name = "b",
                                 .argument = "button()",
-                            },
+                            }),
                         },
                         .constness = true,
                         .result = "void",
@@ -89,10 +93,10 @@ auto definition() -> space
                         .parameters =
                         {
                             parameter
-                            {
+                            ({
                                 .type = "int",
                                 .name = "i",
-                            },
+                            }),
                         },
                         .result = "*that",
                     },
@@ -145,11 +149,11 @@ auto definition() -> space
                 .parameters =
                 {
                     parameter
-                    {
+                    ({
                         .type = "typename",
                         .name = "Data",
                         .argument = "int",
-                    },
+                    }),
                 },
                 .name = "numeric",
                 .parents =

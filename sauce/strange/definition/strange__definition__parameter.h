@@ -33,14 +33,3 @@ struct reflection<strange::definition::parameter>
 };
 
 }
-
-template<>
-struct std::hash<strange::definition::parameter>
-{
-    inline auto operator()(strange::definition::parameter const & param) const -> size_t
-    {
-        return std::hash<std::string>{}(param.type)
-            ^ std::hash<std::string>{}(param.name)
-            ^ std::hash<std::string>{}(param.argument);
-    }
-};

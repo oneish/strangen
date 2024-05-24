@@ -1,5 +1,5 @@
 #pragma once
-#include "strange__definition__parameter.h"
+#include "../space/strange__space.h"
 #include "strange__definition__operation.h"
 #include "../reflection/strange__reflection.h"
 #include <string>
@@ -11,10 +11,10 @@ namespace definition
 {
 struct abstraction
 {
-    std::vector<parameter> parameters;
+    std::vector<strange::parameter> parameters;
     std::string name;
     std::vector<std::string> parents;
-    std::vector<parameter> types;
+    std::vector<strange::parameter> types;
     std::vector<operation> operations;
     std::string thing;
 };
@@ -41,31 +41,3 @@ struct reflection<strange::definition::abstraction>
 };
 
 }
-
-template<>
-struct std::hash<strange::definition::abstraction>
-{
-    inline auto operator()(strange::definition::abstraction const & abs) const -> size_t
-    {
-        std::size_t h = 0;
-        for (auto const & param : abs.parameters)
-        {
-            h ^= std::hash<strange::definition::parameter>{}(param);
-        }
-        h ^= std::hash<std::string>{}(abs.name);
-        for (auto const & parent : abs.parents)
-        {
-            h ^= std::hash<std::string>{}(parent);
-        }
-        for (auto const & type : abs.types)
-        {
-            h ^= std::hash<strange::definition::parameter>{}(type);
-        }
-        for (auto const & oper : abs.operations)
-        {
-            h ^= std::hash<strange::definition::operation>{}(oper);
-        }
-        h ^= std::hash<std::string>{}(abs.thing);
-        return h;
-    }
-};

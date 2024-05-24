@@ -32,17 +32,3 @@ struct reflection<strange::definition::space>
 };
 
 }
-
-template<>
-struct std::hash<strange::definition::space>
-{
-    inline auto operator()(strange::definition::space const & spc) const -> size_t
-    {
-        std::size_t h = std::hash<std::string>{}(spc.name);
-        for (auto const & abs : spc.abstractions)
-        {
-            h ^= std::hash<strange::definition::abstraction>{}(abs);
-        }
-        return h;
-    }
-};
