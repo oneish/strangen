@@ -249,6 +249,12 @@ int main()
     auto wnt = example::widget_number::_make<implementation_template<int>>();
     auto nit = example::numeric<>::_make<implementation_template<int>>();
 
+    auto params = strange::vector<strange::parameter>::_make();
+    for (auto & param : params)
+    {
+        std::cout << "param: " << param.name() << std::endl;
+    }
+
     std::ifstream ifs{"example__parser_input.h", std::ios::binary};
     std::istreambuf_iterator<char> it{ifs};
     strange::comprehension::toker toker(it);

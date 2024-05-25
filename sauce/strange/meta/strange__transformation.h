@@ -194,7 +194,7 @@ namespace )#" << _space.name << R"#(
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename )#" << abstraction.name << R"#(::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename )#" << abstraction.name << R"#(::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing)#";
@@ -364,12 +364,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<)#" << abstraction.name << R"#(_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -697,7 +697,12 @@ public:
                             _out << R"#(return std::dynamic_pointer_cast<typename )#" << abstraction.name;
                         }
                         _abstraction_parameters(abstraction, false, false, false, false);
-                        _out << R"#(::_derived>(strange::_common::_shared)->)#" << operation.name;
+                        _out << R"#(::_derived)#";
+                        if (operation.constness)
+                        {
+                            _out << R"#( const)#";
+                        }
+                        _out << R"#(>(strange::_common::_shared)->)#" << operation.name;
                     }
                     if ((operation.modification.empty() && !inner) || (operation.customisation.empty() && !operation.data))
                     {

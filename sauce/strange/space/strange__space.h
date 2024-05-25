@@ -283,7 +283,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename any::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename any::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -407,12 +407,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<any_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<any_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<any_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<any_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -502,7 +502,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename forward_const_iterator::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename forward_const_iterator::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -651,12 +651,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<forward_const_iterator_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<forward_const_iterator_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<forward_const_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<forward_const_iterator_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -742,7 +742,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename forward_iterator::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename forward_iterator::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -907,12 +907,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<forward_iterator_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<forward_iterator_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<forward_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<forward_iterator_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -990,7 +990,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename bidirectional_const_iterator::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename bidirectional_const_iterator::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1155,12 +1155,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<bidirectional_const_iterator_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<bidirectional_const_iterator_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<bidirectional_const_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<bidirectional_const_iterator_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -1246,7 +1246,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename bidirectional_iterator::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename bidirectional_iterator::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1436,12 +1436,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<bidirectional_iterator_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<bidirectional_iterator_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<bidirectional_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<bidirectional_iterator_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -1543,7 +1543,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename random_access_const_iterator::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename random_access_const_iterator::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1756,12 +1756,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<random_access_const_iterator_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<random_access_const_iterator_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<random_access_const_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<random_access_const_iterator_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -1863,7 +1863,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename random_access_iterator::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename random_access_iterator::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -2141,12 +2141,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<random_access_iterator_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<random_access_iterator_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<random_access_iterator_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<random_access_iterator_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -2340,7 +2340,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename vector::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename vector::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -2673,12 +2673,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<vector_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<vector_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<vector_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<vector_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -2769,7 +2769,7 @@ protected:
 public:
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared).operator bool();
     }
 
     template<typename _Thing = strange::definition::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -2942,12 +2942,12 @@ public:
 
     inline auto _valid() const -> bool
     {
-        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared).operator bool();
+        return std::dynamic_pointer_cast<parameter_::_instance const>(strange::_common::_shared).operator bool();
     }
 
     inline auto _thing() const -> _Thing const &
     {
-        return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared)->_thing;
+        return std::dynamic_pointer_cast<parameter_::_instance const>(strange::_common::_shared)->_thing;
     }
 
     inline auto _thing() -> _Thing &
@@ -3001,13 +3001,13 @@ inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(for
 template<typename T>
 inline auto forward_const_iterator<T>::operator*() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator*();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator*();
 }
 
 template<typename T>
 inline auto forward_const_iterator<T>::operator->() const -> T const *
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator->();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator->();
 }
 
 template<typename T>
@@ -3030,13 +3030,13 @@ inline auto forward_const_iterator<T>::operator++(int i) -> forward_const_iterat
 template<typename T>
 inline auto forward_const_iterator<T>::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto forward_const_iterator<T>::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3102,13 +3102,13 @@ inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_i
 template<typename T>
 inline auto forward_iterator<T>::operator*() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator*();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator*();
 }
 
 template<typename T>
 inline auto forward_iterator<T>::operator->() const -> T const *
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator->();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator->();
 }
 
 template<typename T>
@@ -3131,13 +3131,13 @@ inline auto forward_iterator<T>::operator++(int i) -> forward_iterator
 template<typename T>
 inline auto forward_iterator<T>::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto forward_iterator<T>::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
@@ -3157,13 +3157,13 @@ inline auto forward_iterator<T>::operator->() -> T *
 template<typename T>
 inline auto forward_iterator<T>::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto forward_iterator<T>::operator!=(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3229,13 +3229,13 @@ inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T>
 inline auto bidirectional_const_iterator<T>::operator*() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator*();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator*();
 }
 
 template<typename T>
 inline auto bidirectional_const_iterator<T>::operator->() const -> T const *
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator->();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator->();
 }
 
 template<typename T>
@@ -3258,25 +3258,25 @@ inline auto bidirectional_const_iterator<T>::operator++(int i) -> bidirectional_
 template<typename T>
 inline auto bidirectional_const_iterator<T>::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto bidirectional_const_iterator<T>::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto bidirectional_const_iterator<T>::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto bidirectional_const_iterator<T>::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
@@ -3395,13 +3395,13 @@ inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(bid
 template<typename T>
 inline auto bidirectional_iterator<T>::operator*() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator*();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator*();
 }
 
 template<typename T>
 inline auto bidirectional_iterator<T>::operator->() const -> T const *
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator->();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator->();
 }
 
 template<typename T>
@@ -3424,13 +3424,13 @@ inline auto bidirectional_iterator<T>::operator++(int i) -> bidirectional_iterat
 template<typename T>
 inline auto bidirectional_iterator<T>::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto bidirectional_iterator<T>::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
@@ -3450,25 +3450,25 @@ inline auto bidirectional_iterator<T>::operator->() -> T *
 template<typename T>
 inline auto bidirectional_iterator<T>::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto bidirectional_iterator<T>::operator!=(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto bidirectional_iterator<T>::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto bidirectional_iterator<T>::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
@@ -3491,13 +3491,13 @@ inline auto bidirectional_iterator<T>::operator--(int i) -> bidirectional_iterat
 template<typename T>
 inline auto bidirectional_iterator<T>::operator==(bidirectional_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto bidirectional_iterator<T>::operator!=(bidirectional_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3635,13 +3635,13 @@ inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T>
 inline auto random_access_const_iterator<T>::operator*() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator*();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator*();
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator->() const -> T const *
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator->();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator->();
 }
 
 template<typename T>
@@ -3664,25 +3664,25 @@ inline auto random_access_const_iterator<T>::operator++(int i) -> random_access_
 template<typename T>
 inline auto random_access_const_iterator<T>::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
@@ -3705,37 +3705,37 @@ inline auto random_access_const_iterator<T>::operator--(int i) -> random_access_
 template<typename T>
 inline auto random_access_const_iterator<T>::operator==(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator!=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator<(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator<(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator>(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator>(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator<=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator<=(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator<=(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator>=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator>=(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename T>
@@ -3757,25 +3757,25 @@ inline auto random_access_const_iterator<T>::operator-=(std::ptrdiff_t n) -> ran
 template<typename T>
 inline auto random_access_const_iterator<T>::operator+(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator+(n);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator+(n);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator-(n);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator-(n);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator-(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator-(other);
 }
 
 template<typename T>
 inline auto random_access_const_iterator<T>::operator[](std::ptrdiff_t n) const -> T const &
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator[](n);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator[](n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -4009,13 +4009,13 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator[](std
 template<typename T>
 inline auto random_access_iterator<T>::operator*() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator*();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator*();
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator->() const -> T const *
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator->();
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator->();
 }
 
 template<typename T>
@@ -4038,13 +4038,13 @@ inline auto random_access_iterator<T>::operator++(int i) -> random_access_iterat
 template<typename T>
 inline auto random_access_iterator<T>::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
@@ -4064,25 +4064,25 @@ inline auto random_access_iterator<T>::operator->() -> T *
 template<typename T>
 inline auto random_access_iterator<T>::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator!=(forward_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename forward_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename bidirectional_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
@@ -4105,49 +4105,49 @@ inline auto random_access_iterator<T>::operator--(int i) -> random_access_iterat
 template<typename T>
 inline auto random_access_iterator<T>::operator==(bidirectional_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator!=(bidirectional_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename bidirectional_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator==(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator!=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator<(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator<(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator>(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator>(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator<=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator<=(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator<=(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator>=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator>=(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename T>
@@ -4169,61 +4169,61 @@ inline auto random_access_iterator<T>::operator-=(std::ptrdiff_t n) -> random_ac
 template<typename T>
 inline auto random_access_iterator<T>::operator+(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator+(n);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator+(n);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator-(n);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator-(n);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator-(other);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator-(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator[](std::ptrdiff_t n) const -> T const &
 {
-    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived>(strange::_common::_shared)->operator[](n);
+    return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator[](n);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator==(random_access_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator!=(random_access_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator<(random_access_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator<(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator>(random_access_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator>(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator<=(random_access_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived>(strange::_common::_shared)->operator<=(other);
+    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator<=(other);
 }
 
 template<typename T>
 inline auto random_access_iterator<T>::operator>=(random_access_iterator<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived>(strange::_common::_shared)->operator>=(other);
+    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename T>
@@ -4243,7 +4243,7 @@ inline auto random_access_iterator<T>::operator-(std::ptrdiff_t n) -> random_acc
 template<typename T>
 inline auto random_access_iterator<T>::operator-(random_access_iterator<T> other) const -> std::ptrdiff_t
 {
-    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived>(strange::_common::_shared)->operator-(other);
+    return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator-(other);
 }
 
 template<typename T>
@@ -4604,7 +4604,7 @@ inline auto vector<T>::at(size_t pos) -> T &
 template<typename T>
 inline auto vector<T>::at(size_t pos) const -> T const &
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->at(pos);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->at(pos);
 }
 
 template<typename T>
@@ -4617,7 +4617,7 @@ inline auto vector<T>::operator[](size_t pos) -> T &
 template<typename T>
 inline auto vector<T>::operator[](size_t pos) const -> T const &
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator[](pos);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator[](pos);
 }
 
 template<typename T>
@@ -4630,7 +4630,7 @@ inline auto vector<T>::front() -> T &
 template<typename T>
 inline auto vector<T>::front() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->front();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->front();
 }
 
 template<typename T>
@@ -4643,7 +4643,7 @@ inline auto vector<T>::back() -> T &
 template<typename T>
 inline auto vector<T>::back() const -> T const &
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->back();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->back();
 }
 
 template<typename T>
@@ -4656,7 +4656,7 @@ inline auto vector<T>::data() -> T *
 template<typename T>
 inline auto vector<T>::data() const -> T const *
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->data();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->data();
 }
 
 template<typename T>
@@ -4669,13 +4669,13 @@ inline auto vector<T>::begin() -> typename strange::random_access_iterator<T>
 template<typename T>
 inline auto vector<T>::begin() const -> typename strange::random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->begin();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->begin();
 }
 
 template<typename T>
 inline auto vector<T>::cbegin() const -> typename strange::random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->cbegin();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->cbegin();
 }
 
 template<typename T>
@@ -4688,13 +4688,13 @@ inline auto vector<T>::end() -> typename strange::random_access_iterator<T>
 template<typename T>
 inline auto vector<T>::end() const -> typename strange::random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->end();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->end();
 }
 
 template<typename T>
 inline auto vector<T>::cend() const -> typename strange::random_access_const_iterator<T>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->cend();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->cend();
 }
 
 template<typename T>
@@ -4707,13 +4707,13 @@ inline auto vector<T>::rbegin() -> typename std::reverse_iterator<strange::rando
 template<typename T>
 inline auto vector<T>::rbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->rbegin();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->rbegin();
 }
 
 template<typename T>
 inline auto vector<T>::crbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->crbegin();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->crbegin();
 }
 
 template<typename T>
@@ -4726,31 +4726,31 @@ inline auto vector<T>::rend() -> typename std::reverse_iterator<strange::random_
 template<typename T>
 inline auto vector<T>::rend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->rend();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->rend();
 }
 
 template<typename T>
 inline auto vector<T>::crend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->crend();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->crend();
 }
 
 template<typename T>
 inline auto vector<T>::empty() const -> bool
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->empty();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->empty();
 }
 
 template<typename T>
 inline auto vector<T>::size() const -> size_t
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->size();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->size();
 }
 
 template<typename T>
 inline auto vector<T>::max_size() const -> size_t
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->max_size();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->max_size();
 }
 
 template<typename T>
@@ -4763,7 +4763,7 @@ inline auto vector<T>::reserve(size_t new_cap) -> void
 template<typename T>
 inline auto vector<T>::capacity() const -> size_t
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->capacity();
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->capacity();
 }
 
 template<typename T>
@@ -4890,37 +4890,37 @@ inline auto vector<T>::swap(vector<T> & other) -> void
 template<typename T>
 inline auto vector<T>::operator==(vector<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 template<typename T>
 inline auto vector<T>::operator!=(vector<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 template<typename T>
 inline auto vector<T>::operator<(vector<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator<(other);
 }
 
 template<typename T>
 inline auto vector<T>::operator>(vector<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator>(other);
 }
 
 template<typename T>
 inline auto vector<T>::operator<=(vector<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator<=(other);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator<=(other);
 }
 
 template<typename T>
 inline auto vector<T>::operator>=(vector<T> const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator>=(other);
+    return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename _Thing, bool _Copy>
@@ -5001,7 +5001,7 @@ inline auto parameter_<_Thing, _Copy>::_instance::operator>=(parameter const & o
 
 inline auto parameter::type() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->type();
 }
 
 inline auto parameter::type() -> std::string &
@@ -5012,7 +5012,7 @@ inline auto parameter::type() -> std::string &
 
 inline auto parameter::name() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->name();
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->name();
 }
 
 inline auto parameter::name() -> std::string &
@@ -5023,7 +5023,7 @@ inline auto parameter::name() -> std::string &
 
 inline auto parameter::argument() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->argument();
 }
 
 inline auto parameter::argument() -> std::string &
@@ -5034,32 +5034,32 @@ inline auto parameter::argument() -> std::string &
 
 inline auto parameter::operator==(parameter const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
 inline auto parameter::operator!=(parameter const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator!=(other);
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
 inline auto parameter::operator<(parameter const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator<(other);
 }
 
 inline auto parameter::operator<=(parameter const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator<=(other);
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator<=(other);
 }
 
 inline auto parameter::operator>(parameter const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator>(other);
 }
 
 inline auto parameter::operator>=(parameter const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->operator>=(other);
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 }
