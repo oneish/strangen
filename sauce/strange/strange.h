@@ -20,23 +20,22 @@ struct std::hash<strange::parameter>
     }
 };
 
-#include "definition/strange__definition__operation.h"
 template<>
-struct std::hash<strange::definition::operation>
+struct std::hash<strange::operation>
 {
-    inline auto operator()(strange::definition::operation const & op) const -> size_t
+    inline auto operator()(strange::operation const & op) const -> size_t
     {
-        std::size_t h = std::hash<std::string>{}(op.name);
-        for (auto const & param : op.parameters)
+        std::size_t h = std::hash<std::string>{}(op.name());
+        for (auto const & param : op.parameters())
         {
             h ^= std::hash<strange::parameter>{}(param);
         }
-        return h ^ std::hash<bool>{}(op.constness)
-            ^ std::hash<std::string>{}(op.result)
-            ^ std::hash<bool>{}(op.data)
-            ^ std::hash<std::string>{}(op.modification)
-            ^ std::hash<std::string>{}(op.customisation)
-            ^ std::hash<std::string>{}(op.implementation);
+        return h ^ std::hash<bool>{}(op.constness())
+            ^ std::hash<std::string>{}(op.result())
+            ^ std::hash<bool>{}(op.data())
+            ^ std::hash<std::string>{}(op.modification())
+            ^ std::hash<std::string>{}(op.customisation())
+            ^ std::hash<std::string>{}(op.implementation());
     }
 };
 
@@ -62,7 +61,7 @@ struct std::hash<strange::definition::abstraction>
         }
         for (auto const & oper : abs.operations)
         {
-            h ^= std::hash<strange::definition::operation>{}(oper);
+            h ^= std::hash<strange::operation>{}(oper);
         }
         h ^= std::hash<std::string>{}(abs.thing);
         return h;

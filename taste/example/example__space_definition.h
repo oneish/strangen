@@ -45,7 +45,6 @@ namespace meta
 {
 using strange::definition::space;
 using strange::definition::abstraction;
-using strange::definition::operation;
 
 inline auto parents(std::vector<std::string> pars) -> strange::vector<std::string>
 {
@@ -62,6 +61,16 @@ inline auto parameters(std::vector<strange::parameter> params) -> strange::vecto
     return strange::vector<strange::parameter>::_make(params);
 }
 
+inline auto operation(strange::definition::operation op) -> strange::operation
+{
+    return strange::operation::_make(op);
+}
+
+inline auto operations(std::vector<strange::operation> ops) -> strange::vector<strange::operation>
+{
+    return strange::vector<strange::operation>::_make(ops);
+}
+
 auto definition() -> space
 {
     return space
@@ -72,10 +81,10 @@ auto definition() -> space
             abstraction
             {
                 .name = "widget",
-                .operations =
-                {
+                .operations = operations
+                ({
                     operation
-                    {
+                    ({
                         .name = "display",
                         .parameters = parameters
                         ({
@@ -88,19 +97,19 @@ auto definition() -> space
                         }),
                         .constness = true,
                         .result = "void",
-                    },
+                    }),
                     operation
-                    {
+                    ({
                         .name = "inc",
                         .result = "void",
-                    },
+                    }),
                     operation
-                    {
+                    ({
                         .name = "operator++",
                         .result = "*this",
-                    },
+                    }),
                     operation
-                    {
+                    ({
                         .name = "operator--",
                         .parameters = parameters
                         ({
@@ -111,8 +120,8 @@ auto definition() -> space
                             }),
                         }),
                         .result = "*that",
-                    },
-                },
+                    }),
+                }),
             },
             abstraction
             {
@@ -121,31 +130,31 @@ auto definition() -> space
                 ({
                     "widget",
                 }),
-                .operations =
-                {
+                .operations = operations
+                ({
                     operation
-                    {
+                    ({
                         .name = "push",
                         .result = "void",
-                    },
-                },
+                    }),
+                }),
             },
             abstraction
             {
                 .name = "number",
-                .operations =
-                {
+                .operations = operations
+                ({
                     operation
-                    {
+                    ({
                         .name = "inc",
                         .result = "void",
-                    },
+                    }),
                     operation
-                    {
+                    ({
                         .name = "dec",
                         .result = "void",
-                    },
-                },
+                    }),
+                }),
             },
             abstraction
             {
@@ -172,28 +181,28 @@ auto definition() -> space
                 ({
                     "number",
                 }),
-                .operations =
-                {
+                .operations = operations
+                ({
                     operation
-                    {
+                    ({
                         .name = "get",
                         .constness = true,
                         .result = "Data",
-                    },
+                    }),
                     operation
-                    {
+                    ({
                         .name = "x",
                         .constness = true,
                         .result = "Data const &",
                         .data = true,
-                    },
+                    }),
                     operation
-                    {
+                    ({
                         .name = "x",
                         .result = "Data &",
                         .data = true,
-                    },
-                },
+                    }),
+                }),
             },
         },
     };

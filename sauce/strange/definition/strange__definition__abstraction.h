@@ -1,6 +1,5 @@
 #pragma once
 #include "../space/strange__space.h"
-#include "strange__definition__operation.h"
 #include "../reflection/strange__reflection.h"
 #include <string>
 
@@ -14,7 +13,7 @@ struct abstraction
     std::string name;
     strange::vector<std::string> parents = strange::vector<std::string>::_make();
     strange::vector<strange::parameter> types = strange::vector<strange::parameter>::_make();
-    std::vector<operation> operations;
+    strange::vector<strange::operation> operations = strange::vector<strange::operation>::_make();
     std::string thing;
 };
 

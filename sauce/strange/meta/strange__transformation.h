@@ -186,7 +186,7 @@ namespace )#" << _space.name << R"#(
             _out << R"#(        }
 )#";
             {
-                std::unordered_set<definition::operation> unique;
+                std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, true, false, unique);
             }
             _out << R"#(    };
@@ -230,7 +230,7 @@ public:
 
 )#";
             {
-                std::unordered_set<definition::operation> unique;
+                std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, false, unique);
             }
             _out << R"#(};
@@ -348,7 +348,7 @@ private:
         }
 )#";
             {
-                std::unordered_set<definition::operation> unique;
+                std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, false, unique);
             }
             _out << R"#(
@@ -393,11 +393,11 @@ public:
         for (auto const & abstraction : _space.abstractions)
         {
             {
-                std::unordered_set<definition::operation> unique;
+                std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, true, false, true, unique);
             }
             {
-                std::unordered_set<definition::operation> unique;
+                std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, true, unique);
             }
         }
@@ -535,7 +535,7 @@ public:
         }
     }
 
-    auto _abstraction_operations(definition::abstraction const & abstraction, definition::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<definition::operation> & unique) -> void
+    auto _abstraction_operations(definition::abstraction const & abstraction, definition::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<strange::operation> & unique) -> void
     {
         if ((!inner) || !pure)
         {
@@ -587,7 +587,7 @@ public:
                 }
                 if (!definition)
                 {
-                    _out << R"#(auto )#" << operation.name;
+                    _out << R"#(auto )#" << operation.name();
                 }
                 else
                 {
@@ -605,10 +605,10 @@ public:
                     {
                         _out << R"#(::)#";
                     }
-                    _out << operation.name;
+                    _out << operation.name();
                 }
                 _operation_parameters(operation, true, definition && !inner);
-                if (operation.constness)
+                if (operation.constness())
                 {
                     _out << R"#( const -> )#";
                 }
@@ -616,9 +616,9 @@ public:
                 {
                     _out << R"#( -> )#";
                 }
-                bool const that = (operation.result == "*that");
-                bool const this_or_that = (that || (operation.result == "*this"));
-                bool const this_or_that_or_void = (this_or_that || (operation.result == "void"));
+                bool const that = (operation.result() == "*that");
+                bool const this_or_that = (that || (operation.result() == "*this"));
+                bool const this_or_that_or_void = (this_or_that || (operation.result() == "void"));
                 if (this_or_that)
                 {
                     if (inner || pure)
@@ -636,7 +636,7 @@ public:
                 }
                 else
                 {
-                    _out << operation.result;
+                    _out << operation.result();
                 }
                 if (!definition)
                 {
@@ -663,27 +663,27 @@ public:
     )#";
                     if (inner)
                     {
-                        if (!operation.customisation.empty())
+                        if (!operation.customisation().empty())
                         {
-                            _out << operation.customisation;
+                            _out << operation.customisation();
                         }
                         else if (this_or_that_or_void)
                         {
-                            _out << R"#(_thing.)#" << operation.name;
+                            _out << R"#(_thing.)#" << operation.name();
                         }
                         else
                         {
-                            _out << R"#(return _thing.)#" << operation.name;
+                            _out << R"#(return _thing.)#" << operation.name();
                         }
                     }
-                    else if (operation.modification.empty())
+                    else if (operation.modification().empty())
                     {
                         if (that)
                         {
                             _out << R"#(auto _result = *this;
     )#";
                         }
-                        if (!operation.constness)
+                        if (!operation.constness())
                         {
                             _out << R"#(strange::_common::_mutate();
     )#";
@@ -698,19 +698,19 @@ public:
                         }
                         _abstraction_parameters(abstraction, false, false, false, false);
                         _out << R"#(::_derived)#";
-                        if (operation.constness)
+                        if (operation.constness())
                         {
                             _out << R"#( const)#";
                         }
-                        _out << R"#(>(strange::_common::_shared)->)#" << operation.name;
+                        _out << R"#(>(strange::_common::_shared)->)#" << operation.name();
                     }
-                    if ((operation.modification.empty() && !inner) || (operation.customisation.empty() && !operation.data))
+                    if ((operation.modification().empty() && !inner) || (operation.customisation().empty() && !operation.data()))
                     {
                         _operation_parameters(operation, false, false);
                     }
-                    if ((!inner) && !operation.modification.empty())
+                    if ((!inner) && !operation.modification().empty())
                     {
-                        _out << operation.modification;
+                        _out << operation.modification();
                     }
                     else if (this_or_that && !inner)
                     {
@@ -739,11 +739,11 @@ public:
         }
     }
 
-    auto _operation_parameters(definition::operation const & operation, bool const types, bool const arguments) -> void
+    auto _operation_parameters(strange::operation const & operation, bool const types, bool const arguments) -> void
     {
         _out << R"#(()#";
         bool first = true;
-        for (auto const & parameter : operation.parameters)
+        for (auto const & parameter : operation.parameters())
         {
             if (first)
             {

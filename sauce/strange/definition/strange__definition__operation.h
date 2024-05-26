@@ -19,18 +19,6 @@ struct operation
     std::string implementation;
 };
 
-inline auto operator==(operation const & lhs, operation const & rhs) -> bool
-{
-    return lhs.name == rhs.name
-        && lhs.parameters == rhs.parameters
-        && lhs.constness == rhs.constness
-        && lhs.result == rhs.result
-        && lhs.data == rhs.data
-        && lhs.modification == rhs.modification
-        && lhs.customisation == rhs.customisation
-        && lhs.implementation == rhs.implementation;
-}
-
 }
 
 template<>
