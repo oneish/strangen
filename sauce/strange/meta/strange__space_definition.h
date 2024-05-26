@@ -1065,7 +1065,7 @@ auto definition() -> space
                         .name = "begin",
                         .constness = true,
                         .result = "typename strange::random_access_const_iterator<T>",
-                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())",
+                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())",
                     },
                     operation
                     {
@@ -1085,7 +1085,7 @@ auto definition() -> space
                         .name = "end",
                         .constness = true,
                         .result = "typename strange::random_access_const_iterator<T>",
-                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())",
+                        .customisation = "return random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())",
                     },
                     operation
                     {
@@ -1105,7 +1105,7 @@ auto definition() -> space
                         .name = "rbegin",
                         .constness = true,
                         .result = "typename std::reverse_iterator<strange::random_access_const_iterator<T>>",
-                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())}",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())}",
                     },
                     operation
                     {
@@ -1125,7 +1125,7 @@ auto definition() -> space
                         .name = "rend",
                         .constness = true,
                         .result = "typename std::reverse_iterator<strange::random_access_const_iterator<T>>",
-                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())}",
+                        .customisation = "return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())}",
                     },
                     operation
                     {

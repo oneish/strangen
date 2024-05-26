@@ -4346,7 +4346,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::begin() -> typename strange::r
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::begin() const -> typename strange::random_access_const_iterator<T>
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin());
+    return random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -4364,7 +4364,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::end() -> typename strange::ran
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::end() const -> typename strange::random_access_const_iterator<T>
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend());
+    return random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -4382,7 +4382,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() -> typename std::reve
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())};
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -4400,7 +4400,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::rend() -> typename std::revers
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::rend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())};
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
