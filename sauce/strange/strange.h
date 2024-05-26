@@ -67,20 +67,21 @@ struct std::hash<strange::abstraction>
     }
 };
 
-#include "definition/strange__definition__parameter.h"
-#include "definition/strange__definition__operation.h"
-#include "definition/strange__definition__abstraction.h"
-#include "definition/strange__definition__space.h"
 template<>
-struct std::hash<strange::definition::space>
+struct std::hash<strange::space>
 {
-    inline auto operator()(strange::definition::space const & spc) const -> size_t
+    inline auto operator()(strange::space const & spc) const -> size_t
     {
-        std::size_t h = std::hash<std::string>{}(spc.name);
-        for (auto const & abstract : spc.abstractions)
+        std::size_t h = std::hash<std::string>{}(spc.name());
+        for (auto const & abstract : spc.abstractions())
         {
             h ^= std::hash<strange::abstraction>{}(abstract);
         }
         return h;
     }
 };
+
+#include "definition/strange__definition__parameter.h"
+#include "definition/strange__definition__operation.h"
+#include "definition/strange__definition__abstraction.h"
+#include "definition/strange__definition__space.h"

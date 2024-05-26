@@ -8,8 +8,6 @@ namespace strange
 {
 namespace meta
 {
-using strange::definition::space;
-
 inline auto parents(std::vector<std::string> pars) -> strange::vector<std::string>
 {
     return strange::vector<std::string>::_make(pars);
@@ -45,10 +43,15 @@ inline auto abstractions(std::vector<strange::abstraction> abstracts) -> strange
     return strange::vector<strange::abstraction>::_make(abstracts);
 }
 
-auto definition() -> space
+inline auto space(strange::definition::space spc) -> strange::space
 {
-    return space
-    {
+    return strange::space::_make(spc);
+}
+
+auto definition() -> strange::space
+{
+    return meta::space
+    ({
         .name = "strange",
         .abstractions = abstractions
         ({
@@ -2235,7 +2238,7 @@ auto definition() -> space
                 .thing = "strange::definition::space",
             }),
         }),
-    };
+    });
 }
 }
 }

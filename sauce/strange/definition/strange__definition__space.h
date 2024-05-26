@@ -13,12 +13,6 @@ struct space
     strange::vector<strange::abstraction> abstractions;
 };
 
-inline auto operator==(space const & lhs, space const & rhs) -> bool
-{
-    return lhs.name == rhs.name
-        && lhs.abstractions == rhs.abstractions;
-}
-
 }
 
 template<>
