@@ -118,7 +118,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -212,7 +212,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -270,7 +270,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -371,7 +371,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -453,7 +453,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -483,7 +483,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -498,7 +498,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -513,7 +513,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -528,7 +528,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -593,13 +593,13 @@ auto definition() -> space
                         {
                             parameter
                             ({
-                                .type = "random_access_const_iterator<T>",
+                                .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
                         },
                         .constness = true,
                         .result = "std::ptrdiff_t",
-                        .customisation = "return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -681,7 +681,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -711,7 +711,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -726,7 +726,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -741,7 +741,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -756,7 +756,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -795,13 +795,13 @@ auto definition() -> space
                         {
                             parameter
                             ({
-                                .type = "random_access_iterator<T>",
+                                .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
                         },
                         .constness = true,
                         .result = "std::ptrdiff_t",
-                        .customisation = "return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -1438,7 +1438,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing == other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing == other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -1453,7 +1453,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing != other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing != other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -1468,7 +1468,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing < other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing < other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -1483,7 +1483,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing > other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing > other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -1498,7 +1498,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing <= other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing <= other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
                     },
                     operation
                     {
@@ -1513,7 +1513,7 @@ auto definition() -> space
                         },
                         .constness = true,
                         .result = "bool",
-                        .customisation = "return _thing >= other.template _static<vector_<T, _Thing, _Copy>>()._thing()",
+                        .customisation = "return _thing >= other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
                     },
                 },
                 .thing = "std::vector<T>",

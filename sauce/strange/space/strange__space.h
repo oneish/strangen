@@ -1535,7 +1535,7 @@ protected:
 
         virtual auto operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T> = 0;
 
-        virtual auto operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t = 0;
+        virtual auto operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t = 0;
 
         virtual auto operator[](std::ptrdiff_t n) const -> T const & = 0;
     };
@@ -1605,7 +1605,7 @@ public:
 
     inline auto operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>;
 
-    inline auto operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t;
+    inline auto operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t;
 
     inline auto operator[](std::ptrdiff_t n) const -> T const &;
 };
@@ -1740,7 +1740,7 @@ private:
 
         inline auto operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T> final;
 
-        inline auto operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t final;
+        inline auto operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t final;
 
         inline auto operator[](std::ptrdiff_t n) const -> T const & final;
 
@@ -1855,7 +1855,7 @@ protected:
 
         virtual auto operator-(std::ptrdiff_t n) -> random_access_iterator<T> = 0;
 
-        virtual auto operator-(random_access_iterator<T> other) const -> std::ptrdiff_t = 0;
+        virtual auto operator-(random_access_iterator<T> const & other) const -> std::ptrdiff_t = 0;
 
         virtual auto operator[](std::ptrdiff_t n) -> T & = 0;
     };
@@ -1938,7 +1938,7 @@ public:
 
     inline auto operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>;
 
-    inline auto operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t;
+    inline auto operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t;
 
     inline auto operator[](std::ptrdiff_t n) const -> T const &;
 
@@ -1958,7 +1958,7 @@ public:
 
     inline auto operator-(std::ptrdiff_t n) -> random_access_iterator<T>;
 
-    inline auto operator-(random_access_iterator<T> other) const -> std::ptrdiff_t;
+    inline auto operator-(random_access_iterator<T> const & other) const -> std::ptrdiff_t;
 
     inline auto operator[](std::ptrdiff_t n) -> T &;
 };
@@ -2105,7 +2105,7 @@ private:
 
         inline auto operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T> final;
 
-        inline auto operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t final;
+        inline auto operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t final;
 
         inline auto operator[](std::ptrdiff_t n) const -> T const & final;
 
@@ -2125,7 +2125,7 @@ private:
 
         inline auto operator-(std::ptrdiff_t n) -> random_access_iterator<T> final;
 
-        inline auto operator-(random_access_iterator<T> other) const -> std::ptrdiff_t final;
+        inline auto operator-(random_access_iterator<T> const & other) const -> std::ptrdiff_t final;
 
         inline auto operator[](std::ptrdiff_t n) -> T & final;
 
@@ -2989,7 +2989,7 @@ inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator++(int
 template<typename T, typename _Thing, bool _Copy>
 inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3066,7 +3066,7 @@ inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) ->
 template<typename T, typename _Thing, bool _Copy>
 inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3090,7 +3090,7 @@ inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
 template<typename T, typename _Thing, bool _Copy>
 inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3193,7 +3193,7 @@ inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T, typename _Thing, bool _Copy>
 inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3205,7 +3205,7 @@ inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T, typename _Thing, bool _Copy>
 inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3323,7 +3323,7 @@ inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator++(int
 template<typename T, typename _Thing, bool _Copy>
 inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3347,7 +3347,7 @@ inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator->() -
 template<typename T, typename _Thing, bool _Copy>
 inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3359,7 +3359,7 @@ inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(for
 template<typename T, typename _Thing, bool _Copy>
 inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3383,7 +3383,7 @@ inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator--(int
 template<typename T, typename _Thing, bool _Copy>
 inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3527,7 +3527,7 @@ inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3539,7 +3539,7 @@ inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3563,7 +3563,7 @@ inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3575,25 +3575,25 @@ inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3621,9 +3621,9 @@ inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
 {
-    return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3767,7 +3767,7 @@ inline auto random_access_const_iterator<T>::operator-(std::ptrdiff_t n) const -
 }
 
 template<typename T>
-inline auto random_access_const_iterator<T>::operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t
+inline auto random_access_const_iterator<T>::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
 {
     return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator-(other);
 }
@@ -3805,7 +3805,7 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator++(int
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3829,7 +3829,7 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator->() -
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3841,7 +3841,7 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(for
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3865,7 +3865,7 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator--(int
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3877,7 +3877,7 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(bid
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3889,25 +3889,25 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(ran
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3935,9 +3935,9 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(std:
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
 {
-    return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3949,7 +3949,7 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator[](std
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3961,25 +3961,25 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(ran
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_iterator<T> const & other) const -> bool
 {
-    return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_iterator<T> const & other) const -> bool
 {
-    return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_iterator<T> const & other) const -> bool
 {
-    return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_iterator<T> const & other) const -> bool
 {
-    return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -3995,9 +3995,9 @@ inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(std:
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_iterator<T> other) const -> std::ptrdiff_t
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_iterator<T> const & other) const -> std::ptrdiff_t
 {
-    return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy>>()._thing();
+    return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -4179,7 +4179,7 @@ inline auto random_access_iterator<T>::operator-(std::ptrdiff_t n) const -> rand
 }
 
 template<typename T>
-inline auto random_access_iterator<T>::operator-(random_access_const_iterator<T> other) const -> std::ptrdiff_t
+inline auto random_access_iterator<T>::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
 {
     return std::dynamic_pointer_cast<typename random_access_const_iterator<T>::_derived const>(strange::_common::_shared)->operator-(other);
 }
@@ -4241,7 +4241,7 @@ inline auto random_access_iterator<T>::operator-(std::ptrdiff_t n) -> random_acc
 }
 
 template<typename T>
-inline auto random_access_iterator<T>::operator-(random_access_iterator<T> other) const -> std::ptrdiff_t
+inline auto random_access_iterator<T>::operator-(random_access_iterator<T> const & other) const -> std::ptrdiff_t
 {
     return std::dynamic_pointer_cast<typename random_access_iterator<T>::_derived const>(strange::_common::_shared)->operator-(other);
 }
@@ -4532,37 +4532,37 @@ inline auto vector_<T, _Thing, _Copy>::_instance::swap(vector<T> & other) -> voi
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator==(vector<T> const & other) const -> bool
 {
-    return _thing == other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+    return _thing == other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator!=(vector<T> const & other) const -> bool
 {
-    return _thing != other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+    return _thing != other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator<(vector<T> const & other) const -> bool
 {
-    return _thing < other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+    return _thing < other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator>(vector<T> const & other) const -> bool
 {
-    return _thing > other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+    return _thing > other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator<=(vector<T> const & other) const -> bool
 {
-    return _thing <= other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+    return _thing <= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator>=(vector<T> const & other) const -> bool
 {
-    return _thing >= other.template _static<vector_<T, _Thing, _Copy>>()._thing();
+    return _thing >= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T>

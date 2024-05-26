@@ -38,7 +38,7 @@ namespace strange
         [[strange::result("*that")]]
         auto operator++(int i) -> forward_const_iterator;
 
-        [[strange::customisation("return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy>>()._thing()")]]
+        [[strange::customisation("return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing()")]]
         auto operator==(forward_const_iterator<T> const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
