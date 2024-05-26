@@ -1905,6 +1905,196 @@ auto definition() -> space
                 }),
                 .thing = "strange::definition::operation",
             },
+            abstraction
+            {
+                .name = "abstraction",
+                .parents = parents
+                ({
+                    "any",
+                }),
+                .operations = operations
+                ({
+                    operation
+                    ({
+                        .name = "parameters",
+                        .constness = true,
+                        .result = "strange::vector<strange::parameter> const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "parameters",
+                        .result = "strange::vector<strange::parameter> &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "name",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "name",
+                        .result = "std::string &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "parents",
+                        .constness = true,
+                        .result = "strange::vector<std::string> const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "parents",
+                        .result = "strange::vector<std::string> &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "types",
+                        .constness = true,
+                        .result = "strange::vector<strange::parameter> const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "types",
+                        .result = "strange::vector<strange::parameter> &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "operations",
+                        .constness = true,
+                        .result = "strange::vector<strange::operation> const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "operations",
+                        .result = "strange::vector<strange::operation> &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "thing",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "thing",
+                        .result = "std::string &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "operator==",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "abstraction const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return parameters() == other.parameters()
+        && name() == other.name()
+        && parents() == other.parents()
+        && types() == other.types()
+        && operations() == other.operations()
+        && thing() == other.thing())#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator!=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "abstraction const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    }),
+                    operation
+                    ({
+                        .name = "operator<",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "abstraction const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return parameters() < other.parameters()
+        || (parameters() == other.parameters() && (name() < other.name()
+        || (name() == other.name() && (parents() < other.parents()
+        || (parents() == other.parents() && (types() < other.types()
+        || (types() == other.types() && (operations() < other.operations()
+        || (operations() == other.operations() && thing() < other.thing()))))))))))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator<=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "abstraction const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return operator<(other) || operator==(other))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator>",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "abstraction const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<=(other))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator>=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "abstraction const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<(other))#",
+                    }),
+                }),
+                .thing = "strange::definition::abstraction",
+            },
         },
     };
 }
