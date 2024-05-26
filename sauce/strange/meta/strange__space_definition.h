@@ -9,6 +9,11 @@ using strange::definition::space;
 using strange::definition::abstraction;
 using strange::definition::operation;
 
+inline auto parents(std::vector<std::string> pars) -> strange::vector<std::string>
+{
+    return strange::vector<std::string>::_make(pars);
+}
+
 inline auto parameter(strange::definition::parameter param) -> strange::parameter
 {
     return strange::parameter::_make(param);
@@ -41,10 +46,10 @@ auto definition() -> space
                     }),
                 }),
                 .name = "forward_const_iterator",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "any",
-                },
+                }),
                 .types = parameters
                 ({
                     parameter
@@ -153,10 +158,10 @@ auto definition() -> space
                     }),
                 }),
                 .name = "forward_iterator",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "forward_const_iterator<T>",
-                },
+                }),
                 .types = parameters
                 ({
                     parameter
@@ -247,10 +252,10 @@ auto definition() -> space
                     }),
                 }),
                 .name = "bidirectional_const_iterator",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "forward_const_iterator<T>",
-                },
+                }),
                 .types = parameters
                 ({
                     parameter
@@ -323,11 +328,11 @@ auto definition() -> space
                     }),
                 }),
                 .name = "bidirectional_iterator",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "forward_iterator<T>",
                     "bidirectional_const_iterator<T>",
-                },
+                }),
                 .types = parameters
                 ({
                     parameter
@@ -406,10 +411,10 @@ auto definition() -> space
                     }),
                 }),
                 .name = "random_access_const_iterator",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "bidirectional_const_iterator<T>",
-                },
+                }),
                 .types = parameters
                 ({
                     parameter
@@ -633,11 +638,11 @@ auto definition() -> space
                     }),
                 }),
                 .name = "random_access_iterator",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "bidirectional_iterator<T>",
                     "random_access_const_iterator<T>",
-                },
+                }),
                 .types = parameters
                 ({
                     parameter
@@ -835,10 +840,10 @@ auto definition() -> space
                     }),
                 }),
                 .name = "vector",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "any",
-                },
+                }),
                 .types = parameters
                 ({
                     parameter
@@ -1526,10 +1531,10 @@ auto definition() -> space
             abstraction
             {
                 .name = "parameter",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "any",
-                },
+                }),
                 .operations =
                 {
                     operation

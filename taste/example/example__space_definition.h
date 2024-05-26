@@ -45,6 +45,11 @@ using strange::definition::space;
 using strange::definition::abstraction;
 using strange::definition::operation;
 
+inline auto parents(std::vector<std::string> pars) -> strange::vector<std::string>
+{
+    return strange::vector<std::string>::_make(pars);
+}
+
 inline auto parameter(strange::definition::parameter param) -> strange::parameter
 {
     return strange::parameter::_make(param);
@@ -110,10 +115,10 @@ auto definition() -> space
             abstraction
             {
                 .name = "button",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "widget",
-                },
+                }),
                 .operations =
                 {
                     operation
@@ -143,11 +148,11 @@ auto definition() -> space
             abstraction
             {
                 .name = "widget_number",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "widget",
                     "number",
-                },
+                }),
             },
             abstraction
             {
@@ -161,10 +166,10 @@ auto definition() -> space
                     }),
                 }),
                 .name = "numeric",
-                .parents =
-                {
+                .parents = parents
+                ({
                     "number",
-                },
+                }),
                 .operations =
                 {
                     operation

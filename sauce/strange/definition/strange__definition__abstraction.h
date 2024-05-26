@@ -12,7 +12,7 @@ struct abstraction
 {
     strange::vector<strange::parameter> parameters = strange::vector<strange::parameter>::_make();
     std::string name;
-    std::vector<std::string> parents;
+    strange::vector<std::string> parents = strange::vector<std::string>::_make();
     strange::vector<strange::parameter> types = strange::vector<strange::parameter>::_make();
     std::vector<operation> operations;
     std::string thing;
