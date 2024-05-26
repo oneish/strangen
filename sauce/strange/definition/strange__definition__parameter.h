@@ -14,13 +14,6 @@ struct parameter
     std::string argument;
 };
 
-inline auto operator==(parameter const & lhs, parameter const & rhs) -> bool
-{
-    return lhs.type == rhs.type
-        && lhs.name == rhs.name
-        && lhs.argument == rhs.argument;
-}
-
 }
 
 template<>
