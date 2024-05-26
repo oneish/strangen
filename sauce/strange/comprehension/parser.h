@@ -1,17 +1,12 @@
 #pragma once
 #include "toker.h"
-#include "../definition/strange__definition__space.h"
+#include "../strange.h"
 #include <iostream>
 
 namespace strange
 {
 namespace comprehension
 {
-using strange::definition::space;
-using strange::definition::abstraction;
-using strange::definition::operation;
-using strange::definition::parameter;
-
 struct parser
 {
     toker toke;
