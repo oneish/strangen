@@ -1,8 +1,5 @@
 #pragma once
-#include "../../sauce/strange/definition/strange__definition__parameter.h"
-#include "../../sauce/strange/definition/strange__definition__operation.h"
-#include "../../sauce/strange/definition/strange__definition__abstraction.h"
-#include "../../sauce/strange/definition/strange__definition__space.h"
+#include "../../sauce/strange/strange.h"
 /*
 namespace example
 {
