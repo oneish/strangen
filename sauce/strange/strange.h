@@ -1,5 +1,9 @@
 #pragma once
 #include "space/strange__space.h"
+#include "definition/strange__definition__parameter.h"
+#include "definition/strange__definition__operation.h"
+#include "definition/strange__definition__abstraction.h"
+#include "definition/strange__definition__space.h"
 
 namespace strange
 {
@@ -80,8 +84,3 @@ struct std::hash<strange::space>
         return h;
     }
 };
-
-#include "definition/strange__definition__parameter.h"
-#include "definition/strange__definition__operation.h"
-#include "definition/strange__definition__abstraction.h"
-#include "definition/strange__definition__space.h"
