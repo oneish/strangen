@@ -2104,6 +2104,136 @@ auto definition() -> space
                 }),
                 .thing = "strange::definition::abstraction",
             }),
+            abstraction
+            ({
+                .name = "space",
+                .parents = parents
+                ({
+                    "any",
+                }),
+                .operations = operations
+                ({
+                    operation
+                    ({
+                        .name = "name",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "name",
+                        .result = "std::string &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "abstractions",
+                        .constness = true,
+                        .result = "strange::vector<strange::abstraction> const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "abstractions",
+                        .result = "strange::vector<strange::abstraction> &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "operator==",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "space const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return name() == other.name()
+        && abstractions() == other.abstractions())#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator!=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "space const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    }),
+                    operation
+                    ({
+                        .name = "operator<",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "space const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return name() < other.name()
+        || (name() == other.name() && abstractions() < other.abstractions()))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator<=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "space const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return operator<(other) || operator==(other))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator>",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "space const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<=(other))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator>=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "space const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<(other))#",
+                    }),
+                }),
+                .thing = "strange::definition::space",
+            }),
         }),
     };
 }
