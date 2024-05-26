@@ -23,51 +23,53 @@ struct std::hash<strange::parameter>
 template<>
 struct std::hash<strange::operation>
 {
-    inline auto operator()(strange::operation const & op) const -> size_t
+    inline auto operator()(strange::operation const & oper) const -> size_t
     {
-        std::size_t h = std::hash<std::string>{}(op.name());
-        for (auto const & param : op.parameters())
+        std::size_t h = std::hash<std::string>{}(oper.name());
+        for (auto const & param : oper.parameters())
         {
             h ^= std::hash<strange::parameter>{}(param);
         }
-        return h ^ std::hash<bool>{}(op.constness())
-            ^ std::hash<std::string>{}(op.result())
-            ^ std::hash<bool>{}(op.data())
-            ^ std::hash<std::string>{}(op.modification())
-            ^ std::hash<std::string>{}(op.customisation())
-            ^ std::hash<std::string>{}(op.implementation());
+        return h ^ std::hash<bool>{}(oper.constness())
+            ^ std::hash<std::string>{}(oper.result())
+            ^ std::hash<bool>{}(oper.data())
+            ^ std::hash<std::string>{}(oper.modification())
+            ^ std::hash<std::string>{}(oper.customisation())
+            ^ std::hash<std::string>{}(oper.implementation());
     }
 };
 
-#include "definition/strange__definition__abstraction.h"
 template<>
-struct std::hash<strange::definition::abstraction>
+struct std::hash<strange::abstraction>
 {
-    inline auto operator()(strange::definition::abstraction const & abs) const -> size_t
+    inline auto operator()(strange::abstraction const & abstract) const -> size_t
     {
         std::size_t h = 0;
-        for (auto const & param : abs.parameters)
+        for (auto const & param : abstract.parameters())
         {
             h ^= std::hash<strange::parameter>{}(param);
         }
-        h ^= std::hash<std::string>{}(abs.name);
-        for (auto const & parent : abs.parents)
+        h ^= std::hash<std::string>{}(abstract.name());
+        for (auto const & parent : abstract.parents())
         {
             h ^= std::hash<std::string>{}(parent);
         }
-        for (auto const & type : abs.types)
+        for (auto const & type : abstract.types())
         {
             h ^= std::hash<strange::parameter>{}(type);
         }
-        for (auto const & oper : abs.operations)
+        for (auto const & oper : abstract.operations())
         {
             h ^= std::hash<strange::operation>{}(oper);
         }
-        h ^= std::hash<std::string>{}(abs.thing);
+        h ^= std::hash<std::string>{}(abstract.thing());
         return h;
     }
 };
 
+#include "definition/strange__definition__parameter.h"
+#include "definition/strange__definition__operation.h"
+#include "definition/strange__definition__abstraction.h"
 #include "definition/strange__definition__space.h"
 template<>
 struct std::hash<strange::definition::space>
@@ -75,9 +77,9 @@ struct std::hash<strange::definition::space>
     inline auto operator()(strange::definition::space const & spc) const -> size_t
     {
         std::size_t h = std::hash<std::string>{}(spc.name);
-        for (auto const & abs : spc.abstractions)
+        for (auto const & abstract : spc.abstractions)
         {
-            h ^= std::hash<strange::definition::abstraction>{}(abs);
+            h ^= std::hash<strange::abstraction>{}(abstract);
         }
         return h;
     }

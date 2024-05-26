@@ -44,7 +44,6 @@ namespace example
 namespace meta
 {
 using strange::definition::space;
-using strange::definition::abstraction;
 
 inline auto parents(std::vector<std::string> pars) -> strange::vector<std::string>
 {
@@ -61,14 +60,24 @@ inline auto parameters(std::vector<strange::parameter> params) -> strange::vecto
     return strange::vector<strange::parameter>::_make(params);
 }
 
-inline auto operation(strange::definition::operation op) -> strange::operation
+inline auto operation(strange::definition::operation oper) -> strange::operation
 {
-    return strange::operation::_make(op);
+    return strange::operation::_make(oper);
 }
 
-inline auto operations(std::vector<strange::operation> ops) -> strange::vector<strange::operation>
+inline auto operations(std::vector<strange::operation> opers) -> strange::vector<strange::operation>
 {
-    return strange::vector<strange::operation>::_make(ops);
+    return strange::vector<strange::operation>::_make(opers);
+}
+
+inline auto abstraction(strange::definition::abstraction abstract) -> strange::abstraction
+{
+    return strange::abstraction::_make(abstract);
+}
+
+inline auto abstractions(std::vector<strange::abstraction> abstracts) -> strange::vector<strange::abstraction>
+{
+    return strange::vector<strange::abstraction>::_make(abstracts);
 }
 
 auto definition() -> space
@@ -76,10 +85,10 @@ auto definition() -> space
     return space
     {
         .name = "example",
-        .abstractions =
-        {
+        .abstractions = abstractions
+        ({
             abstraction
-            {
+            ({
                 .name = "widget",
                 .operations = operations
                 ({
@@ -122,9 +131,9 @@ auto definition() -> space
                         .result = "*that",
                     }),
                 }),
-            },
+            }),
             abstraction
-            {
+            ({
                 .name = "button",
                 .parents = parents
                 ({
@@ -138,9 +147,9 @@ auto definition() -> space
                         .result = "void",
                     }),
                 }),
-            },
+            }),
             abstraction
-            {
+            ({
                 .name = "number",
                 .operations = operations
                 ({
@@ -155,18 +164,18 @@ auto definition() -> space
                         .result = "void",
                     }),
                 }),
-            },
+            }),
             abstraction
-            {
+            ({
                 .name = "widget_number",
                 .parents = parents
                 ({
                     "widget",
                     "number",
                 }),
-            },
+            }),
             abstraction
-            {
+            ({
                 .parameters = parameters
                 ({
                     parameter
@@ -203,8 +212,8 @@ auto definition() -> space
                         .data = true,
                     }),
                 }),
-            },
-        },
+            }),
+        }),
     };
 }
 }

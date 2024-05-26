@@ -17,16 +17,6 @@ struct abstraction
     std::string thing;
 };
 
-inline auto operator==(abstraction const & lhs, abstraction const & rhs) -> bool
-{
-    return lhs.parameters == rhs.parameters
-        && lhs.name == rhs.name
-        && lhs.parents == rhs.parents
-        && lhs.types == rhs.types
-        && lhs.operations == rhs.operations
-        && lhs.thing == rhs.thing;
-}
-
 }
 
 template<>
