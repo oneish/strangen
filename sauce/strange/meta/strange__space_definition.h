@@ -1,4 +1,7 @@
 #pragma once
+#include "../definition/strange__definition__parameter.h"
+#include "../definition/strange__definition__operation.h"
+#include "../definition/strange__definition__abstraction.h"
 #include "../definition/strange__definition__space.h"
 
 namespace strange
@@ -1672,6 +1675,226 @@ auto definition() -> space
                     },
                 },
                 .thing = "strange::definition::parameter",
+            },
+            abstraction
+            {
+                .name = "operation",
+                .parents = parents
+                ({
+                    "any",
+                }),
+                .operations =
+                {
+                    operation
+                    {
+                        .name = "name",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "name",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "parameters",
+                        .constness = true,
+                        .result = "strange::vector<strange::parameter> const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "parameters",
+                        .result = "strange::vector<strange::parameter> &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "constness",
+                        .constness = true,
+                        .result = "bool const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "constness",
+                        .result = "bool &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "result",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "result",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "data",
+                        .constness = true,
+                        .result = "bool const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "data",
+                        .result = "bool &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "modification",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "modification",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "customisation",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "customisation",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "implementation",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "implementation",
+                        .result = "std::string &",
+                        .data = true,
+                    },
+                    operation
+                    {
+                        .name = "operator==",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "operation const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return name() == other.name()
+        && parameters() == other.parameters()
+        && constness() == other.constness()
+        && result() == other.result()
+        && data() == other.data()
+        && modification() == other.modification()
+        && customisation() == other.customisation()
+        && implementation() == other.implementation())#",
+                    },
+                    operation
+                    {
+                        .name = "operator!=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "operation const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    },
+                    operation
+                    {
+                        .name = "operator<",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "operation const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return name() < other.name()
+        || (name() == other.name() && (parameters() < other.parameters()
+        || (parameters() == other.parameters() && (constness() < other.constness()
+        || (constness() == other.constness() && (result() < other.result()
+        || (result() == other.result() && (data() < other.data()
+        || (data() == other.data() && (modification() < other.modification()
+        || (modification() == other.modification() && (customisation() < other.customisation()
+        || (customisation() == other.customisation() && implementation() < other.implementation()))))))))))))))#",
+                    },
+                    operation
+                    {
+                        .name = "operator<=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "operation const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return operator<(other) || operator==(other))#",
+                    },
+                    operation
+                    {
+                        .name = "operator>",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "operation const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<=(other))#",
+                    },
+                    operation
+                    {
+                        .name = "operator>=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "operation const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<(other))#",
+                    },
+                },
+                .thing = "strange::definition::operation",
             },
         },
     };

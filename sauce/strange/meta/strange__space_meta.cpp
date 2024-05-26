@@ -8,8 +8,17 @@ int main()
 std::cout << R"~(#pragma once
 #include "../common/strange__common.h"
 #include "../reflection/strange__reflection.h"
-#include "../definition/strange__definition__parameter.h"
 #include <vector>
+namespace strange
+{
+namespace definition
+{
+struct parameter;
+struct operation;
+struct abstraction;
+struct space;
+}
+}
 )~";
 
 // more meta code
