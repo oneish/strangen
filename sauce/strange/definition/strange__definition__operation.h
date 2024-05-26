@@ -2,7 +2,6 @@
 #include "../space/strange__space.h"
 #include "../reflection/strange__reflection.h"
 #include <string>
-#include <vector>
 
 namespace strange
 {
@@ -11,7 +10,7 @@ namespace definition
 struct operation
 {
     std::string name;
-    std::vector<strange::parameter> parameters;
+    strange::vector<strange::parameter> parameters = strange::vector<strange::parameter>::_make();
     bool constness = false;
     std::string result;
     bool data = false;

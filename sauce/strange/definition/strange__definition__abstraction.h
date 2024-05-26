@@ -3,7 +3,6 @@
 #include "strange__definition__operation.h"
 #include "../reflection/strange__reflection.h"
 #include <string>
-#include <vector>
 
 namespace strange
 {
@@ -11,10 +10,10 @@ namespace definition
 {
 struct abstraction
 {
-    std::vector<strange::parameter> parameters;
+    strange::vector<strange::parameter> parameters = strange::vector<strange::parameter>::_make();
     std::string name;
     std::vector<std::string> parents;
-    std::vector<strange::parameter> types;
+    strange::vector<strange::parameter> types = strange::vector<strange::parameter>::_make();
     std::vector<operation> operations;
     std::string thing;
 };

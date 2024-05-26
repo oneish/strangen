@@ -14,6 +14,11 @@ inline auto parameter(strange::definition::parameter param) -> strange::paramete
     return strange::parameter::_make(param);
 }
 
+inline auto parameters(std::vector<strange::parameter> params) -> strange::vector<strange::parameter>
+{
+    return strange::vector<strange::parameter>::_make(params);
+}
+
 auto definition() -> space
 {
     return space
@@ -27,21 +32,21 @@ auto definition() -> space
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "T",
                     }),
-                },
+                }),
                 .name = "forward_const_iterator",
                 .parents =
                 {
                     "any",
                 },
-                .types =
-                {
+                .types = parameters
+                ({
                     parameter
                     ({
                         .type = "using",
@@ -72,7 +77,7 @@ auto definition() -> space
                         .name = "iterator_category",
                         .argument = "std::forward_iterator_tag",
                     }),
-                },
+                }),
                 .operations =
                 {
                     operation
@@ -95,27 +100,27 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator++",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "int",
                                 .name = "i",
                             }),
-                        },
+                        }),
                         .result = "*that",
                     },
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "forward_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -123,14 +128,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "forward_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return !operator==(other)",
@@ -139,21 +144,21 @@ auto definition() -> space
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "T",
                     }),
-                },
+                }),
                 .name = "forward_iterator",
                 .parents =
                 {
                     "forward_const_iterator<T>",
                 },
-                .types =
-                {
+                .types = parameters
+                ({
                     parameter
                     ({
                         .type = "using",
@@ -184,7 +189,7 @@ auto definition() -> space
                         .name = "iterator_category",
                         .argument = "std::forward_iterator_tag",
                     }),
-                },
+                }),
                 .operations =
                 {
                     operation
@@ -202,14 +207,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "forward_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -217,14 +222,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "forward_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return !operator==(other)",
@@ -233,41 +238,41 @@ auto definition() -> space
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "T",
                     }),
-                },
+                }),
                 .name = "bidirectional_const_iterator",
                 .parents =
                 {
                     "forward_const_iterator<T>",
                 },
-                .types =
-                {
+                .types = parameters
+                ({
                     parameter
                     ({
                         .type = "using",
                         .name = "iterator_category",
                         .argument = "std::bidirectional_iterator_tag",
                     }),
-                },
+                }),
                 .operations =
                 {
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "bidirectional_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -275,14 +280,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "bidirectional_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return !operator==(other)",
@@ -295,36 +300,36 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator--",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "int",
                                 .name = "i",
                             }),
-                        },
+                        }),
                         .result = "*that",
                     },
                 },
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "T",
                     }),
-                },
+                }),
                 .name = "bidirectional_iterator",
                 .parents =
                 {
                     "forward_iterator<T>",
                     "bidirectional_const_iterator<T>",
                 },
-                .types =
-                {
+                .types = parameters
+                ({
                     parameter
                     ({
                         .type = "using",
@@ -355,20 +360,20 @@ auto definition() -> space
                         .name = "iterator_category",
                         .argument = "std::bidirectional_iterator_tag",
                     }),
-                },
+                }),
                 .operations =
                 {
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "bidirectional_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -376,14 +381,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "bidirectional_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return !operator==(other)",
@@ -392,21 +397,21 @@ auto definition() -> space
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "T",
                     }),
-                },
+                }),
                 .name = "random_access_const_iterator",
                 .parents =
                 {
                     "bidirectional_const_iterator<T>",
                 },
-                .types =
-                {
+                .types = parameters
+                ({
                     parameter
                     ({
                         .type = "using",
@@ -437,20 +442,20 @@ auto definition() -> space
                         .name = "iterator_category",
                         .argument = "std::random_access_iterator_tag",
                     }),
-                },
+                }),
                 .operations =
                 {
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -458,14 +463,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return !operator==(other)",
@@ -473,14 +478,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -488,14 +493,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -503,14 +508,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -518,14 +523,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -533,40 +538,40 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator+=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
                         .result = "*this",
                     },
                     operation
                     {
                         .name = "operator-=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
                         .result = "*this",
                     },
                     operation
                     {
                         .name = "operator+",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "random_access_const_iterator<T>",
                         .customisation = "return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing + n)",
@@ -574,14 +579,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator-",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "random_access_const_iterator<T>",
                         .customisation = "return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing - n)",
@@ -589,14 +594,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator-",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_const_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "std::ptrdiff_t",
                         .customisation = "return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -604,14 +609,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator[]",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "T const &",
                     },
@@ -619,22 +624,22 @@ auto definition() -> space
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "T",
                     }),
-                },
+                }),
                 .name = "random_access_iterator",
                 .parents =
                 {
                     "bidirectional_iterator<T>",
                     "random_access_const_iterator<T>",
                 },
-                .types =
-                {
+                .types = parameters
+                ({
                     parameter
                     ({
                         .type = "using",
@@ -665,20 +670,20 @@ auto definition() -> space
                         .name = "iterator_category",
                         .argument = "std::random_access_iterator_tag",
                     }),
-                },
+                }),
                 .operations =
                 {
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -686,14 +691,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return !operator==(other)",
@@ -701,14 +706,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -716,14 +721,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -731,14 +736,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -746,14 +751,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -761,14 +766,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator+",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
 // hack                        .constness = true,
                         .result = "random_access_iterator<T>",
                         .customisation = "return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing + n)",
@@ -776,14 +781,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator-",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
 // hack                        .constness = true,
                         .result = "random_access_iterator<T>",
                         .customisation = "return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing - n)",
@@ -791,14 +796,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator-",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "random_access_iterator<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "std::ptrdiff_t",
                         .customisation = "return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing()",
@@ -806,14 +811,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator[]",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::ptrdiff_t",
                                 .name = "n",
                             }),
-                        },
+                        }),
 // hack                        .constness = true,
                         .result = "T &",
                     },
@@ -821,21 +826,21 @@ auto definition() -> space
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "T",
                     }),
-                },
+                }),
                 .name = "vector",
                 .parents =
                 {
                     "any",
                 },
-                .types =
-                {
+                .types = parameters
+                ({
                     parameter
                     ({
                         .type = "using",
@@ -902,27 +907,27 @@ auto definition() -> space
                         .name = "const_reverse_iterator",
                         .argument = "typename std::reverse_iterator<const_iterator>",
                     }),
-                },
+                }),
                 .operations =
                 {
                     operation
                     {
                         .name = "operator=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::initializer_list<T>",
                                 .name = "ilist",
                             }),
-                        },
+                        }),
                         .result = "*this",
                     },
                     operation
                     {
                         .name = "assign",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
@@ -933,14 +938,14 @@ auto definition() -> space
                                 .type = "T const &",
                                 .name = "value",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
                     {
                         .name = "assign",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "forward_const_iterator<T>",
@@ -951,73 +956,73 @@ auto definition() -> space
                                 .type = "forward_const_iterator<T>",
                                 .name = "last",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
                     {
                         .name = "assign",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "std::initializer_list<T>",
                                 .name = "ilist",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
                     {
                         .name = "at",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
                                 .name = "pos",
                             }),
-                        },
+                        }),
                         .result = "T &",
                     },
                     operation
                     {
                         .name = "at",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
                                 .name = "pos",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "T const &",
                     },
                     operation
                     {
                         .name = "operator[]",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
                                 .name = "pos",
                             }),
-                        },
+                        }),
                         .result = "T &",
                     },
                     operation
                     {
                         .name = "operator[]",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
                                 .name = "pos",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "T const &",
                     },
@@ -1155,14 +1160,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "reserve",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
                                 .name = "new_cap",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
@@ -1184,8 +1189,8 @@ auto definition() -> space
                     operation
                     {
                         .name = "insert",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "typename strange::random_access_const_iterator<T>",
@@ -1196,7 +1201,7 @@ auto definition() -> space
                                 .type = "T const &",
                                 .name = "value",
                             }),
-                        },
+                        }),
                         .result = "typename strange::random_access_iterator<T>",
                         .modification = R"#(auto const index = pos - cbegin();
     strange::_common::_mutate(); // could invalidate iterators
@@ -1207,8 +1212,8 @@ auto definition() -> space
                     operation
                     {
                         .name = "insert",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "typename strange::random_access_const_iterator<T>",
@@ -1219,7 +1224,7 @@ auto definition() -> space
                                 .type = "T &&",
                                 .name = "value",
                             }),
-                        },
+                        }),
                         .result = "typename strange::random_access_iterator<T>",
                         .modification = R"#(auto const index = pos - cbegin();
     strange::_common::_mutate(); // could invalidate iterators
@@ -1230,8 +1235,8 @@ auto definition() -> space
                     operation
                     {
                         .name = "insert",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "typename strange::random_access_const_iterator<T>",
@@ -1247,7 +1252,7 @@ auto definition() -> space
                                 .type = "T const &",
                                 .name = "value",
                             }),
-                        },
+                        }),
                         .result = "typename strange::random_access_iterator<T>",
                         .modification = R"#(auto const index = pos - cbegin();
     strange::_common::_mutate(); // could invalidate iterators
@@ -1258,8 +1263,8 @@ auto definition() -> space
                     operation
                     {
                         .name = "insert",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "typename strange::random_access_const_iterator<T>",
@@ -1275,7 +1280,7 @@ auto definition() -> space
                                 .type = "forward_const_iterator<T>",
                                 .name = "last",
                             }),
-                        },
+                        }),
                         .result = "typename strange::random_access_iterator<T>",
                         .modification = R"#(auto const index = pos - cbegin();
     strange::_common::_mutate(); // could invalidate iterators
@@ -1286,8 +1291,8 @@ auto definition() -> space
                     operation
                     {
                         .name = "insert",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "typename strange::random_access_const_iterator<T>",
@@ -1298,7 +1303,7 @@ auto definition() -> space
                                 .type = "std::initializer_list<T>",
                                 .name = "ilist",
                             }),
-                        },
+                        }),
                         .result = "typename strange::random_access_iterator<T>",
                         .modification = R"#(auto const index = pos - cbegin();
     strange::_common::_mutate(); // could invalidate iterators
@@ -1309,14 +1314,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "erase",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "pos",
                             }),
-                        },
+                        }),
                         .result = "typename strange::random_access_iterator<T>",
                         .modification = R"#(auto const index = pos - cbegin();
     strange::_common::_mutate(); // could invalidate iterators
@@ -1327,8 +1332,8 @@ auto definition() -> space
                     operation
                     {
                         .name = "erase",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "typename strange::random_access_const_iterator<T>",
@@ -1339,7 +1344,7 @@ auto definition() -> space
                                 .type = "typename strange::random_access_const_iterator<T>",
                                 .name = "last",
                             }),
-                        },
+                        }),
                         .result = "typename strange::random_access_iterator<T>",
                         .modification = R"#(auto const first_index = first - cbegin();
     auto const last_index = last - cbegin();
@@ -1352,27 +1357,27 @@ auto definition() -> space
                     operation
                     {
                         .name = "push_back",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "T const &",
                                 .name = "value",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
                     {
                         .name = "push_back",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "T &&",
                                 .name = "value",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
@@ -1383,21 +1388,21 @@ auto definition() -> space
                     operation
                     {
                         .name = "resize",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
                                 .name = "count",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
                     {
                         .name = "resize",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "size_t",
@@ -1408,34 +1413,34 @@ auto definition() -> space
                                 .type = "T const &",
                                 .name = "value",
                             }),
-                        },
+                        }),
                         .result = "void",
                     },
                     operation
                     {
                         .name = "swap",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "vector<T> &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .result = "void",
                         .customisation = "_thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing())"
                     },
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "vector<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing == other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
@@ -1443,14 +1448,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "vector<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing != other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
@@ -1458,14 +1463,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "vector<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing < other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
@@ -1473,14 +1478,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "vector<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing > other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
@@ -1488,14 +1493,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "vector<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing <= other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
@@ -1503,14 +1508,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "vector<T> const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return _thing >= other.template _static<vector_<T, _Thing, _Copy> const>()._thing()",
@@ -1569,14 +1574,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator==",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "parameter const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = R"#(return type() == other.type()
@@ -1586,14 +1591,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator!=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "parameter const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = "return !operator==(other)",
@@ -1601,14 +1606,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "parameter const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = R"#(return type() < other.type()
@@ -1618,14 +1623,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator<=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "parameter const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = R"#(return operator<(other) || operator==(other))#",
@@ -1633,14 +1638,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "parameter const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = R"#(return !operator<=(other))#",
@@ -1648,14 +1653,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator>=",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "parameter const &",
                                 .name = "other",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "bool",
                         .customisation = R"#(return !operator<(other))#",

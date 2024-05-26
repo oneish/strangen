@@ -50,6 +50,11 @@ inline auto parameter(strange::definition::parameter param) -> strange::paramete
     return strange::parameter::_make(param);
 }
 
+inline auto parameters(std::vector<strange::parameter> params) -> strange::vector<strange::parameter>
+{
+    return strange::vector<strange::parameter>::_make(params);
+}
+
 auto definition() -> space
 {
     return space
@@ -65,15 +70,15 @@ auto definition() -> space
                     operation
                     {
                         .name = "display",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "button",
                                 .name = "b",
                                 .argument = "button()",
                             }),
-                        },
+                        }),
                         .constness = true,
                         .result = "void",
                     },
@@ -90,14 +95,14 @@ auto definition() -> space
                     operation
                     {
                         .name = "operator--",
-                        .parameters =
-                        {
+                        .parameters = parameters
+                        ({
                             parameter
                             ({
                                 .type = "int",
                                 .name = "i",
                             }),
-                        },
+                        }),
                         .result = "*that",
                     },
                 },
@@ -146,15 +151,15 @@ auto definition() -> space
             },
             abstraction
             {
-                .parameters =
-                {
+                .parameters = parameters
+                ({
                     parameter
                     ({
                         .type = "typename",
                         .name = "Data",
                         .argument = "int",
                     }),
-                },
+                }),
                 .name = "numeric",
                 .parents =
                 {
