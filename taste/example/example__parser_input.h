@@ -1,3 +1,4 @@
+// parser test
 namespace strange
 {
     struct any

@@ -24,34 +24,27 @@ struct parser
             switch (token.classification)
             {
                 case strange::comprehension::cls::character:
-                    std::cout << "character:";
-                    break;
+                    return error<space>("strange::parser::parse() expected namespace, but got character: " + token.text);
                 case strange::comprehension::cls::comment:
-                    std::cout << "comment:";
+                    std::cout << "comment: " << token.text << std::endl;
                     break;
                 case strange::comprehension::cls::mistake:
-                    std::cout << "mistake:";
-                    break;
+                    return error<space>("strange::parser::parse() expected namespace, but got mistake: " + token.text);
                 case strange::comprehension::cls::name:
                     if (token.text == "namespace")
                     {
                         return parse_space();
                     }
-                    std::cout << "name:";
-                    break;
+                    return error<space>("strange::parser::parse() expected namespace, but got name: " + token.text);
                 case strange::comprehension::cls::number:
-                    std::cout << "number:";
-                    break;
+                    return error<space>("strange::parser::parse() expected namespace, but got number: " + token.text);
                 case strange::comprehension::cls::punctuation:
-                    std::cout << "punctuation:";
-                    break;
+                    return error<space>("strange::parser::parse() expected namespace, but got punctuation: " + token.text);
                 case strange::comprehension::cls::string:
-                    std::cout << "string:";
-                    break;
+                    return error<space>("strange::parser::parse() expected namespace, but got string: " + token.text);
                 default:
-                    std::cout << "token:";
+                    return error<space>("strange::parser::parse() expected namespace, but got token: " + token.text);
             }
-            std::cout << token.text << std::endl;
         }
         return space{};
     }

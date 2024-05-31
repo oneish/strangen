@@ -260,6 +260,14 @@ int main()
     strange::comprehension::toker toker(it);
     strange::comprehension::parser parser(toker);
     auto space = parser.parse();
+    if (space._valid())
+    {
+        std::cout << "valid space" << std::endl;
+    }
+    else
+    {
+        std::cout << "invalid space: " << space._error() << std::endl;
+    }
 
     return 0;
 }
