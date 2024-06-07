@@ -10,7 +10,7 @@ namespace definition
 struct space
 {
     std::string name;
-    strange::vector<strange::abstraction> abstractions;
+    strange::vector<strange::abstraction> abstractions = strange::vector<strange::abstraction>::_make();
 };
 
 }
