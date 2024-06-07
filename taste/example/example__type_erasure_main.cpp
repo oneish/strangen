@@ -262,7 +262,8 @@ int main()
     auto space = parser.parse();
     if (space._valid())
     {
-        std::cout << "valid space" << std::endl;
+        std::cout << "valid space:" << std::endl;
+        std::cout << space.name() << std::endl;
     }
     else
     {
