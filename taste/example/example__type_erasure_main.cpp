@@ -1,6 +1,6 @@
 #include "../../sauce/strange/strange.h"
-#include "../../sauce/strange/comprehension/toker.h"
-#include "../../sauce/strange/comprehension/parser.h"
+#include "../../sauce/strange/comprehension/strange__comprehension__toker.h"
+#include "../../sauce/strange/comprehension/strange__comprehension__parser.h"
 //#include "example__type_erasure.h"
 #include "example__space_transformation_3.h"
 
@@ -269,6 +269,7 @@ int main()
     {
         std::cout << "invalid space: " << space._error() << std::endl;
     }
+    auto tok = strange::token::_make();
 
     return 0;
 }

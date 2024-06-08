@@ -2234,6 +2234,181 @@ auto definition() -> strange::space
                 }),
                 .thing = "strange::definition::space",
             }),
+            abstraction
+            ({
+                .name = "token",
+                .parents = parents
+                ({
+                    "any",
+                }),
+                .operations = operations
+                ({
+                    operation
+                    ({
+                        .name = "filename",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "filename",
+                        .result = "std::string &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "line",
+                        .constness = true,
+                        .result = "int64_t const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "line",
+                        .result = "int64_t &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "position",
+                        .constness = true,
+                        .result = "int64_t const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "position",
+                        .result = "int64_t &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "classification",
+                        .constness = true,
+                        .result = "strange::comprehension::cls const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "classification",
+                        .result = "strange::comprehension::cls &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "text",
+                        .constness = true,
+                        .result = "std::string const &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "text",
+                        .result = "std::string &",
+                        .data = true,
+                    }),
+                    operation
+                    ({
+                        .name = "operator==",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "token const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return filename() == other.filename()
+        && line() == other.line()
+        && position() == other.position()
+        && classification() == other.classification()
+        && text() == other.text())#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator!=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "token const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = "return !operator==(other)",
+                    }),
+                    operation
+                    ({
+                        .name = "operator<",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "token const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return filename() < other.filename()
+        || (filename() == other.filename() && (line() < other.line()
+        || (line() == other.line() && (position() < other.position()
+        || (position() == other.position() && (classification() < other.classification()
+        || (classification() == other.classification() && text() < other.text()))))))))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator<=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "token const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return operator<(other) || operator==(other))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator>",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "token const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<=(other))#",
+                    }),
+                    operation
+                    ({
+                        .name = "operator>=",
+                        .parameters = parameters
+                        ({
+                            parameter
+                            ({
+                                .type = "token const &",
+                                .name = "other",
+                            }),
+                        }),
+                        .constness = true,
+                        .result = "bool",
+                        .customisation = R"#(return !operator<(other))#",
+                    }),
+                }),
+                .thing = "strange::comprehension::token",
+            }),
         }),
     });
 }

@@ -4,6 +4,7 @@
 #include "definition/strange__definition__operation.h"
 #include "definition/strange__definition__abstraction.h"
 #include "definition/strange__definition__space.h"
+#include "comprehension/strange__comprehension__toker.h"
 
 namespace strange
 {
@@ -92,3 +93,17 @@ struct std::hash<strange::space>
         return h;
     }
 };
+/*
+template<>
+struct std::hash<strange::token>
+{
+    inline auto operator()(strange::token const & tok) const -> size_t
+    {
+        return std::hash<std::string>{}(tok.filename())
+            ^ std::hash<int64_t>{}(tok.line())
+            ^ std::hash<int64_t>{}(tok.position())
+            ^ std::hash<std::underlying_type_t<strange::comprehension::cls>>{}(static_cast<std::underlying_type_t<strange::comprehension::cls>>(tok.classification()))
+            ^ std::hash<std::string>{}(tok.text());
+    }
+};
+*/

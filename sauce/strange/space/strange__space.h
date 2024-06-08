@@ -11,6 +11,11 @@ struct operation;
 struct abstraction;
 struct space;
 }
+namespace comprehension
+{
+enum class cls;
+struct token;
+}
 }
 #include <memory>
 #include <string>
@@ -86,6 +91,11 @@ struct space;
 
 template<typename _Thing = strange::definition::space, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct space_;
+
+struct token;
+
+template<typename _Thing = strange::comprehension::token, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct token_;
 
 }
 
@@ -305,6 +315,24 @@ struct reflection<strange::space_<_Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::space_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::token>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::token";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::token_<_Thing, _Copy>>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::token_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -3931,6 +3959,299 @@ public:
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
+struct token : any
+{
+    inline token() = default;
+
+    inline token(token const & other)
+    :strange::_common{other}
+    ,any{}
+    {
+    }
+
+    inline token(token && other)
+    :strange::_common{std::move(other)}
+    ,any{}
+    {
+    }
+
+    inline auto operator=(token const & other) -> token &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(token && other) -> token &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline token(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any{}
+    {
+    }
+
+    explicit inline token(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any{}
+    {
+    }
+
+protected:
+    struct _derived : any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename token::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto filename() const -> std::string const & = 0;
+
+        virtual auto filename() -> std::string & = 0;
+
+        virtual auto line() const -> int64_t const & = 0;
+
+        virtual auto line() -> int64_t & = 0;
+
+        virtual auto position() const -> int64_t const & = 0;
+
+        virtual auto position() -> int64_t & = 0;
+
+        virtual auto classification() const -> strange::comprehension::cls const & = 0;
+
+        virtual auto classification() -> strange::comprehension::cls & = 0;
+
+        virtual auto text() const -> std::string const & = 0;
+
+        virtual auto text() -> std::string & = 0;
+
+        virtual auto operator==(token const & other) const -> bool = 0;
+
+        virtual auto operator!=(token const & other) const -> bool = 0;
+
+        virtual auto operator<(token const & other) const -> bool = 0;
+
+        virtual auto operator<=(token const & other) const -> bool = 0;
+
+        virtual auto operator>(token const & other) const -> bool = 0;
+
+        virtual auto operator>=(token const & other) const -> bool = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing = strange::comprehension::token, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    inline static auto _make(_Args && ... _args) -> token
+    {
+        return token{token::_derived::_static_shared_to_base(std::make_shared<typename token_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Kind_ = token;
+
+    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+
+    inline static std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+
+    inline auto filename() const -> std::string const &;
+
+    inline auto filename() -> std::string &;
+
+    inline auto line() const -> int64_t const &;
+
+    inline auto line() -> int64_t &;
+
+    inline auto position() const -> int64_t const &;
+
+    inline auto position() -> int64_t &;
+
+    inline auto classification() const -> strange::comprehension::cls const &;
+
+    inline auto classification() -> strange::comprehension::cls &;
+
+    inline auto text() const -> std::string const &;
+
+    inline auto text() -> std::string &;
+
+    inline auto operator==(token const & other) const -> bool;
+
+    inline auto operator!=(token const & other) const -> bool;
+
+    inline auto operator<(token const & other) const -> bool;
+
+    inline auto operator<=(token const & other) const -> bool;
+
+    inline auto operator>(token const & other) const -> bool;
+
+    inline auto operator>=(token const & other) const -> bool;
+};
+
+template<typename _Thing, bool _Copy>
+struct token_ : token
+{
+    inline token_() = default;
+
+    inline token_(token_ const & other)
+    :strange::_common{other}
+    ,token{}
+    {
+    }
+
+    inline token_(token_ && other)
+    :strange::_common{std::move(other)}
+    ,token{}
+    {
+    }
+
+    inline auto operator=(token_ const & other) -> token_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(token_ && other) -> token_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline token_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,token{}
+    {
+    }
+
+    explicit inline token_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,token{}
+    {
+    }
+
+private:
+    friend struct token;
+
+    struct _instance final : token::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :token_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return token_::_derived::_static_shared_to_base(std::make_shared<token_::_instance>(_thing));
+            }
+            else
+            {
+                throw true;
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return token::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return token::_cats_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return token_::_name_;
+        }
+
+        inline auto filename() const -> std::string const & final;
+
+        inline auto filename() -> std::string & final;
+
+        inline auto line() const -> int64_t const & final;
+
+        inline auto line() -> int64_t & final;
+
+        inline auto position() const -> int64_t const & final;
+
+        inline auto position() -> int64_t & final;
+
+        inline auto classification() const -> strange::comprehension::cls const & final;
+
+        inline auto classification() -> strange::comprehension::cls & final;
+
+        inline auto text() const -> std::string const & final;
+
+        inline auto text() -> std::string & final;
+
+        inline auto operator==(token const & other) const -> bool final;
+
+        inline auto operator!=(token const & other) const -> bool final;
+
+        inline auto operator<(token const & other) const -> bool final;
+
+        inline auto operator<=(token const & other) const -> bool final;
+
+        inline auto operator>(token const & other) const -> bool final;
+
+        inline auto operator>=(token const & other) const -> bool final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    inline static auto _make_(_Args && ... _args) -> token_
+    {
+        return token_{token_::_derived::_static_shared_to_base(std::make_shared<token_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<token_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<token_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<token_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Abstraction_ = token_;
+    using _Thing_ = _Thing;
+
+    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+};
+
 template<typename T, typename _Thing, bool _Copy>
 inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
 {
@@ -6621,6 +6942,195 @@ inline auto space::operator>(space const & other) const -> bool
 inline auto space::operator>=(space const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator>=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::filename() const -> std::string const &
+{
+    return _thing.filename;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::filename() -> std::string &
+{
+    return _thing.filename;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::line() const -> int64_t const &
+{
+    return _thing.line;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::line() -> int64_t &
+{
+    return _thing.line;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::position() const -> int64_t const &
+{
+    return _thing.position;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::position() -> int64_t &
+{
+    return _thing.position;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::classification() const -> strange::comprehension::cls const &
+{
+    return _thing.classification;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::classification() -> strange::comprehension::cls &
+{
+    return _thing.classification;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::text() const -> std::string const &
+{
+    return _thing.text;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::text() -> std::string &
+{
+    return _thing.text;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::operator==(token const & other) const -> bool
+{
+    return filename() == other.filename()
+        && line() == other.line()
+        && position() == other.position()
+        && classification() == other.classification()
+        && text() == other.text();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::operator!=(token const & other) const -> bool
+{
+    return !operator==(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::operator<(token const & other) const -> bool
+{
+    return filename() < other.filename()
+        || (filename() == other.filename() && (line() < other.line()
+        || (line() == other.line() && (position() < other.position()
+        || (position() == other.position() && (classification() < other.classification()
+        || (classification() == other.classification() && text() < other.text())))))));
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::operator<=(token const & other) const -> bool
+{
+    return operator<(other) || operator==(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::operator>(token const & other) const -> bool
+{
+    return !operator<=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto token_<_Thing, _Copy>::_instance::operator>=(token const & other) const -> bool
+{
+    return !operator<(other);
+}
+
+inline auto token::filename() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->filename();
+}
+
+inline auto token::filename() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->filename();
+}
+
+inline auto token::line() const -> int64_t const &
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->line();
+}
+
+inline auto token::line() -> int64_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->line();
+}
+
+inline auto token::position() const -> int64_t const &
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->position();
+}
+
+inline auto token::position() -> int64_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->position();
+}
+
+inline auto token::classification() const -> strange::comprehension::cls const &
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->classification();
+}
+
+inline auto token::classification() -> strange::comprehension::cls &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->classification();
+}
+
+inline auto token::text() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->text();
+}
+
+inline auto token::text() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->text();
+}
+
+inline auto token::operator==(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator==(other);
+}
+
+inline auto token::operator!=(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator!=(other);
+}
+
+inline auto token::operator<(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator<(other);
+}
+
+inline auto token::operator<=(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator<=(other);
+}
+
+inline auto token::operator>(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator>(other);
+}
+
+inline auto token::operator>=(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 }

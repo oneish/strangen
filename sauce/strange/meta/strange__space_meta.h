@@ -14,6 +14,11 @@ struct operation;
 struct abstraction;
 struct space;
 }
+namespace comprehension
+{
+enum class cls;
+struct token;
+}
 }
 /*~
 // more meta code
