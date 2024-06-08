@@ -53,7 +53,7 @@ struct parser
             spc._error("strange::parser::parse_space() expected '{', but got punctuation: " + tok.text());
             return;
         }
-        for(;;)
+        for (;;)
         {
             parse_name_or_punctuation(tok);
             if (tok.classification() == cls::mistake)
@@ -65,7 +65,7 @@ struct parser
             {
                 if (tok.text() != "}")
                 {
-                    spc._error("strange::parser::parse_space() expected '}', but got punctuation: " + tok.text());
+                    spc._error("strange::parser::parse_space() expected name or '}', but got punctuation: " + tok.text());
                     return;
                 }
                 return;
@@ -82,6 +82,132 @@ struct parser
     }
 
     void parse_abstraction(strange::token & tok, abstraction & abs)
+    {
+        if (tok.text() == "template")
+        {
+            parse_template(abs);
+            if (!abs._valid())
+            {
+                return;
+            }
+            parse_name(tok);
+            if (tok.classification() == cls::mistake)
+            {
+                abs._error(tok.text());
+                return;
+            }
+        }
+        if (tok.text() != "struct")
+        {
+            abs._error("strange::parser::parse_abstraction() expected 'struct', but got name: " + tok.text());
+            return;
+        }
+        parse_name_or_punctuation(tok);
+        if (tok.classification() == cls::mistake)
+        {
+            abs._error(tok.text());
+            return;
+        }
+        if (tok.classification() == cls::punctuation)
+        {
+            if (tok.text() != "[[")
+            {
+                abs._error("strange::parser::parse_abstraction() expected name or '[[', but got punctuation: " + tok.text());
+                return;
+            }
+            parse_attribute(abs);
+            if (!abs._valid())
+            {
+                return;
+            }
+            parse_name(tok);
+            if (tok.classification() == cls::mistake)
+            {
+                abs._error(tok.text());
+                return;
+            }
+        }
+        abs.name() = tok.text();
+
+    }
+
+    void parse_template(abstraction & abs)
+    {
+        strange::token tok;
+        parse_punctuation(tok);
+        if (tok.classification() == cls::mistake)
+        {
+            abs._error(tok.text());
+            return;
+        }
+        if (tok.text() != "<")
+        {
+            abs._error("strange::parser::parse_template() expected '<', but got punctuation: " + tok.text());
+            return;
+        }
+        for (;;)
+        {
+            parse_name(tok);
+            if (tok.classification() == cls::mistake)
+            {
+                abs._error(tok.text());
+                return;
+            }
+            if (tok.text() != "typename")
+            {
+                abs._error("strange::parser::parse_template() expected 'typename', but got name: " + tok.text());
+                return;
+            }
+            auto param = strange::parameter::_make();
+            param.type() = tok.text();
+            parse_name(tok);
+            if (tok.classification() == cls::mistake)
+            {
+                abs._error(tok.text());
+                return;
+            }
+            param.name() = tok.text();
+            parse_punctuation(tok);
+            if (tok.classification() == cls::mistake)
+            {
+                abs._error(tok.text());
+                return;
+            }
+            if (tok.text() == ">")
+            {
+                abs.parameters().push_back(param);
+                return;
+            }
+            if (tok.text() == ",")
+            {
+                abs.parameters().push_back(param);
+                continue;
+            }
+            if (tok.text() != "=")
+            {
+                abs._error("strange::parser::parse_template() expected '>' ',' or '=', but got punctuation: " + tok.text());
+                return;
+            }
+            parse_argument(tok, param.argument());
+            if (tok.classification() == cls::mistake)
+            {
+                abs._error(tok.text());
+                return;
+            }
+            abs.parameters().push_back(param);
+            if (tok.text() == ">")
+            {
+                return;
+            }
+        }
+    }
+
+    void parse_argument(strange::token & tok, std::string & arg)
+    {
+
+    }
+
+    void parse_attribute(abstraction & abs)
     {
 
     }

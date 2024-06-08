@@ -349,6 +349,8 @@ struct toker
                 case '&':
                 case '|':
                 case '=':
+                case '[':
+                case ']':
                     text = char1;
                     if (char1 == char2)
                     {
