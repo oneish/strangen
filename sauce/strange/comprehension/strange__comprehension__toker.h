@@ -63,12 +63,12 @@ struct toker
         return c >= '0' && c <= '9';
     }
 
-    inline auto make_token(cls classification, std::string text) const -> token
+    inline auto make_token(cls classification, std::string text) const -> strange::token
     {
-        return {.filename = filename, .line = start_line, .position = start_position, .classification = classification, .text = text};
+        return strange::token::_make(token{.filename = filename, .line = start_line, .position = start_position, .classification = classification, .text = text});
     }
 
-    inline auto increment() -> token
+    inline auto increment() -> strange::token
     {
         if (!end)
         {
@@ -90,7 +90,7 @@ struct toker
         return make_token(cls::mistake, "beyond end of stream");
     }
 
-    inline auto next() -> token
+    inline auto next() -> strange::token
     {
         start_line = line;
         start_position = position;

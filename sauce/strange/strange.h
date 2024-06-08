@@ -93,7 +93,7 @@ struct std::hash<strange::space>
         return h;
     }
 };
-/*
+
 template<>
 struct std::hash<strange::token>
 {
@@ -106,4 +106,3 @@ struct std::hash<strange::token>
             ^ std::hash<std::string>{}(tok.text());
     }
 };
-*/
