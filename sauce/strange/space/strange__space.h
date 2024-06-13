@@ -4252,42 +4252,6 @@ public:
     inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
-{
-    return _thing.operator*();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
-{
-    return _thing.operator->();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
-{
-    _thing.operator++();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
-{
-    _thing.operator++(i);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
-{
-    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
-{
-    return !operator==(other);
-}
-
 template<typename T>
 inline auto forward_const_iterator<T>::operator*() const -> T const &
 {
@@ -4330,61 +4294,37 @@ inline auto forward_const_iterator<T>::operator!=(forward_const_iterator<T> cons
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
+inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
 {
     return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
+inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
 {
     return _thing.operator->();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
+inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
 {
     _thing.operator++();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
+inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
 {
     _thing.operator++(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
+inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
-{
-    return !operator==(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator*() -> T &
-{
-    return _thing.operator*();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
-{
-    return _thing.operator->();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
-{
-    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_iterator<T> const & other) const -> bool
+inline auto forward_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
@@ -4457,63 +4397,63 @@ inline auto forward_iterator<T>::operator!=(forward_iterator<T> const & other) c
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
 {
     return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
 {
     return _thing.operator->();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
 {
     _thing.operator++();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
 {
     _thing.operator++(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator*() -> T &
 {
-    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
+    return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
+{
+    return _thing.operator->();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
+{
+    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto forward_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
-{
-    _thing.operator--();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
-{
-    _thing.operator--(i);
 }
 
 template<typename T>
@@ -4587,99 +4527,63 @@ inline auto bidirectional_const_iterator<T>::operator--(int i) -> bidirectional_
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
 {
     return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
 {
     return _thing.operator->();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
 {
     _thing.operator++();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
 {
     _thing.operator++(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator*() -> T &
-{
-    return _thing.operator*();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
-{
-    return _thing.operator->();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
-{
-    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_iterator<T> const & other) const -> bool
-{
-    return !operator==(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
 {
     _thing.operator--();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
+inline auto bidirectional_const_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
 {
     _thing.operator--(i);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_iterator<T> const & other) const -> bool
-{
-    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_iterator<T> const & other) const -> bool
-{
-    return !operator==(other);
 }
 
 template<typename T>
@@ -4791,135 +4695,99 @@ inline auto bidirectional_iterator<T>::operator!=(bidirectional_iterator<T> cons
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
 {
     return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
 {
     return _thing.operator->();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
 {
     _thing.operator++();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
 {
     _thing.operator++(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator*() -> T &
+{
+    return _thing.operator*();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
+{
+    return _thing.operator->();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
+{
+    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_iterator<T> const & other) const -> bool
+{
+    return !operator==(other);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
 {
     _thing.operator--();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
 {
     _thing.operator--(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_iterator<T> const & other) const -> bool
 {
-    return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
+    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(random_access_const_iterator<T> const & other) const -> bool
+inline auto bidirectional_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_const_iterator<T> const & other) const -> bool
-{
-    return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_const_iterator<T> const & other) const -> bool
-{
-    return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_const_iterator<T> const & other) const -> bool
-{
-    return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_const_iterator<T> const & other) const -> bool
-{
-    return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator+=(std::ptrdiff_t n) -> void
-{
-    _thing.operator+=(n);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-=(std::ptrdiff_t n) -> void
-{
-    _thing.operator-=(n);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator+(std::ptrdiff_t n) const -> random_access_const_iterator<T>
-{
-    return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing + n);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>
-{
-    return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing - n);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
-{
-    return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator[](std::ptrdiff_t n) const -> T const &
-{
-    return _thing.operator[](n);
 }
 
 template<typename T>
@@ -5069,229 +4937,133 @@ inline auto random_access_const_iterator<T>::operator[](std::ptrdiff_t n) const 
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
 {
     return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
 {
     return _thing.operator->();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
 {
     _thing.operator++();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
 {
     _thing.operator++(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator*() -> T &
-{
-    return _thing.operator*();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
-{
-    return _thing.operator->();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
-{
-    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_iterator<T> const & other) const -> bool
-{
-    return !operator==(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
 {
     _thing.operator--();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
 {
     _thing.operator--(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_iterator<T> const & other) const -> bool
-{
-    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_iterator<T> const & other) const -> bool
-{
-    return !operator==(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_const_iterator<T> const & other) const -> bool
 {
     return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(random_access_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator!=(random_access_const_iterator<T> const & other) const -> bool
 {
     return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_const_iterator<T> const & other) const -> bool
 {
     return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_const_iterator<T> const & other) const -> bool
 {
     return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_const_iterator<T> const & other) const -> bool
 {
     return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_const_iterator<T> const & other) const -> bool
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_const_iterator<T> const & other) const -> bool
 {
     return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+=(std::ptrdiff_t n) -> void
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator+=(std::ptrdiff_t n) -> void
 {
     _thing.operator+=(n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-=(std::ptrdiff_t n) -> void
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-=(std::ptrdiff_t n) -> void
 {
     _thing.operator-=(n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+(std::ptrdiff_t n) const -> random_access_const_iterator<T>
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator+(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
     return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing + n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
     return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing - n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
 {
     return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator[](std::ptrdiff_t n) const -> T const &
-{
-    return _thing.operator[](n);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_iterator<T> const & other) const -> bool
-{
-    return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(random_access_iterator<T> const & other) const -> bool
-{
-    return !operator==(other);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_iterator<T> const & other) const -> bool
-{
-    return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_iterator<T> const & other) const -> bool
-{
-    return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_iterator<T> const & other) const -> bool
-{
-    return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_iterator<T> const & other) const -> bool
-{
-    return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+(std::ptrdiff_t n) -> random_access_iterator<T>
-{
-    return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing + n);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(std::ptrdiff_t n) -> random_access_iterator<T>
-{
-    return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing - n);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_iterator<T> const & other) const -> std::ptrdiff_t
-{
-    return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator[](std::ptrdiff_t n) -> T &
+inline auto random_access_const_iterator_<T, _Thing, _Copy>::_instance::operator[](std::ptrdiff_t n) const -> T const &
 {
     return _thing.operator[](n);
 }
@@ -5544,315 +5316,231 @@ inline auto random_access_iterator<T>::operator[](std::ptrdiff_t n) -> T &
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::initializer_list<T> ilist) -> void
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator*() const -> T const &
 {
-    _thing.operator=(ilist);
+    return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::assign(size_t count, T const & value) -> void
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator->() const -> T const *
 {
-    _thing.assign(count, value);
+    return _thing.operator->();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator++() -> void
 {
-    _thing.assign(first, last);
+    _thing.operator++();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::assign(std::initializer_list<T> ilist) -> void
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator++(int i) -> void
 {
-    _thing.assign(ilist);
+    _thing.operator++(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) -> T &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing.at(pos);
+    return _thing == other.template _static<forward_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) const -> T const &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_const_iterator<T> const & other) const -> bool
 {
-    return _thing.at(pos);
+    return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) -> T &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator*() -> T &
 {
-    return _thing.operator[](pos);
+    return _thing.operator*();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) const -> T const &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator->() -> T *
 {
-    return _thing.operator[](pos);
+    return _thing.operator->();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::front() -> T &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(forward_iterator<T> const & other) const -> bool
 {
-    return _thing.front();
+    return _thing == other.template _static<forward_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::front() const -> T const &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(forward_iterator<T> const & other) const -> bool
 {
-    return _thing.front();
+    return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::back() -> T &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return _thing.back();
+    return _thing == other.template _static<bidirectional_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::back() const -> T const &
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_const_iterator<T> const & other) const -> bool
 {
-    return _thing.back();
+    return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::data() -> T *
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator--() -> void
 {
-    return _thing.data();
+    _thing.operator--();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::data() const -> T const *
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator--(int i) -> void
 {
-    return _thing.data();
+    _thing.operator--(i);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::begin() -> typename strange::random_access_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(bidirectional_iterator<T> const & other) const -> bool
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
+    return _thing == other.template _static<bidirectional_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::begin() const -> typename strange::random_access_const_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(bidirectional_iterator<T> const & other) const -> bool
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
+    return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::cbegin() const -> typename strange::random_access_const_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_const_iterator<T> const & other) const -> bool
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin());
+    return _thing == other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::end() -> typename strange::random_access_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
+    return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::end() const -> typename strange::random_access_const_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_const_iterator<T> const & other) const -> bool
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
+    return _thing < other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::cend() const -> typename strange::random_access_const_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_const_iterator<T> const & other) const -> bool
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend());
+    return _thing > other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() -> typename std::reverse_iterator<strange::random_access_iterator<T>>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
+    return _thing <= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_const_iterator<T> const & other) const -> bool
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
+    return _thing >= other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::crbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+=(std::ptrdiff_t n) -> void
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())};
+    _thing.operator+=(n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::rend() -> typename std::reverse_iterator<strange::random_access_iterator<T>>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-=(std::ptrdiff_t n) -> void
 {
-    return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
+    _thing.operator-=(n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::rend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
+    return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing + n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::crend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(std::ptrdiff_t n) const -> random_access_const_iterator<T>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())};
+    return random_access_const_iterator<T>::template _make<_Thing, _Copy>(_thing - n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::empty() const -> bool
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_const_iterator<T> const & other) const -> std::ptrdiff_t
 {
-    return _thing.empty();
+    return _thing - other.template _static<random_access_const_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::size() const -> size_t
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator[](std::ptrdiff_t n) const -> T const &
 {
-    return _thing.size();
+    return _thing.operator[](n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::max_size() const -> size_t
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator==(random_access_iterator<T> const & other) const -> bool
 {
-    return _thing.max_size();
+    return _thing == other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::reserve(size_t new_cap) -> void
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator!=(random_access_iterator<T> const & other) const -> bool
 {
-    _thing.reserve(new_cap);
+    return !operator==(other);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::capacity() const -> size_t
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<(random_access_iterator<T> const & other) const -> bool
 {
-    return _thing.capacity();
+    return _thing < other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::shrink_to_fit() -> void
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>(random_access_iterator<T> const & other) const -> bool
 {
-    _thing.shrink_to_fit();
+    return _thing > other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::clear() -> void
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator<=(random_access_iterator<T> const & other) const -> bool
 {
-    _thing.clear();
+    return _thing <= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator>=(random_access_iterator<T> const & other) const -> bool
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value));
+    return _thing >= other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator+(std::ptrdiff_t n) -> random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)));
+    return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing + n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(std::ptrdiff_t n) -> random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value));
+    return random_access_iterator<T>::template _make<_Thing, _Copy>(_thing - n);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator-(random_access_iterator<T> const & other) const -> std::ptrdiff_t
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last));
+    return _thing - other.template _static<random_access_iterator_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
+inline auto random_access_iterator_<T, _Thing, _Copy>::_instance::operator[](std::ptrdiff_t n) -> T &
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist));
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
-{
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>
-{
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T const & value) -> void
-{
-    _thing.push_back(value);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T && value) -> void
-{
-    _thing.push_back(std::move(value));
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::pop_back() -> void
-{
-    _thing.pop_back();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count) -> void
-{
-    _thing.resize(count);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count, T const & value) -> void
-{
-    _thing.resize(count, value);
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::swap(vector<T> & other) -> void
-{
-    _thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing());
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator==(vector<T> const & other) const -> bool
-{
-    return _thing == other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator!=(vector<T> const & other) const -> bool
-{
-    return _thing != other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator<(vector<T> const & other) const -> bool
-{
-    return _thing < other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator>(vector<T> const & other) const -> bool
-{
-    return _thing > other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator<=(vector<T> const & other) const -> bool
-{
-    return _thing <= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
-}
-
-template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator>=(vector<T> const & other) const -> bool
-{
-    return _thing >= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+    return _thing.operator[](n);
 }
 
 template<typename T>
@@ -6213,6 +5901,381 @@ inline auto vector<T>::operator>=(vector<T> const & other) const -> bool
     return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::initializer_list<T> ilist) -> void
+{
+    _thing.operator=(ilist);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(size_t count, T const & value) -> void
+{
+    _thing.assign(count, value);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void
+{
+    _thing.assign(first, last);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(std::initializer_list<T> ilist) -> void
+{
+    _thing.assign(ilist);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) -> T &
+{
+    return _thing.at(pos);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) const -> T const &
+{
+    return _thing.at(pos);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) -> T &
+{
+    return _thing.operator[](pos);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) const -> T const &
+{
+    return _thing.operator[](pos);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::front() -> T &
+{
+    return _thing.front();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::front() const -> T const &
+{
+    return _thing.front();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::back() -> T &
+{
+    return _thing.back();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::back() const -> T const &
+{
+    return _thing.back();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::data() -> T *
+{
+    return _thing.data();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::data() const -> T const *
+{
+    return _thing.data();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::begin() -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::begin() const -> typename strange::random_access_const_iterator<T>
+{
+    return random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::cbegin() const -> typename strange::random_access_const_iterator<T>
+{
+    return random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::end() -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::end() const -> typename strange::random_access_const_iterator<T>
+{
+    return random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::cend() const -> typename strange::random_access_const_iterator<T>
+{
+    return random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() -> typename std::reverse_iterator<strange::random_access_iterator<T>>
+{
+    return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+{
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::crbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+{
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())};
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::rend() -> typename std::reverse_iterator<strange::random_access_iterator<T>>
+{
+    return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::rend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+{
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::crend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
+{
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())};
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::empty() const -> bool
+{
+    return _thing.empty();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::size() const -> size_t
+{
+    return _thing.size();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::max_size() const -> size_t
+{
+    return _thing.max_size();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::reserve(size_t new_cap) -> void
+{
+    _thing.reserve(new_cap);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::capacity() const -> size_t
+{
+    return _thing.capacity();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::shrink_to_fit() -> void
+{
+    _thing.shrink_to_fit();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::clear() -> void
+{
+    _thing.clear();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>
+{
+    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T const & value) -> void
+{
+    _thing.push_back(value);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::push_back(T && value) -> void
+{
+    _thing.push_back(std::move(value));
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::pop_back() -> void
+{
+    _thing.pop_back();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count) -> void
+{
+    _thing.resize(count);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count, T const & value) -> void
+{
+    _thing.resize(count, value);
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::swap(vector<T> & other) -> void
+{
+    _thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing());
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator==(vector<T> const & other) const -> bool
+{
+    return _thing == other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator!=(vector<T> const & other) const -> bool
+{
+    return _thing != other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator<(vector<T> const & other) const -> bool
+{
+    return _thing < other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator>(vector<T> const & other) const -> bool
+{
+    return _thing > other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator<=(vector<T> const & other) const -> bool
+{
+    return _thing <= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+}
+
+template<typename T, typename _Thing, bool _Copy>
+inline auto vector_<T, _Thing, _Copy>::_instance::operator>=(vector<T> const & other) const -> bool
+{
+    return _thing >= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+}
+
+inline auto parameter::type() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->type();
+}
+
+inline auto parameter::type() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
+}
+
+inline auto parameter::name() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->name();
+}
+
+inline auto parameter::name() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->name();
+}
+
+inline auto parameter::argument() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->argument();
+}
+
+inline auto parameter::argument() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
+}
+
+inline auto parameter::operator==(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator==(other);
+}
+
+inline auto parameter::operator!=(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator!=(other);
+}
+
+inline auto parameter::operator<(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator<(other);
+}
+
+inline auto parameter::operator<=(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator<=(other);
+}
+
+inline auto parameter::operator>(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator>(other);
+}
+
+inline auto parameter::operator>=(parameter const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator>=(other);
+}
+
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::type() const -> std::string const &
 {
@@ -6289,67 +6352,122 @@ inline auto parameter_<_Thing, _Copy>::_instance::operator>=(parameter const & o
     return !operator<(other);
 }
 
-inline auto parameter::type() const -> std::string const &
+inline auto operation::name() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->type();
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->name();
 }
 
-inline auto parameter::type() -> std::string &
+inline auto operation::name() -> std::string &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->type();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->name();
 }
 
-inline auto parameter::name() const -> std::string const &
+inline auto operation::parameters() const -> strange::vector<strange::parameter> const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->name();
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->parameters();
 }
 
-inline auto parameter::name() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->name();
-}
-
-inline auto parameter::argument() const -> std::string const &
-{
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->argument();
-}
-
-inline auto parameter::argument() -> std::string &
+inline auto operation::parameters() -> strange::vector<strange::parameter> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->parameters();
 }
 
-inline auto parameter::operator==(parameter const & other) const -> bool
+inline auto operation::constness() const -> bool const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->constness();
 }
 
-inline auto parameter::operator!=(parameter const & other) const -> bool
+inline auto operation::constness() -> bool &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator!=(other);
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->constness();
 }
 
-inline auto parameter::operator<(parameter const & other) const -> bool
+inline auto operation::result() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->result();
 }
 
-inline auto parameter::operator<=(parameter const & other) const -> bool
+inline auto operation::result() -> std::string &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator<=(other);
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->result();
 }
 
-inline auto parameter::operator>(parameter const & other) const -> bool
+inline auto operation::data() const -> bool const &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->data();
 }
 
-inline auto parameter::operator>=(parameter const & other) const -> bool
+inline auto operation::data() -> bool &
 {
-    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator>=(other);
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->data();
+}
+
+inline auto operation::modification() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->modification();
+}
+
+inline auto operation::modification() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->modification();
+}
+
+inline auto operation::customisation() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->customisation();
+}
+
+inline auto operation::customisation() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->customisation();
+}
+
+inline auto operation::implementation() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->implementation();
+}
+
+inline auto operation::implementation() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->implementation();
+}
+
+inline auto operation::operator==(operation const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator==(other);
+}
+
+inline auto operation::operator!=(operation const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator!=(other);
+}
+
+inline auto operation::operator<(operation const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator<(other);
+}
+
+inline auto operation::operator<=(operation const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator<=(other);
+}
+
+inline auto operation::operator>(operation const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator>(other);
+}
+
+inline auto operation::operator>=(operation const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename _Thing, bool _Copy>
@@ -6498,122 +6616,100 @@ inline auto operation_<_Thing, _Copy>::_instance::operator>=(operation const & o
     return !operator<(other);
 }
 
-inline auto operation::name() const -> std::string const &
+inline auto abstraction::parameters() const -> strange::vector<strange::parameter> const &
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->name();
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->parameters();
 }
 
-inline auto operation::name() -> std::string &
+inline auto abstraction::parameters() -> strange::vector<strange::parameter> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->name();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->parameters();
 }
 
-inline auto operation::parameters() const -> strange::vector<strange::parameter> const &
+inline auto abstraction::name() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->parameters();
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->name();
 }
 
-inline auto operation::parameters() -> strange::vector<strange::parameter> &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->parameters();
-}
-
-inline auto operation::constness() const -> bool const &
-{
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->constness();
-}
-
-inline auto operation::constness() -> bool &
+inline auto abstraction::name() -> std::string &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->constness();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->name();
 }
 
-inline auto operation::result() const -> std::string const &
+inline auto abstraction::parents() const -> strange::vector<std::string> const &
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->result();
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->parents();
 }
 
-inline auto operation::result() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->result();
-}
-
-inline auto operation::data() const -> bool const &
-{
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->data();
-}
-
-inline auto operation::data() -> bool &
+inline auto abstraction::parents() -> strange::vector<std::string> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->data();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->parents();
 }
 
-inline auto operation::modification() const -> std::string const &
+inline auto abstraction::types() const -> strange::vector<strange::parameter> const &
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->modification();
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->types();
 }
 
-inline auto operation::modification() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->modification();
-}
-
-inline auto operation::customisation() const -> std::string const &
-{
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->customisation();
-}
-
-inline auto operation::customisation() -> std::string &
+inline auto abstraction::types() -> strange::vector<strange::parameter> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->customisation();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->types();
 }
 
-inline auto operation::implementation() const -> std::string const &
+inline auto abstraction::operations() const -> strange::vector<strange::operation> const &
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->implementation();
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operations();
 }
 
-inline auto operation::implementation() -> std::string &
+inline auto abstraction::operations() -> strange::vector<strange::operation> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->implementation();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->operations();
 }
 
-inline auto operation::operator==(operation const & other) const -> bool
+inline auto abstraction::thing() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->thing();
 }
 
-inline auto operation::operator!=(operation const & other) const -> bool
+inline auto abstraction::thing() -> std::string &
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator!=(other);
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->thing();
 }
 
-inline auto operation::operator<(operation const & other) const -> bool
+inline auto abstraction::operator==(abstraction const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
-inline auto operation::operator<=(operation const & other) const -> bool
+inline auto abstraction::operator!=(abstraction const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator<=(other);
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
-inline auto operation::operator>(operation const & other) const -> bool
+inline auto abstraction::operator<(abstraction const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator<(other);
 }
 
-inline auto operation::operator>=(operation const & other) const -> bool
+inline auto abstraction::operator<=(abstraction const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator>=(other);
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator<=(other);
+}
+
+inline auto abstraction::operator>(abstraction const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator>(other);
+}
+
+inline auto abstraction::operator>=(abstraction const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename _Thing, bool _Copy>
@@ -6734,100 +6830,56 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator>=(abstraction const
     return !operator<(other);
 }
 
-inline auto abstraction::parameters() const -> strange::vector<strange::parameter> const &
+inline auto space::name() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->parameters();
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->name();
 }
 
-inline auto abstraction::parameters() -> strange::vector<strange::parameter> &
+inline auto space::name() -> std::string &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->parameters();
+    return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->name();
 }
 
-inline auto abstraction::name() const -> std::string const &
+inline auto space::abstractions() const -> strange::vector<strange::abstraction> const &
 {
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->name();
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->abstractions();
 }
 
-inline auto abstraction::name() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->name();
-}
-
-inline auto abstraction::parents() const -> strange::vector<std::string> const &
-{
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->parents();
-}
-
-inline auto abstraction::parents() -> strange::vector<std::string> &
+inline auto space::abstractions() -> strange::vector<strange::abstraction> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->parents();
+    return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->abstractions();
 }
 
-inline auto abstraction::types() const -> strange::vector<strange::parameter> const &
+inline auto space::operator==(space const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->types();
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator==(other);
 }
 
-inline auto abstraction::types() -> strange::vector<strange::parameter> &
+inline auto space::operator!=(space const & other) const -> bool
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->types();
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator!=(other);
 }
 
-inline auto abstraction::operations() const -> strange::vector<strange::operation> const &
+inline auto space::operator<(space const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operations();
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator<(other);
 }
 
-inline auto abstraction::operations() -> strange::vector<strange::operation> &
+inline auto space::operator<=(space const & other) const -> bool
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->operations();
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator<=(other);
 }
 
-inline auto abstraction::thing() const -> std::string const &
+inline auto space::operator>(space const & other) const -> bool
 {
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->thing();
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator>(other);
 }
 
-inline auto abstraction::thing() -> std::string &
+inline auto space::operator>=(space const & other) const -> bool
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->thing();
-}
-
-inline auto abstraction::operator==(abstraction const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator==(other);
-}
-
-inline auto abstraction::operator!=(abstraction const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator!=(other);
-}
-
-inline auto abstraction::operator<(abstraction const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator<(other);
-}
-
-inline auto abstraction::operator<=(abstraction const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator<=(other);
-}
-
-inline auto abstraction::operator>(abstraction const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator>(other);
-}
-
-inline auto abstraction::operator>=(abstraction const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator>=(other);
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename _Thing, bool _Copy>
@@ -6892,56 +6944,89 @@ inline auto space_<_Thing, _Copy>::_instance::operator>=(space const & other) co
     return !operator<(other);
 }
 
-inline auto space::name() const -> std::string const &
+inline auto token::filename() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->name();
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->filename();
 }
 
-inline auto space::name() -> std::string &
+inline auto token::filename() -> std::string &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->name();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->filename();
 }
 
-inline auto space::abstractions() const -> strange::vector<strange::abstraction> const &
+inline auto token::line() const -> int64_t const &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->abstractions();
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->line();
 }
 
-inline auto space::abstractions() -> strange::vector<strange::abstraction> &
+inline auto token::line() -> int64_t &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->abstractions();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->line();
 }
 
-inline auto space::operator==(space const & other) const -> bool
+inline auto token::position() const -> int64_t const &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator==(other);
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->position();
 }
 
-inline auto space::operator!=(space const & other) const -> bool
+inline auto token::position() -> int64_t &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator!=(other);
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->position();
 }
 
-inline auto space::operator<(space const & other) const -> bool
+inline auto token::classification() const -> strange::comprehension::cls const &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator<(other);
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->classification();
 }
 
-inline auto space::operator<=(space const & other) const -> bool
+inline auto token::classification() -> strange::comprehension::cls &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator<=(other);
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->classification();
 }
 
-inline auto space::operator>(space const & other) const -> bool
+inline auto token::text() const -> std::string const &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator>(other);
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->text();
 }
 
-inline auto space::operator>=(space const & other) const -> bool
+inline auto token::text() -> std::string &
 {
-    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator>=(other);
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->text();
+}
+
+inline auto token::operator==(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator==(other);
+}
+
+inline auto token::operator!=(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator!=(other);
+}
+
+inline auto token::operator<(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator<(other);
+}
+
+inline auto token::operator<=(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator<=(other);
+}
+
+inline auto token::operator>(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator>(other);
+}
+
+inline auto token::operator>=(token const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 template<typename _Thing, bool _Copy>
@@ -7046,91 +7131,6 @@ template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::operator>=(token const & other) const -> bool
 {
     return !operator<(other);
-}
-
-inline auto token::filename() const -> std::string const &
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->filename();
-}
-
-inline auto token::filename() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->filename();
-}
-
-inline auto token::line() const -> int64_t const &
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->line();
-}
-
-inline auto token::line() -> int64_t &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->line();
-}
-
-inline auto token::position() const -> int64_t const &
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->position();
-}
-
-inline auto token::position() -> int64_t &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->position();
-}
-
-inline auto token::classification() const -> strange::comprehension::cls const &
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->classification();
-}
-
-inline auto token::classification() -> strange::comprehension::cls &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->classification();
-}
-
-inline auto token::text() const -> std::string const &
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->text();
-}
-
-inline auto token::text() -> std::string &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->text();
-}
-
-inline auto token::operator==(token const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator==(other);
-}
-
-inline auto token::operator!=(token const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator!=(other);
-}
-
-inline auto token::operator<(token const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator<(other);
-}
-
-inline auto token::operator<=(token const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator<=(other);
-}
-
-inline auto token::operator>(token const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator>(other);
-}
-
-inline auto token::operator>=(token const & other) const -> bool
-{
-    return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator>=(other);
 }
 
 }

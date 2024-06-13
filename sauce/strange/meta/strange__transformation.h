@@ -393,11 +393,11 @@ public:
         {
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, true, false, true, unique);
+                _abstraction_operations(abstraction, abstraction, false, false, true, unique);
             }
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, false, false, true, unique);
+                _abstraction_operations(abstraction, abstraction, true, false, true, unique);
             }
         }
     }
