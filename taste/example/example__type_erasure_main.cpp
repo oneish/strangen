@@ -276,5 +276,12 @@ int main()
 #include <string>
 namespace syntax
 {
+namespace strange
+{
+namespace comprehension
+{
+enum class cls;
+}
+}
 #include "example__parser_input.h"
 }

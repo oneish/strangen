@@ -1454,7 +1454,7 @@ auto definition() -> strange::space
                             }),
                         }),
                         .result = "void",
-                        .customisation = "_thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing())"
+                        .customisation = "_thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing())",
                     }),
                     operation
                     ({
