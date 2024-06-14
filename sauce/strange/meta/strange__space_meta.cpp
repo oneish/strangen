@@ -1,5 +1,7 @@
 // meta code
-#include "strange__space_definition.h"
+#include <fstream>
+#include "../strange.h"
+#include "../comprehension/strange__comprehension__parser.h"
 #include "strange__transformation.h"
 
 #include <iostream>
@@ -26,8 +28,20 @@ struct token;
 }
 )~";
 
-// more meta code
-strange::transformation(strange::meta::definition(), std::cout).transform();
+    // more meta code
+    std::ifstream ifs{"strange__space_prototype.h", std::ios::binary};
+    std::istreambuf_iterator<char> it{ifs};
+    strange::comprehension::toker toker(it);
+    strange::comprehension::parser parser(toker);
+    auto space = parser.parse();
+    if (space._valid())
+    {
+        strange::transformation(space, std::cout).transform();
+    }
+    else
+    {
+        std::cout << "invalid space: " << space._error() << std::endl;
+    }
 
 std::cout << R"~(
 )~";

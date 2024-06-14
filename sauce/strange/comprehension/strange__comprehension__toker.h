@@ -16,6 +16,7 @@ enum class cls
     string,
     comment,
     punctuation,
+    whitespace,
     mistake,
 };
 
@@ -297,9 +298,13 @@ struct toker
                 }
                 else if ((char1 == ' ') || (char1 == '\n') || (char1 == '\t') || (char1 == '\r'))
                 {
-                    // skip whitespace
-                    start_line = line;
-                    start_position = position + 1;
+                    // whitespace
+                    text += char1;
+                    if ((char2 != ' ') && (char2 != '\n') && (char2 != '\t') && (char2 != '\r'))
+                    {
+                        // end of whitespace
+                        return make_token(cls::whitespace, text);
+                    }
                     continue;
                 }
                 else switch (char1)

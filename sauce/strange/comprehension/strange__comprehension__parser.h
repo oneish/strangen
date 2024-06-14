@@ -1,6 +1,7 @@
 #pragma once
 #include "../strange.h"
 #include <iostream>
+#include <algorithm>
 
 namespace strange
 {
@@ -8,6 +9,15 @@ namespace comprehension
 {
 struct parser
 {
+    static inline auto rtrim(std::string & s) -> void
+    {
+        s.erase(std::find_if(s.rbegin(), s.rend(),
+            [](unsigned char ch)
+            {
+                return !std::isspace(ch);
+            }).base(), s.end());
+    }
+
     toker toke;
 
     parser(toker tokenizer)
@@ -178,13 +188,19 @@ struct parser
                 abs._error(oper._error());
                 return;
             }
-            abs.operations().push_back(oper);
-            if (oper.data() && !oper.constness())
+            if (oper.data())
             {
-                oper.constness() = true;
-                oper.result() += " const";
-                abs.operations().push_back(oper);
+                auto result = oper.result();
+                oper.result() += " const &";
+                if (!oper.constness())
+                {
+                    oper.constness() = true;
+                    abs.operations().push_back(oper);
+                    oper.constness() = false;
+                    oper.result() = result + " &";
+                }
             }
+            abs.operations().push_back(oper);
         }
         parse_punctuation(tok);
         if (tok.classification() == cls::mistake)
@@ -307,27 +323,22 @@ struct parser
         while (!toke.end)
         {
             tok = toke.increment();
-            if (!arg.empty())
-            {
-                arg += " ";
-            }
             switch (tok.classification())
             {
-                case strange::comprehension::cls::character:
+                case cls::character:
                     arg += "'" + tok.text() + "'";
                     break;
-                case strange::comprehension::cls::comment:
-                    std::cout << "comment: " << tok.text() << std::endl;
+                case cls::comment:
                     break;
-                case strange::comprehension::cls::mistake:
+                case cls::mistake:
                     return;
-                case strange::comprehension::cls::name:
+                case cls::name:
                     arg += tok.text();
                     break;
-                case strange::comprehension::cls::number:
+                case cls::number:
                     arg += tok.text();
                     break;
-                case strange::comprehension::cls::punctuation:
+                case cls::punctuation:
                     if (tok.text() == "<")
                     {
                         ++angle;
@@ -340,6 +351,7 @@ struct parser
                     {
                         if (parent && angle == 0 && curly == 0 && round == 0 && square == 0)
                         {
+                            rtrim(arg);
                             return;
                         }
                         ++curly;
@@ -375,11 +387,21 @@ struct parser
                             tok.classification() = cls::mistake;
                             tok.text() = "strange::parser::parse_argument() mismatched brackets: " + tok.text();
                         }
+                        else
+                        {
+                            rtrim(arg);
+                        }
                         return;
                     }
                     break;
-                case strange::comprehension::cls::string:
+                case cls::string:
                     arg += "\"" + tok.text() + "\"";
+                    break;
+                case cls::whitespace:
+                    if (!arg.empty())
+                    {
+                        arg += " ";
+                    }
                     break;
                 default:
                     tok.classification() = cls::mistake;
@@ -529,19 +551,24 @@ struct parser
         {
             for (;;)
             {
-                parse_name_or_punctuation(tok);
+                parse_name_or_punctuation(tok, true);
                 if (tok.classification() == cls::mistake)
                 {
                     oper._error(tok.text());
                     return;
                 }
+                if (tok.classification() == cls::whitespace)
+                {
+                    if (!oper.name().empty())
+                    {
+                        oper.name() += " ";
+                    }
+                    continue;
+                }
                 if (tok.text() == "(")
                 {
+                    rtrim(oper.name());
                     break;
-                }
-                if (!oper.name().empty())
-                {
-                    oper.name() += " ";
                 }
                 oper.name() += tok.text();
             }
@@ -570,7 +597,7 @@ struct parser
             bool ignore = !oper.result().empty();
             for (;;)
             {
-                parse_name_or_punctuation(tok);
+                parse_name_or_punctuation(tok, true);
                 if (tok.classification() == cls::mistake)
                 {
                     oper._error(tok.text());
@@ -578,15 +605,20 @@ struct parser
                 }
                 if (tok.text() == ";")
                 {
+                    rtrim(oper.result());
                     return;
                 }
                 if (ignore)
                 {
                     continue;
                 }
-                if (!oper.result().empty())
+                if (tok.classification() == cls::whitespace)
                 {
-                    oper.result() != " ";
+                    if (!oper.result().empty())
+                    {
+                        oper.result() += " ";
+                    }
+                    continue;
                 }
                 oper.result() += tok.text();
             }
@@ -596,19 +628,16 @@ struct parser
         std::string previous;
         for (;;)
         {
-            parse_name_or_punctuation(tok);
+            parse_name_or_punctuation(tok, true);
             if (tok.classification() == cls::mistake)
             {
                 oper._error(tok.text());
                 return;
             }
-            if (!oper.result().empty())
-            {
-                oper.result() += " ";
-            }
             oper.result() += previous;
             if (tok.text() == "{" || tok.text() == ";")
             {
+                rtrim(oper.result());
                 break;
             }
             previous = last;
@@ -744,7 +773,7 @@ struct parser
             std::string last;
             for (;;)
             {
-                parse_name_or_punctuation(tok);
+                parse_name_or_punctuation(tok, true);
                 if (tok.classification() == cls::mistake)
                 {
                     oper._error(tok.text());
@@ -752,11 +781,12 @@ struct parser
                 }
                 if (tok.text() == "=" || tok.text() == "," || tok.text() == ")")
                 {
+                    rtrim(param.type());
                     break;
                 }
-                if (!param.type().empty())
+                if (param.type().empty())
                 {
-                    param.type() += " ";
+                    rtrim(last);
                 }
                 param.type() += last;
                 last = tok.text();
@@ -811,29 +841,30 @@ struct parser
             tok = toke.increment();
             switch (tok.classification())
             {
-                case strange::comprehension::cls::character:
+                case cls::character:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name() got character: " + tok.text();
                     return;
-                case strange::comprehension::cls::comment:
-                    std::cout << "comment: " << tok.text() << std::endl;
+                case cls::comment:
                     break;
-                case strange::comprehension::cls::mistake:
+                case cls::mistake:
                     return;
-                case strange::comprehension::cls::name:
+                case cls::name:
                     return;
-                case strange::comprehension::cls::number:
+                case cls::number:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name() got number: " + tok.text();
                     return;
-                case strange::comprehension::cls::punctuation:
+                case cls::punctuation:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name() got punctuation: " + tok.text();
                     return;
-                case strange::comprehension::cls::string:
+                case cls::string:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name() got string: " + tok.text();
                     return;
+                case cls::whitespace:
+                    break;
                 default:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name() got token: " + tok.text();
@@ -851,29 +882,30 @@ struct parser
             tok = toke.increment();
             switch (tok.classification())
             {
-                case strange::comprehension::cls::character:
+                case cls::character:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_punctuation() got character: " + tok.text();
                     return;
-                case strange::comprehension::cls::comment:
-                    std::cout << "comment: " << tok.text() << std::endl;
+                case cls::comment:
                     break;
-                case strange::comprehension::cls::mistake:
+                case cls::mistake:
                     return;
-                case strange::comprehension::cls::name:
+                case cls::name:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_punctuation() got name: " + tok.text();
                     return;
-                case strange::comprehension::cls::number:
+                case cls::number:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_punctuation() got number: " + tok.text();
                     return;
-                case strange::comprehension::cls::punctuation:
+                case cls::punctuation:
                     return;
-                case strange::comprehension::cls::string:
+                case cls::string:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_punctuation() got string: " + tok.text();
                     return;
+                case cls::whitespace:
+                    break;
                 default:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_punctuation() got token: " + tok.text();
@@ -891,29 +923,30 @@ struct parser
             tok = toke.increment();
             switch (tok.classification())
             {
-                case strange::comprehension::cls::character:
+                case cls::character:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_string() got character: " + tok.text();
                     return;
-                case strange::comprehension::cls::comment:
-                    std::cout << "comment: " << tok.text() << std::endl;
+                case cls::comment:
                     break;
-                case strange::comprehension::cls::mistake:
+                case cls::mistake:
                     return;
-                case strange::comprehension::cls::name:
+                case cls::name:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_string() got name: " + tok.text();
                     return;
-                case strange::comprehension::cls::number:
+                case cls::number:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_string() got number: " + tok.text();
                     return;
-                case strange::comprehension::cls::punctuation:
+                case cls::punctuation:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_string() got punctuation: " + tok.text();
                     return;
-                case strange::comprehension::cls::string:
+                case cls::string:
                     return;
+                case cls::whitespace:
+                    break;
                 default:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_string() got token: " + tok.text();
@@ -924,34 +957,39 @@ struct parser
         tok.text() = "strange::parser::parse_string() reached end of tokens";
     }
 
-    void parse_name_or_punctuation(strange::token & tok)
+    void parse_name_or_punctuation(strange::token & tok, bool whitespace = false)
     {
         while (!toke.end)
         {
             tok = toke.increment();
             switch (tok.classification())
             {
-                case strange::comprehension::cls::character:
+                case cls::character:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name_or_punctuation() got character: " + tok.text();
                     return;
-                case strange::comprehension::cls::comment:
-                    std::cout << "comment: " << tok.text() << std::endl;
+                case cls::comment:
                     break;
-                case strange::comprehension::cls::mistake:
+                case cls::mistake:
                     return;
-                case strange::comprehension::cls::name:
+                case cls::name:
                     return;
-                case strange::comprehension::cls::number:
+                case cls::number:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name_or_punctuation() got number: " + tok.text();
                     return;
-                case strange::comprehension::cls::punctuation:
+                case cls::punctuation:
                     return;
-                case strange::comprehension::cls::string:
+                case cls::string:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name_or_punctuation() got string: " + tok.text();
                     return;
+                case cls::whitespace:
+                    if (whitespace)
+                    {
+                        return;
+                    }
+                    break;
                 default:
                     tok.classification() = cls::mistake;
                     tok.text() = "strange::parser::parse_name_or_punctuation() got token: " + tok.text();

@@ -5761,66 +5761,43 @@ inline auto vector<T>::clear() -> void
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
 {
-    auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
+    auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
 {
-    auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));
+    auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
-    auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
+    auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);
+    auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);
 }
 
 template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
 {
-    auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
+    auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
 }
 
 template<typename T>
 inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
 {
-    auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);
+    auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);
 }
 
 template<typename T>
 inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    auto const first_index = first - cbegin();
-    auto const last_index = last - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    first = cbegin() + first_index;
-    last = cbegin() + last_index;
-    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);
+    auto const first_index = first - cbegin(); auto const last_index = last - cbegin(); strange::_common::_mutate(); first = cbegin() + first_index; last = cbegin() + last_index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);
 }
 
 template<typename T>
@@ -6315,9 +6292,7 @@ inline auto parameter_<_Thing, _Copy>::_instance::argument() -> std::string &
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::operator==(parameter const & other) const -> bool
 {
-    return type() == other.type()
-        && name() == other.name()
-        && argument() == other.argument();
+    return type() == other.type() && name() == other.name() && argument() == other.argument();
 }
 
 template<typename _Thing, bool _Copy>
@@ -6329,9 +6304,7 @@ inline auto parameter_<_Thing, _Copy>::_instance::operator!=(parameter const & o
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::operator<(parameter const & other) const -> bool
 {
-    return type() < other.type()
-        || (type() == other.type() && (name() < other.name()
-        || (name() == other.name() && argument() < other.argument())));
+    return type() < other.type() || (type() == other.type() && (name() < other.name() || (name() == other.name() && argument() < other.argument())));
 }
 
 template<typename _Thing, bool _Copy>
@@ -6569,14 +6542,7 @@ inline auto operation_<_Thing, _Copy>::_instance::implementation() -> std::strin
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::operator==(operation const & other) const -> bool
 {
-    return name() == other.name()
-        && parameters() == other.parameters()
-        && constness() == other.constness()
-        && result() == other.result()
-        && data() == other.data()
-        && modification() == other.modification()
-        && customisation() == other.customisation()
-        && implementation() == other.implementation();
+    return name() == other.name() && parameters() == other.parameters() && constness() == other.constness() && result() == other.result() && data() == other.data() && modification() == other.modification() && customisation() == other.customisation() && implementation() == other.implementation();
 }
 
 template<typename _Thing, bool _Copy>
@@ -6588,14 +6554,7 @@ inline auto operation_<_Thing, _Copy>::_instance::operator!=(operation const & o
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::operator<(operation const & other) const -> bool
 {
-    return name() < other.name()
-        || (name() == other.name() && (parameters() < other.parameters()
-        || (parameters() == other.parameters() && (constness() < other.constness()
-        || (constness() == other.constness() && (result() < other.result()
-        || (result() == other.result() && (data() < other.data()
-        || (data() == other.data() && (modification() < other.modification()
-        || (modification() == other.modification() && (customisation() < other.customisation()
-        || (customisation() == other.customisation() && implementation() < other.implementation())))))))))))));
+    return name() < other.name() || (name() == other.name() && (parameters() < other.parameters() || (parameters() == other.parameters() && (constness() < other.constness() || (constness() == other.constness() && (result() < other.result() || (result() == other.result() && (data() < other.data() || (data() == other.data() && (modification() < other.modification() || (modification() == other.modification() && (customisation() < other.customisation() || (customisation() == other.customisation() && implementation() < other.implementation())))))))))))));
 }
 
 template<typename _Thing, bool _Copy>
@@ -6787,12 +6746,7 @@ inline auto abstraction_<_Thing, _Copy>::_instance::thing() -> std::string &
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::operator==(abstraction const & other) const -> bool
 {
-    return parameters() == other.parameters()
-        && name() == other.name()
-        && parents() == other.parents()
-        && types() == other.types()
-        && operations() == other.operations()
-        && thing() == other.thing();
+    return parameters() == other.parameters() && name() == other.name() && parents() == other.parents() && types() == other.types() && operations() == other.operations() && thing() == other.thing();
 }
 
 template<typename _Thing, bool _Copy>
@@ -6804,12 +6758,7 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator!=(abstraction const
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::operator<(abstraction const & other) const -> bool
 {
-    return parameters() < other.parameters()
-        || (parameters() == other.parameters() && (name() < other.name()
-        || (name() == other.name() && (parents() < other.parents()
-        || (parents() == other.parents() && (types() < other.types()
-        || (types() == other.types() && (operations() < other.operations()
-        || (operations() == other.operations() && thing() < other.thing())))))))));
+    return parameters() < other.parameters() || (parameters() == other.parameters() && (name() < other.name() || (name() == other.name() && (parents() < other.parents() || (parents() == other.parents() && (types() < other.types() || (types() == other.types() && (operations() < other.operations() || (operations() == other.operations() && thing() < other.thing())))))))));
 }
 
 template<typename _Thing, bool _Copy>
@@ -6909,8 +6858,7 @@ inline auto space_<_Thing, _Copy>::_instance::abstractions() -> strange::vector<
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::operator==(space const & other) const -> bool
 {
-    return name() == other.name()
-        && abstractions() == other.abstractions();
+    return name() == other.name() && abstractions() == other.abstractions();
 }
 
 template<typename _Thing, bool _Copy>
@@ -6922,8 +6870,7 @@ inline auto space_<_Thing, _Copy>::_instance::operator!=(space const & other) co
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::operator<(space const & other) const -> bool
 {
-    return name() < other.name()
-        || (name() == other.name() && abstractions() < other.abstractions());
+    return name() < other.name() || (name() == other.name() && abstractions() < other.abstractions());
 }
 
 template<typename _Thing, bool _Copy>
@@ -7092,11 +7039,7 @@ inline auto token_<_Thing, _Copy>::_instance::text() -> std::string &
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::operator==(token const & other) const -> bool
 {
-    return filename() == other.filename()
-        && line() == other.line()
-        && position() == other.position()
-        && classification() == other.classification()
-        && text() == other.text();
+    return filename() == other.filename() && line() == other.line() && position() == other.position() && classification() == other.classification() && text() == other.text();
 }
 
 template<typename _Thing, bool _Copy>
@@ -7108,11 +7051,7 @@ inline auto token_<_Thing, _Copy>::_instance::operator!=(token const & other) co
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::operator<(token const & other) const -> bool
 {
-    return filename() < other.filename()
-        || (filename() == other.filename() && (line() < other.line()
-        || (line() == other.line() && (position() < other.position()
-        || (position() == other.position() && (classification() < other.classification()
-        || (classification() == other.classification() && text() < other.text())))))));
+    return filename() < other.filename() || (filename() == other.filename() && (line() < other.line() || (line() == other.line() && (position() < other.position() || (position() == other.position() && (classification() < other.classification() || (classification() == other.classification() && text() < other.text())))))));
 }
 
 template<typename _Thing, bool _Copy>
