@@ -264,31 +264,54 @@ namespace strange
 
         auto clear() -> void;
 
-        [[strange::modification("auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);")]]
+        [[strange::modification("auto const index = pos - cbegin();"
+        "    strange::_common::_mutate();"
+        "    pos = cbegin() + index;"
+        "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>;
 
-        [[strange::modification("auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));")]]
+        [[strange::modification("auto const index = pos - cbegin();"
+        "    strange::_common::_mutate();"
+        "    pos = cbegin() + index;"
+        "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>;
 
-        [[strange::modification("auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);")]]
+        [[strange::modification("auto const index = pos - cbegin();"
+        "    strange::_common::_mutate();"
+        "    pos = cbegin() + index;"
+        "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>;
 
-        [[strange::modification("auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);")]]
+        [[strange::modification("auto const index = pos - cbegin();"
+        "    strange::_common::_mutate();"
+        "    pos = cbegin() + index;"
+        "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>;
 
-        [[strange::modification("auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);")]]
+        [[strange::modification("auto const index = pos - cbegin();"
+        "    strange::_common::_mutate();"
+        "    pos = cbegin() + index;"
+        "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>;
 
-        [[strange::modification("auto const index = pos - cbegin(); strange::_common::_mutate(); pos = cbegin() + index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);")]]
+        [[strange::modification("auto const index = pos - cbegin();"
+        "    strange::_common::_mutate();"
+        "    pos = cbegin() + index;"
+        "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()))")]]
         auto erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>;
 
-        [[strange::modification("auto const first_index = first - cbegin(); auto const last_index = last - cbegin(); strange::_common::_mutate(); first = cbegin() + first_index; last = cbegin() + last_index; return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);")]]
+        [[strange::modification("auto const first_index = first - cbegin();"
+        "    auto const last_index = last - cbegin();"
+        "    strange::_common::_mutate();"
+        "    first = cbegin() + first_index;"
+        "    last = cbegin() + last_index;"
+        "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()))")]]
         auto erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>;
 
@@ -331,13 +354,17 @@ namespace strange
         std::string name;
         std::string argument;
 
-        [[strange::customisation("return type() == other.type() && name() == other.name() && argument() == other.argument()")]]
+        [[strange::customisation("return type() == other.type()"
+        "    && name() == other.name()"
+        "    && argument() == other.argument()")]]
         auto operator==(parameter const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
         auto operator!=(parameter const & other) const -> bool;
 
-        [[strange::customisation("return type() < other.type() || (type() == other.type() && (name() < other.name() || (name() == other.name() && argument() < other.argument())))")]]
+        [[strange::customisation("return type() < other.type() || (type() == other.type()"
+        "    && (name() < other.name() || (name() == other.name()"
+        "    && argument() < other.argument())))")]]
         auto operator<(parameter const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]
@@ -362,13 +389,27 @@ namespace strange
         std::string customisation;
         std::string implementation;
 
-        [[strange::customisation("return name() == other.name() && parameters() == other.parameters() && constness() == other.constness() && result() == other.result() && data() == other.data() && modification() == other.modification() && customisation() == other.customisation() && implementation() == other.implementation()")]]
+        [[strange::customisation("return name() == other.name()"
+        "    && parameters() == other.parameters()"
+        "    && constness() == other.constness()"
+        "    && result() == other.result()"
+        "    && data() == other.data()"
+        "    && modification() == other.modification()"
+        "    && customisation() == other.customisation()"
+        "    && implementation() == other.implementation()")]]
         auto operator==(operation const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
         auto operator!=(operation const & other) const -> bool;
 
-        [[strange::customisation("return name() < other.name() || (name() == other.name() && (parameters() < other.parameters() || (parameters() == other.parameters() && (constness() < other.constness() || (constness() == other.constness() && (result() < other.result() || (result() == other.result() && (data() < other.data() || (data() == other.data() && (modification() < other.modification() || (modification() == other.modification() && (customisation() < other.customisation() || (customisation() == other.customisation() && implementation() < other.implementation())))))))))))))")]]
+        [[strange::customisation("return name() < other.name() || (name() == other.name()"
+        "    && (parameters() < other.parameters() || (parameters() == other.parameters()"
+        "    && (constness() < other.constness() || (constness() == other.constness()"
+        "    && (result() < other.result() || (result() == other.result()"
+        "    && (data() < other.data() || (data() == other.data()"
+        "    && (modification() < other.modification() || (modification() == other.modification()"
+        "    && (customisation() < other.customisation() || (customisation() == other.customisation()"
+        "    && implementation() < other.implementation())))))))))))))")]]
         auto operator<(operation const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]
@@ -391,13 +432,23 @@ namespace strange
         strange::vector<strange::operation> operations;
         std::string thing;
 
-        [[strange::customisation("return parameters() == other.parameters() && name() == other.name() && parents() == other.parents() && types() == other.types() && operations() == other.operations() && thing() == other.thing()")]]
+        [[strange::customisation("return parameters() == other.parameters()"
+        "    && name() == other.name()"
+        "    && parents() == other.parents()"
+        "    && types() == other.types()"
+        "    && operations() == other.operations()"
+        "    && thing() == other.thing()")]]
         auto operator==(abstraction const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
         auto operator!=(abstraction const & other) const -> bool;
 
-        [[strange::customisation("return parameters() < other.parameters() || (parameters() == other.parameters() && (name() < other.name() || (name() == other.name() && (parents() < other.parents() || (parents() == other.parents() && (types() < other.types() || (types() == other.types() && (operations() < other.operations() || (operations() == other.operations() && thing() < other.thing())))))))))")]]
+        [[strange::customisation("return parameters() < other.parameters() || (parameters() == other.parameters()"
+        "    && (name() < other.name() || (name() == other.name()"
+        "    && (parents() < other.parents() || (parents() == other.parents()"
+        "    && (types() < other.types() || (types() == other.types()"
+        "    && (operations() < other.operations() || (operations() == other.operations()"
+        "    && thing() < other.thing())))))))))")]]
         auto operator<(abstraction const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]
@@ -416,13 +467,15 @@ namespace strange
         std::string name;
         strange::vector<strange::abstraction> abstractions;
 
-        [[strange::customisation("return name() == other.name() && abstractions() == other.abstractions()")]]
+        [[strange::customisation("return name() == other.name()"
+        "    && abstractions() == other.abstractions()")]]
         auto operator==(space const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
         auto operator!=(space const & other) const -> bool;
 
-        [[strange::customisation("return name() < other.name() || (name() == other.name() && abstractions() < other.abstractions())")]]
+        [[strange::customisation("return name() < other.name() || (name() == other.name()"
+        "    && abstractions() < other.abstractions())")]]
         auto operator<(space const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]
@@ -444,13 +497,21 @@ namespace strange
         strange::comprehension::cls classification;
         std::string text;
 
-        [[strange::customisation("return filename() == other.filename() && line() == other.line() && position() == other.position() && classification() == other.classification() && text() == other.text()")]]
+        [[strange::customisation("return filename() == other.filename()"
+        "    && line() == other.line()"
+        "    && position() == other.position()"
+        "    && classification() == other.classification()"
+        "    && text() == other.text()")]]
         auto operator==(token const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
         auto operator!=(token const & other) const -> bool;
 
-        [[strange::customisation("return filename() < other.filename() || (filename() == other.filename() && (line() < other.line() || (line() == other.line() && (position() < other.position() || (position() == other.position() && (classification() < other.classification() || (classification() == other.classification() && text() < other.text())))))))")]]
+        [[strange::customisation("return filename() < other.filename() || (filename() == other.filename()"
+        "    && (line() < other.line() || (line() == other.line()"
+        "    && (position() < other.position() || (position() == other.position()"
+        "    && (classification() < other.classification() || (classification() == other.classification()"
+        "    && text() < other.text())))))))")]]
         auto operator<(token const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]

@@ -460,14 +460,7 @@ struct parser
             abs._error("strange::parser::parse_abstraction_attribute() expected '(', but got punctuation: " + tok.text());
             return;
         }
-        parse_string(tok);
-        if (tok.classification() == cls::mistake)
-        {
-            abs._error(tok.text());
-            return;
-        }
-        abs.thing() = tok.text();
-        parse_punctuation(tok);
+        parse_string(tok, abs.thing());
         if (tok.classification() == cls::mistake)
         {
             abs._error(tok.text());
@@ -722,7 +715,8 @@ struct parser
             oper._error("strange::parser::parse_operation_attribute() expected '(', but got punctuation: " + tok.text());
             return;
         }
-        parse_string(tok);
+        std::string text;
+        parse_string(tok, text);
         if (tok.classification() == cls::mistake)
         {
             oper._error(tok.text());
@@ -730,21 +724,15 @@ struct parser
         }
         if (result)
         {
-            oper.result() = tok.text();
+            oper.result() = text;
         }
         else if (modification)
         {
-            oper.modification() = tok.text();
+            oper.modification() = text;
         }
         else
         {
-            oper.customisation() = tok.text();
-        }
-        parse_punctuation(tok);
-        if (tok.classification() == cls::mistake)
-        {
-            oper._error(tok.text());
-            return;
+            oper.customisation() = text;
         }
         if (tok.text() != ")")
         {
@@ -916,7 +904,7 @@ struct parser
         tok.text() = "strange::parser::parse_punctuation() reached end of tokens";
     }
 
-    void parse_string(strange::token & tok)
+    void parse_string(strange::token & tok, std::string & text)
     {
         while (!toke.end)
         {
@@ -940,11 +928,15 @@ struct parser
                     tok.text() = "strange::parser::parse_string() got number: " + tok.text();
                     return;
                 case cls::punctuation:
-                    tok.classification() = cls::mistake;
-                    tok.text() = "strange::parser::parse_string() got punctuation: " + tok.text();
                     return;
                 case cls::string:
-                    return;
+                    if (!text.empty())
+                    {
+                        text += R"#(
+)#";
+                    }
+                    text += tok.text();
+                    break;
                 case cls::whitespace:
                     break;
                 default:
