@@ -550,6 +550,11 @@ public:
                 {
                     _abstraction_operations(*it, derived, inner, pure, definition, unique);
                 }
+                else
+                {
+                    _out << R"#(static_assert(false, "strange abstraction parent not recognised: )#" << parent << R"#(");
+)#";
+                }
             }
         }
         if (!abstraction.operations().empty())

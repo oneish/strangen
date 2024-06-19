@@ -40,7 +40,8 @@ struct token;
     }
     else
     {
-        std::cout << "invalid space: " << space._error() << std::endl;
+        std::cout << R"#(static_assert(false, "strange space error: )#" << space._error() << R"#(");
+)#";
     }
 
 std::cout << R"~(
