@@ -269,6 +269,7 @@ int main()
         std::cout << "invalid space: " << space._error() << std::endl;
     }
     auto tok = strange::token::_make();
+    std::cout << tok._name() << std::endl;
 
     return 0;
 }

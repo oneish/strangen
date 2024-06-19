@@ -28,7 +28,19 @@ struct token
     cls classification;
     std::string text;
 };
+}
 
+template<>
+struct reflection<strange::comprehension::token>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::comprehension::token";
+    }
+};
+
+namespace comprehension
+{
 struct toker
 {
     std::istreambuf_iterator<char> it;
