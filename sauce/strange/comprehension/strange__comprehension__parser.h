@@ -526,8 +526,7 @@ struct parser
         {
             if (tok.text() != "[[")
             {
-                oper._error("strange::parser::parse_operation() expected name or '[[', but got punctuation: " + tok.text());
-                return;
+                break;
             }
             parse_operation_attribute(oper);
             if (!oper._valid())
@@ -597,10 +596,10 @@ struct parser
                     oper._error(tok.text());
                     return;
                 }
-                if (tok.text() == ";")
+                if (tok.text() == "{" || tok.text() == ";")
                 {
                     rtrim(oper.result());
-                    return;
+                    break;
                 }
                 if (ignore)
                 {
@@ -617,31 +616,39 @@ struct parser
                 oper.result() += tok.text();
             }
         }
-        oper.data() = true;
-        std::string last = tok.text();
-        std::string previous;
-        for (;;)
+        else
         {
-            parse_name_or_punctuation(tok, true);
-            if (tok.classification() == cls::mistake)
+            oper.data() = true;
+            oper.result() = tok.text();
+            for (;;)
             {
-                oper._error(tok.text());
-                return;
+                parse_name_or_punctuation(tok, true);
+                if (tok.classification() == cls::mistake)
+                {
+                    oper._error(tok.text());
+                    return;
+                }
+                if (tok.text() == "{" || tok.text() == ";")
+                {
+                    rtrim(oper.result());
+                    if (oper.result().length() > oper.name().length() && oper.result().substr(oper.result().length() - oper.name().length()) == oper.name())
+                    {
+                        oper.result() = oper.result().substr(0, oper.result().length() - oper.name().length());
+                        rtrim(oper.result());
+                    }
+                    break;
+                }
+                oper.result() += tok.text();
+                if (tok.classification() == cls::name)
+                {
+                    oper.name() = tok.text();
+                }
             }
-            oper.result() += previous;
-            if (tok.text() == "{" || tok.text() == ";")
+            if (oper.result().length() > 5 && oper.result().substr(oper.result().length() - 5) == "const")
             {
-                rtrim(oper.result());
-                break;
+                oper.constness() = true;
             }
-            previous = last;
-            last = tok.text();
         }
-        if (oper.result().length() > 5 && oper.result().substr(oper.result().length() - 5) == "const")
-        {
-            oper.constness() = true;
-        }
-        oper.name() = last;
         if (tok.text() != ";")
         {
             oper.implementation() = tok.text();
