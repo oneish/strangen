@@ -763,7 +763,6 @@ struct parser
         for (;;)
         {
             auto param = strange::parameter::_make();
-            std::string last;
             for (;;)
             {
                 parse_name_or_punctuation(tok, true);
@@ -775,24 +774,32 @@ struct parser
                 if (tok.text() == "=" || tok.text() == "," || tok.text() == ")")
                 {
                     rtrim(param.type());
+                    param.type() = param.type().substr(0, param.type().length() - param.name().length());
+                    rtrim(param.type());
                     break;
                 }
                 if (param.type().empty())
                 {
-                    rtrim(last);
+                    param.type() = tok.text();
+                    rtrim(param.type());
                 }
-                param.type() += last;
-                last = tok.text();
+                else
+                {
+                    param.type() += tok.text();
+                }
+                if (tok.classification() == cls::name)
+                {
+                    param.name() = tok.text();
+                }
             }
-            if (last.empty())
+            if (param.name().empty())
             {
                 if (tok.text() != ")")
                 {
-                    oper._error("strange::parser::parse_parameters() expected ')', but got text: " + tok.text());
+                    oper._error("strange::parser::parse_parameters() expected ')', but got punctuation: " + tok.text());
                 }
                 return;
             }
-            param.name() = last;
             if (tok.text() == ")")
             {
                 oper.parameters().push_back(param);
