@@ -631,11 +631,8 @@ struct parser
                 if (tok.text() == "{" || tok.text() == ";")
                 {
                     rtrim(oper.result());
-                    if (oper.result().length() > oper.name().length() && oper.result().substr(oper.result().length() - oper.name().length()) == oper.name())
-                    {
-                        oper.result() = oper.result().substr(0, oper.result().length() - oper.name().length());
-                        rtrim(oper.result());
-                    }
+                    oper.result() = oper.result().substr(0, oper.result().length() - oper.name().length());
+                    rtrim(oper.result());
                     break;
                 }
                 oper.result() += tok.text();
