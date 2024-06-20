@@ -190,15 +190,16 @@ struct parser
             }
             if (oper.data())
             {
-                auto result = oper.result();
-                oper.result() += " const &";
                 if (!oper.constness())
                 {
+                    auto result = oper.result();
+                    oper.result() += " const &";
                     oper.constness() = true;
                     abs.operations().push_back(oper);
+                    oper.result() = result;
                     oper.constness() = false;
-                    oper.result() = result + " &";
                 }
+                oper.result() += " &";
             }
             abs.operations().push_back(oper);
         }
@@ -636,7 +637,7 @@ struct parser
             previous = last;
             last = tok.text();
         }
-        if (previous == "const")
+        if (oper.result().length() > 5 && oper.result().substr(oper.result().length() - 5) == "const")
         {
             oper.constness() = true;
         }
