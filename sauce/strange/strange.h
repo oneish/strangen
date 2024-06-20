@@ -22,14 +22,40 @@ auto error(Message && message) -> _Abstraction
 }
 }
 
+template<typename T>
+inline auto hash_init(T const & v) -> std::size_t
+{
+    std::hash<T> hasher;
+    return hasher(v);
+}
+
+template<typename T>
+inline auto hash_combine(std::size_t & seed, T const & v) -> void
+{
+    std::hash<T> hasher;
+    seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+}
+
+template<typename T>
+inline auto hash_range(T const & v) -> std::size_t
+{
+    auto h = hash_init(v.size());
+    for (auto const & elem : v)
+    {
+        hash_combine(h, elem);
+    }
+    return h;
+}
+
 template<>
 struct std::hash<strange::parameter>
 {
     inline auto operator()(strange::parameter const & param) const -> size_t
     {
-        return std::hash<std::string>{}(param.type())
-            ^ std::hash<std::string>{}(param.name())
-            ^ std::hash<std::string>{}(param.argument());
+        auto h = hash_init(param.type());
+        hash_combine(h, param.name());
+        hash_combine(h, param.argument());
+        return h;
     }
 };
 
@@ -38,17 +64,15 @@ struct std::hash<strange::operation>
 {
     inline auto operator()(strange::operation const & oper) const -> size_t
     {
-        std::size_t h = std::hash<std::string>{}(oper.name());
-        for (auto const & param : oper.parameters())
-        {
-            h ^= std::hash<strange::parameter>{}(param);
-        }
-        return h ^ std::hash<bool>{}(oper.constness())
-            ^ std::hash<std::string>{}(oper.result())
-            ^ std::hash<bool>{}(oper.data())
-            ^ std::hash<std::string>{}(oper.modification())
-            ^ std::hash<std::string>{}(oper.customisation())
-            ^ std::hash<std::string>{}(oper.implementation());
+        auto h = hash_init(oper.name());
+        hash_combine(h, hash_range(oper.parameters()));
+        hash_combine(h, oper.constness());
+        hash_combine(h, oper.result());
+        hash_combine(h, oper.data());
+        hash_combine(h, oper.modification());
+        hash_combine(h, oper.customisation());
+        hash_combine(h, oper.implementation());
+        return h;
     }
 };
 
@@ -57,26 +81,14 @@ struct std::hash<strange::abstraction>
 {
     inline auto operator()(strange::abstraction const & abstract) const -> size_t
     {
-        std::size_t h = 0;
-        for (auto const & param : abstract.parameters())
-        {
-            h ^= std::hash<strange::parameter>{}(param);
-        }
-        h ^= std::hash<std::string>{}(abstract.name());
-        for (auto const & parent : abstract.parents())
-        {
-            h ^= std::hash<std::string>{}(parent);
-        }
-        for (auto const & type : abstract.types())
-        {
-            h ^= std::hash<strange::parameter>{}(type);
-        }
-        for (auto const & oper : abstract.operations())
-        {
-            h ^= std::hash<strange::operation>{}(oper);
-        }
-        return h ^ std::hash<std::string>{}(abstract.thing())
-            ^ std::hash<std::string>{}(abstract.implementation());
+        auto h = hash_range(abstract.parameters());
+        hash_combine(h, abstract.name());
+        hash_combine(h, hash_range(abstract.parents()));
+        hash_combine(h, hash_range(abstract.types()));
+        hash_combine(h, hash_range(abstract.operations()));
+        hash_combine(h, abstract.thing());
+        hash_combine(h, abstract.implementation());
+        return h;
     }
 };
 
@@ -85,11 +97,8 @@ struct std::hash<strange::space>
 {
     inline auto operator()(strange::space const & spc) const -> size_t
     {
-        std::size_t h = std::hash<std::string>{}(spc.name());
-        for (auto const & abstract : spc.abstractions())
-        {
-            h ^= std::hash<strange::abstraction>{}(abstract);
-        }
+        auto h = hash_init(spc.name());
+        hash_combine(h, hash_range(spc.abstractions()));
         return h;
     }
 };
@@ -99,10 +108,11 @@ struct std::hash<strange::token>
 {
     inline auto operator()(strange::token const & tok) const -> size_t
     {
-        return std::hash<std::string>{}(tok.filename())
-            ^ std::hash<int64_t>{}(tok.line())
-            ^ std::hash<int64_t>{}(tok.position())
-            ^ std::hash<std::underlying_type_t<strange::comprehension::cls>>{}(static_cast<std::underlying_type_t<strange::comprehension::cls>>(tok.classification()))
-            ^ std::hash<std::string>{}(tok.text());
+        auto h = hash_init(tok.filename());
+        hash_combine(h, tok.line());
+        hash_combine(h, tok.position());
+        hash_combine(h, tok.classification());
+        hash_combine(h, tok.text());
+        return h;
     }
 };
