@@ -202,6 +202,10 @@ struct parser
                 oper.result() += " &";
             }
             abs.operations().push_back(oper);
+            if (abs.implementation().empty() && !oper.implementation().empty())
+            {
+                abs.implementation() = abs.thing();
+            }
         }
         parse_punctuation(tok);
         if (tok.classification() == cls::mistake)
@@ -445,9 +449,11 @@ struct parser
             abs._error(tok.text());
             return;
         }
-        if (tok.text() != "thing")
+        bool thing = (tok.text() == "thing");
+        bool implementation = (tok.text() == "implementation");
+        if (!thing && !implementation)
         {
-            abs._error("strange::parser::parse_abstraction_attribute() expected 'thing', but got name: " + tok.text());
+            abs._error("strange::parser::parse_abstraction_attribute() expected 'thing' or 'implementation', but got name: " + tok.text());
             return;
         }
         parse_punctuation(tok);
@@ -461,7 +467,14 @@ struct parser
             abs._error("strange::parser::parse_abstraction_attribute() expected '(', but got punctuation: " + tok.text());
             return;
         }
-        parse_string(tok, abs.thing());
+        if (thing)
+        {
+            parse_string(tok, abs.thing());
+        }
+        else if (implementation)
+        {
+            parse_string(tok, abs.implementation());
+        }
         if (tok.classification() == cls::mistake)
         {
             abs._error(tok.text());
