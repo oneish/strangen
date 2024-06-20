@@ -75,8 +75,8 @@ struct std::hash<strange::abstraction>
         {
             h ^= std::hash<strange::operation>{}(oper);
         }
-        h ^= std::hash<std::string>{}(abstract.thing());
-        return h;
+        return h ^ std::hash<std::string>{}(abstract.thing())
+            ^ std::hash<std::string>{}(abstract.implementation());
     }
 };
 

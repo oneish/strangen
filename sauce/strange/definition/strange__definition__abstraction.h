@@ -15,6 +15,7 @@ struct abstraction
     strange::vector<strange::parameter> types = strange::vector<strange::parameter>::_make();
     strange::vector<strange::operation> operations = strange::vector<strange::operation>::_make();
     std::string thing;
+    std::string implementation;
 };
 
 }

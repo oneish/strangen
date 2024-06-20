@@ -431,13 +431,15 @@ namespace strange
         strange::vector<strange::parameter> types;
         strange::vector<strange::operation> operations;
         std::string thing;
+        std::string implementation;
 
         [[strange::customisation("return parameters() == other.parameters()"
         "    && name() == other.name()"
         "    && parents() == other.parents()"
         "    && types() == other.types()"
         "    && operations() == other.operations()"
-        "    && thing() == other.thing()")]]
+        "    && thing() == other.thing()"
+        "    && implementation() == other.implementation()")]]
         auto operator==(abstraction const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
@@ -448,7 +450,8 @@ namespace strange
         "    && (parents() < other.parents() || (parents() == other.parents()"
         "    && (types() < other.types() || (types() == other.types()"
         "    && (operations() < other.operations() || (operations() == other.operations()"
-        "    && thing() < other.thing())))))))))")]]
+        "    && (thing() < other.thing() || (thing() == other.thing()"
+        "    && implementation() < other.implementation())))))))))))")]]
         auto operator<(abstraction const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]

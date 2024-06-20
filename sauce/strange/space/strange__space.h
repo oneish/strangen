@@ -3469,6 +3469,10 @@ protected:
 
         virtual auto thing() -> std::string & = 0;
 
+        virtual auto implementation() const -> std::string const & = 0;
+
+        virtual auto implementation() -> std::string & = 0;
+
         virtual auto operator==(abstraction const & other) const -> bool = 0;
 
         virtual auto operator!=(abstraction const & other) const -> bool = 0;
@@ -3530,6 +3534,10 @@ public:
     inline auto thing() const -> std::string const &;
 
     inline auto thing() -> std::string &;
+
+    inline auto implementation() const -> std::string const &;
+
+    inline auto implementation() -> std::string &;
 
     inline auto operator==(abstraction const & other) const -> bool;
 
@@ -3657,6 +3665,10 @@ private:
         inline auto thing() const -> std::string const & final;
 
         inline auto thing() -> std::string & final;
+
+        inline auto implementation() const -> std::string const & final;
+
+        inline auto implementation() -> std::string & final;
 
         inline auto operator==(abstraction const & other) const -> bool final;
 
@@ -6682,6 +6694,17 @@ inline auto abstraction::thing() -> std::string &
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->thing();
 }
 
+inline auto abstraction::implementation() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->implementation();
+}
+
+inline auto abstraction::implementation() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->implementation();
+}
+
 inline auto abstraction::operator==(abstraction const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator==(other);
@@ -6785,6 +6808,18 @@ inline auto abstraction_<_Thing, _Copy>::_instance::thing() -> std::string &
 }
 
 template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::implementation() const -> std::string const &
+{
+    return _thing.implementation;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::implementation() -> std::string &
+{
+    return _thing.implementation;
+}
+
+template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::operator==(abstraction const & other) const -> bool
 {
     return parameters() == other.parameters()
@@ -6792,7 +6827,8 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator==(abstraction const
     && parents() == other.parents()
     && types() == other.types()
     && operations() == other.operations()
-    && thing() == other.thing();
+    && thing() == other.thing()
+    && implementation() == other.implementation();
 }
 
 template<typename _Thing, bool _Copy>
@@ -6809,7 +6845,8 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator<(abstraction const 
     && (parents() < other.parents() || (parents() == other.parents()
     && (types() < other.types() || (types() == other.types()
     && (operations() < other.operations() || (operations() == other.operations()
-    && thing() < other.thing())))))))));
+    && (thing() < other.thing() || (thing() == other.thing()
+    && implementation() < other.implementation())))))))))));
 }
 
 template<typename _Thing, bool _Copy>
