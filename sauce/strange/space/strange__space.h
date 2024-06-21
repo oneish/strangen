@@ -4367,7 +4367,11 @@ namespace implementation
 {
 struct token
 {
-
+    std::string filename {};
+    int64_t line {};
+    int64_t position {};
+    strange::comprehension::cls classification {};
+    std::string text {};
 };
 }
 }

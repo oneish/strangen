@@ -211,7 +211,6 @@ public:
         return cats;
     }();
 
-
     inline auto display(button b) const -> void;
 
     inline auto inc() -> void;
@@ -432,7 +431,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto display(button b) const -> void;
 
@@ -656,7 +654,6 @@ public:
         return cats;
     }();
 
-
     inline auto inc() -> void;
 
     inline auto dec() -> void;
@@ -872,7 +869,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto display(button b) const -> void;
 
@@ -1103,7 +1099,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto inc() -> void;
 

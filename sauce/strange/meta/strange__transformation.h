@@ -59,7 +59,7 @@ namespace )#" << _space.name() << R"#(
             _out << R"#(struct )#" << abstraction.name() << R"#(_;
 
 )#";
-            _abstraction_implementation(abstraction, true, true);
+            _abstraction_implementation(abstraction, true);
         }
     }
 
@@ -411,7 +411,7 @@ public:
 };
 
 )#";
-            _abstraction_implementation(abstraction, false, true);
+            _abstraction_implementation(abstraction, false);
         }
     }
 
@@ -562,7 +562,7 @@ public:
         }
     }
 
-    auto _abstraction_implementation(strange::abstraction const & abstraction, bool const forward, bool const declaration) -> void
+    auto _abstraction_implementation(strange::abstraction const & abstraction, bool const forward) -> void
     {
         if (abstraction.implementation().empty())
         {
@@ -601,8 +601,7 @@ public:
                 std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, false, true, unique);
             }
-            _out << R"#(
-})#";
+            _out << R"#(})#";
         }
         _out << R"#(;
 )#";
@@ -647,11 +646,19 @@ namespace )#" << _space.name() << R"#(
         }
         for (auto const & operation : abstraction.operations())
         {
-            if ((implementation && operation.implementation().empty()) || unique.count(operation))
+            if ((implementation && (operation.implementation().empty() || (operation.data() && !operation.constness())))
+                || unique.count(operation))
             {
                 continue;
             }
             unique.insert(operation);
+            if (implementation && operation.data())
+            {
+                    _out << R"#(    )#" << operation.result().substr(0, operation.result().length() - 7)
+                        << operation.name() << R"#( )#" << operation.implementation() << R"#(;
+)#";
+                continue;
+            }
             if (!definition)
             {
                 if (pure)

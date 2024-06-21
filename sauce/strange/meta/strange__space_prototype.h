@@ -495,11 +495,11 @@ namespace strange
     [[strange::implementation("strange::implementation::token")]]
     token : any
     {
-        std::string filename;
-        int64_t line;
-        int64_t position;
-        strange::comprehension::cls classification;
-        std::string text;
+        std::string filename {};
+        int64_t line {};
+        int64_t position {};
+        strange::comprehension::cls classification {};
+        std::string text {};
 
         [[strange::customisation("return filename() == other.filename()"
         "    && line() == other.line()"
