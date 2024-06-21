@@ -200,9 +200,9 @@ public:
         return widget{widget::_derived::_static_shared_to_base(std::make_shared<typename widget_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = widget;
+    using _Abstraction_ = widget;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -306,6 +306,11 @@ private:
             return widget::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return widget_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return widget_::_name_;
@@ -345,10 +350,12 @@ public:
         return std::dynamic_pointer_cast<widget_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = widget_;
+    using _Kind_ = widget_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct button : widget
@@ -414,9 +421,9 @@ public:
         return button{button::_derived::_static_shared_to_base(std::make_shared<typename button_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = button;
+    using _Abstraction_ = button;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -523,6 +530,11 @@ private:
             return button::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return button_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return button_::_name_;
@@ -564,10 +576,12 @@ public:
         return std::dynamic_pointer_cast<button_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = button_;
+    using _Kind_ = button_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct number : virtual strange::_common
@@ -631,9 +645,9 @@ public:
         return number{number::_derived::_static_shared_to_base(std::make_shared<typename number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = number;
+    using _Abstraction_ = number;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -733,6 +747,11 @@ private:
             return number::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return number_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return number_::_name_;
@@ -768,10 +787,12 @@ public:
         return std::dynamic_pointer_cast<number_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = number_;
+    using _Kind_ = number_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct widget_number : widget, number
@@ -839,9 +860,9 @@ public:
         return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<typename widget_number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = widget_number;
+    using _Abstraction_ = widget_number;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -949,6 +970,11 @@ private:
             return widget_number::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return widget_number_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return widget_number_::_name_;
@@ -990,10 +1016,12 @@ public:
         return std::dynamic_pointer_cast<widget_number_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = widget_number_;
+    using _Kind_ = widget_number_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename Data>
@@ -1064,9 +1092,9 @@ public:
         return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<Data, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = numeric;
+    using _Abstraction_ = numeric;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -1173,6 +1201,11 @@ private:
             return numeric<Data>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return numeric_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return numeric_::_name_;
@@ -1214,10 +1247,12 @@ public:
         return std::dynamic_pointer_cast<numeric_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = numeric_;
+    using _Kind_ = numeric_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 inline auto widget::display(button b = button()) const -> void

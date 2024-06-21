@@ -398,9 +398,9 @@ public:
         return any{any::_derived::_static_shared_to_base(std::make_shared<typename any_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = any;
+    using _Abstraction_ = any;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -496,6 +496,11 @@ private:
             return any::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return any_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return any_::_name_;
@@ -527,10 +532,12 @@ public:
         return std::dynamic_pointer_cast<any_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = any_;
+    using _Kind_ = any_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>
@@ -617,9 +624,9 @@ public:
         return forward_const_iterator{forward_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename forward_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = forward_const_iterator;
+    using _Abstraction_ = forward_const_iterator;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -728,6 +735,11 @@ private:
             return forward_const_iterator<T>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return forward_const_iterator_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return forward_const_iterator_::_name_;
@@ -771,10 +783,12 @@ public:
         return std::dynamic_pointer_cast<forward_const_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = forward_const_iterator_;
+    using _Kind_ = forward_const_iterator_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>
@@ -857,9 +871,9 @@ public:
         return forward_iterator{forward_iterator::_derived::_static_shared_to_base(std::make_shared<typename forward_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = forward_iterator;
+    using _Abstraction_ = forward_iterator;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -976,6 +990,11 @@ private:
             return forward_iterator<T>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return forward_iterator_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return forward_iterator_::_name_;
@@ -1027,10 +1046,12 @@ public:
         return std::dynamic_pointer_cast<forward_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = forward_iterator_;
+    using _Kind_ = forward_iterator_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>
@@ -1105,9 +1126,9 @@ public:
         return bidirectional_const_iterator{bidirectional_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename bidirectional_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = bidirectional_const_iterator;
+    using _Abstraction_ = bidirectional_const_iterator;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -1224,6 +1245,11 @@ private:
             return bidirectional_const_iterator<T>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return bidirectional_const_iterator_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return bidirectional_const_iterator_::_name_;
@@ -1275,10 +1301,12 @@ public:
         return std::dynamic_pointer_cast<bidirectional_const_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = bidirectional_const_iterator_;
+    using _Kind_ = bidirectional_const_iterator_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>
@@ -1361,9 +1389,9 @@ public:
         return bidirectional_iterator{bidirectional_iterator::_derived::_static_shared_to_base(std::make_shared<typename bidirectional_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = bidirectional_iterator;
+    using _Abstraction_ = bidirectional_iterator;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -1493,6 +1521,11 @@ private:
             return bidirectional_iterator<T>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return bidirectional_iterator_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return bidirectional_iterator_::_name_;
@@ -1556,10 +1589,12 @@ public:
         return std::dynamic_pointer_cast<bidirectional_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = bidirectional_iterator_;
+    using _Kind_ = bidirectional_iterator_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>
@@ -1658,9 +1693,9 @@ public:
         return random_access_const_iterator{random_access_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename random_access_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = random_access_const_iterator;
+    using _Abstraction_ = random_access_const_iterator;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -1801,6 +1836,11 @@ private:
             return random_access_const_iterator<T>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return random_access_const_iterator_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return random_access_const_iterator_::_name_;
@@ -1876,10 +1916,12 @@ public:
         return std::dynamic_pointer_cast<random_access_const_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = random_access_const_iterator_;
+    using _Kind_ = random_access_const_iterator_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>
@@ -1978,9 +2020,9 @@ public:
         return random_access_iterator{random_access_iterator::_derived::_static_shared_to_base(std::make_shared<typename random_access_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = random_access_iterator;
+    using _Abstraction_ = random_access_iterator;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -2154,6 +2196,11 @@ private:
             return random_access_iterator<T>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return random_access_iterator_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return random_access_iterator_::_name_;
@@ -2261,10 +2308,12 @@ public:
         return std::dynamic_pointer_cast<random_access_iterator_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = random_access_iterator_;
+    using _Kind_ = random_access_iterator_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>
@@ -2455,9 +2504,9 @@ public:
         return vector{vector::_derived::_static_shared_to_base(std::make_shared<typename vector_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = vector;
+    using _Abstraction_ = vector;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -2658,6 +2707,11 @@ private:
             return vector<T>::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return vector_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return vector_::_name_;
@@ -2793,10 +2847,12 @@ public:
         return std::dynamic_pointer_cast<vector_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = vector_;
+    using _Kind_ = vector_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct parameter : any
@@ -2884,9 +2940,9 @@ public:
         return parameter{parameter::_derived::_static_shared_to_base(std::make_shared<typename parameter_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = parameter;
+    using _Abstraction_ = parameter;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -3007,6 +3063,11 @@ private:
             return parameter::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return parameter_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return parameter_::_name_;
@@ -3062,10 +3123,12 @@ public:
         return std::dynamic_pointer_cast<parameter_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = parameter_;
+    using _Kind_ = parameter_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct operation : any
@@ -3173,9 +3236,9 @@ public:
         return operation{operation::_derived::_static_shared_to_base(std::make_shared<typename operation_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = operation;
+    using _Abstraction_ = operation;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -3316,6 +3379,11 @@ private:
             return operation::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return operation_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return operation_::_name_;
@@ -3391,10 +3459,12 @@ public:
         return std::dynamic_pointer_cast<operation_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = operation_;
+    using _Kind_ = operation_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct abstraction : any
@@ -3498,9 +3568,9 @@ public:
         return abstraction{abstraction::_derived::_static_shared_to_base(std::make_shared<typename abstraction_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = abstraction;
+    using _Abstraction_ = abstraction;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -3637,6 +3707,11 @@ private:
             return abstraction::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return abstraction_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return abstraction_::_name_;
@@ -3708,10 +3783,12 @@ public:
         return std::dynamic_pointer_cast<abstraction_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = abstraction_;
+    using _Kind_ = abstraction_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct space : any
@@ -3795,9 +3872,9 @@ public:
         return space{space::_derived::_static_shared_to_base(std::make_shared<typename space_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = space;
+    using _Abstraction_ = space;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -3914,6 +3991,11 @@ private:
             return space::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return space_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return space_::_name_;
@@ -3965,10 +4047,12 @@ public:
         return std::dynamic_pointer_cast<space_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = space_;
+    using _Kind_ = space_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct token : any
@@ -4064,9 +4148,9 @@ public:
         return token{token::_derived::_static_shared_to_base(std::make_shared<typename token_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = token;
+    using _Abstraction_ = token;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -4195,6 +4279,11 @@ private:
             return token::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return token_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return token_::_name_;
@@ -4258,10 +4347,12 @@ public:
         return std::dynamic_pointer_cast<token_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = token_;
+    using _Kind_ = token_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename T>

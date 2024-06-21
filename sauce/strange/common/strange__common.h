@@ -22,6 +22,7 @@ protected:
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
         virtual inline auto _cat() const -> std::string = 0;
         virtual inline auto _cats() const -> std::unordered_set<std::string> = 0;
+        virtual inline auto _copy() const -> bool = 0;
         virtual inline auto _name() const -> std::string = 0;
 
         virtual inline auto _error() const -> std::string
@@ -80,6 +81,11 @@ private:
         virtual inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return std::unordered_set<std::string>{};
+        }
+
+        virtual inline auto _copy() const -> bool final
+        {
+            return false;
         }
 
         virtual inline auto _name() const -> std::string final
@@ -145,6 +151,15 @@ public:
             return _shared->_cats();
         }
         return std::unordered_set<std::string>{};
+    }
+
+    inline auto _copy() const -> bool
+    {
+        if (_shared)
+        {
+            return _shared->_copy();
+        }
+        return false;
     }
 
     inline auto _name() const -> std::string

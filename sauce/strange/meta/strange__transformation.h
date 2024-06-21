@@ -210,9 +210,9 @@ public:
             _out << R"#(::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    using _Kind_ = )#" << abstraction.name() << R"#(;
+    using _Abstraction_ = )#" << abstraction.name() << R"#(;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
     inline static std::unordered_set<std::string> const _cats_ = []()
     {
@@ -341,6 +341,11 @@ private:
             _out << R"#(::_cats_;
         }
 
+        inline auto _copy() const -> bool final
+        {
+            return )#" << abstraction.name() << R"#(_::_copy_;
+        }
+
         inline auto _name() const -> std::string final
         {
             return )#" << abstraction.name() << R"#(_::_name_;
@@ -377,10 +382,12 @@ public:
         return std::dynamic_pointer_cast<)#" << abstraction.name() << R"#(_::_instance>(strange::_common::_shared)->_thing;
     }
 
-    using _Abstraction_ = )#" << abstraction.name() << R"#(_;
+    using _Kind_ = )#" << abstraction.name() << R"#(_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    inline static bool const _copy_ = _Copy;
+
+    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 )#";
