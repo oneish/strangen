@@ -491,8 +491,7 @@ namespace strange
         auto operator>=(space const & other) const -> bool;
     };
 
-    struct [[strange::thing("strange::comprehension::token")]]
-    [[strange::implementation("strange::implementation::token")]]
+    struct [[strange::thing("strange::implementation::token")]]
     token : any
     {
         std::string filename {};

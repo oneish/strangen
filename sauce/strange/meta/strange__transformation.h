@@ -37,7 +37,6 @@ protected:
         _out << R"#(
 namespace )#" << _space.name() << R"#(
 {
-
 )#";
         _forward_declarations();
         _reflections();
@@ -51,16 +50,20 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
+            _out << R"#(
+)#";
             _abstraction_parameters(abstraction, true, true, false, false);
             _out << R"#(struct )#" << abstraction.name() << R"#(;
-
+)#";
+            _abstraction_implementation(abstraction, true);
+            _out << R"#(
 )#";
             _abstraction_parameters(abstraction, true, true, true, false);
             _out << R"#(struct )#" << abstraction.name() << R"#(_;
-
 )#";
-            _abstraction_implementation(abstraction, true);
         }
+        _out << R"#(
+)#";
     }
 
     auto _reflections() -> void
@@ -610,13 +613,14 @@ public:
             _out << R"#(}
 )#";
         }
-        if (!forward)
-        {
-            _out << R"#(}
+        _out << R"#(}
 
 namespace )#" << _space.name() << R"#(
 {
-
+)#";
+        if (!forward)
+        {
+        _out << R"#(
 )#";
         }
     }

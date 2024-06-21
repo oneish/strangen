@@ -23,7 +23,6 @@ struct space;
 namespace comprehension
 {
 enum class cls;
-struct token;
 }
 }
 )~";

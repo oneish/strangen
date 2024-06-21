@@ -20,27 +20,6 @@ enum class cls
     mistake,
 };
 
-struct token
-{
-    std::string filename;
-    int64_t line;
-    int64_t position;
-    cls classification;
-    std::string text;
-};
-}
-
-template<>
-struct reflection<strange::comprehension::token>
-{
-    inline static auto name() -> std::string
-    {
-        return "strange::comprehension::token";
-    }
-};
-
-namespace comprehension
-{
 struct toker
 {
     std::istreambuf_iterator<char> it;
@@ -78,7 +57,7 @@ struct toker
 
     inline auto make_token(cls classification, std::string text) const -> strange::token
     {
-        return strange::token::_make(token{.filename = filename, .line = start_line, .position = start_position, .classification = classification, .text = text});
+        return strange::token::_make(strange::implementation::token{.filename = filename, .line = start_line, .position = start_position, .classification = classification, .text = text});
     }
 
     inline auto increment() -> strange::token

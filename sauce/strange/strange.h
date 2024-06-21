@@ -4,7 +4,6 @@
 #include "definition/strange__definition__operation.h"
 #include "definition/strange__definition__abstraction.h"
 #include "definition/strange__definition__space.h"
-#include "comprehension/strange__comprehension__toker.h"
 
 namespace strange
 {

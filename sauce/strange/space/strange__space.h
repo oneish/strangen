@@ -14,7 +14,6 @@ struct space;
 namespace comprehension
 {
 enum class cls;
-struct token;
 }
 }
 #include <memory>
@@ -93,10 +92,6 @@ template<typename _Thing = strange::definition::space, bool _Copy = std::is_copy
 struct space_;
 
 struct token;
-
-template<typename _Thing = strange::comprehension::token, bool _Copy = std::is_copy_constructible_v<_Thing>>
-struct token_;
-
 }
 
 namespace strange
@@ -105,6 +100,14 @@ namespace implementation
 {
 struct token;
 }
+}
+
+namespace strange
+{
+
+template<typename _Thing = strange::implementation::token, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct token_;
+
 }
 
 namespace strange
@@ -4147,7 +4150,7 @@ public:
         return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared).operator bool();
     }
 
-    template<typename _Thing = strange::comprehension::token, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::token, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> token
     {
         return token{token::_derived::_static_shared_to_base(std::make_shared<typename token_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
