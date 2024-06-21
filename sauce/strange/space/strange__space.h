@@ -425,7 +425,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 };
 
 template<typename _Thing, bool _Copy>
@@ -652,7 +651,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto operator*() const -> T const &;
 
@@ -899,7 +897,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto operator*() const -> T const &;
 
@@ -1154,7 +1151,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto operator*() const -> T const &;
 
@@ -1418,7 +1414,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto operator*() const -> T const &;
 
@@ -1721,7 +1716,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto operator*() const -> T const &;
 
@@ -2049,7 +2043,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto operator*() const -> T const &;
 
@@ -2533,7 +2526,6 @@ public:
         return cats;
     }();
 
-
     inline auto operator=(std::initializer_list<T> ilist) -> vector &;
 
     inline auto assign(size_t count, T const & value) -> void;
@@ -2969,7 +2961,6 @@ public:
         return cats;
     }();
 
-
     inline auto type() const -> std::string const &;
 
     inline auto type() -> std::string &;
@@ -3264,7 +3255,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto name() const -> std::string const &;
 
@@ -3597,7 +3587,6 @@ public:
         return cats;
     }();
 
-
     inline auto parameters() const -> strange::vector<strange::parameter> const &;
 
     inline auto parameters() -> strange::vector<strange::parameter> &;
@@ -3901,7 +3890,6 @@ public:
         return cats;
     }();
 
-
     inline auto name() const -> std::string const &;
 
     inline auto name() -> std::string &;
@@ -4176,7 +4164,6 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
-
 
     inline auto filename() const -> std::string const &;
 

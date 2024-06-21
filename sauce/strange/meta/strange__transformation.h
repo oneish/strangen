@@ -207,7 +207,7 @@ namespace )#" << _space.name() << R"#(
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, true, true, false, unique);
+                _abstraction_operations(abstraction, abstraction, true, true, false, false, unique);
             }
             _out << R"#(    };
 
@@ -247,11 +247,10 @@ public:
             _out << R"#(        cats.insert(_cat_);
         return cats;
     }();
-
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, false, false, false, unique);
+                _abstraction_operations(abstraction, abstraction, false, false, false, false, unique);
             }
             _out << R"#(};
 
@@ -374,7 +373,7 @@ private:
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, true, false, false, unique);
+                _abstraction_operations(abstraction, abstraction, true, false, false, false, unique);
             }
             _out << R"#(
         _Thing _thing;
@@ -422,11 +421,11 @@ public:
         {
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, false, false, true, unique);
+                _abstraction_operations(abstraction, abstraction, false, false, true, false, unique);
             }
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, true, false, true, unique);
+                _abstraction_operations(abstraction, abstraction, true, false, true, false, unique);
             }
         }
     }
@@ -598,7 +597,10 @@ public:
             _out << R"#(
 {
 )#";
-            //TODO
+            {
+                std::unordered_set<strange::operation> unique;
+                _abstraction_operations(abstraction, abstraction, false, false, false, true, unique);
+            }
             _out << R"#(
 })#";
         }
@@ -620,7 +622,7 @@ namespace )#" << _space.name() << R"#(
         }
     }
 
-    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::unordered_set<strange::operation> & unique) -> void
+    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, bool const implementation, std::unordered_set<strange::operation> & unique) -> void
     {
         if ((!inner) || !pure)
         {
@@ -634,7 +636,7 @@ namespace )#" << _space.name() << R"#(
                     });
                 if (it != _space.abstractions().cend())
                 {
-                    _abstraction_operations(*it, derived, inner, pure, definition, unique);
+                    _abstraction_operations(*it, derived, inner, pure, definition, implementation, unique);
                 }
                 else
                 {
@@ -643,188 +645,185 @@ namespace )#" << _space.name() << R"#(
                 }
             }
         }
-        if (!abstraction.operations().empty())
+        for (auto const & operation : abstraction.operations())
         {
-            for (auto const & operation : abstraction.operations())
+            if ((implementation && operation.implementation().empty()) || unique.count(operation))
             {
-                if (unique.count(operation))
+                continue;
+            }
+            unique.insert(operation);
+            if (!definition)
+            {
+                if (pure)
                 {
-                    continue;
-                }
-                unique.insert(operation);
-                if (!definition)
-                {
-                    if (pure)
-                    {
-                        _out << R"#(
+                    _out << R"#(
         virtual )#";
-                    }
-                    else if (inner)
-                    {
-                        _out << R"#(
+                }
+                else if (inner)
+                {
+                    _out << R"#(
         inline )#";
-                    }
-                    else
-                    {
-                        _out << R"#(
+                }
+                else
+                {
+                    _out << R"#(
     inline )#";
-                    }
+                }
+            }
+            else
+            {
+                _abstraction_parameters(derived, true, false, inner, false);
+                _out << R"#(inline )#";
+            }
+            if (!definition)
+            {
+                _out << R"#(auto )#" << operation.name();
+            }
+            else
+            {
+                _out << R"#(auto )#" << derived.name();
+                if (inner)
+                {
+                    _out << R"#(_)#";
+                }
+                _abstraction_parameters(derived, false, false, inner, false);
+                if (inner)
+                {
+                    _out << R"#(::_instance::)#";
                 }
                 else
                 {
-                    _abstraction_parameters(derived, true, false, inner, false);
-                    _out << R"#(inline )#";
+                    _out << R"#(::)#";
                 }
-                if (!definition)
+                _out << operation.name();
+            }
+            _operation_parameters(operation, true, definition && !inner);
+            if (operation.constness())
+            {
+                _out << R"#( const -> )#";
+            }
+            else
+            {
+                _out << R"#( -> )#";
+            }
+            bool const that = (operation.result() == "*that");
+            bool const this_or_that = (that || (operation.result() == "*this"));
+            bool const this_or_that_or_void = (this_or_that || (operation.result() == "void"));
+            if (this_or_that)
+            {
+                if (inner || pure)
                 {
-                    _out << R"#(auto )#" << operation.name();
+                    _out << "void";
                 }
                 else
                 {
-                    _out << R"#(auto )#" << derived.name();
-                    if (inner)
+                    _out << derived.name();
+                    if (!that)
                     {
-                        _out << R"#(_)#";
+                        _out << R"#( &)#";
                     }
-                    _abstraction_parameters(derived, false, false, inner, false);
-                    if (inner)
+                }
+            }
+            else
+            {
+                _out << operation.result();
+            }
+            if (!definition)
+            {
+                if (pure)
+                {
+                    _out << R"#( = 0;
+)#";
+                }
+                else if (inner)
+                {
+                    _out << R"#( final;
+)#";
+                }
+                else
+                {
+                    _out << R"#(;
+)#";
+                }
+            }
+            else
+            {
+                _out << R"#(
+{
+    )#";
+                if (inner)
+                {
+                    if (!operation.customisation().empty())
                     {
-                        _out << R"#(::_instance::)#";
+                        _out << operation.customisation();
+                    }
+                    else if (this_or_that_or_void)
+                    {
+                        _out << R"#(_thing.)#" << operation.name();
                     }
                     else
                     {
-                        _out << R"#(::)#";
+                        _out << R"#(return _thing.)#" << operation.name();
                     }
-                    _out << operation.name();
                 }
-                _operation_parameters(operation, true, definition && !inner);
-                if (operation.constness())
+                else if (operation.modification().empty())
                 {
-                    _out << R"#( const -> )#";
-                }
-                else
-                {
-                    _out << R"#( -> )#";
-                }
-                bool const that = (operation.result() == "*that");
-                bool const this_or_that = (that || (operation.result() == "*this"));
-                bool const this_or_that_or_void = (this_or_that || (operation.result() == "void"));
-                if (this_or_that)
-                {
-                    if (inner || pure)
+                    if (that)
                     {
-                        _out << "void";
+                        _out << R"#(auto _result = *this;
+    )#";
+                    }
+                    if (!operation.constness())
+                    {
+                        _out << R"#(strange::_common::_mutate();
+    )#";
+                    }
+                    if (this_or_that_or_void)
+                    {
+                        _out << R"#(std::dynamic_pointer_cast<typename )#" << abstraction.name();
                     }
                     else
                     {
-                        _out << derived.name();
-                        if (!that)
-                        {
-                            _out << R"#( &)#";
-                        }
+                        _out << R"#(return std::dynamic_pointer_cast<typename )#" << abstraction.name();
                     }
-                }
-                else
-                {
-                    _out << operation.result();
-                }
-                if (!definition)
-                {
-                    if (pure)
+                    _abstraction_parameters(abstraction, false, false, false, false);
+                    _out << R"#(::_derived)#";
+                    if (operation.constness())
                     {
-                        _out << R"#( = 0;
-)#";
+                        _out << R"#( const)#";
                     }
-                    else if (inner)
+                    _out << R"#(>(strange::_common::_shared)->)#" << operation.name();
+                }
+                if ((operation.modification().empty() && !inner) || (operation.customisation().empty() && !operation.data()))
+                {
+                    _operation_parameters(operation, false, false);
+                }
+                if ((!inner) && !operation.modification().empty())
+                {
+                    _out << operation.modification();
+                }
+                else if (this_or_that && !inner)
+                {
+                    if (that)
                     {
-                        _out << R"#( final;
-)#";
+                        _out << R"#(;
+    return _result;)#";
+
                     }
                     else
                     {
                         _out << R"#(;
-)#";
+    return *this;)#";
                     }
                 }
                 else
                 {
-                    _out << R"#(
-{
-    )#";
-                    if (inner)
-                    {
-                        if (!operation.customisation().empty())
-                        {
-                            _out << operation.customisation();
-                        }
-                        else if (this_or_that_or_void)
-                        {
-                            _out << R"#(_thing.)#" << operation.name();
-                        }
-                        else
-                        {
-                            _out << R"#(return _thing.)#" << operation.name();
-                        }
-                    }
-                    else if (operation.modification().empty())
-                    {
-                        if (that)
-                        {
-                            _out << R"#(auto _result = *this;
-    )#";
-                        }
-                        if (!operation.constness())
-                        {
-                            _out << R"#(strange::_common::_mutate();
-    )#";
-                        }
-                        if (this_or_that_or_void)
-                        {
-                            _out << R"#(std::dynamic_pointer_cast<typename )#" << abstraction.name();
-                        }
-                        else
-                        {
-                            _out << R"#(return std::dynamic_pointer_cast<typename )#" << abstraction.name();
-                        }
-                        _abstraction_parameters(abstraction, false, false, false, false);
-                        _out << R"#(::_derived)#";
-                        if (operation.constness())
-                        {
-                            _out << R"#( const)#";
-                        }
-                        _out << R"#(>(strange::_common::_shared)->)#" << operation.name();
-                    }
-                    if ((operation.modification().empty() && !inner) || (operation.customisation().empty() && !operation.data()))
-                    {
-                        _operation_parameters(operation, false, false);
-                    }
-                    if ((!inner) && !operation.modification().empty())
-                    {
-                        _out << operation.modification();
-                    }
-                    else if (this_or_that && !inner)
-                    {
-                        if (that)
-                        {
-                            _out << R"#(;
-    return _result;)#";
-
-                        }
-                        else
-                        {
-                            _out << R"#(;
-    return *this;)#";
-                        }
-                    }
-                    else
-                    {
-                        _out << R"#(;)#";
-                    }
-                    _out << R"#(
+                    _out << R"#(;)#";
+                }
+                _out << R"#(
 }
 
 )#";
-                }
             }
         }
     }
