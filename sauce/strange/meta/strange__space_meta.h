@@ -9,13 +9,6 @@
 #include <vector>
 namespace strange
 {
-namespace definition
-{
-struct parameter;
-struct operation;
-struct abstraction;
-struct space;
-}
 namespace comprehension
 {
 enum class cls;

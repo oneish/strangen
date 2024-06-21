@@ -4,13 +4,6 @@
 #include <vector>
 namespace strange
 {
-namespace definition
-{
-struct parameter;
-struct operation;
-struct abstraction;
-struct space;
-}
 namespace comprehension
 {
 enum class cls;
@@ -72,23 +65,71 @@ template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy
 struct vector_;
 
 struct parameter;
+}
 
-template<typename _Thing = strange::definition::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>>
+namespace strange
+{
+namespace implementation
+{
+struct parameter;
+}
+}
+
+namespace strange
+{
+
+template<typename _Thing = strange::implementation::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct parameter_;
 
 struct operation;
+}
 
-template<typename _Thing = strange::definition::operation, bool _Copy = std::is_copy_constructible_v<_Thing>>
+namespace strange
+{
+namespace implementation
+{
+struct operation;
+}
+}
+
+namespace strange
+{
+
+template<typename _Thing = strange::implementation::operation, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct operation_;
 
 struct abstraction;
+}
 
-template<typename _Thing = strange::definition::abstraction, bool _Copy = std::is_copy_constructible_v<_Thing>>
+namespace strange
+{
+namespace implementation
+{
+struct abstraction;
+}
+}
+
+namespace strange
+{
+
+template<typename _Thing = strange::implementation::abstraction, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct abstraction_;
 
 struct space;
+}
 
-template<typename _Thing = strange::definition::space, bool _Copy = std::is_copy_constructible_v<_Thing>>
+namespace strange
+{
+namespace implementation
+{
+struct space;
+}
+}
+
+namespace strange
+{
+
+template<typename _Thing = strange::implementation::space, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct space_;
 
 struct token;
@@ -276,6 +317,15 @@ struct reflection<strange::parameter_<_Thing, _Copy>>
 };
 
 template<>
+struct reflection<strange::implementation::parameter>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::implementation::parameter";
+    }
+};
+
+template<>
 struct reflection<strange::operation>
 {
     inline static auto name() -> std::string
@@ -290,6 +340,15 @@ struct reflection<strange::operation_<_Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::operation_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::implementation::operation>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::implementation::operation";
     }
 };
 
@@ -312,6 +371,15 @@ struct reflection<strange::abstraction_<_Thing, _Copy>>
 };
 
 template<>
+struct reflection<strange::implementation::abstraction>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::implementation::abstraction";
+    }
+};
+
+template<>
 struct reflection<strange::space>
 {
     inline static auto name() -> std::string
@@ -326,6 +394,15 @@ struct reflection<strange::space_<_Thing, _Copy>>
     inline static auto name() -> std::string
     {
         return "strange::space_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::implementation::space>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::implementation::space";
     }
 };
 
@@ -2946,7 +3023,7 @@ public:
         return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared).operator bool();
     }
 
-    template<typename _Thing = strange::definition::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> parameter
     {
         return parameter{parameter::_derived::_static_shared_to_base(std::make_shared<typename parameter_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -3142,6 +3219,24 @@ public:
     inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
+}
+
+namespace strange
+{
+namespace implementation
+{
+struct parameter
+{
+    std::string type {};
+    std::string name {};
+    std::string argument {};
+};
+}
+}
+
+namespace strange
+{
+
 struct operation : any
 {
     inline operation() = default;
@@ -3241,7 +3336,7 @@ public:
         return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared).operator bool();
     }
 
-    template<typename _Thing = strange::definition::operation, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::operation, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> operation
     {
         return operation{operation::_derived::_static_shared_to_base(std::make_shared<typename operation_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -3477,6 +3572,29 @@ public:
     inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
+}
+
+namespace strange
+{
+namespace implementation
+{
+struct operation
+{
+    std::string name {};
+    strange::vector<strange::parameter> parameters {strange::vector<strange::parameter>::_make()};
+    bool constness {false};
+    std::string result {};
+    bool data {false};
+    std::string modification {};
+    std::string customisation {};
+    std::string implementation {};
+};
+}
+}
+
+namespace strange
+{
+
 struct abstraction : any
 {
     inline abstraction() = default;
@@ -3572,7 +3690,7 @@ public:
         return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared).operator bool();
     }
 
-    template<typename _Thing = strange::definition::abstraction, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::abstraction, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> abstraction
     {
         return abstraction{abstraction::_derived::_static_shared_to_base(std::make_shared<typename abstraction_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -3800,6 +3918,28 @@ public:
     inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
+}
+
+namespace strange
+{
+namespace implementation
+{
+struct abstraction
+{
+    strange::vector<strange::parameter> parameters {strange::vector<strange::parameter>::_make()};
+    std::string name {};
+    strange::vector<std::string> parents {strange::vector<std::string>::_make()};
+    strange::vector<strange::parameter> types {strange::vector<strange::parameter>::_make()};
+    strange::vector<strange::operation> operations {strange::vector<strange::operation>::_make()};
+    std::string thing {};
+    std::string implementation {};
+};
+}
+}
+
+namespace strange
+{
+
 struct space : any
 {
     inline space() = default;
@@ -3875,7 +4015,7 @@ public:
         return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared).operator bool();
     }
 
-    template<typename _Thing = strange::definition::space, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::space, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     inline static auto _make(_Args && ... _args) -> space
     {
         return space{space::_derived::_static_shared_to_base(std::make_shared<typename space_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -4062,6 +4202,23 @@ public:
 
     inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
+
+}
+
+namespace strange
+{
+namespace implementation
+{
+struct space
+{
+    std::string name {};
+    strange::vector<strange::abstraction> abstractions {strange::vector<strange::abstraction>::_make()};
+};
+}
+}
+
+namespace strange
+{
 
 struct token : any
 {

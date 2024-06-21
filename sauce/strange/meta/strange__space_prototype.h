@@ -347,12 +347,12 @@ namespace strange
         auto operator>=(vector<T> const & other) const -> bool;
     };
 
-    struct [[strange::thing("strange::definition::parameter")]]
+    struct [[strange::thing("strange::implementation::parameter")]]
     parameter : any
     {
-        std::string type;
-        std::string name;
-        std::string argument;
+        std::string type {};
+        std::string name {};
+        std::string argument {};
 
         [[strange::customisation("return type() == other.type()"
         "    && name() == other.name()"
@@ -377,17 +377,17 @@ namespace strange
         auto operator>=(parameter const & other) const -> bool;
     };
 
-    struct [[strange::thing("strange::definition::operation")]]
+    struct [[strange::thing("strange::implementation::operation")]]
     operation : any
     {
-        std::string name;
-        strange::vector<strange::parameter> parameters;
-        bool constness;
-        std::string result;
-        bool data;
-        std::string modification;
-        std::string customisation;
-        std::string implementation;
+        std::string name {};
+        strange::vector<strange::parameter> parameters {strange::vector<strange::parameter>::_make()};
+        bool constness {false};
+        std::string result {};
+        bool data {false};
+        std::string modification {};
+        std::string customisation {};
+        std::string implementation {};
 
         [[strange::customisation("return name() == other.name()"
         "    && parameters() == other.parameters()"
@@ -422,16 +422,16 @@ namespace strange
         auto operator>=(operation const & other) const -> bool;
     };
 
-    struct [[strange::thing("strange::definition::abstraction")]]
+    struct [[strange::thing("strange::implementation::abstraction")]]
     abstraction : any
     {
-        strange::vector<strange::parameter> parameters;
-        std::string name;
-        strange::vector<std::string> parents;
-        strange::vector<strange::parameter> types;
-        strange::vector<strange::operation> operations;
-        std::string thing;
-        std::string implementation;
+        strange::vector<strange::parameter> parameters {strange::vector<strange::parameter>::_make()};
+        std::string name {};
+        strange::vector<std::string> parents {strange::vector<std::string>::_make()};
+        strange::vector<strange::parameter> types {strange::vector<strange::parameter>::_make()};
+        strange::vector<strange::operation> operations {strange::vector<strange::operation>::_make()};
+        std::string thing {};
+        std::string implementation {};
 
         [[strange::customisation("return parameters() == other.parameters()"
         "    && name() == other.name()"
@@ -464,11 +464,11 @@ namespace strange
         auto operator>=(abstraction const & other) const -> bool;
     };
 
-    struct [[strange::thing("strange::definition::space")]]
+    struct [[strange::thing("strange::implementation::space")]]
     space : any
     {
-        std::string name;
-        strange::vector<strange::abstraction> abstractions;
+        std::string name {};
+        strange::vector<strange::abstraction> abstractions {strange::vector<strange::abstraction>::_make()};
 
         [[strange::customisation("return name() == other.name()"
         "    && abstractions() == other.abstractions()")]]

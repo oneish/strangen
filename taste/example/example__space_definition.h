@@ -45,7 +45,7 @@ inline auto parents(std::vector<std::string> pars) -> strange::vector<std::strin
     return strange::vector<std::string>::_make(pars);
 }
 
-inline auto parameter(strange::definition::parameter param) -> strange::parameter
+inline auto parameter(strange::implementation::parameter param) -> strange::parameter
 {
     return strange::parameter::_make(param);
 }
@@ -55,7 +55,7 @@ inline auto parameters(std::vector<strange::parameter> params) -> strange::vecto
     return strange::vector<strange::parameter>::_make(params);
 }
 
-inline auto operation(strange::definition::operation oper) -> strange::operation
+inline auto operation(strange::implementation::operation oper) -> strange::operation
 {
     return strange::operation::_make(oper);
 }
@@ -65,7 +65,7 @@ inline auto operations(std::vector<strange::operation> opers) -> strange::vector
     return strange::vector<strange::operation>::_make(opers);
 }
 
-inline auto abstraction(strange::definition::abstraction abstract) -> strange::abstraction
+inline auto abstraction(strange::implementation::abstraction abstract) -> strange::abstraction
 {
     return strange::abstraction::_make(abstract);
 }
@@ -75,7 +75,7 @@ inline auto abstractions(std::vector<strange::abstraction> abstracts) -> strange
     return strange::vector<strange::abstraction>::_make(abstracts);
 }
 
-inline auto space(strange::definition::space spc) -> strange::space
+inline auto space(strange::implementation::space spc) -> strange::space
 {
     return strange::space::_make(spc);
 }
