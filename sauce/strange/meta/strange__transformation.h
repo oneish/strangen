@@ -132,6 +132,24 @@ namespace strange
     }
 };
 )#";
+            if (!abstraction.implementation().empty())
+            {
+                _out << R"#(
+)#";
+                _abstraction_parameters(abstraction, true, false, false, true);
+                _out << R"#(struct reflection<)#" << abstraction.implementation();
+                _abstraction_parameters(abstraction, false, false, false, true);
+                _out << R"#(>
+{
+    inline static auto name() -> std::string
+    {
+        return ")#" << abstraction.implementation();
+                _abstraction_parameters(abstraction, false, false, false, true);
+                _out << R"#(";
+    }
+};
+)#";
+            }
         }
         _out << R"#(
 }

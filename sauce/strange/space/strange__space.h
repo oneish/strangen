@@ -343,6 +343,15 @@ struct reflection<strange::token_<_Thing, _Copy>>
     }
 };
 
+template<>
+struct reflection<strange::implementation::token>
+{
+    inline static auto name() -> std::string
+    {
+        return "strange::implementation::token";
+    }
+};
+
 }
 
 namespace strange
