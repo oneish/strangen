@@ -492,6 +492,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::comprehension::token")]]
+    [[strange::implementation("strange::implementation::token")]]
     token : any
     {
         std::string filename;

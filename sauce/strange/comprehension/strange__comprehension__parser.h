@@ -118,19 +118,18 @@ struct parser
             abs._error(tok.text());
             return;
         }
-        if (tok.classification() == cls::punctuation)
+        while (tok.classification() == cls::punctuation)
         {
             if (tok.text() != "[[")
             {
-                abs._error("strange::parser::parse_abstraction() expected name or '[[', but got punctuation: " + tok.text());
-                return;
+                break;
             }
             parse_abstraction_attribute(abs);
             if (!abs._valid())
             {
                 return;
             }
-            parse_name(tok);
+            parse_name_or_punctuation(tok);
             if (tok.classification() == cls::mistake)
             {
                 abs._error(tok.text());
