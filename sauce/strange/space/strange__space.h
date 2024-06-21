@@ -65,6 +65,7 @@ template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy
 struct vector_;
 
 struct parameter;
+
 }
 
 namespace strange
@@ -82,6 +83,7 @@ template<typename _Thing = strange::implementation::parameter, bool _Copy = std:
 struct parameter_;
 
 struct operation;
+
 }
 
 namespace strange
@@ -99,6 +101,7 @@ template<typename _Thing = strange::implementation::operation, bool _Copy = std:
 struct operation_;
 
 struct abstraction;
+
 }
 
 namespace strange
@@ -116,6 +119,7 @@ template<typename _Thing = strange::implementation::abstraction, bool _Copy = st
 struct abstraction_;
 
 struct space;
+
 }
 
 namespace strange
@@ -133,6 +137,7 @@ template<typename _Thing = strange::implementation::space, bool _Copy = std::is_
 struct space_;
 
 struct token;
+
 }
 
 namespace strange

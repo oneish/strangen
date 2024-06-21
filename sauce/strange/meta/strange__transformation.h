@@ -54,10 +54,9 @@ namespace )#" << _space.name() << R"#(
 )#";
             _abstraction_parameters(abstraction, true, true, false, false);
             _out << R"#(struct )#" << abstraction.name() << R"#(;
+
 )#";
             _abstraction_implementation(abstraction, true);
-            _out << R"#(
-)#";
             _abstraction_parameters(abstraction, true, true, true, false);
             _out << R"#(struct )#" << abstraction.name() << R"#(_;
 )#";
@@ -617,12 +616,8 @@ public:
 
 namespace )#" << _space.name() << R"#(
 {
+
 )#";
-        if (!forward)
-        {
-        _out << R"#(
-)#";
-        }
     }
 
     auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, bool const implementation, std::unordered_set<strange::operation> & unique) -> void
