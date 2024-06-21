@@ -98,6 +98,13 @@ template<typename _Thing = strange::comprehension::token, bool _Copy = std::is_c
 struct token_;
 
 }
+namespace strange
+{
+namespace implementation
+{
+struct token;
+}
+}
 
 namespace strange
 {

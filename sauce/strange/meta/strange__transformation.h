@@ -1,6 +1,8 @@
 #pragma once
 #include "../strange.h"
+#include <sstream>
 #include <ostream>
+#include <iostream>
 #include <algorithm>
 #include <unordered_set>
 
@@ -57,6 +59,37 @@ namespace )#" << _space.name() << R"#(
             _out << R"#(struct )#" << abstraction.name() << R"#(_;
 
 )#";
+            if (!abstraction.implementation().empty())
+            {
+                _out << R"#(}
+)#";
+                std::istringstream imp{abstraction.implementation()};
+                std::string name;
+                std::string last;
+                int64_t depth = 0;
+                while (std::getline(imp, name, ':'))
+                {
+                    if (name.empty())
+                    {
+                        continue;
+                    }
+                    if (!last.empty())
+                    {
+                        _out << R"#(namespace )#" << last << R"#(
+{
+)#";
+                        ++depth;
+                    }
+                    last = name;
+                }
+                _out << R"#(struct )#" << last << R"#(;
+)#";
+                while (--depth)
+                {
+                    _out << R"#(}
+)#";
+                }
+            }
         }
     }
 
