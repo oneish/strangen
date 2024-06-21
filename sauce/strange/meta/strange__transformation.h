@@ -59,38 +59,7 @@ namespace )#" << _space.name() << R"#(
             _out << R"#(struct )#" << abstraction.name() << R"#(_;
 
 )#";
-            if (!abstraction.implementation().empty())
-            {
-                _out << R"#(}
-)#";
-                std::istringstream imp{abstraction.implementation()};
-                std::string name;
-                std::string last;
-                int64_t depth = 0;
-                while (std::getline(imp, name, ':'))
-                {
-                    if (name.empty())
-                    {
-                        continue;
-                    }
-                    if (!last.empty())
-                    {
-                        _out << R"#(namespace )#" << last << R"#(
-{
-)#";
-                        ++depth;
-                    }
-                    last = name;
-                }
-                _abstraction_parameters(abstraction, true, true, false, false);
-                _out << R"#(struct )#" << last << R"#(;
-)#";
-                while (--depth)
-                {
-                    _out << R"#(}
-)#";
-                }
-            }
+            _abstraction_implementation(abstraction, true, true);
         }
     }
 
@@ -443,6 +412,7 @@ public:
 };
 
 )#";
+            _abstraction_implementation(abstraction, false, true);
         }
     }
 
@@ -589,6 +559,63 @@ public:
         for (auto const & parent : abstraction.parents())
         {
             _out << R"#(    ,)#" << parent << R"#({}
+)#";
+        }
+    }
+
+    auto _abstraction_implementation(strange::abstraction const & abstraction, bool const forward, bool const declaration) -> void
+    {
+        if (abstraction.implementation().empty())
+        {
+            return;
+        }
+        _out << R"#(}
+
+)#";
+        std::istringstream imp{abstraction.implementation()};
+        std::string name;
+        std::string last;
+        int64_t depth = 0;
+        while (std::getline(imp, name, ':'))
+        {
+            if (name.empty())
+            {
+                continue;
+            }
+            if (!last.empty())
+            {
+                _out << R"#(namespace )#" << last << R"#(
+{
+)#";
+                ++depth;
+            }
+            last = name;
+        }
+        _abstraction_parameters(abstraction, true, true, false, false);
+        _out << R"#(struct )#" << last;
+        if (!forward)
+        {
+            _out << R"#(
+{
+)#";
+            //TODO
+            _out << R"#(
+})#";
+        }
+        _out << R"#(;
+)#";
+        while (--depth)
+        {
+            _out << R"#(}
+)#";
+        }
+        if (!forward)
+        {
+            _out << R"#(}
+
+namespace )#" << _space.name() << R"#(
+{
+
 )#";
         }
     }

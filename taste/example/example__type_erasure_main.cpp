@@ -7,10 +7,10 @@
 #include <algorithm>
 #include <fstream>
 
-struct implementation
+struct implement
 {
-    // implementation() = default;
-    // implementation(implementation const&) = delete;
+    // implement() = default;
+    // implement(implement const&) = delete;
 
     int x = 0;
 
@@ -57,10 +57,10 @@ struct implementation
 };
 
 template<typename Datatype>
-struct implementation_template
+struct implement_template
 {
-    // implementation() = default;
-    // implementation(implementation const&) = delete;
+    // implement() = default;
+    // implement(implement const&) = delete;
 
     Datatype x = 0;
 
@@ -115,20 +115,20 @@ namespace strange
 {
 
 template<>
-struct reflection<implementation>
+struct reflection<implement>
 {
     inline static auto name() -> std::string
     {
-        return "implementation";
+        return "implement";
     }
 };
 
 template<typename Datatype>
-struct reflection<implementation_template<Datatype>>
+struct reflection<implement_template<Datatype>>
 {
     inline static auto name() -> std::string
     {
-        return "implementation_template<" + reflection<Datatype>::name() + ">";
+        return "implement_template<" + reflection<Datatype>::name() + ">";
     }
 };
 
@@ -163,7 +163,7 @@ int main()
     std::cout << v3._cat() << std::endl;
     v3._cats();
 
-    auto w1 = example::widget::_make<implementation>();
+    auto w1 = example::widget::_make<implement>();
     w1.inc();
     auto w2 = ++w1;
     w1.display();
@@ -172,7 +172,7 @@ int main()
     w1.display();
     w2.display();
 
-    auto b1 = example::button::_make<implementation>()--;
+    auto b1 = example::button::_make<implement>()--;
     if (b1._something())
     {
         std::cout << "yes" << b1._error() << std::endl;
@@ -215,11 +215,11 @@ int main()
     std::cout << w1._error("help!") << std::endl;
     std::cout << w1._error() << std::endl;
 
-    auto n1 = example::number::_make<implementation>();
+    auto n1 = example::number::_make<implement>();
     n1.inc();
     n1.dec();
 
-    auto wn1 = example::widget_number::_make<implementation>();
+    auto wn1 = example::widget_number::_make<implement>();
     wn1.inc();
     wn1.display();
 
@@ -236,17 +236,17 @@ int main()
 
     increment(wn2);
 
-    auto ni1 = example::numeric<>::_make<implementation>();
+    auto ni1 = example::numeric<>::_make<implement>();
     ni1.inc();
     auto ni2 = ni1;
     ni2.x() = 2;
     std::cout << ni1.get() << ni1.x() << ni2.x() << std::endl;
 
-    auto wt = example::widget::_make<implementation_template<int>>();
-    auto bt = example::button::_make<implementation_template<int>>()--;
-    auto nt = example::number::_make<implementation_template<int>>();
-    auto wnt = example::widget_number::_make<implementation_template<int>>();
-    auto nit = example::numeric<>::_make<implementation_template<int>>();
+    auto wt = example::widget::_make<implement_template<int>>();
+    auto bt = example::button::_make<implement_template<int>>()--;
+    auto nt = example::number::_make<implement_template<int>>();
+    auto wnt = example::widget_number::_make<implement_template<int>>();
+    auto nit = example::numeric<>::_make<implement_template<int>>();
 
     auto params = strange::vector<strange::parameter>::_make();
     for (auto & param : params)

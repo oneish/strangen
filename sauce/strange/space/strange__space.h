@@ -98,6 +98,7 @@ template<typename _Thing = strange::comprehension::token, bool _Copy = std::is_c
 struct token_;
 
 }
+
 namespace strange
 {
 namespace implementation
@@ -4370,6 +4371,22 @@ public:
 
     inline static std::string const _name_ = strange::reflection<_Kind_>::name();
 };
+
+}
+
+namespace strange
+{
+namespace implementation
+{
+struct token
+{
+
+};
+}
+}
+
+namespace strange
+{
 
 template<typename T>
 inline auto forward_const_iterator<T>::operator*() const -> T const &
