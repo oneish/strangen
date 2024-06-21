@@ -82,6 +82,7 @@ namespace )#" << _space.name() << R"#(
                     }
                     last = name;
                 }
+                _abstraction_parameters(abstraction, true, true, false, false);
                 _out << R"#(struct )#" << last << R"#(;
 )#";
                 while (--depth)
