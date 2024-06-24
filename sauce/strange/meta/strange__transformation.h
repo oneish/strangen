@@ -42,8 +42,6 @@ namespace )#" << _space.name() << R"#(
         _reflections();
         _declarations();
         _definitions();
-        _out << R"#(}
-)#";
     }
 
     auto _forward_declarations() -> void
@@ -430,6 +428,13 @@ public:
                 _abstraction_operations(abstraction, abstraction, true, false, true, false, unique);
             }
         }
+        _out << R"#(}
+)#";
+        for (auto const & abstraction : _space.abstractions())
+        {
+            std::unordered_set<strange::operation> unique;
+            _abstraction_operations(abstraction, abstraction, false, false, true, true, unique);
+        }
     }
 
     auto _abstraction_name_and_parameters(strange::abstraction const & abstraction) -> void
@@ -651,11 +656,75 @@ namespace )#" << _space.name() << R"#(
                 continue;
             }
             unique.insert(operation);
-            if (implementation && operation.data())
+            if (implementation)
             {
-                    _out << R"#(    )#" << operation.result().substr(0, operation.result().length() - 7)
-                        << operation.name() << R"#( )#" << operation.implementation() << R"#(;
+                if (operation.data())
+                {
+                    if (!definition)
+                    {
+                        _out << R"#(    )#" << operation.result().substr(0, operation.result().length() - 7)
+                            << operation.name() << R"#( )#" << operation.implementation() << R"#(;
 )#";
+                    }
+                }
+                else if (!definition)
+                {
+                    _out << R"#(    inline auto )#" << operation.name();
+                    _operation_parameters(operation, true, true);
+                    if (operation.constness())
+                    {
+                        _out << R"#( const -> )#";
+                    }
+                    else
+                    {
+                        _out << R"#( -> )#";
+                    }
+                    _out << operation.result() << R"#(;
+)#";
+                }
+                else
+                {
+                    _out << R"#(
+)#";
+                    std::istringstream imp{abstraction.implementation()};
+                    std::string name;
+                    std::string last;
+                    int64_t depth = 0;
+                    while (std::getline(imp, name, ':'))
+                    {
+                        if (name.empty())
+                        {
+                            continue;
+                        }
+                        if (!last.empty())
+                        {
+                            _out << R"#(namespace )#" << last << R"#(
+{
+)#";
+                            ++depth;
+                        }
+                        last = name;
+                    }
+                    _abstraction_parameters(derived, true, false, inner, false);
+                    _out << R"#(inline auto )#" << last << R"#(::)#" << operation.name();
+                    _operation_parameters(operation, true, false);
+                    if (operation.constness())
+                    {
+                        _out << R"#( const -> )#";
+                    }
+                    else
+                    {
+                        _out << R"#( -> )#";
+                    }
+                    _out << operation.result() << R"#(
+)#" << operation.implementation() << R"#(
+)#";
+                    while (depth--)
+                    {
+                        _out << R"#(}
+)#";
+                    }
+                }
                 continue;
             }
             if (!definition)
