@@ -4293,8 +4293,6 @@ protected:
 
         virtual auto text() -> std::string & = 0;
 
-        virtual auto arg(int x) -> int = 0;
-
         virtual auto operator==(token const & other) const -> bool = 0;
 
         virtual auto operator!=(token const & other) const -> bool = 0;
@@ -4351,8 +4349,6 @@ public:
     inline auto text() const -> std::string const &;
 
     inline auto text() -> std::string &;
-
-    inline auto arg(int x) -> int;
 
     inline auto operator==(token const & other) const -> bool;
 
@@ -4482,8 +4478,6 @@ private:
 
         inline auto text() -> std::string & final;
 
-        inline auto arg(int x) -> int final;
-
         inline auto operator==(token const & other) const -> bool final;
 
         inline auto operator!=(token const & other) const -> bool final;
@@ -4543,7 +4537,6 @@ struct token
     int64_t position {};
     strange::comprehension::cls classification {};
     std::string text {};
-    inline auto arg(int x) -> int;
 };
 }
 }
@@ -7323,12 +7316,6 @@ inline auto token::text() -> std::string &
     return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->text();
 }
 
-inline auto token::arg(int x = 1) -> int
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename token::_derived>(strange::_common::_shared)->arg(x);
-}
-
 inline auto token::operator==(token const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename token::_derived const>(strange::_common::_shared)->operator==(other);
@@ -7420,12 +7407,6 @@ inline auto token_<_Thing, _Copy>::_instance::text() -> std::string &
 }
 
 template<typename _Thing, bool _Copy>
-inline auto token_<_Thing, _Copy>::_instance::arg(int x) -> int
-{
-    return _thing.arg(x);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::operator==(token const & other) const -> bool
 {
     return filename() == other.filename()
@@ -7469,14 +7450,5 @@ inline auto token_<_Thing, _Copy>::_instance::operator>=(token const & other) co
     return !operator<(other);
 }
 
-}
-
-namespace strange
-{
-namespace implementation
-{
-inline auto token::arg(int x = 1) -> int
-{return x;}
-}
 }
 

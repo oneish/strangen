@@ -500,8 +500,6 @@ namespace strange
         strange::comprehension::cls classification {};
         std::string text {};
 
-        auto arg(int x = 1) -> int {return x;};
-
         [[strange::customisation("return filename() == other.filename()"
         "    && line() == other.line()"
         "    && position() == other.position()"
