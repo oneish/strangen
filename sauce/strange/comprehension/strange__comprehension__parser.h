@@ -381,11 +381,7 @@ struct parser
                     {
                         --square;
                     }
-                    if (tok.text() != "," && tok.text() != ";")
-                    {
-                        arg += tok.text();
-                    }
-                    if (angle < 0 || curly < 0 || round < 0 || square < 0 || tok.text() == "," || tok.text() == ";")
+                    if (angle < 0 || curly < 0 || round < 0 || square < 0)
                     {
                         if (angle > 0 || curly > 0 || round > 0 || square > 0)
                         {
@@ -398,6 +394,13 @@ struct parser
                         }
                         return;
                     }
+                    if (angle == 0 && curly == 0 && round == 0 && square == 0 &&
+                        (tok.text() == "," || tok.text() == ";"))
+                    {
+                        rtrim(arg);
+                        return;
+                    }
+                    arg += tok.text();
                     break;
                 case cls::string:
                     arg += "\"" + tok.text() + "\"";

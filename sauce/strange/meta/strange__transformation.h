@@ -670,7 +670,7 @@ namespace )#" << _space.name() << R"#(
                 else if (!definition)
                 {
                     _out << R"#(    inline auto )#" << operation.name();
-                    _operation_parameters(operation, true, true);
+                    _operation_parameters(operation, true, false);
                     if (operation.constness())
                     {
                         _out << R"#( const -> )#";
@@ -707,7 +707,7 @@ namespace )#" << _space.name() << R"#(
                     }
                     _abstraction_parameters(derived, true, false, inner, false);
                     _out << R"#(inline auto )#" << last << R"#(::)#" << operation.name();
-                    _operation_parameters(operation, true, false);
+                    _operation_parameters(operation, true, true);
                     if (operation.constness())
                     {
                         _out << R"#( const -> )#";
