@@ -389,5 +389,48 @@ struct toker
         return make_token(cls::mistake, text);
     }
 };
+
+auto operator<<(std::ostream & str, cls classification) -> std::ostream &
+{
+    switch (classification)
+    {
+        case strange::comprehension::cls::name:
+            str << "name";
+            break;
+        case strange::comprehension::cls::number:
+            str << "number";
+            break;
+        case strange::comprehension::cls::character:
+            str << "character";
+            break;
+        case strange::comprehension::cls::string:
+            str << "string";
+            break;
+        case strange::comprehension::cls::comment:
+            str << "comment";
+            break;
+        case strange::comprehension::cls::punctuation:
+            str << "punctuation";
+            break;
+        case strange::comprehension::cls::whitespace:
+            str << "whitespace";
+            break;
+        case strange::comprehension::cls::mistake:
+            str << "mistake";
+            break;
+    };
+    return str;
+}
+
+auto operator<<(std::ostream & str, token const & tok) -> std::ostream &
+{
+    str << "file: " << tok.filename()
+        << " line: " << tok.line()
+        << " pos: " << tok.position()
+        << " cls: " << tok.classification()
+        << " text: " << tok.text();
+    return str;
+}
+
 }
 }
