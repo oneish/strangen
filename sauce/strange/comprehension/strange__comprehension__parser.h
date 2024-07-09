@@ -53,7 +53,7 @@ struct parser
         if (!err.empty())
         {
             std::stringstream str;
-            str << "strange::comprehension::parser::" << err << " " << tok;
+            str << "strange::comprehension::parser::" << err << " - " << tok;
             spc._error(str.str());
         }
         return spc;

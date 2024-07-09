@@ -32,10 +32,10 @@ struct toker
     bool dot;
     char use;
 
-    toker(std::istreambuf_iterator<char> sit)
+    toker(std::istreambuf_iterator<char> sit, std::string const & fname = std::string{})
     :it{sit}
     ,end{it == std::istreambuf_iterator<char>{}}
-    ,filename{}
+    ,filename{fname}
     ,start_line{1}
     ,start_position{0}
     ,line{1}
