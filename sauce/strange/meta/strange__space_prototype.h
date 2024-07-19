@@ -265,42 +265,42 @@ namespace strange
         auto clear() -> void;
 
         [[strange::modification("auto const index = pos - cbegin();"
-        "    strange::_common::_mutate();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
         "    pos = cbegin() + index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>;
 
         [[strange::modification("auto const index = pos - cbegin();"
-        "    strange::_common::_mutate();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
         "    pos = cbegin() + index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>;
 
         [[strange::modification("auto const index = pos - cbegin();"
-        "    strange::_common::_mutate();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
         "    pos = cbegin() + index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>;
 
         [[strange::modification("auto const index = pos - cbegin();"
-        "    strange::_common::_mutate();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
         "    pos = cbegin() + index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>;
 
         [[strange::modification("auto const index = pos - cbegin();"
-        "    strange::_common::_mutate();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
         "    pos = cbegin() + index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist))")]]
         auto insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>;
 
         [[strange::modification("auto const index = pos - cbegin();"
-        "    strange::_common::_mutate();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
         "    pos = cbegin() + index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()))")]]
@@ -308,7 +308,7 @@ namespace strange
 
         [[strange::modification("auto const first_index = first - cbegin();"
         "    auto const last_index = last - cbegin();"
-        "    strange::_common::_mutate();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
         "    first = cbegin() + first_index;"
         "    last = cbegin() + last_index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);")]]
