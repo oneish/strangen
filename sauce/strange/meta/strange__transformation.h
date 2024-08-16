@@ -625,7 +625,7 @@ namespace )#" << _space.name() << R"#(
 )#";
     }
 
-    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, bool const implementation, std::unordered_set<strange::operation> & unique) -> void
+    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, bool const implementation, std::unordered_set<strange::operation> & unique, std::string const & name = std::string{}) -> void
     {
         if ((!inner) || !pure)
         {
@@ -639,7 +639,7 @@ namespace )#" << _space.name() << R"#(
                     });
                 if (it != _space.abstractions().cend())
                 {
-                    _abstraction_operations(*it, derived, inner, pure, definition, implementation, unique);
+                    _abstraction_operations(*it, derived, inner, pure, definition, implementation, unique, parent);
                 }
                 else
                 {
@@ -855,13 +855,21 @@ namespace )#" << _space.name() << R"#(
                     }
                     if (this_or_that_or_void)
                     {
-                        _out << R"#(std::dynamic_pointer_cast<typename )#" << abstraction.name();
+                        _out << R"#(std::dynamic_pointer_cast<typename )#";
                     }
                     else
                     {
-                        _out << R"#(return std::dynamic_pointer_cast<typename )#" << abstraction.name();
+                        _out << R"#(return std::dynamic_pointer_cast<typename )#";
                     }
-                    _abstraction_parameters(abstraction, false, false, false, false);
+                    if (name.empty())
+                    {
+                        _out << abstraction.name();
+                        _abstraction_parameters(abstraction, false, false, false, false);
+                    }
+                    else
+                    {
+                        _out << name;
+                    }
                     _out << R"#(::_derived)#";
                     if (operation.constness())
                     {
