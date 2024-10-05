@@ -590,6 +590,8 @@ protected:
             return food::_derived::_static_shared_to_base(derived);
         }
 
+        virtual auto ripen() -> void = 0;
+
         virtual auto ripe() const -> bool = 0;
 
         virtual auto peel() -> void = 0;
@@ -622,6 +624,8 @@ public:
     }();
 
     inline auto eat() -> void;
+
+    inline auto ripen() -> void;
 
     inline auto ripe() const -> bool;
 
@@ -727,6 +731,8 @@ private:
 
         inline auto eat() -> void final;
 
+        inline auto ripen() -> void final;
+
         inline auto ripe() const -> bool final;
 
         inline auto peel() -> void final;
@@ -816,7 +822,13 @@ protected:
             return any::_derived::_static_shared_to_base(derived);
         }
 
+        virtual auto push_back(Item const & item) -> void = 0;
+
         virtual auto size() const -> std::size_t = 0;
+
+        virtual auto operator[](std::size_t pos) const -> Item const & = 0;
+
+        virtual auto operator[](std::size_t pos) -> Item & = 0;
     };
 
 public:
@@ -843,7 +855,13 @@ public:
         return cats;
     }();
 
+    inline auto push_back(Item const & item) -> void;
+
     inline auto size() const -> std::size_t;
+
+    inline auto operator[](std::size_t pos) const -> Item const &;
+
+    inline auto operator[](std::size_t pos) -> Item &;
 };
 
 template<typename Item, typename _Thing, bool _Copy>
@@ -941,7 +959,13 @@ private:
             return bunch_::_name_;
         }
 
+        inline auto push_back(Item const & item) -> void final;
+
         inline auto size() const -> std::size_t final;
+
+        inline auto operator[](std::size_t pos) const -> Item const & final;
+
+        inline auto operator[](std::size_t pos) -> Item & final;
 
         _Thing _thing;
     };
@@ -1021,6 +1045,8 @@ struct bunch_of_fruit : food, bunch<fruit>
     {
     }
 
+    using Item = fruit;
+
 protected:
     struct _derived : food::_derived, bunch<fruit>::_derived
     {
@@ -1028,6 +1054,10 @@ protected:
         {
             return food::_derived::_static_shared_to_base(derived);
         }
+
+        virtual auto pick() -> void = 0;
+
+        virtual auto picked() const -> bool = 0;
     };
 
 public:
@@ -1057,7 +1087,17 @@ public:
 
     inline auto eat() -> void;
 
+    inline auto push_back(Item const & item) -> void;
+
     inline auto size() const -> std::size_t;
+
+    inline auto operator[](std::size_t pos) const -> Item const &;
+
+    inline auto operator[](std::size_t pos) -> Item &;
+
+    inline auto pick() -> void;
+
+    inline auto picked() const -> bool;
 };
 
 template<typename _Thing, bool _Copy>
@@ -1157,7 +1197,17 @@ private:
 
         inline auto eat() -> void final;
 
+        inline auto push_back(Item const & item) -> void final;
+
         inline auto size() const -> std::size_t final;
+
+        inline auto operator[](std::size_t pos) const -> Item const & final;
+
+        inline auto operator[](std::size_t pos) -> Item & final;
+
+        inline auto pick() -> void final;
+
+        inline auto picked() const -> bool final;
 
         _Thing _thing;
     };
@@ -1211,6 +1261,12 @@ inline auto fruit::eat() -> void
     std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
 }
 
+inline auto fruit::ripen() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename fruit::_derived>(strange::_common::_shared)->ripen();
+}
+
 inline auto fruit::ripe() const -> bool
 {
     return std::dynamic_pointer_cast<typename fruit::_derived const>(strange::_common::_shared)->ripe();
@@ -1234,6 +1290,12 @@ inline auto fruit_<_Thing, _Copy>::_instance::eat() -> void
 }
 
 template<typename _Thing, bool _Copy>
+inline auto fruit_<_Thing, _Copy>::_instance::ripen() -> void
+{
+    _thing.ripen();
+}
+
+template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::ripe() const -> bool
 {
     return _thing.ripe();
@@ -1252,9 +1314,35 @@ inline auto fruit_<_Thing, _Copy>::_instance::peeled() const -> bool
 }
 
 template<typename Item>
+inline auto bunch<Item>::push_back(Item const & item) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bunch<Item>::_derived>(strange::_common::_shared)->push_back(item);
+}
+
+template<typename Item>
 inline auto bunch<Item>::size() const -> std::size_t
 {
     return std::dynamic_pointer_cast<typename bunch<Item>::_derived const>(strange::_common::_shared)->size();
+}
+
+template<typename Item>
+inline auto bunch<Item>::operator[](std::size_t pos) const -> Item const &
+{
+    return std::dynamic_pointer_cast<typename bunch<Item>::_derived const>(strange::_common::_shared)->operator[](pos);
+}
+
+template<typename Item>
+inline auto bunch<Item>::operator[](std::size_t pos) -> Item &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bunch<Item>::_derived>(strange::_common::_shared)->operator[](pos);
+}
+
+template<typename Item, typename _Thing, bool _Copy>
+inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back(Item const & item) -> void
+{
+    _thing.push_back(item);
 }
 
 template<typename Item, typename _Thing, bool _Copy>
@@ -1263,15 +1351,55 @@ inline auto bunch_<Item, _Thing, _Copy>::_instance::size() const -> std::size_t
     return _thing.size();
 }
 
+template<typename Item, typename _Thing, bool _Copy>
+inline auto bunch_<Item, _Thing, _Copy>::_instance::operator[](std::size_t pos) const -> Item const &
+{
+    return _thing.operator[](pos);
+}
+
+template<typename Item, typename _Thing, bool _Copy>
+inline auto bunch_<Item, _Thing, _Copy>::_instance::operator[](std::size_t pos) -> Item &
+{
+    return _thing.operator[](pos);
+}
+
 inline auto bunch_of_fruit::eat() -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
 }
 
+inline auto bunch_of_fruit::push_back(Item const & item) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bunch<fruit>::_derived>(strange::_common::_shared)->push_back(item);
+}
+
 inline auto bunch_of_fruit::size() const -> std::size_t
 {
     return std::dynamic_pointer_cast<typename bunch<fruit>::_derived const>(strange::_common::_shared)->size();
+}
+
+inline auto bunch_of_fruit::operator[](std::size_t pos) const -> Item const &
+{
+    return std::dynamic_pointer_cast<typename bunch<fruit>::_derived const>(strange::_common::_shared)->operator[](pos);
+}
+
+inline auto bunch_of_fruit::operator[](std::size_t pos) -> Item &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bunch<fruit>::_derived>(strange::_common::_shared)->operator[](pos);
+}
+
+inline auto bunch_of_fruit::pick() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bunch_of_fruit::_derived>(strange::_common::_shared)->pick();
+}
+
+inline auto bunch_of_fruit::picked() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bunch_of_fruit::_derived const>(strange::_common::_shared)->picked();
 }
 
 template<typename _Thing, bool _Copy>
@@ -1281,9 +1409,39 @@ inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::eat() -> void
 }
 
 template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::push_back(Item const & item) -> void
+{
+    _thing.push_back(item);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::size() const -> std::size_t
 {
     return _thing.size();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::operator[](std::size_t pos) const -> Item const &
+{
+    return _thing.operator[](pos);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::operator[](std::size_t pos) -> Item &
+{
+    return _thing.operator[](pos);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::pick() -> void
+{
+    _thing.pick();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::picked() const -> bool
+{
+    return _thing.picked();
 }
 
 }
