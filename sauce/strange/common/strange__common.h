@@ -5,6 +5,8 @@
 
 namespace strange
 {
+struct _no_copy_constructor {};
+
 // _common is the base class for all strange abstractions
 // _common does not have any virtual functions or a v-table itself
 // _common has a single data member, which is shared pointer to _common::_base
@@ -70,7 +72,7 @@ private:
 
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
-            throw false;
+            throw _no_copy_constructor{};
         }
 
         virtual inline auto _cat() const -> std::string final
@@ -111,7 +113,7 @@ public:
             {
                 _shared = _shared->_clone();
             }
-            catch(bool const &)
+            catch(_no_copy_constructor const &)
             {
             }
         }

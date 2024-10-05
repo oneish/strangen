@@ -275,7 +275,7 @@ private:
             }
             else
             {
-                throw true;
+                throw strange::_no_copy_constructor{};
             }
         }
 
@@ -482,7 +482,7 @@ private:
             }
             else
             {
-                throw true;
+                throw strange::_no_copy_constructor{};
             }
         }
 
@@ -705,7 +705,7 @@ private:
             }
             else
             {
-                throw true;
+                throw strange::_no_copy_constructor{};
             }
         }
 
@@ -935,7 +935,7 @@ private:
             }
             else
             {
-                throw true;
+                throw strange::_no_copy_constructor{};
             }
         }
 
@@ -1171,7 +1171,7 @@ private:
             }
             else
             {
-                throw true;
+                throw strange::_no_copy_constructor{};
             }
         }
 
