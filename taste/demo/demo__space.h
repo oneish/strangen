@@ -824,6 +824,8 @@ protected:
 
         virtual auto push_back(Item const & item) -> void = 0;
 
+        virtual auto push_back(Item && item) -> void = 0;
+
         virtual auto size() const -> std::size_t = 0;
 
         virtual auto operator[](std::size_t pos) const -> Item const & = 0;
@@ -856,6 +858,8 @@ public:
     }();
 
     inline auto push_back(Item const & item) -> void;
+
+    inline auto push_back(Item && item) -> void;
 
     inline auto size() const -> std::size_t;
 
@@ -960,6 +964,8 @@ private:
         }
 
         inline auto push_back(Item const & item) -> void final;
+
+        inline auto push_back(Item && item) -> void final;
 
         inline auto size() const -> std::size_t final;
 
@@ -1089,6 +1095,8 @@ public:
 
     inline auto push_back(Item const & item) -> void;
 
+    inline auto push_back(Item && item) -> void;
+
     inline auto size() const -> std::size_t;
 
     inline auto operator[](std::size_t pos) const -> Item const &;
@@ -1198,6 +1206,8 @@ private:
         inline auto eat() -> void final;
 
         inline auto push_back(Item const & item) -> void final;
+
+        inline auto push_back(Item && item) -> void final;
 
         inline auto size() const -> std::size_t final;
 
@@ -1321,6 +1331,13 @@ inline auto bunch<Item>::push_back(Item const & item) -> void
 }
 
 template<typename Item>
+inline auto bunch<Item>::push_back(Item && item) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bunch<Item>::_derived>(strange::_common::_shared)->push_back(std::move(item));
+}
+
+template<typename Item>
 inline auto bunch<Item>::size() const -> std::size_t
 {
     return std::dynamic_pointer_cast<typename bunch<Item>::_derived const>(strange::_common::_shared)->size();
@@ -1343,6 +1360,12 @@ template<typename Item, typename _Thing, bool _Copy>
 inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back(Item const & item) -> void
 {
     _thing.push_back(item);
+}
+
+template<typename Item, typename _Thing, bool _Copy>
+inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back(Item && item) -> void
+{
+    _thing.push_back(std::move(item));
 }
 
 template<typename Item, typename _Thing, bool _Copy>
@@ -1373,6 +1396,12 @@ inline auto bunch_of_fruit::push_back(Item const & item) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename bunch<fruit>::_derived>(strange::_common::_shared)->push_back(item);
+}
+
+inline auto bunch_of_fruit::push_back(Item && item) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bunch<fruit>::_derived>(strange::_common::_shared)->push_back(std::move(item));
 }
 
 inline auto bunch_of_fruit::size() const -> std::size_t
@@ -1412,6 +1441,12 @@ template<typename _Thing, bool _Copy>
 inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::push_back(Item const & item) -> void
 {
     _thing.push_back(item);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::push_back(Item && item) -> void
+{
+    _thing.push_back(std::move(item));
 }
 
 template<typename _Thing, bool _Copy>

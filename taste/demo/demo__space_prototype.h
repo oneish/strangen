@@ -25,6 +25,7 @@ namespace demo
     struct bunch : any
     {
         auto push_back(Item const & item) -> void;
+        auto push_back(Item && item) -> void;
         auto size() const -> std::size_t;
         auto operator[](std::size_t pos) const -> Item const &;
         auto operator[](std::size_t pos) -> Item &;
