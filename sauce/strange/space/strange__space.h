@@ -3233,8 +3233,14 @@ namespace implementation
 struct parameter
 {
     std::string type_ {};
+    inline auto type() const -> std::string const & { return type_; };
+    inline auto type() -> std::string & { return type_; };
     std::string name_ {};
+    inline auto name() const -> std::string const & { return name_; };
+    inline auto name() -> std::string & { return name_; };
     std::string argument_ {};
+    inline auto argument() const -> std::string const & { return argument_; };
+    inline auto argument() -> std::string & { return argument_; };
 };
 }
 }
@@ -3586,13 +3592,29 @@ namespace implementation
 struct operation
 {
     std::string name_ {};
+    inline auto name() const -> std::string const & { return name_; };
+    inline auto name() -> std::string & { return name_; };
     strange::vector<strange::parameter> parameters_ {strange::vector<strange::parameter>::_make()};
+    inline auto parameters() const -> strange::vector<strange::parameter> const & { return parameters_; };
+    inline auto parameters() -> strange::vector<strange::parameter> & { return parameters_; };
     bool constness_ {false};
+    inline auto constness() const -> bool const & { return constness_; };
+    inline auto constness() -> bool & { return constness_; };
     std::string result_ {};
+    inline auto result() const -> std::string const & { return result_; };
+    inline auto result() -> std::string & { return result_; };
     bool data_ {false};
+    inline auto data() const -> bool const & { return data_; };
+    inline auto data() -> bool & { return data_; };
     std::string modification_ {};
+    inline auto modification() const -> std::string const & { return modification_; };
+    inline auto modification() -> std::string & { return modification_; };
     std::string customisation_ {};
+    inline auto customisation() const -> std::string const & { return customisation_; };
+    inline auto customisation() -> std::string & { return customisation_; };
     std::string implementation_ {};
+    inline auto implementation() const -> std::string const & { return implementation_; };
+    inline auto implementation() -> std::string & { return implementation_; };
 };
 }
 }
@@ -3932,12 +3954,26 @@ namespace implementation
 struct abstraction
 {
     strange::vector<strange::parameter> parameters_ {strange::vector<strange::parameter>::_make()};
+    inline auto parameters() const -> strange::vector<strange::parameter> const & { return parameters_; };
+    inline auto parameters() -> strange::vector<strange::parameter> & { return parameters_; };
     std::string name_ {};
+    inline auto name() const -> std::string const & { return name_; };
+    inline auto name() -> std::string & { return name_; };
     strange::vector<std::string> parents_ {strange::vector<std::string>::_make()};
+    inline auto parents() const -> strange::vector<std::string> const & { return parents_; };
+    inline auto parents() -> strange::vector<std::string> & { return parents_; };
     strange::vector<strange::parameter> types_ {strange::vector<strange::parameter>::_make()};
+    inline auto types() const -> strange::vector<strange::parameter> const & { return types_; };
+    inline auto types() -> strange::vector<strange::parameter> & { return types_; };
     strange::vector<strange::operation> operations_ {strange::vector<strange::operation>::_make()};
+    inline auto operations() const -> strange::vector<strange::operation> const & { return operations_; };
+    inline auto operations() -> strange::vector<strange::operation> & { return operations_; };
     std::string thing_ {};
+    inline auto thing() const -> std::string const & { return thing_; };
+    inline auto thing() -> std::string & { return thing_; };
     std::string implementation_ {};
+    inline auto implementation() const -> std::string const & { return implementation_; };
+    inline auto implementation() -> std::string & { return implementation_; };
 };
 }
 }
@@ -4217,7 +4253,11 @@ namespace implementation
 struct space
 {
     std::string name_ {};
+    inline auto name() const -> std::string const & { return name_; };
+    inline auto name() -> std::string & { return name_; };
     strange::vector<strange::abstraction> abstractions_ {strange::vector<strange::abstraction>::_make()};
+    inline auto abstractions() const -> strange::vector<strange::abstraction> const & { return abstractions_; };
+    inline auto abstractions() -> strange::vector<strange::abstraction> & { return abstractions_; };
 };
 }
 }
@@ -4533,10 +4573,20 @@ namespace implementation
 struct token
 {
     std::string filename_ {};
+    inline auto filename() const -> std::string const & { return filename_; };
+    inline auto filename() -> std::string & { return filename_; };
     int64_t line_ {};
+    inline auto line() const -> int64_t const & { return line_; };
+    inline auto line() -> int64_t & { return line_; };
     int64_t position_ {};
+    inline auto position() const -> int64_t const & { return position_; };
+    inline auto position() -> int64_t & { return position_; };
     strange::comprehension::cls classification_ {};
+    inline auto classification() const -> strange::comprehension::cls const & { return classification_; };
+    inline auto classification() -> strange::comprehension::cls & { return classification_; };
     std::string text_ {};
+    inline auto text() const -> std::string const & { return text_; };
+    inline auto text() -> std::string & { return text_; };
 };
 }
 }

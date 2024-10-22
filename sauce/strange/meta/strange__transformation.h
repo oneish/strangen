@@ -670,7 +670,7 @@ namespace )#" << _space.name() << R"#(
 )#";
                     }
                 }
-                else if (!definition)
+                if (!definition)
                 {
                     _out << R"#(    inline auto )#" << operation.name();
                     _operation_parameters(operation, true, false);
@@ -682,10 +682,15 @@ namespace )#" << _space.name() << R"#(
                     {
                         _out << R"#( -> )#";
                     }
-                    _out << operation.result() << R"#(;
+                    _out << operation.result();
+                    if (operation.data())
+                    {
+                        _out << R"#( { return )#" << operation.name() << R"#(_; })#";
+                    }
+                    _out << R"#(;
 )#";
                 }
-                else
+                else if (!operation.data())
                 {
                     _out << R"#(
 )#";
