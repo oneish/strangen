@@ -32,13 +32,9 @@ struct banana
         return _peeled;
     }
 
-    auto xxx() const -> std::string const & { return xxx_; }
-    auto xxx() -> std::string & { return xxx_; }
-
 private:
     bool _ripe = false;
     bool _peeled = false;
-    std::string xxx_;
 };
 
 #include "demo__space.h"
