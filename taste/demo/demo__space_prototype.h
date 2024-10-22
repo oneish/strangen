@@ -18,6 +18,7 @@ namespace demo
         auto ripe() const -> bool;
         auto peel() -> void;
         auto peeled() const -> bool;
+        std::string xxx {};
     };
 
     // template

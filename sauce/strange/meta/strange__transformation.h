@@ -663,7 +663,7 @@ namespace )#" << _space.name() << R"#(
                     if (!definition)
                     {
                         _out << R"#(    )#" << operation.result().substr(0, operation.result().length() - 7)
-                            << operation.name() << R"#( )#" << operation.implementation() << R"#(;
+                            << operation.name() << R"#(_ )#" << operation.implementation() << R"#(;
 )#";
                     }
                 }
@@ -880,6 +880,10 @@ namespace )#" << _space.name() << R"#(
                 if ((operation.modification().empty() && !inner) || (operation.customisation().empty() && !operation.data()))
                 {
                     _operation_parameters(operation, false, false);
+                }
+                else if (operation.data())
+                {
+                    _out << R"#(_)#";
                 }
                 if ((!inner) && !operation.modification().empty())
                 {

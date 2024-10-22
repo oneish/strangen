@@ -597,6 +597,10 @@ protected:
         virtual auto peel() -> void = 0;
 
         virtual auto peeled() const -> bool = 0;
+
+        virtual auto xxx() const -> std::string const & = 0;
+
+        virtual auto xxx() -> std::string & = 0;
     };
 
 public:
@@ -632,6 +636,10 @@ public:
     inline auto peel() -> void;
 
     inline auto peeled() const -> bool;
+
+    inline auto xxx() const -> std::string const &;
+
+    inline auto xxx() -> std::string &;
 };
 
 template<typename _Thing, bool _Copy>
@@ -738,6 +746,10 @@ private:
         inline auto peel() -> void final;
 
         inline auto peeled() const -> bool final;
+
+        inline auto xxx() const -> std::string const & final;
+
+        inline auto xxx() -> std::string & final;
 
         _Thing _thing;
     };
@@ -1293,6 +1305,17 @@ inline auto fruit::peeled() const -> bool
     return std::dynamic_pointer_cast<typename fruit::_derived const>(strange::_common::_shared)->peeled();
 }
 
+inline auto fruit::xxx() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename fruit::_derived const>(strange::_common::_shared)->xxx();
+}
+
+inline auto fruit::xxx() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename fruit::_derived>(strange::_common::_shared)->xxx();
+}
+
 template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::eat() -> void
 {
@@ -1321,6 +1344,18 @@ template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::peeled() const -> bool
 {
     return _thing.peeled();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto fruit_<_Thing, _Copy>::_instance::xxx() const -> std::string const &
+{
+    return _thing.xxx_;
+}
+
+template<typename _Thing, bool _Copy>
+inline auto fruit_<_Thing, _Copy>::_instance::xxx() -> std::string &
+{
+    return _thing.xxx_;
 }
 
 template<typename Item>

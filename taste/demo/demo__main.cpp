@@ -32,6 +32,8 @@ struct banana
         return _peeled;
     }
 
+    std::string xxx_;
+
 private:
     bool _ripe = false;
     bool _peeled = false;

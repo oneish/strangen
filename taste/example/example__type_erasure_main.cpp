@@ -12,47 +12,47 @@ struct implement
     // implement() = default;
     // implement(implement const&) = delete;
 
-    int x = 0;
+    int x_ = 0;
 
     inline void display(example::button b) const
     {
-        std::cout << "display: " << x << std::endl;
+        std::cout << "display: " << x_ << std::endl;
     }
 
     inline void inc()
     {
-        std::cout << "inc: " << x << " -> " << (x + 1) << std::endl;
-        ++x;
+        std::cout << "inc: " << x_ << " -> " << (x_ + 1) << std::endl;
+        ++x_;
     }
 
     inline void operator++()
     {
-        std::cout << "operator++: " << x << " -> " << (x + 1) << std::endl;
-        ++x;
+        std::cout << "operator++: " << x_ << " -> " << (x_ + 1) << std::endl;
+        ++x_;
     }
 
     inline void operator--(int)
     {
-        std::cout << "operator--: " << x << " -> " << (x - 1) << std::endl;
-        x--;
+        std::cout << "operator--: " << x_ << " -> " << (x_ - 1) << std::endl;
+        x_--;
     }
 
     inline void push()
     {
-        std::cout << "push: " << x << " -> " << (x - 1) << std::endl;
-        --x;
+        std::cout << "push: " << x_ << " -> " << (x_ - 1) << std::endl;
+        --x_;
     }
 
     inline void dec()
     {
-        std::cout << "dec: " << x << " -> " << (x - 1) << std::endl;
-        --x;
+        std::cout << "dec: " << x_ << " -> " << (x_ - 1) << std::endl;
+        --x_;
     }
 
     inline int get() const
     {
-        std::cout << "get: " << x << std::endl;
-        return x;
+        std::cout << "get: " << x_ << std::endl;
+        return x_;
     }
 };
 
@@ -62,47 +62,47 @@ struct implement_template
     // implement() = default;
     // implement(implement const&) = delete;
 
-    Datatype x = 0;
+    Datatype x_ = 0;
 
     inline void display(example::button b) const
     {
-        std::cout << "display: " << x << std::endl;
+        std::cout << "display: " << x_ << std::endl;
     }
 
     inline void inc()
     {
-        std::cout << "inc: " << x << " -> " << (x + 1) << std::endl;
-        ++x;
+        std::cout << "inc: " << x_ << " -> " << (x_ + 1) << std::endl;
+        ++x_;
     }
 
     inline void operator++()
     {
-        std::cout << "operator++: " << x << " -> " << (x + 1) << std::endl;
-        ++x;
+        std::cout << "operator++: " << x_ << " -> " << (x_ + 1) << std::endl;
+        ++x_;
     }
 
     inline void operator--(int)
     {
-        std::cout << "operator--: " << x << " -> " << (x - 1) << std::endl;
-        x--;
+        std::cout << "operator--: " << x_ << " -> " << (x_ - 1) << std::endl;
+        x_--;
     }
 
     inline void push()
     {
-        std::cout << "push: " << x << " -> " << (x - 1) << std::endl;
-        --x;
+        std::cout << "push: " << x_ << " -> " << (x_ - 1) << std::endl;
+        --x_;
     }
 
     inline void dec()
     {
-        std::cout << "dec: " << x << " -> " << (x - 1) << std::endl;
-        --x;
+        std::cout << "dec: " << x_ << " -> " << (x_ - 1) << std::endl;
+        --x_;
     }
 
     inline Datatype get() const
     {
-        std::cout << "get: " << x << std::endl;
-        return x;
+        std::cout << "get: " << x_ << std::endl;
+        return x_;
     }
 };
 

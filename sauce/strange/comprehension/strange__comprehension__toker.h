@@ -57,7 +57,7 @@ struct toker
 
     inline auto make_token(cls classification, std::string text) const -> strange::token
     {
-        return strange::token::_make(strange::implementation::token{.filename = filename, .line = start_line, .position = start_position, .classification = classification, .text = text});
+        return strange::token::_make(strange::implementation::token{.filename_ = filename, .line_ = start_line, .position_ = start_position, .classification_ = classification, .text_ = text});
     }
 
     inline auto increment() -> strange::token

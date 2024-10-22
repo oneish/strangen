@@ -84,91 +84,91 @@ auto definition() -> strange::space
 {
     return meta::space
     ({
-        .name = "example",
-        .abstractions = abstractions
+        .name_ = "example",
+        .abstractions_ = abstractions
         ({
             abstraction
             ({
-                .name = "widget",
-                .operations = operations
+                .name_ = "widget",
+                .operations_ = operations
                 ({
                     operation
                     ({
-                        .name = "display",
-                        .parameters = parameters
+                        .name_ = "display",
+                        .parameters_ = parameters
                         ({
                             parameter
                             ({
-                                .type = "button",
-                                .name = "b",
-                                .argument = "button()",
+                                .type_ = "button",
+                                .name_ = "b",
+                                .argument_ = "button()",
                             }),
                         }),
-                        .constness = true,
-                        .result = "void",
+                        .constness_ = true,
+                        .result_ = "void",
                     }),
                     operation
                     ({
-                        .name = "inc",
-                        .result = "void",
+                        .name_ = "inc",
+                        .result_ = "void",
                     }),
                     operation
                     ({
-                        .name = "operator++",
-                        .result = "*this",
+                        .name_ = "operator++",
+                        .result_ = "*this",
                     }),
                     operation
                     ({
-                        .name = "operator--",
-                        .parameters = parameters
+                        .name_ = "operator--",
+                        .parameters_ = parameters
                         ({
                             parameter
                             ({
-                                .type = "int",
-                                .name = "i",
+                                .type_ = "int",
+                                .name_ = "i",
                             }),
                         }),
-                        .result = "*that",
+                        .result_ = "*that",
                     }),
                 }),
             }),
             abstraction
             ({
-                .name = "button",
-                .parents = parents
+                .name_ = "button",
+                .parents_ = parents
                 ({
                     "widget",
                 }),
-                .operations = operations
+                .operations_ = operations
                 ({
                     operation
                     ({
-                        .name = "push",
-                        .result = "void",
+                        .name_ = "push",
+                        .result_ = "void",
                     }),
                 }),
             }),
             abstraction
             ({
-                .name = "number",
-                .operations = operations
+                .name_ = "number",
+                .operations_ = operations
                 ({
                     operation
                     ({
-                        .name = "inc",
-                        .result = "void",
+                        .name_ = "inc",
+                        .result_ = "void",
                     }),
                     operation
                     ({
-                        .name = "dec",
-                        .result = "void",
+                        .name_ = "dec",
+                        .result_ = "void",
                     }),
                 }),
             }),
             abstraction
             ({
-                .name = "widget_number",
-                .parents = parents
+                .name_ = "widget_number",
+                .parents_ = parents
                 ({
                     "widget",
                     "number",
@@ -176,40 +176,40 @@ auto definition() -> strange::space
             }),
             abstraction
             ({
-                .parameters = parameters
+                .parameters_ = parameters
                 ({
                     parameter
                     ({
-                        .type = "typename",
-                        .name = "Data",
-                        .argument = "int",
+                        .type_ = "typename",
+                        .name_ = "Data",
+                        .argument_ = "int",
                     }),
                 }),
-                .name = "numeric",
-                .parents = parents
+                .name_ = "numeric",
+                .parents_ = parents
                 ({
                     "number",
                 }),
-                .operations = operations
+                .operations_ = operations
                 ({
                     operation
                     ({
-                        .name = "get",
-                        .constness = true,
-                        .result = "Data",
+                        .name_ = "get",
+                        .constness_ = true,
+                        .result_ = "Data",
                     }),
                     operation
                     ({
-                        .name = "x",
-                        .constness = true,
-                        .result = "Data const &",
-                        .data = true,
+                        .name_ = "x",
+                        .constness_ = true,
+                        .result_ = "Data const &",
+                        .data_ = true,
                     }),
                     operation
                     ({
-                        .name = "x",
-                        .result = "Data &",
-                        .data = true,
+                        .name_ = "x",
+                        .result_ = "Data &",
+                        .data_ = true,
                     }),
                 }),
             }),
