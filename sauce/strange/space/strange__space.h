@@ -6621,37 +6621,37 @@ inline auto parameter::operator>=(parameter const & other) const -> bool
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::type() const -> std::string const &
 {
-    return _thing.type_;
+    return _thing.type();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::type() -> std::string &
 {
-    return _thing.type_;
+    return _thing.type();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::name() -> std::string &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::argument() const -> std::string const &
 {
-    return _thing.argument_;
+    return _thing.argument();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::argument() -> std::string &
 {
-    return _thing.argument_;
+    return _thing.argument();
 }
 
 template<typename _Thing, bool _Copy>
@@ -6815,97 +6815,97 @@ inline auto operation::operator>=(operation const & other) const -> bool
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::name() -> std::string &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::parameters() const -> strange::vector<strange::parameter> const &
 {
-    return _thing.parameters_;
+    return _thing.parameters();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::parameters() -> strange::vector<strange::parameter> &
 {
-    return _thing.parameters_;
+    return _thing.parameters();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::constness() const -> bool const &
 {
-    return _thing.constness_;
+    return _thing.constness();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::constness() -> bool &
 {
-    return _thing.constness_;
+    return _thing.constness();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::result() const -> std::string const &
 {
-    return _thing.result_;
+    return _thing.result();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::result() -> std::string &
 {
-    return _thing.result_;
+    return _thing.result();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::data() const -> bool const &
 {
-    return _thing.data_;
+    return _thing.data();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::data() -> bool &
 {
-    return _thing.data_;
+    return _thing.data();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::modification() const -> std::string const &
 {
-    return _thing.modification_;
+    return _thing.modification();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::modification() -> std::string &
 {
-    return _thing.modification_;
+    return _thing.modification();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::customisation() const -> std::string const &
 {
-    return _thing.customisation_;
+    return _thing.customisation();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::customisation() -> std::string &
 {
-    return _thing.customisation_;
+    return _thing.customisation();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::implementation() const -> std::string const &
 {
-    return _thing.implementation_;
+    return _thing.implementation();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::implementation() -> std::string &
 {
-    return _thing.implementation_;
+    return _thing.implementation();
 }
 
 template<typename _Thing, bool _Copy>
@@ -7068,85 +7068,85 @@ inline auto abstraction::operator>=(abstraction const & other) const -> bool
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::parameters() const -> strange::vector<strange::parameter> const &
 {
-    return _thing.parameters_;
+    return _thing.parameters();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::parameters() -> strange::vector<strange::parameter> &
 {
-    return _thing.parameters_;
+    return _thing.parameters();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::name() -> std::string &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::parents() const -> strange::vector<std::string> const &
 {
-    return _thing.parents_;
+    return _thing.parents();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::parents() -> strange::vector<std::string> &
 {
-    return _thing.parents_;
+    return _thing.parents();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::types() const -> strange::vector<strange::parameter> const &
 {
-    return _thing.types_;
+    return _thing.types();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::types() -> strange::vector<strange::parameter> &
 {
-    return _thing.types_;
+    return _thing.types();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::operations() const -> strange::vector<strange::operation> const &
 {
-    return _thing.operations_;
+    return _thing.operations();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::operations() -> strange::vector<strange::operation> &
 {
-    return _thing.operations_;
+    return _thing.operations();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::thing() const -> std::string const &
 {
-    return _thing.thing_;
+    return _thing.thing();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::thing() -> std::string &
 {
-    return _thing.thing_;
+    return _thing.thing();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::implementation() const -> std::string const &
 {
-    return _thing.implementation_;
+    return _thing.implementation();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::implementation() -> std::string &
 {
-    return _thing.implementation_;
+    return _thing.implementation();
 }
 
 template<typename _Thing, bool _Copy>
@@ -7252,25 +7252,25 @@ inline auto space::operator>=(space const & other) const -> bool
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::name() -> std::string &
 {
-    return _thing.name_;
+    return _thing.name();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::abstractions() const -> strange::vector<strange::abstraction> const &
 {
-    return _thing.abstractions_;
+    return _thing.abstractions();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::abstractions() -> strange::vector<strange::abstraction> &
 {
-    return _thing.abstractions_;
+    return _thing.abstractions();
 }
 
 template<typename _Thing, bool _Copy>
@@ -7399,61 +7399,61 @@ inline auto token::operator>=(token const & other) const -> bool
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::filename() const -> std::string const &
 {
-    return _thing.filename_;
+    return _thing.filename();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::filename() -> std::string &
 {
-    return _thing.filename_;
+    return _thing.filename();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::line() const -> int64_t const &
 {
-    return _thing.line_;
+    return _thing.line();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::line() -> int64_t &
 {
-    return _thing.line_;
+    return _thing.line();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::position() const -> int64_t const &
 {
-    return _thing.position_;
+    return _thing.position();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::position() -> int64_t &
 {
-    return _thing.position_;
+    return _thing.position();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::classification() const -> strange::comprehension::cls const &
 {
-    return _thing.classification_;
+    return _thing.classification();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::classification() -> strange::comprehension::cls &
 {
-    return _thing.classification_;
+    return _thing.classification();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::text() const -> std::string const &
 {
-    return _thing.text_;
+    return _thing.text();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::text() -> std::string &
 {
-    return _thing.text_;
+    return _thing.text();
 }
 
 template<typename _Thing, bool _Copy>

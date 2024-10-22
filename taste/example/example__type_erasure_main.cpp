@@ -12,7 +12,8 @@ struct implement
     // implement() = default;
     // implement(implement const&) = delete;
 
-    int x_ = 0;
+    auto x() const -> int const & { return x_; }
+    auto x() -> int & { return x_; }
 
     inline void display(example::button b) const
     {
@@ -54,6 +55,9 @@ struct implement
         std::cout << "get: " << x_ << std::endl;
         return x_;
     }
+
+private:
+    int x_ = 0;
 };
 
 template<typename Datatype>
@@ -62,7 +66,8 @@ struct implement_template
     // implement() = default;
     // implement(implement const&) = delete;
 
-    Datatype x_ = 0;
+    auto x() const -> Datatype const & { return x_; }
+    auto x() -> Datatype & { return x_; }
 
     inline void display(example::button b) const
     {
@@ -104,6 +109,9 @@ struct implement_template
         std::cout << "get: " << x_ << std::endl;
         return x_;
     }
+
+private:
+    Datatype x_ = 0;
 };
 
 void increment(example::number & num)

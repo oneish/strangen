@@ -1502,13 +1502,13 @@ inline auto numeric_<Data, _Thing, _Copy>::_instance::get() const -> Data
 template<typename Data, typename _Thing, bool _Copy>
 inline auto numeric_<Data, _Thing, _Copy>::_instance::x() const -> Data const &
 {
-    return _thing.x_;
+    return _thing.x();
 }
 
 template<typename Data, typename _Thing, bool _Copy>
 inline auto numeric_<Data, _Thing, _Copy>::_instance::x() -> Data &
 {
-    return _thing.x_;
+    return _thing.x();
 }
 
 }

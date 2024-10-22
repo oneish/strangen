@@ -885,13 +885,9 @@ namespace )#" << _space.name() << R"#(
                     }
                     _out << R"#(>(strange::_common::_shared)->)#" << operation.name();
                 }
-                if ((operation.modification().empty() && !inner) || (operation.customisation().empty() && !operation.data()))
+                if ((operation.modification().empty() && !inner) || operation.customisation().empty())
                 {
                     _operation_parameters(operation, false, false);
-                }
-                else if (operation.data())
-                {
-                    _out << R"#(_)#";
                 }
                 if ((!inner) && !operation.modification().empty())
                 {

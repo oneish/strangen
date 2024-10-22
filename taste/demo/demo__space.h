@@ -1349,13 +1349,13 @@ inline auto fruit_<_Thing, _Copy>::_instance::peeled() const -> bool
 template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::xxx() const -> std::string const &
 {
-    return _thing.xxx_;
+    return _thing.xxx();
 }
 
 template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::xxx() -> std::string &
 {
-    return _thing.xxx_;
+    return _thing.xxx();
 }
 
 template<typename Item>
