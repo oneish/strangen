@@ -650,17 +650,20 @@ namespace )#" << _space.name() << R"#(
         }
         for (auto const & operation : abstraction.operations())
         {
-            if ((implementation && (operation.implementation().empty() || (operation.data() && !operation.constness())))
-                || unique.count(operation))
+            if (unique.count(operation))
             {
                 continue;
             }
             unique.insert(operation);
             if (implementation)
             {
-                if (operation.data())
+                if (operation.implementation().empty())
                 {
-                    if (!definition)
+                    continue;
+                }
+                else if (operation.data())
+                {
+                    if (operation.constness() && !definition)
                     {
                         _out << R"#(    )#" << operation.result().substr(0, operation.result().length() - 7)
                             << operation.name() << R"#(_ )#" << operation.implementation() << R"#(;
