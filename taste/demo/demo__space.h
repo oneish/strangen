@@ -330,7 +330,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 struct food : any
@@ -539,7 +550,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return food_::_derived::_static_shared_to_base(std::make_shared<food_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 struct fruit : food
@@ -770,7 +792,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return fruit_::_derived::_static_shared_to_base(std::make_shared<fruit_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename Item>
@@ -1004,7 +1037,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return bunch_::_derived::_static_shared_to_base(std::make_shared<bunch_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 struct bunch_of_fruit : food, bunch<fruit>
@@ -1250,7 +1294,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return bunch_of_fruit_::_derived::_static_shared_to_base(std::make_shared<bunch_of_fruit_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 inline auto food::eat() -> void

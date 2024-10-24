@@ -354,7 +354,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 struct button : widget
@@ -579,7 +590,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 struct number : virtual strange::_common
@@ -789,7 +811,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 struct widget_number : widget, number
@@ -1017,7 +1050,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename Data>
@@ -1247,7 +1291,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 inline auto widget::display(button b = button()) const -> void

@@ -407,7 +407,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 )#";

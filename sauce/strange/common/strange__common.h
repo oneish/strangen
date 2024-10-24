@@ -1,6 +1,8 @@
 #pragma once
+#include <functional>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 
 namespace strange
@@ -34,6 +36,8 @@ protected:
     };
 
     std::shared_ptr<_common::_base> _shared;
+
+    static inline std::unordered_map<std::string, std::function<std::shared_ptr<_common::_base>()>> _factory_;
 
     inline _common() = default;
     inline _common(_common const &) = default;
@@ -209,6 +213,17 @@ public:
             return other;
         }
         return Other{};
+    }
+
+    template<typename Other>
+    static inline auto _construct(std::string const & name) -> Other
+    {
+        auto it = _factory_.find(name);
+        if (it == _factory_.end())
+        {
+            return Other{};
+        }
+        return Other{it->second()};
     }
 };
 }

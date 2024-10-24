@@ -638,7 +638,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename T>
@@ -888,7 +899,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return forward_const_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_const_iterator_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename T>
@@ -1150,7 +1172,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return forward_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_iterator_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename T>
@@ -1404,7 +1437,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return bidirectional_const_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_const_iterator_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename T>
@@ -1691,7 +1735,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return bidirectional_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_iterator_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename T>
@@ -2017,7 +2072,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return random_access_const_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_const_iterator_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename T>
@@ -2408,7 +2474,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return random_access_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_iterator_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 template<typename T>
@@ -2946,7 +3023,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return vector_::_derived::_static_shared_to_base(std::make_shared<vector_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 struct parameter : any
@@ -3221,7 +3309,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 }
@@ -3580,7 +3679,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return operation_::_derived::_static_shared_to_base(std::make_shared<operation_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 }
@@ -3942,7 +4052,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return abstraction_::_derived::_static_shared_to_base(std::make_shared<abstraction_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 }
@@ -4241,7 +4362,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return space_::_derived::_static_shared_to_base(std::make_shared<space_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 }
@@ -4561,7 +4693,18 @@ public:
 
     static inline bool const _copy_ = _Copy;
 
-    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return token_::_derived::_static_shared_to_base(std::make_shared<token_::_instance>());
+            });
+        }
+        return name;
+    }();
 };
 
 }
