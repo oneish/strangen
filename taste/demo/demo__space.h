@@ -43,7 +43,7 @@ namespace strange
 template<>
 struct reflection<demo::any>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::any";
     }
@@ -52,7 +52,7 @@ struct reflection<demo::any>
 template<typename _Thing, bool _Copy>
 struct reflection<demo::any_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::any_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -61,7 +61,7 @@ struct reflection<demo::any_<_Thing, _Copy>>
 template<>
 struct reflection<demo::food>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::food";
     }
@@ -70,7 +70,7 @@ struct reflection<demo::food>
 template<typename _Thing, bool _Copy>
 struct reflection<demo::food_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::food_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -79,7 +79,7 @@ struct reflection<demo::food_<_Thing, _Copy>>
 template<>
 struct reflection<demo::fruit>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::fruit";
     }
@@ -88,7 +88,7 @@ struct reflection<demo::fruit>
 template<typename _Thing, bool _Copy>
 struct reflection<demo::fruit_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::fruit_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -97,7 +97,7 @@ struct reflection<demo::fruit_<_Thing, _Copy>>
 template<typename Item>
 struct reflection<demo::bunch<Item>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::bunch<" + reflection<Item>::name() + ">";
     }
@@ -106,7 +106,7 @@ struct reflection<demo::bunch<Item>>
 template<typename Item, typename _Thing, bool _Copy>
 struct reflection<demo::bunch_<Item, _Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::bunch_<" + reflection<Item>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -115,7 +115,7 @@ struct reflection<demo::bunch_<Item, _Thing, _Copy>>
 template<>
 struct reflection<demo::bunch_of_fruit>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::bunch_of_fruit";
     }
@@ -124,7 +124,7 @@ struct reflection<demo::bunch_of_fruit>
 template<typename _Thing, bool _Copy>
 struct reflection<demo::bunch_of_fruit_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "demo::bunch_of_fruit_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -187,16 +187,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> any
+    static inline auto _make(_Args && ... _args) -> any
     {
         return any{any::_derived::_static_shared_to_base(std::make_shared<typename any_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Abstraction_ = any;
 
-    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(_cat_);
@@ -304,7 +304,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> any_
+    static inline auto _make_(_Args && ... _args) -> any_
     {
         return any_{any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -328,9 +328,9 @@ public:
     using _Kind_ = any_;
     using _Thing_ = _Thing;
 
-    inline static bool const _copy_ = _Copy;
+    static inline bool const _copy_ = _Copy;
 
-    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct food : any
@@ -391,16 +391,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> food
+    static inline auto _make(_Args && ... _args) -> food
     {
         return food{food::_derived::_static_shared_to_base(std::make_shared<typename food_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Abstraction_ = food;
 
-    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
@@ -513,7 +513,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> food_
+    static inline auto _make_(_Args && ... _args) -> food_
     {
         return food_{food_::_derived::_static_shared_to_base(std::make_shared<food_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -537,9 +537,9 @@ public:
     using _Kind_ = food_;
     using _Thing_ = _Thing;
 
-    inline static bool const _copy_ = _Copy;
+    static inline bool const _copy_ = _Copy;
 
-    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct fruit : food
@@ -606,16 +606,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> fruit
+    static inline auto _make(_Args && ... _args) -> fruit
     {
         return fruit{fruit::_derived::_static_shared_to_base(std::make_shared<typename fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Abstraction_ = fruit;
 
-    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(food::_cats_.cbegin(), food::_cats_.cend());
@@ -744,7 +744,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> fruit_
+    static inline auto _make_(_Args && ... _args) -> fruit_
     {
         return fruit_{fruit_::_derived::_static_shared_to_base(std::make_shared<fruit_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -768,9 +768,9 @@ public:
     using _Kind_ = fruit_;
     using _Thing_ = _Thing;
 
-    inline static bool const _copy_ = _Copy;
+    static inline bool const _copy_ = _Copy;
 
-    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 template<typename Item>
@@ -840,16 +840,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> bunch
+    static inline auto _make(_Args && ... _args) -> bunch
     {
         return bunch{bunch::_derived::_static_shared_to_base(std::make_shared<typename bunch_<Item, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Abstraction_ = bunch;
 
-    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
@@ -978,7 +978,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> bunch_
+    static inline auto _make_(_Args && ... _args) -> bunch_
     {
         return bunch_{bunch_::_derived::_static_shared_to_base(std::make_shared<bunch_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -1002,9 +1002,9 @@ public:
     using _Kind_ = bunch_;
     using _Thing_ = _Thing;
 
-    inline static bool const _copy_ = _Copy;
+    static inline bool const _copy_ = _Copy;
 
-    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 struct bunch_of_fruit : food, bunch<fruit>
@@ -1073,16 +1073,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> bunch_of_fruit
+    static inline auto _make(_Args && ... _args) -> bunch_of_fruit
     {
         return bunch_of_fruit{bunch_of_fruit::_derived::_static_shared_to_base(std::make_shared<typename bunch_of_fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Abstraction_ = bunch_of_fruit;
 
-    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(food::_cats_.cbegin(), food::_cats_.cend());
@@ -1224,7 +1224,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> bunch_of_fruit_
+    static inline auto _make_(_Args && ... _args) -> bunch_of_fruit_
     {
         return bunch_of_fruit_{bunch_of_fruit_::_derived::_static_shared_to_base(std::make_shared<bunch_of_fruit_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -1248,9 +1248,9 @@ public:
     using _Kind_ = bunch_of_fruit_;
     using _Thing_ = _Thing;
 
-    inline static bool const _copy_ = _Copy;
+    static inline bool const _copy_ = _Copy;
 
-    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 inline auto food::eat() -> void

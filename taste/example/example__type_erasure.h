@@ -43,7 +43,7 @@ namespace strange
 template<>
 struct reflection<example::widget>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::widget";
     }
@@ -52,7 +52,7 @@ struct reflection<example::widget>
 template<typename _Thing, bool _Copy>
 struct reflection<example::widget_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::widget_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -61,7 +61,7 @@ struct reflection<example::widget_<_Thing, _Copy>>
 template<>
 struct reflection<example::button>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::button";
     }
@@ -70,7 +70,7 @@ struct reflection<example::button>
 template<typename _Thing, bool _Copy>
 struct reflection<example::button_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::button_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -79,7 +79,7 @@ struct reflection<example::button_<_Thing, _Copy>>
 template<>
 struct reflection<example::number>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::number";
     }
@@ -88,7 +88,7 @@ struct reflection<example::number>
 template<typename _Thing, bool _Copy>
 struct reflection<example::number_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::number_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -97,7 +97,7 @@ struct reflection<example::number_<_Thing, _Copy>>
 template<>
 struct reflection<example::widget_number>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::widget_number";
     }
@@ -106,7 +106,7 @@ struct reflection<example::widget_number>
 template<typename _Thing, bool _Copy>
 struct reflection<example::widget_number_<_Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::widget_number_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -115,7 +115,7 @@ struct reflection<example::widget_number_<_Thing, _Copy>>
 template<typename Data>
 struct reflection<example::numeric<Data>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::numeric<" + reflection<Data>::name() + ">";
     }
@@ -124,7 +124,7 @@ struct reflection<example::numeric<Data>>
 template<typename Data, typename _Thing, bool _Copy>
 struct reflection<example::numeric_<Data, _Thing, _Copy>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "example::numeric_<" + reflection<Data>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
@@ -195,16 +195,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget
+    static inline auto _make(_Args && ... _args) -> widget
     {
         return widget{widget::_derived::_static_shared_to_base(std::make_shared<typename widget_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Kind_ = widget;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Kind_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(_cat_);
@@ -324,7 +324,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> widget_
+    static inline auto _make_(_Args && ... _args) -> widget_
     {
         return widget_{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -348,7 +348,7 @@ public:
     using _Abstraction_ = widget_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
 struct button : widget
@@ -409,16 +409,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> button
+    static inline auto _make(_Args && ... _args) -> button
     {
         return button{button::_derived::_static_shared_to_base(std::make_shared<typename button_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Kind_ = button;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Kind_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(widget::_cats_.cbegin(), widget::_cats_.cend());
@@ -543,7 +543,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> button_
+    static inline auto _make_(_Args && ... _args) -> button_
     {
         return button_{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -567,7 +567,7 @@ public:
     using _Abstraction_ = button_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
 struct number : virtual strange::_common
@@ -626,16 +626,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> number
+    static inline auto _make(_Args && ... _args) -> number
     {
         return number{number::_derived::_static_shared_to_base(std::make_shared<typename number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Kind_ = number;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Kind_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(_cat_);
@@ -747,7 +747,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> number_
+    static inline auto _make_(_Args && ... _args) -> number_
     {
         return number_{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -771,7 +771,7 @@ public:
     using _Abstraction_ = number_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
 struct widget_number : widget, number
@@ -834,16 +834,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> widget_number
+    static inline auto _make(_Args && ... _args) -> widget_number
     {
         return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<typename widget_number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Kind_ = widget_number;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Kind_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(widget::_cats_.cbegin(), widget::_cats_.cend());
@@ -969,7 +969,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> widget_number_
+    static inline auto _make_(_Args && ... _args) -> widget_number_
     {
         return widget_number_{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -993,7 +993,7 @@ public:
     using _Abstraction_ = widget_number_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
 template<typename Data>
@@ -1059,16 +1059,16 @@ public:
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> numeric
+    static inline auto _make(_Args && ... _args) -> numeric
     {
         return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<Data, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     using _Kind_ = numeric;
 
-    inline static std::string const _cat_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Kind_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
         cats.insert(number::_cats_.cbegin(), number::_cats_.cend());
@@ -1193,7 +1193,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> numeric_
+    static inline auto _make_(_Args && ... _args) -> numeric_
     {
         return numeric_{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -1217,7 +1217,7 @@ public:
     using _Abstraction_ = numeric_;
     using _Thing_ = _Thing;
 
-    inline static std::string const _name_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _name_ = strange::reflection<_Abstraction_>::name();
 };
 
 template<typename _Thing, bool _Copy>

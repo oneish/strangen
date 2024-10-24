@@ -79,7 +79,7 @@ namespace strange
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return ")#" << _space.name() << R"#(::)#" << abstraction.name();
             _abstraction_parameters(abstraction, false, false, false, true);
@@ -93,7 +93,7 @@ namespace strange
             _abstraction_parameters(abstraction, false, false, true, false);
             _out << R"#(>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return ")#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(_)#";
             _abstraction_parameters(abstraction, false, false, true, true);
@@ -110,7 +110,7 @@ namespace strange
                 _abstraction_parameters(abstraction, false, false, false, true);
                 _out << R"#(>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return ")#" << abstraction.implementation();
                 _abstraction_parameters(abstraction, false, false, false, true);
@@ -223,7 +223,7 @@ public:
         _out << R"#( = )#" << abstraction.thing();
     }
     _out << R"#(, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    inline static auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(
+    static inline auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(
     {
         return )#" << abstraction.name() << R"#({)#" << abstraction.name() << R"#(::_derived::_static_shared_to_base(std::make_shared<typename )#"
             << abstraction.name() << R"#(_)#";
@@ -233,9 +233,9 @@ public:
 
     using _Abstraction_ = )#" << abstraction.name() << R"#(;
 
-    inline static std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
 
-    inline static std::unordered_set<std::string> const _cats_ = []()
+    static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
 )#";
@@ -381,7 +381,7 @@ private:
 
 public:
     template<typename ... _Args>
-    inline static auto _make_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
+    static inline auto _make_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
     {
         return )#" << abstraction.name() << R"#(_{)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
     }
@@ -405,9 +405,9 @@ public:
     using _Kind_ = )#" << abstraction.name() << R"#(_;
     using _Thing_ = _Thing;
 
-    inline static bool const _copy_ = _Copy;
+    static inline bool const _copy_ = _Copy;
 
-    inline static std::string const _name_ = strange::reflection<_Kind_>::name();
+    static inline std::string const _name_ = strange::reflection<_Kind_>::name();
 };
 
 )#";

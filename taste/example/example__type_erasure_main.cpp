@@ -125,7 +125,7 @@ namespace strange
 template<>
 struct reflection<implement>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "implement";
     }
@@ -134,7 +134,7 @@ struct reflection<implement>
 template<typename Datatype>
 struct reflection<implement_template<Datatype>>
 {
-    inline static auto name() -> std::string
+    static inline auto name() -> std::string
     {
         return "implement_template<" + reflection<Datatype>::name() + ">";
     }

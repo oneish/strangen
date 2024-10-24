@@ -45,12 +45,12 @@ struct toker
     {
     }
 
-    inline static auto alpha_char(char c) -> bool
+    static inline auto alpha_char(char c) -> bool
     {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_';
 	}
 
-    inline static auto numeric_char(char c) -> bool
+    static inline auto numeric_char(char c) -> bool
     {
         return c >= '0' && c <= '9';
     }
