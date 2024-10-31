@@ -2561,19 +2561,19 @@ protected:
 
         virtual auto operator=(std::initializer_list<T> ilist) -> void = 0;
 
-        virtual auto assign(size_t count, T const & value) -> void = 0;
+        virtual auto assign(std::size_t count, T const & value) -> void = 0;
 
         virtual auto assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void = 0;
 
         virtual auto assign(std::initializer_list<T> ilist) -> void = 0;
 
-        virtual auto at(size_t pos) -> T & = 0;
+        virtual auto at(std::size_t pos) -> T & = 0;
 
-        virtual auto at(size_t pos) const -> T const & = 0;
+        virtual auto at(std::size_t pos) const -> T const & = 0;
 
-        virtual auto operator[](size_t pos) -> T & = 0;
+        virtual auto operator[](std::size_t pos) -> T & = 0;
 
-        virtual auto operator[](size_t pos) const -> T const & = 0;
+        virtual auto operator[](std::size_t pos) const -> T const & = 0;
 
         virtual auto front() -> T & = 0;
 
@@ -2613,13 +2613,13 @@ protected:
 
         virtual auto empty() const -> bool = 0;
 
-        virtual auto size() const -> size_t = 0;
+        virtual auto size() const -> std::size_t = 0;
 
-        virtual auto max_size() const -> size_t = 0;
+        virtual auto max_size() const -> std::size_t = 0;
 
-        virtual auto reserve(size_t new_cap) -> void = 0;
+        virtual auto reserve(std::size_t new_cap) -> void = 0;
 
-        virtual auto capacity() const -> size_t = 0;
+        virtual auto capacity() const -> std::size_t = 0;
 
         virtual auto shrink_to_fit() -> void = 0;
 
@@ -2629,7 +2629,7 @@ protected:
 
         virtual auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T> = 0;
 
-        virtual auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T> = 0;
+        virtual auto insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T> = 0;
 
         virtual auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T> = 0;
 
@@ -2645,9 +2645,9 @@ protected:
 
         virtual auto pop_back() -> void = 0;
 
-        virtual auto resize(size_t count) -> void = 0;
+        virtual auto resize(std::size_t count) -> void = 0;
 
-        virtual auto resize(size_t count, T const & value) -> void = 0;
+        virtual auto resize(std::size_t count, T const & value) -> void = 0;
 
         virtual auto swap(vector<T> & other) -> void = 0;
 
@@ -2690,19 +2690,19 @@ public:
 
     inline auto operator=(std::initializer_list<T> ilist) -> vector &;
 
-    inline auto assign(size_t count, T const & value) -> void;
+    inline auto assign(std::size_t count, T const & value) -> void;
 
     inline auto assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void;
 
     inline auto assign(std::initializer_list<T> ilist) -> void;
 
-    inline auto at(size_t pos) -> T &;
+    inline auto at(std::size_t pos) -> T &;
 
-    inline auto at(size_t pos) const -> T const &;
+    inline auto at(std::size_t pos) const -> T const &;
 
-    inline auto operator[](size_t pos) -> T &;
+    inline auto operator[](std::size_t pos) -> T &;
 
-    inline auto operator[](size_t pos) const -> T const &;
+    inline auto operator[](std::size_t pos) const -> T const &;
 
     inline auto front() -> T &;
 
@@ -2742,13 +2742,13 @@ public:
 
     inline auto empty() const -> bool;
 
-    inline auto size() const -> size_t;
+    inline auto size() const -> std::size_t;
 
-    inline auto max_size() const -> size_t;
+    inline auto max_size() const -> std::size_t;
 
-    inline auto reserve(size_t new_cap) -> void;
+    inline auto reserve(std::size_t new_cap) -> void;
 
-    inline auto capacity() const -> size_t;
+    inline auto capacity() const -> std::size_t;
 
     inline auto shrink_to_fit() -> void;
 
@@ -2758,7 +2758,7 @@ public:
 
     inline auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>;
 
-    inline auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>;
+    inline auto insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T>;
 
     inline auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>;
 
@@ -2774,9 +2774,9 @@ public:
 
     inline auto pop_back() -> void;
 
-    inline auto resize(size_t count) -> void;
+    inline auto resize(std::size_t count) -> void;
 
-    inline auto resize(size_t count, T const & value) -> void;
+    inline auto resize(std::size_t count, T const & value) -> void;
 
     inline auto swap(vector<T> & other) -> void;
 
@@ -2890,19 +2890,19 @@ private:
 
         inline auto operator=(std::initializer_list<T> ilist) -> void final;
 
-        inline auto assign(size_t count, T const & value) -> void final;
+        inline auto assign(std::size_t count, T const & value) -> void final;
 
         inline auto assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void final;
 
         inline auto assign(std::initializer_list<T> ilist) -> void final;
 
-        inline auto at(size_t pos) -> T & final;
+        inline auto at(std::size_t pos) -> T & final;
 
-        inline auto at(size_t pos) const -> T const & final;
+        inline auto at(std::size_t pos) const -> T const & final;
 
-        inline auto operator[](size_t pos) -> T & final;
+        inline auto operator[](std::size_t pos) -> T & final;
 
-        inline auto operator[](size_t pos) const -> T const & final;
+        inline auto operator[](std::size_t pos) const -> T const & final;
 
         inline auto front() -> T & final;
 
@@ -2942,13 +2942,13 @@ private:
 
         inline auto empty() const -> bool final;
 
-        inline auto size() const -> size_t final;
+        inline auto size() const -> std::size_t final;
 
-        inline auto max_size() const -> size_t final;
+        inline auto max_size() const -> std::size_t final;
 
-        inline auto reserve(size_t new_cap) -> void final;
+        inline auto reserve(std::size_t new_cap) -> void final;
 
-        inline auto capacity() const -> size_t final;
+        inline auto capacity() const -> std::size_t final;
 
         inline auto shrink_to_fit() -> void final;
 
@@ -2958,7 +2958,7 @@ private:
 
         inline auto insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T> final;
 
-        inline auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T> final;
+        inline auto insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T> final;
 
         inline auto insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T> final;
 
@@ -2974,9 +2974,9 @@ private:
 
         inline auto pop_back() -> void final;
 
-        inline auto resize(size_t count) -> void final;
+        inline auto resize(std::size_t count) -> void final;
 
-        inline auto resize(size_t count, T const & value) -> void final;
+        inline auto resize(std::size_t count, T const & value) -> void final;
 
         inline auto swap(vector<T> & other) -> void final;
 
@@ -6037,7 +6037,7 @@ inline auto vector<T>::operator=(std::initializer_list<T> ilist) -> vector &
 }
 
 template<typename T>
-inline auto vector<T>::assign(size_t count, T const & value) -> void
+inline auto vector<T>::assign(std::size_t count, T const & value) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->assign(count, value);
@@ -6058,27 +6058,27 @@ inline auto vector<T>::assign(std::initializer_list<T> ilist) -> void
 }
 
 template<typename T>
-inline auto vector<T>::at(size_t pos) -> T &
+inline auto vector<T>::at(std::size_t pos) -> T &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->at(pos);
 }
 
 template<typename T>
-inline auto vector<T>::at(size_t pos) const -> T const &
+inline auto vector<T>::at(std::size_t pos) const -> T const &
 {
     return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->at(pos);
 }
 
 template<typename T>
-inline auto vector<T>::operator[](size_t pos) -> T &
+inline auto vector<T>::operator[](std::size_t pos) -> T &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->operator[](pos);
 }
 
 template<typename T>
-inline auto vector<T>::operator[](size_t pos) const -> T const &
+inline auto vector<T>::operator[](std::size_t pos) const -> T const &
 {
     return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->operator[](pos);
 }
@@ -6205,26 +6205,26 @@ inline auto vector<T>::empty() const -> bool
 }
 
 template<typename T>
-inline auto vector<T>::size() const -> size_t
+inline auto vector<T>::size() const -> std::size_t
 {
     return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->size();
 }
 
 template<typename T>
-inline auto vector<T>::max_size() const -> size_t
+inline auto vector<T>::max_size() const -> std::size_t
 {
     return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->max_size();
 }
 
 template<typename T>
-inline auto vector<T>::reserve(size_t new_cap) -> void
+inline auto vector<T>::reserve(std::size_t new_cap) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->reserve(new_cap);
 }
 
 template<typename T>
-inline auto vector<T>::capacity() const -> size_t
+inline auto vector<T>::capacity() const -> std::size_t
 {
     return std::dynamic_pointer_cast<typename vector<T>::_derived const>(strange::_common::_shared)->capacity();
 }
@@ -6262,7 +6262,7 @@ inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> 
 }
 
 template<typename T>
-inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
+inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
     auto const index = pos - cbegin();
     strange::_common::_mutate(); // could invalidate iterators
@@ -6330,14 +6330,14 @@ inline auto vector<T>::pop_back() -> void
 }
 
 template<typename T>
-inline auto vector<T>::resize(size_t count) -> void
+inline auto vector<T>::resize(std::size_t count) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->resize(count);
 }
 
 template<typename T>
-inline auto vector<T>::resize(size_t count, T const & value) -> void
+inline auto vector<T>::resize(std::size_t count, T const & value) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->resize(count, value);
@@ -6393,7 +6393,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::operator=(std::initializer_lis
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::assign(size_t count, T const & value) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(std::size_t count, T const & value) -> void
 {
     _thing.assign(count, value);
 }
@@ -6411,25 +6411,25 @@ inline auto vector_<T, _Thing, _Copy>::_instance::assign(std::initializer_list<T
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) -> T &
+inline auto vector_<T, _Thing, _Copy>::_instance::at(std::size_t pos) -> T &
 {
     return _thing.at(pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::at(size_t pos) const -> T const &
+inline auto vector_<T, _Thing, _Copy>::_instance::at(std::size_t pos) const -> T const &
 {
     return _thing.at(pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) -> T &
+inline auto vector_<T, _Thing, _Copy>::_instance::operator[](std::size_t pos) -> T &
 {
     return _thing.operator[](pos);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::operator[](size_t pos) const -> T const &
+inline auto vector_<T, _Thing, _Copy>::_instance::operator[](std::size_t pos) const -> T const &
 {
     return _thing.operator[](pos);
 }
@@ -6549,25 +6549,25 @@ inline auto vector_<T, _Thing, _Copy>::_instance::empty() const -> bool
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::size() const -> size_t
+inline auto vector_<T, _Thing, _Copy>::_instance::size() const -> std::size_t
 {
     return _thing.size();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::max_size() const -> size_t
+inline auto vector_<T, _Thing, _Copy>::_instance::max_size() const -> std::size_t
 {
     return _thing.max_size();
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::reserve(size_t new_cap) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::reserve(std::size_t new_cap) -> void
 {
     _thing.reserve(new_cap);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::capacity() const -> size_t
+inline auto vector_<T, _Thing, _Copy>::_instance::capacity() const -> std::size_t
 {
     return _thing.capacity();
 }
@@ -6597,7 +6597,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::rando
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>
+inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
     return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value));
 }
@@ -6645,13 +6645,13 @@ inline auto vector_<T, _Thing, _Copy>::_instance::pop_back() -> void
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::resize(std::size_t count) -> void
 {
     _thing.resize(count);
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::resize(size_t count, T const & value) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::resize(std::size_t count, T const & value) -> void
 {
     _thing.resize(count, value);
 }

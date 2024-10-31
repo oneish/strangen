@@ -188,19 +188,19 @@ namespace strange
         [[strange::result("*this")]]
         auto operator=(std::initializer_list<T> ilist) -> void;
 
-        auto assign(size_t count, T const & value) -> void;
+        auto assign(std::size_t count, T const & value) -> void;
 
         auto assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void;
 
         auto assign(std::initializer_list<T> ilist) -> void;
 
-        auto at(size_t pos) -> T &;
+        auto at(std::size_t pos) -> T &;
 
-        auto at(size_t pos) const -> T const &;
+        auto at(std::size_t pos) const -> T const &;
 
-        auto operator[](size_t pos) -> T &;
+        auto operator[](std::size_t pos) -> T &;
 
-        auto operator[](size_t pos) const -> T const &;
+        auto operator[](std::size_t pos) const -> T const &;
 
         auto front() -> T &;
 
@@ -252,13 +252,13 @@ namespace strange
 
         auto empty() const -> bool;
 
-        auto size() const -> size_t;
+        auto size() const -> std::size_t;
 
-        auto max_size() const -> size_t;
+        auto max_size() const -> std::size_t;
 
-        auto reserve(size_t new_cap) -> void;
+        auto reserve(std::size_t new_cap) -> void;
 
-        auto capacity() const -> size_t;
+        auto capacity() const -> std::size_t;
 
         auto shrink_to_fit() -> void;
 
@@ -283,7 +283,7 @@ namespace strange
         "    pos = cbegin() + index;"
         "    return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);")]]
         [[strange::customisation("return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value))")]]
-        auto insert(typename strange::random_access_const_iterator<T> pos, size_t count, T const & value) -> typename strange::random_access_iterator<T>;
+        auto insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T>;
 
         [[strange::modification("auto const index = pos - cbegin();"
         "    strange::_common::_mutate(); // could invalidate iterators"
@@ -321,9 +321,9 @@ namespace strange
 
         auto pop_back() -> void;
 
-        auto resize(size_t count) -> void;
+        auto resize(std::size_t count) -> void;
 
-        auto resize(size_t count, T const & value) -> void;
+        auto resize(std::size_t count, T const & value) -> void;
 
         [[strange::customisation("_thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing())")]]
         auto swap(vector<T> & other) -> void;
@@ -526,4 +526,121 @@ namespace strange
         [[strange::customisation("return !operator<(other)")]]
         auto operator>=(token const & other) const -> bool;
     };
+/*
+    struct stuff : any
+    {
+        auto pack(bag & dest) const -> void;
+        auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
+        auto unpack(bag const & src) -> void;
+        auto unpack(bag const & src, std::vector<any> & unique) -> void;
+    };
+
+    struct bag : stuff
+    {
+        auto is_null() const -> bool;
+        auto from_null() -> void;
+        auto make_null() const -> bag;
+
+        auto is_bool() const -> bool;
+        auto as_bool(bool & dest) const -> void;
+        auto to_bool() const -> bool;
+        auto from_bool() -> void;
+        auto from_bool(bool src) -> void;
+        auto make_bool() const -> bag;
+        auto make_bool(bool src) const -> bag;
+
+        auto is_int64() const -> bool;
+        auto as_int64(int64_t & dest) const -> void;
+        auto to_int64() const -> int64_t;
+        auto from_int64() -> void;
+        auto from_int64(int64_t src) -> void;
+        auto make_int64() const -> bag;
+        auto make_int64(int64_t src) const -> bag;
+
+        auto is_double() const -> bool;
+        auto as_double(double & dest) const -> void;
+        auto to_double() const -> double;
+        auto from_double() -> void;
+        auto from_double(double src) -> void;
+        auto make_double() const -> bag;
+        auto make_double(double src) const -> bag;
+
+        auto is_string() const -> bool;
+        auto as_string(std::string & dest) const -> void;
+        auto to_string() const -> std::string;
+        auto from_string() -> void;
+        auto from_string(std::string const & src) -> void;
+        auto make_string() const -> bag;
+        auto make_string(std::string const & src) const -> bag;
+
+        auto is_array() const -> bool;
+        auto as_array(std::vector<bag> & dest) const -> void;
+        auto to_array() const -> std::vector<bag>;
+        auto from_array() -> void;
+        auto from_array(std::vector<bag> const & src) -> void;
+        auto make_array() const -> bag;
+        auto make_array(std::vector<bag> const & src) const -> bag;
+        auto at_array(std::size_t index) const -> bag;
+        auto front_array() const -> bag;
+        auto back_array() const -> bag;
+        auto begin_array() -> bidirectional_iterator<bag>;
+        auto begin_array() const -> bidirectional_const_iterator<bag>;
+        auto cbegin_array() const -> bidirectional_const_iterator<bag>;
+        auto end_array() -> bidirectional_iterator<bag>;
+        auto end_array() const -> bidirectional_const_iterator<bag>;
+        auto cend_array() const -> bidirectional_const_iterator<bag>;
+        auto rbegin_array() -> bidirectional_iterator<bag>;
+        auto rbegin_array() const -> bidirectional_const_iterator<bag>;
+        auto crbegin_array() const -> bidirectional_const_iterator<bag>;
+        auto rend_array() -> bidirectional_iterator<bag>;
+        auto rend_array() const -> bidirectional_const_iterator<bag>;
+        auto crend_array() const -> bidirectional_const_iterator<bag>;
+        auto empty_array() const -> bool;
+        auto size_array() const -> std::size_t;
+        auto reserve_array(std::size_t new_cap) -> void;
+        auto capacity_array() const -> std::size_t;
+        auto clear_array() -> void;
+
+        // push_front, pop_front, push_back, pop_back,
+        // erase, resize, get,
+        // at_front, at_back, front, back,
+        // insert, set
+
+        auto is_object() const -> bool;
+        auto as_object(std::unordered_map<std::string, bag> & dest) const -> void;
+        auto to_object() const -> std::unordered_map<std::string, bag>;
+        auto from_object() -> void;
+        auto from_object(std::unordered_map<std::string, bag> const & src) -> void;
+        auto make_object() const -> bag;
+        auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag;
+        auto at_object(std::string const & key) const -> bag;
+
+        // add_field, remove_field, insert, set, erase, clear,
+        // inject, project, operator[], get, find, find_key,
+        // keys, has_key, size, begin, end, key_begin, key_end,
+        // empty, cbegin, cend, rbegin, rend, kvbegin, kvend
+
+        auto is_any() const -> bool;
+        auto as_any(any & dest) const -> void;
+        auto as_any(any & dest, std::vector<any> & unique) const -> void;
+        auto to_any() const -> any;
+        auto to_any(std::vector<any> & unique) const -> any;
+        auto from_any() -> void;
+        auto from_any(any const & src) -> void;
+        auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void;
+        auto make_any() const -> bag;
+        auto make_any(any const & src) const -> bag;
+        auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag;
+    };
+
+    struct package : stuff
+    {
+        // seal, sealed, unseal, from_json, to_json,
+        // from_binary, to_binary, from_yaml, to_yaml
+    };
+
+    struct baggage : bag, package
+    {
+    };
+*/
 }

@@ -287,7 +287,7 @@ struct parser
                 err = "parse_abstraction_template() expected '=', ',' or '>', but got punctuation";
                 return;
             }
-            parse_argument(param.argument(), true);
+            parse_argument(param.argument());
             if (!err.empty())
             {
                 err = "parse_abstraction_template() " + err;
@@ -311,7 +311,7 @@ struct parser
         for (;;)
         {
             std::string parent;
-            parse_argument(parent, false, true);
+            parse_argument(parent, true);
             if (!err.empty())
             {
                 err = "parse_abstraction_parents() " + err;
@@ -688,6 +688,7 @@ struct parser
         for (;;)
         {
             auto param = strange::parameter::_make();
+            int64_t angle = 0;
             for (;;)
             {
                 parse_name_or_punctuation(true);
@@ -696,7 +697,20 @@ struct parser
                     err = "parse_operation_parameters() " + err;
                     return;
                 }
-                if (tok.text() == "=" || tok.text() == "," || tok.text() == ")")
+                if (tok.text() == "<")
+                {
+                    ++angle;
+                }
+                else if (tok.text() == ">")
+                {
+                    --angle;
+                    if (angle < 0)
+                    {
+                        err = "parse_operation_parameters() mismatched '>'";
+                        return;
+                    }
+                }
+                else if (angle == 0 && (tok.text() == "=" || tok.text() == "," || tok.text() == ")"))
                 {
                     rtrim(param.type());
                     param.type() = param.type().substr(0, param.type().length() - param.name().length());
@@ -912,9 +926,9 @@ struct parser
         err = "parse_name_or_punctuation() reached end of tokens";
     }
 
-    void parse_argument(std::string & arg, bool templ = false, bool parent = false)
+    void parse_argument(std::string & arg, bool parent = false)
     {
-        int64_t angle = (templ && arg == "<") ? 1 : 0;
+        int64_t angle = arg == "<" ? 1 : 0;
         int64_t curly = arg == "{" ? 1 : 0;
         int64_t round = arg == "(" ? 1 : 0;
         int64_t square = arg == "[" ? 1 : 0;
@@ -940,17 +954,11 @@ struct parser
                 case cls::punctuation:
                     if (tok.text() == "<")
                     {
-                        if (templ)
-                        {
-                            ++angle;
-                        }
+                        ++angle;
                     }
                     else if (tok.text() == ">")
                     {
-                        if (templ)
-                        {
-                            --angle;
-                        }
+                        --angle;
                     }
                     else if (tok.text() == "{")
                     {
