@@ -580,9 +580,12 @@ namespace strange
         auto from_array(std::vector<bag> const & src) -> void;
         auto make_array() const -> bag;
         auto make_array(std::vector<bag> const & src) const -> bag;
-        auto at_array(std::size_t index) const -> bag;
-        auto front_array() const -> bag;
-        auto back_array() const -> bag;
+        auto at_array(std::size_t index) const -> bag const &;
+        auto at_array(std::size_t index) -> bag &;
+        auto front_array() const -> bag const &;
+        auto front_array() -> bag &;
+        auto back_array() const -> bag const &;
+        auto back_array() -> bag &;
         auto begin_array() -> bidirectional_iterator<bag>;
         auto begin_array() const -> bidirectional_const_iterator<bag>;
         auto cbegin_array() const -> bidirectional_const_iterator<bag>;
@@ -601,10 +604,28 @@ namespace strange
         auto capacity_array() const -> std::size_t;
         auto clear_array() -> void;
 
-        // push_front, pop_front, push_back, pop_back,
-        // erase, resize, get,
-        // at_front, at_back, front, back,
-        // insert, set
+        [[strange::modification("auto const index = pos - cbegin_array();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
+        "    pos = cbegin_array() + index;"
+        "    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_array(pos, value);")]]
+        [[strange::customisation("return bidirectional_iterator<bag>::template _make<decltype(_thing.begin_array())>(_thing.insert_array(pos.template _static<bidirectional_const_iterator_<bag, decltype(_thing.cbegin_array())>>()._thing(), value))")]]
+        auto insert_array(typename strange::bidirectional_const_iterator<bag> pos, bag const & value) -> typename strange::bidirectional_iterator<bag>;
+
+        [[strange::modification("auto const index = pos - cbegin_array();"
+        "    strange::_common::_mutate(); // could invalidate iterators"
+        "    pos = cbegin_array() + index;"
+        "    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_array(pos);")]]
+        [[strange::customisation("return bidirectional_iterator<bag>::template _make<decltype(_thing.begin_array())>(_thing.erase_array(pos.template _static<bidirectional_const_iterator_<bag, decltype(_thing.cbegin_array())>>()._thing()))")]]
+        auto erase_array(typename strange::bidirectional_const_iterator<bag> pos) -> typename strange::bidirectional_iterator<bag>;
+
+        auto push_front_array(bag const & value) -> void;
+        auto push_back_array(bag const & value) -> void;
+        auto pop_front_array() -> void;
+        auto pop_back_array() -> void;
+        auto resize_array(std::size_t count) -> void;
+
+        [[strange::customisation("_thing.swap_array(other.template _static<bag_<_Thing, _Copy>>()._thing())")]]
+        auto swap_array(bag & other) -> void;
 
         auto is_object() const -> bool;
         auto as_object(std::unordered_map<std::string, bag> & dest) const -> void;
