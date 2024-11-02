@@ -642,5 +642,18 @@ namespace strange
     struct baggage : bag, package
     {
     };
+
+    template<typename R, typename ... Args>
+    struct [[strange::thing("std::function<R(Args ...)>")]]
+    const_function<R(Args ...)> : any
+    {
+        auto operator()(Args && ... args) const -> R;
+    };
+
+    template<typename R, typename ... Args>
+    struct function<R(Args ...)> : any
+    {
+        auto operator()(Args && ... args) -> R;
+    };
 */
 }
