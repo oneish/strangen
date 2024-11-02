@@ -537,6 +537,9 @@ namespace strange
 
     struct bag : stuff
     {
+        [[strange::customisation("_thing.swap(other.template _static<bag_<_Thing, _Copy>>()._thing())")]]
+        auto swap(bag & other) -> void;
+
         auto is_null() const -> bool;
         auto from_null() -> void;
         auto make_null() const -> bag;
@@ -603,29 +606,13 @@ namespace strange
         auto reserve_array(std::size_t new_cap) -> void;
         auto capacity_array() const -> std::size_t;
         auto clear_array() -> void;
-
-        [[strange::modification("auto const index = pos - cbegin_array();"
-        "    strange::_common::_mutate(); // could invalidate iterators"
-        "    pos = cbegin_array() + index;"
-        "    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_array(pos, value);")]]
-        [[strange::customisation("return bidirectional_iterator<bag>::template _make<decltype(_thing.begin_array())>(_thing.insert_array(pos.template _static<bidirectional_const_iterator_<bag, decltype(_thing.cbegin_array())>>()._thing(), value))")]]
-        auto insert_array(typename strange::bidirectional_const_iterator<bag> pos, bag const & value) -> typename strange::bidirectional_iterator<bag>;
-
-        [[strange::modification("auto const index = pos - cbegin_array();"
-        "    strange::_common::_mutate(); // could invalidate iterators"
-        "    pos = cbegin_array() + index;"
-        "    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_array(pos);")]]
-        [[strange::customisation("return bidirectional_iterator<bag>::template _make<decltype(_thing.begin_array())>(_thing.erase_array(pos.template _static<bidirectional_const_iterator_<bag, decltype(_thing.cbegin_array())>>()._thing()))")]]
-        auto erase_array(typename strange::bidirectional_const_iterator<bag> pos) -> typename strange::bidirectional_iterator<bag>;
-
+        auto insert_array(std::size_t pos, bag const & value) -> void;
+        auto erase_array(std::size_t pos) -> void;
         auto push_front_array(bag const & value) -> void;
         auto push_back_array(bag const & value) -> void;
         auto pop_front_array() -> void;
         auto pop_back_array() -> void;
         auto resize_array(std::size_t count) -> void;
-
-        [[strange::customisation("_thing.swap_array(other.template _static<bag_<_Thing, _Copy>>()._thing())")]]
-        auto swap_array(bag & other) -> void;
 
         auto is_object() const -> bool;
         auto as_object(std::unordered_map<std::string, bag> & dest) const -> void;
@@ -635,11 +622,23 @@ namespace strange
         auto make_object() const -> bag;
         auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag;
         auto at_object(std::string const & key) const -> bag;
-
-        // add_field, remove_field, insert, set, erase, clear,
-        // inject, project, operator[], get, find, find_key,
-        // keys, has_key, size, begin, end, key_begin, key_end,
-        // empty, cbegin, cend, rbegin, rend, kvbegin, kvend
+        auto begin_object() -> forward_iterator<std::pair<std::string, bag>>;
+        auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+        auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+        auto end_object() -> forward_iterator<std::pair<std::string, bag>>;
+        auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+        auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+        auto empty_object() const -> bool;
+        auto size_object() const -> std::size_t;
+        auto clear_object() -> void;
+        auto insert_object(std::pair<std::string, bag> const & key_value) -> void;
+        auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void;
+        auto erase_object(std::string const & key) -> void;
+        auto at_object(std::string const & key) const -> bag const &;
+        auto at_object(std::string const & key) -> bag &;
+        auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>;
+        auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>;
+        auto contains_object(std::string const & key) const -> bool;
 
         auto is_any() const -> bool;
         auto as_any(any & dest) const -> void;
