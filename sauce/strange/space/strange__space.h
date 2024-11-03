@@ -154,6 +154,26 @@ namespace strange
 template<typename _Thing = strange::implementation::token, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct token_;
 
+struct stuff;
+
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct stuff_;
+
+struct bag;
+
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct bag_;
+
+struct package;
+
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct package_;
+
+struct baggage;
+
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct baggage_;
+
 }
 
 namespace strange
@@ -435,6 +455,78 @@ struct reflection<strange::implementation::token>
     static inline auto name() -> std::string
     {
         return "strange::implementation::token";
+    }
+};
+
+template<>
+struct reflection<strange::stuff>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::stuff";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::stuff_<_Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::stuff_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::bag>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::bag";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::bag_<_Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::bag_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::package>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::package";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::package_<_Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::package_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::baggage>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::baggage";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::baggage_<_Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::baggage_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -4737,6 +4829,2129 @@ struct token
 namespace strange
 {
 
+struct stuff : any
+{
+    inline stuff() = default;
+
+    inline stuff(stuff const & other)
+    :strange::_common{other}
+    ,any{}
+    {
+    }
+
+    inline stuff(stuff && other)
+    :strange::_common{std::move(other)}
+    ,any{}
+    {
+    }
+
+    inline auto operator=(stuff const & other) -> stuff &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(stuff && other) -> stuff &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline stuff(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any{}
+    {
+    }
+
+    explicit inline stuff(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any{}
+    {
+    }
+
+protected:
+    struct _derived : any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename stuff::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto pack(bag & dest) const -> void = 0;
+
+        virtual auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void = 0;
+
+        virtual auto unpack(bag const & src) -> void = 0;
+
+        virtual auto unpack(bag const & src, std::vector<any> & unique) -> void = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> stuff
+    {
+        return stuff{stuff::_derived::_static_shared_to_base(std::make_shared<typename stuff_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Abstraction_ = stuff;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
+
+    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
+};
+
+template<typename _Thing, bool _Copy>
+struct stuff_ : stuff
+{
+    inline stuff_() = default;
+
+    inline stuff_(stuff_ const & other)
+    :strange::_common{other}
+    ,stuff{}
+    {
+    }
+
+    inline stuff_(stuff_ && other)
+    :strange::_common{std::move(other)}
+    ,stuff{}
+    {
+    }
+
+    inline auto operator=(stuff_ const & other) -> stuff_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(stuff_ && other) -> stuff_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline stuff_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,stuff{}
+    {
+    }
+
+    explicit inline stuff_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,stuff{}
+    {
+    }
+
+private:
+    friend struct stuff;
+
+    struct _instance final : stuff::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :stuff_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return stuff_::_derived::_static_shared_to_base(std::make_shared<stuff_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_no_copy_constructor{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return stuff::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return stuff::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return stuff_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return stuff_::_name_;
+        }
+
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
+
+        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> stuff_
+    {
+        return stuff_{stuff_::_derived::_static_shared_to_base(std::make_shared<stuff_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<stuff_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<stuff_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<stuff_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = stuff_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return stuff_::_derived::_static_shared_to_base(std::make_shared<stuff_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
+struct bag : stuff
+{
+    inline bag() = default;
+
+    inline bag(bag const & other)
+    :strange::_common{other}
+    ,stuff{}
+    {
+    }
+
+    inline bag(bag && other)
+    :strange::_common{std::move(other)}
+    ,stuff{}
+    {
+    }
+
+    inline auto operator=(bag const & other) -> bag &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(bag && other) -> bag &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline bag(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,stuff{}
+    {
+    }
+
+    explicit inline bag(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,stuff{}
+    {
+    }
+
+protected:
+    struct _derived : stuff::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename bag::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return stuff::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto swap(bag & other) -> void = 0;
+
+        virtual auto is_null() const -> bool = 0;
+
+        virtual auto from_null() -> void = 0;
+
+        virtual auto make_null() const -> bag = 0;
+
+        virtual auto is_bool() const -> bool = 0;
+
+        virtual auto as_bool(bool & dest) const -> void = 0;
+
+        virtual auto to_bool() const -> bool = 0;
+
+        virtual auto from_bool() -> void = 0;
+
+        virtual auto from_bool(bool src) -> void = 0;
+
+        virtual auto make_bool() const -> bag = 0;
+
+        virtual auto make_bool(bool src) const -> bag = 0;
+
+        virtual auto is_int64() const -> bool = 0;
+
+        virtual auto as_int64(int64_t & dest) const -> void = 0;
+
+        virtual auto to_int64() const -> int64_t = 0;
+
+        virtual auto from_int64() -> void = 0;
+
+        virtual auto from_int64(int64_t src) -> void = 0;
+
+        virtual auto make_int64() const -> bag = 0;
+
+        virtual auto make_int64(int64_t src) const -> bag = 0;
+
+        virtual auto is_double() const -> bool = 0;
+
+        virtual auto as_double(double & dest) const -> void = 0;
+
+        virtual auto to_double() const -> double = 0;
+
+        virtual auto from_double() -> void = 0;
+
+        virtual auto from_double(double src) -> void = 0;
+
+        virtual auto make_double() const -> bag = 0;
+
+        virtual auto make_double(double src) const -> bag = 0;
+
+        virtual auto is_string() const -> bool = 0;
+
+        virtual auto as_string(std::string & dest) const -> void = 0;
+
+        virtual auto to_string() const -> std::string = 0;
+
+        virtual auto from_string() -> void = 0;
+
+        virtual auto from_string(std::string const & src) -> void = 0;
+
+        virtual auto make_string() const -> bag = 0;
+
+        virtual auto make_string(std::string const & src) const -> bag = 0;
+
+        virtual auto is_array() const -> bool = 0;
+
+        virtual auto as_array(std::vector<bag> & dest) const -> void = 0;
+
+        virtual auto to_array() const -> std::vector<bag> = 0;
+
+        virtual auto from_array() -> void = 0;
+
+        virtual auto from_array(std::vector<bag> const & src) -> void = 0;
+
+        virtual auto make_array() const -> bag = 0;
+
+        virtual auto make_array(std::vector<bag> const & src) const -> bag = 0;
+
+        virtual auto at_array(std::size_t index) const -> bag const & = 0;
+
+        virtual auto at_array(std::size_t index) -> bag & = 0;
+
+        virtual auto front_array() const -> bag const & = 0;
+
+        virtual auto front_array() -> bag & = 0;
+
+        virtual auto back_array() const -> bag const & = 0;
+
+        virtual auto back_array() -> bag & = 0;
+
+        virtual auto begin_array() -> bidirectional_iterator<bag> = 0;
+
+        virtual auto begin_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto cbegin_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto end_array() -> bidirectional_iterator<bag> = 0;
+
+        virtual auto end_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto cend_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto rbegin_array() -> bidirectional_iterator<bag> = 0;
+
+        virtual auto rbegin_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto crbegin_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto rend_array() -> bidirectional_iterator<bag> = 0;
+
+        virtual auto rend_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto crend_array() const -> bidirectional_const_iterator<bag> = 0;
+
+        virtual auto empty_array() const -> bool = 0;
+
+        virtual auto size_array() const -> std::size_t = 0;
+
+        virtual auto reserve_array(std::size_t new_cap) -> void = 0;
+
+        virtual auto capacity_array() const -> std::size_t = 0;
+
+        virtual auto clear_array() -> void = 0;
+
+        virtual auto insert_array(std::size_t pos, bag const & value) -> void = 0;
+
+        virtual auto erase_array(std::size_t pos) -> void = 0;
+
+        virtual auto push_front_array(bag const & value) -> void = 0;
+
+        virtual auto push_back_array(bag const & value) -> void = 0;
+
+        virtual auto pop_front_array() -> void = 0;
+
+        virtual auto pop_back_array() -> void = 0;
+
+        virtual auto resize_array(std::size_t count) -> void = 0;
+
+        virtual auto is_object() const -> bool = 0;
+
+        virtual auto as_object(std::unordered_map<std::string, bag> & dest) const -> void = 0;
+
+        virtual auto to_object() const -> std::unordered_map<std::string, bag> = 0;
+
+        virtual auto from_object() -> void = 0;
+
+        virtual auto from_object(std::unordered_map<std::string, bag> const & src) -> void = 0;
+
+        virtual auto make_object() const -> bag = 0;
+
+        virtual auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag = 0;
+
+        virtual auto begin_object() -> forward_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto end_object() -> forward_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto empty_object() const -> bool = 0;
+
+        virtual auto size_object() const -> std::size_t = 0;
+
+        virtual auto clear_object() -> void = 0;
+
+        virtual auto insert_object(std::pair<std::string, bag> const & key_value) -> void = 0;
+
+        virtual auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void = 0;
+
+        virtual auto erase_object(std::string const & key) -> void = 0;
+
+        virtual auto at_object(std::string const & key) const -> bag const & = 0;
+
+        virtual auto at_object(std::string const & key) -> bag & = 0;
+
+        virtual auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>> = 0;
+
+        virtual auto contains_object(std::string const & key) const -> bool = 0;
+
+        virtual auto is_any() const -> bool = 0;
+
+        virtual auto as_any(any & dest) const -> void = 0;
+
+        virtual auto as_any(any & dest, std::vector<any> & unique) const -> void = 0;
+
+        virtual auto to_any() const -> any = 0;
+
+        virtual auto to_any(std::vector<any> & unique) const -> any = 0;
+
+        virtual auto from_any() -> void = 0;
+
+        virtual auto from_any(any const & src) -> void = 0;
+
+        virtual auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void = 0;
+
+        virtual auto make_any() const -> bag = 0;
+
+        virtual auto make_any(any const & src) const -> bag = 0;
+
+        virtual auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> bag
+    {
+        return bag{bag::_derived::_static_shared_to_base(std::make_shared<typename bag_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Abstraction_ = bag;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
+
+    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
+
+    inline auto swap(bag & other) -> void;
+
+    inline auto is_null() const -> bool;
+
+    inline auto from_null() -> void;
+
+    inline auto make_null() const -> bag;
+
+    inline auto is_bool() const -> bool;
+
+    inline auto as_bool(bool & dest) const -> void;
+
+    inline auto to_bool() const -> bool;
+
+    inline auto from_bool() -> void;
+
+    inline auto from_bool(bool src) -> void;
+
+    inline auto make_bool() const -> bag;
+
+    inline auto make_bool(bool src) const -> bag;
+
+    inline auto is_int64() const -> bool;
+
+    inline auto as_int64(int64_t & dest) const -> void;
+
+    inline auto to_int64() const -> int64_t;
+
+    inline auto from_int64() -> void;
+
+    inline auto from_int64(int64_t src) -> void;
+
+    inline auto make_int64() const -> bag;
+
+    inline auto make_int64(int64_t src) const -> bag;
+
+    inline auto is_double() const -> bool;
+
+    inline auto as_double(double & dest) const -> void;
+
+    inline auto to_double() const -> double;
+
+    inline auto from_double() -> void;
+
+    inline auto from_double(double src) -> void;
+
+    inline auto make_double() const -> bag;
+
+    inline auto make_double(double src) const -> bag;
+
+    inline auto is_string() const -> bool;
+
+    inline auto as_string(std::string & dest) const -> void;
+
+    inline auto to_string() const -> std::string;
+
+    inline auto from_string() -> void;
+
+    inline auto from_string(std::string const & src) -> void;
+
+    inline auto make_string() const -> bag;
+
+    inline auto make_string(std::string const & src) const -> bag;
+
+    inline auto is_array() const -> bool;
+
+    inline auto as_array(std::vector<bag> & dest) const -> void;
+
+    inline auto to_array() const -> std::vector<bag>;
+
+    inline auto from_array() -> void;
+
+    inline auto from_array(std::vector<bag> const & src) -> void;
+
+    inline auto make_array() const -> bag;
+
+    inline auto make_array(std::vector<bag> const & src) const -> bag;
+
+    inline auto at_array(std::size_t index) const -> bag const &;
+
+    inline auto at_array(std::size_t index) -> bag &;
+
+    inline auto front_array() const -> bag const &;
+
+    inline auto front_array() -> bag &;
+
+    inline auto back_array() const -> bag const &;
+
+    inline auto back_array() -> bag &;
+
+    inline auto begin_array() -> bidirectional_iterator<bag>;
+
+    inline auto begin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto cbegin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto end_array() -> bidirectional_iterator<bag>;
+
+    inline auto end_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto cend_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto rbegin_array() -> bidirectional_iterator<bag>;
+
+    inline auto rbegin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto crbegin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto rend_array() -> bidirectional_iterator<bag>;
+
+    inline auto rend_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto crend_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto empty_array() const -> bool;
+
+    inline auto size_array() const -> std::size_t;
+
+    inline auto reserve_array(std::size_t new_cap) -> void;
+
+    inline auto capacity_array() const -> std::size_t;
+
+    inline auto clear_array() -> void;
+
+    inline auto insert_array(std::size_t pos, bag const & value) -> void;
+
+    inline auto erase_array(std::size_t pos) -> void;
+
+    inline auto push_front_array(bag const & value) -> void;
+
+    inline auto push_back_array(bag const & value) -> void;
+
+    inline auto pop_front_array() -> void;
+
+    inline auto pop_back_array() -> void;
+
+    inline auto resize_array(std::size_t count) -> void;
+
+    inline auto is_object() const -> bool;
+
+    inline auto as_object(std::unordered_map<std::string, bag> & dest) const -> void;
+
+    inline auto to_object() const -> std::unordered_map<std::string, bag>;
+
+    inline auto from_object() -> void;
+
+    inline auto from_object(std::unordered_map<std::string, bag> const & src) -> void;
+
+    inline auto make_object() const -> bag;
+
+    inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag;
+
+    inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>>;
+
+    inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto end_object() -> forward_iterator<std::pair<std::string, bag>>;
+
+    inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto empty_object() const -> bool;
+
+    inline auto size_object() const -> std::size_t;
+
+    inline auto clear_object() -> void;
+
+    inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void;
+
+    inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void;
+
+    inline auto erase_object(std::string const & key) -> void;
+
+    inline auto at_object(std::string const & key) const -> bag const &;
+
+    inline auto at_object(std::string const & key) -> bag &;
+
+    inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>;
+
+    inline auto contains_object(std::string const & key) const -> bool;
+
+    inline auto is_any() const -> bool;
+
+    inline auto as_any(any & dest) const -> void;
+
+    inline auto as_any(any & dest, std::vector<any> & unique) const -> void;
+
+    inline auto to_any() const -> any;
+
+    inline auto to_any(std::vector<any> & unique) const -> any;
+
+    inline auto from_any() -> void;
+
+    inline auto from_any(any const & src) -> void;
+
+    inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void;
+
+    inline auto make_any() const -> bag;
+
+    inline auto make_any(any const & src) const -> bag;
+
+    inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag;
+};
+
+template<typename _Thing, bool _Copy>
+struct bag_ : bag
+{
+    inline bag_() = default;
+
+    inline bag_(bag_ const & other)
+    :strange::_common{other}
+    ,bag{}
+    {
+    }
+
+    inline bag_(bag_ && other)
+    :strange::_common{std::move(other)}
+    ,bag{}
+    {
+    }
+
+    inline auto operator=(bag_ const & other) -> bag_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(bag_ && other) -> bag_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline bag_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,bag{}
+    {
+    }
+
+    explicit inline bag_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,bag{}
+    {
+    }
+
+private:
+    friend struct bag;
+
+    struct _instance final : bag::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :bag_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return bag_::_derived::_static_shared_to_base(std::make_shared<bag_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_no_copy_constructor{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return bag::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return bag::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return bag_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return bag_::_name_;
+        }
+
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
+
+        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
+
+        inline auto swap(bag & other) -> void final;
+
+        inline auto is_null() const -> bool final;
+
+        inline auto from_null() -> void final;
+
+        inline auto make_null() const -> bag final;
+
+        inline auto is_bool() const -> bool final;
+
+        inline auto as_bool(bool & dest) const -> void final;
+
+        inline auto to_bool() const -> bool final;
+
+        inline auto from_bool() -> void final;
+
+        inline auto from_bool(bool src) -> void final;
+
+        inline auto make_bool() const -> bag final;
+
+        inline auto make_bool(bool src) const -> bag final;
+
+        inline auto is_int64() const -> bool final;
+
+        inline auto as_int64(int64_t & dest) const -> void final;
+
+        inline auto to_int64() const -> int64_t final;
+
+        inline auto from_int64() -> void final;
+
+        inline auto from_int64(int64_t src) -> void final;
+
+        inline auto make_int64() const -> bag final;
+
+        inline auto make_int64(int64_t src) const -> bag final;
+
+        inline auto is_double() const -> bool final;
+
+        inline auto as_double(double & dest) const -> void final;
+
+        inline auto to_double() const -> double final;
+
+        inline auto from_double() -> void final;
+
+        inline auto from_double(double src) -> void final;
+
+        inline auto make_double() const -> bag final;
+
+        inline auto make_double(double src) const -> bag final;
+
+        inline auto is_string() const -> bool final;
+
+        inline auto as_string(std::string & dest) const -> void final;
+
+        inline auto to_string() const -> std::string final;
+
+        inline auto from_string() -> void final;
+
+        inline auto from_string(std::string const & src) -> void final;
+
+        inline auto make_string() const -> bag final;
+
+        inline auto make_string(std::string const & src) const -> bag final;
+
+        inline auto is_array() const -> bool final;
+
+        inline auto as_array(std::vector<bag> & dest) const -> void final;
+
+        inline auto to_array() const -> std::vector<bag> final;
+
+        inline auto from_array() -> void final;
+
+        inline auto from_array(std::vector<bag> const & src) -> void final;
+
+        inline auto make_array() const -> bag final;
+
+        inline auto make_array(std::vector<bag> const & src) const -> bag final;
+
+        inline auto at_array(std::size_t index) const -> bag const & final;
+
+        inline auto at_array(std::size_t index) -> bag & final;
+
+        inline auto front_array() const -> bag const & final;
+
+        inline auto front_array() -> bag & final;
+
+        inline auto back_array() const -> bag const & final;
+
+        inline auto back_array() -> bag & final;
+
+        inline auto begin_array() -> bidirectional_iterator<bag> final;
+
+        inline auto begin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto cbegin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto end_array() -> bidirectional_iterator<bag> final;
+
+        inline auto end_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto cend_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto rbegin_array() -> bidirectional_iterator<bag> final;
+
+        inline auto rbegin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto crbegin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto rend_array() -> bidirectional_iterator<bag> final;
+
+        inline auto rend_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto crend_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto empty_array() const -> bool final;
+
+        inline auto size_array() const -> std::size_t final;
+
+        inline auto reserve_array(std::size_t new_cap) -> void final;
+
+        inline auto capacity_array() const -> std::size_t final;
+
+        inline auto clear_array() -> void final;
+
+        inline auto insert_array(std::size_t pos, bag const & value) -> void final;
+
+        inline auto erase_array(std::size_t pos) -> void final;
+
+        inline auto push_front_array(bag const & value) -> void final;
+
+        inline auto push_back_array(bag const & value) -> void final;
+
+        inline auto pop_front_array() -> void final;
+
+        inline auto pop_back_array() -> void final;
+
+        inline auto resize_array(std::size_t count) -> void final;
+
+        inline auto is_object() const -> bool final;
+
+        inline auto as_object(std::unordered_map<std::string, bag> & dest) const -> void final;
+
+        inline auto to_object() const -> std::unordered_map<std::string, bag> final;
+
+        inline auto from_object() -> void final;
+
+        inline auto from_object(std::unordered_map<std::string, bag> const & src) -> void final;
+
+        inline auto make_object() const -> bag final;
+
+        inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag final;
+
+        inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>> final;
+
+        inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto end_object() -> forward_iterator<std::pair<std::string, bag>> final;
+
+        inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto empty_object() const -> bool final;
+
+        inline auto size_object() const -> std::size_t final;
+
+        inline auto clear_object() -> void final;
+
+        inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void final;
+
+        inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void final;
+
+        inline auto erase_object(std::string const & key) -> void final;
+
+        inline auto at_object(std::string const & key) const -> bag const & final;
+
+        inline auto at_object(std::string const & key) -> bag & final;
+
+        inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>> final;
+
+        inline auto contains_object(std::string const & key) const -> bool final;
+
+        inline auto is_any() const -> bool final;
+
+        inline auto as_any(any & dest) const -> void final;
+
+        inline auto as_any(any & dest, std::vector<any> & unique) const -> void final;
+
+        inline auto to_any() const -> any final;
+
+        inline auto to_any(std::vector<any> & unique) const -> any final;
+
+        inline auto from_any() -> void final;
+
+        inline auto from_any(any const & src) -> void final;
+
+        inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void final;
+
+        inline auto make_any() const -> bag final;
+
+        inline auto make_any(any const & src) const -> bag final;
+
+        inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> bag_
+    {
+        return bag_{bag_::_derived::_static_shared_to_base(std::make_shared<bag_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<bag_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<bag_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<bag_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = bag_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return bag_::_derived::_static_shared_to_base(std::make_shared<bag_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
+struct package : stuff
+{
+    inline package() = default;
+
+    inline package(package const & other)
+    :strange::_common{other}
+    ,stuff{}
+    {
+    }
+
+    inline package(package && other)
+    :strange::_common{std::move(other)}
+    ,stuff{}
+    {
+    }
+
+    inline auto operator=(package const & other) -> package &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(package && other) -> package &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline package(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,stuff{}
+    {
+    }
+
+    explicit inline package(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,stuff{}
+    {
+    }
+
+protected:
+    struct _derived : stuff::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename package::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return stuff::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto seal() -> void = 0;
+
+        virtual auto unseal() -> void = 0;
+
+        virtual auto sealed() const -> bool = 0;
+
+        virtual auto is_binary() const -> bool = 0;
+
+        virtual auto as_binary(std::string & binary) const -> void = 0;
+
+        virtual auto to_binary() const -> std::string = 0;
+
+        virtual auto from_binary(std::string const & binary) -> void = 0;
+
+        virtual auto is_json() const -> bool = 0;
+
+        virtual auto as_json(std::string & json) const -> void = 0;
+
+        virtual auto to_json() const -> std::string = 0;
+
+        virtual auto from_json(std::string const & json) -> void = 0;
+
+        virtual auto is_yaml() const -> bool = 0;
+
+        virtual auto as_yaml(std::string & yaml) const -> void = 0;
+
+        virtual auto to_yaml() const -> std::string = 0;
+
+        virtual auto from_yaml(std::string const & yaml) -> void = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> package
+    {
+        return package{package::_derived::_static_shared_to_base(std::make_shared<typename package_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Abstraction_ = package;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
+
+    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
+
+    inline auto seal() -> void;
+
+    inline auto unseal() -> void;
+
+    inline auto sealed() const -> bool;
+
+    inline auto is_binary() const -> bool;
+
+    inline auto as_binary(std::string & binary) const -> void;
+
+    inline auto to_binary() const -> std::string;
+
+    inline auto from_binary(std::string const & binary) -> void;
+
+    inline auto is_json() const -> bool;
+
+    inline auto as_json(std::string & json) const -> void;
+
+    inline auto to_json() const -> std::string;
+
+    inline auto from_json(std::string const & json) -> void;
+
+    inline auto is_yaml() const -> bool;
+
+    inline auto as_yaml(std::string & yaml) const -> void;
+
+    inline auto to_yaml() const -> std::string;
+
+    inline auto from_yaml(std::string const & yaml) -> void;
+};
+
+template<typename _Thing, bool _Copy>
+struct package_ : package
+{
+    inline package_() = default;
+
+    inline package_(package_ const & other)
+    :strange::_common{other}
+    ,package{}
+    {
+    }
+
+    inline package_(package_ && other)
+    :strange::_common{std::move(other)}
+    ,package{}
+    {
+    }
+
+    inline auto operator=(package_ const & other) -> package_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(package_ && other) -> package_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline package_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,package{}
+    {
+    }
+
+    explicit inline package_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,package{}
+    {
+    }
+
+private:
+    friend struct package;
+
+    struct _instance final : package::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :package_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return package_::_derived::_static_shared_to_base(std::make_shared<package_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_no_copy_constructor{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return package::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return package::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return package_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return package_::_name_;
+        }
+
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
+
+        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
+
+        inline auto seal() -> void final;
+
+        inline auto unseal() -> void final;
+
+        inline auto sealed() const -> bool final;
+
+        inline auto is_binary() const -> bool final;
+
+        inline auto as_binary(std::string & binary) const -> void final;
+
+        inline auto to_binary() const -> std::string final;
+
+        inline auto from_binary(std::string const & binary) -> void final;
+
+        inline auto is_json() const -> bool final;
+
+        inline auto as_json(std::string & json) const -> void final;
+
+        inline auto to_json() const -> std::string final;
+
+        inline auto from_json(std::string const & json) -> void final;
+
+        inline auto is_yaml() const -> bool final;
+
+        inline auto as_yaml(std::string & yaml) const -> void final;
+
+        inline auto to_yaml() const -> std::string final;
+
+        inline auto from_yaml(std::string const & yaml) -> void final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> package_
+    {
+        return package_{package_::_derived::_static_shared_to_base(std::make_shared<package_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<package_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<package_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<package_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = package_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return package_::_derived::_static_shared_to_base(std::make_shared<package_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
+struct baggage : bag, package
+{
+    inline baggage() = default;
+
+    inline baggage(baggage const & other)
+    :strange::_common{other}
+    ,bag{}
+    ,package{}
+    {
+    }
+
+    inline baggage(baggage && other)
+    :strange::_common{std::move(other)}
+    ,bag{}
+    ,package{}
+    {
+    }
+
+    inline auto operator=(baggage const & other) -> baggage &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(baggage && other) -> baggage &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline baggage(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,bag{}
+    ,package{}
+    {
+    }
+
+    explicit inline baggage(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,bag{}
+    ,package{}
+    {
+    }
+
+protected:
+    struct _derived : bag::_derived, package::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename baggage::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return bag::_derived::_static_shared_to_base(derived);
+        }
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename baggage::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> baggage
+    {
+        return baggage{baggage::_derived::_static_shared_to_base(std::make_shared<typename baggage_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Abstraction_ = baggage;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(bag::_cats_.cbegin(), bag::_cats_.cend());
+        cats.insert(package::_cats_.cbegin(), package::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
+
+    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
+
+    inline auto swap(bag & other) -> void;
+
+    inline auto is_null() const -> bool;
+
+    inline auto from_null() -> void;
+
+    inline auto make_null() const -> bag;
+
+    inline auto is_bool() const -> bool;
+
+    inline auto as_bool(bool & dest) const -> void;
+
+    inline auto to_bool() const -> bool;
+
+    inline auto from_bool() -> void;
+
+    inline auto from_bool(bool src) -> void;
+
+    inline auto make_bool() const -> bag;
+
+    inline auto make_bool(bool src) const -> bag;
+
+    inline auto is_int64() const -> bool;
+
+    inline auto as_int64(int64_t & dest) const -> void;
+
+    inline auto to_int64() const -> int64_t;
+
+    inline auto from_int64() -> void;
+
+    inline auto from_int64(int64_t src) -> void;
+
+    inline auto make_int64() const -> bag;
+
+    inline auto make_int64(int64_t src) const -> bag;
+
+    inline auto is_double() const -> bool;
+
+    inline auto as_double(double & dest) const -> void;
+
+    inline auto to_double() const -> double;
+
+    inline auto from_double() -> void;
+
+    inline auto from_double(double src) -> void;
+
+    inline auto make_double() const -> bag;
+
+    inline auto make_double(double src) const -> bag;
+
+    inline auto is_string() const -> bool;
+
+    inline auto as_string(std::string & dest) const -> void;
+
+    inline auto to_string() const -> std::string;
+
+    inline auto from_string() -> void;
+
+    inline auto from_string(std::string const & src) -> void;
+
+    inline auto make_string() const -> bag;
+
+    inline auto make_string(std::string const & src) const -> bag;
+
+    inline auto is_array() const -> bool;
+
+    inline auto as_array(std::vector<bag> & dest) const -> void;
+
+    inline auto to_array() const -> std::vector<bag>;
+
+    inline auto from_array() -> void;
+
+    inline auto from_array(std::vector<bag> const & src) -> void;
+
+    inline auto make_array() const -> bag;
+
+    inline auto make_array(std::vector<bag> const & src) const -> bag;
+
+    inline auto at_array(std::size_t index) const -> bag const &;
+
+    inline auto at_array(std::size_t index) -> bag &;
+
+    inline auto front_array() const -> bag const &;
+
+    inline auto front_array() -> bag &;
+
+    inline auto back_array() const -> bag const &;
+
+    inline auto back_array() -> bag &;
+
+    inline auto begin_array() -> bidirectional_iterator<bag>;
+
+    inline auto begin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto cbegin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto end_array() -> bidirectional_iterator<bag>;
+
+    inline auto end_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto cend_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto rbegin_array() -> bidirectional_iterator<bag>;
+
+    inline auto rbegin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto crbegin_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto rend_array() -> bidirectional_iterator<bag>;
+
+    inline auto rend_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto crend_array() const -> bidirectional_const_iterator<bag>;
+
+    inline auto empty_array() const -> bool;
+
+    inline auto size_array() const -> std::size_t;
+
+    inline auto reserve_array(std::size_t new_cap) -> void;
+
+    inline auto capacity_array() const -> std::size_t;
+
+    inline auto clear_array() -> void;
+
+    inline auto insert_array(std::size_t pos, bag const & value) -> void;
+
+    inline auto erase_array(std::size_t pos) -> void;
+
+    inline auto push_front_array(bag const & value) -> void;
+
+    inline auto push_back_array(bag const & value) -> void;
+
+    inline auto pop_front_array() -> void;
+
+    inline auto pop_back_array() -> void;
+
+    inline auto resize_array(std::size_t count) -> void;
+
+    inline auto is_object() const -> bool;
+
+    inline auto as_object(std::unordered_map<std::string, bag> & dest) const -> void;
+
+    inline auto to_object() const -> std::unordered_map<std::string, bag>;
+
+    inline auto from_object() -> void;
+
+    inline auto from_object(std::unordered_map<std::string, bag> const & src) -> void;
+
+    inline auto make_object() const -> bag;
+
+    inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag;
+
+    inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>>;
+
+    inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto end_object() -> forward_iterator<std::pair<std::string, bag>>;
+
+    inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto empty_object() const -> bool;
+
+    inline auto size_object() const -> std::size_t;
+
+    inline auto clear_object() -> void;
+
+    inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void;
+
+    inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void;
+
+    inline auto erase_object(std::string const & key) -> void;
+
+    inline auto at_object(std::string const & key) const -> bag const &;
+
+    inline auto at_object(std::string const & key) -> bag &;
+
+    inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>;
+
+    inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>;
+
+    inline auto contains_object(std::string const & key) const -> bool;
+
+    inline auto is_any() const -> bool;
+
+    inline auto as_any(any & dest) const -> void;
+
+    inline auto as_any(any & dest, std::vector<any> & unique) const -> void;
+
+    inline auto to_any() const -> any;
+
+    inline auto to_any(std::vector<any> & unique) const -> any;
+
+    inline auto from_any() -> void;
+
+    inline auto from_any(any const & src) -> void;
+
+    inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void;
+
+    inline auto make_any() const -> bag;
+
+    inline auto make_any(any const & src) const -> bag;
+
+    inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag;
+
+    inline auto seal() -> void;
+
+    inline auto unseal() -> void;
+
+    inline auto sealed() const -> bool;
+
+    inline auto is_binary() const -> bool;
+
+    inline auto as_binary(std::string & binary) const -> void;
+
+    inline auto to_binary() const -> std::string;
+
+    inline auto from_binary(std::string const & binary) -> void;
+
+    inline auto is_json() const -> bool;
+
+    inline auto as_json(std::string & json) const -> void;
+
+    inline auto to_json() const -> std::string;
+
+    inline auto from_json(std::string const & json) -> void;
+
+    inline auto is_yaml() const -> bool;
+
+    inline auto as_yaml(std::string & yaml) const -> void;
+
+    inline auto to_yaml() const -> std::string;
+
+    inline auto from_yaml(std::string const & yaml) -> void;
+};
+
+template<typename _Thing, bool _Copy>
+struct baggage_ : baggage
+{
+    inline baggage_() = default;
+
+    inline baggage_(baggage_ const & other)
+    :strange::_common{other}
+    ,baggage{}
+    {
+    }
+
+    inline baggage_(baggage_ && other)
+    :strange::_common{std::move(other)}
+    ,baggage{}
+    {
+    }
+
+    inline auto operator=(baggage_ const & other) -> baggage_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(baggage_ && other) -> baggage_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline baggage_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,baggage{}
+    {
+    }
+
+    explicit inline baggage_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,baggage{}
+    {
+    }
+
+private:
+    friend struct baggage;
+
+    struct _instance final : baggage::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :baggage_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return baggage_::_derived::_static_shared_to_base(std::make_shared<baggage_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_no_copy_constructor{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return baggage::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return baggage::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return baggage_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return baggage_::_name_;
+        }
+
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
+
+        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
+
+        inline auto swap(bag & other) -> void final;
+
+        inline auto is_null() const -> bool final;
+
+        inline auto from_null() -> void final;
+
+        inline auto make_null() const -> bag final;
+
+        inline auto is_bool() const -> bool final;
+
+        inline auto as_bool(bool & dest) const -> void final;
+
+        inline auto to_bool() const -> bool final;
+
+        inline auto from_bool() -> void final;
+
+        inline auto from_bool(bool src) -> void final;
+
+        inline auto make_bool() const -> bag final;
+
+        inline auto make_bool(bool src) const -> bag final;
+
+        inline auto is_int64() const -> bool final;
+
+        inline auto as_int64(int64_t & dest) const -> void final;
+
+        inline auto to_int64() const -> int64_t final;
+
+        inline auto from_int64() -> void final;
+
+        inline auto from_int64(int64_t src) -> void final;
+
+        inline auto make_int64() const -> bag final;
+
+        inline auto make_int64(int64_t src) const -> bag final;
+
+        inline auto is_double() const -> bool final;
+
+        inline auto as_double(double & dest) const -> void final;
+
+        inline auto to_double() const -> double final;
+
+        inline auto from_double() -> void final;
+
+        inline auto from_double(double src) -> void final;
+
+        inline auto make_double() const -> bag final;
+
+        inline auto make_double(double src) const -> bag final;
+
+        inline auto is_string() const -> bool final;
+
+        inline auto as_string(std::string & dest) const -> void final;
+
+        inline auto to_string() const -> std::string final;
+
+        inline auto from_string() -> void final;
+
+        inline auto from_string(std::string const & src) -> void final;
+
+        inline auto make_string() const -> bag final;
+
+        inline auto make_string(std::string const & src) const -> bag final;
+
+        inline auto is_array() const -> bool final;
+
+        inline auto as_array(std::vector<bag> & dest) const -> void final;
+
+        inline auto to_array() const -> std::vector<bag> final;
+
+        inline auto from_array() -> void final;
+
+        inline auto from_array(std::vector<bag> const & src) -> void final;
+
+        inline auto make_array() const -> bag final;
+
+        inline auto make_array(std::vector<bag> const & src) const -> bag final;
+
+        inline auto at_array(std::size_t index) const -> bag const & final;
+
+        inline auto at_array(std::size_t index) -> bag & final;
+
+        inline auto front_array() const -> bag const & final;
+
+        inline auto front_array() -> bag & final;
+
+        inline auto back_array() const -> bag const & final;
+
+        inline auto back_array() -> bag & final;
+
+        inline auto begin_array() -> bidirectional_iterator<bag> final;
+
+        inline auto begin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto cbegin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto end_array() -> bidirectional_iterator<bag> final;
+
+        inline auto end_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto cend_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto rbegin_array() -> bidirectional_iterator<bag> final;
+
+        inline auto rbegin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto crbegin_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto rend_array() -> bidirectional_iterator<bag> final;
+
+        inline auto rend_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto crend_array() const -> bidirectional_const_iterator<bag> final;
+
+        inline auto empty_array() const -> bool final;
+
+        inline auto size_array() const -> std::size_t final;
+
+        inline auto reserve_array(std::size_t new_cap) -> void final;
+
+        inline auto capacity_array() const -> std::size_t final;
+
+        inline auto clear_array() -> void final;
+
+        inline auto insert_array(std::size_t pos, bag const & value) -> void final;
+
+        inline auto erase_array(std::size_t pos) -> void final;
+
+        inline auto push_front_array(bag const & value) -> void final;
+
+        inline auto push_back_array(bag const & value) -> void final;
+
+        inline auto pop_front_array() -> void final;
+
+        inline auto pop_back_array() -> void final;
+
+        inline auto resize_array(std::size_t count) -> void final;
+
+        inline auto is_object() const -> bool final;
+
+        inline auto as_object(std::unordered_map<std::string, bag> & dest) const -> void final;
+
+        inline auto to_object() const -> std::unordered_map<std::string, bag> final;
+
+        inline auto from_object() -> void final;
+
+        inline auto from_object(std::unordered_map<std::string, bag> const & src) -> void final;
+
+        inline auto make_object() const -> bag final;
+
+        inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag final;
+
+        inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>> final;
+
+        inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto end_object() -> forward_iterator<std::pair<std::string, bag>> final;
+
+        inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto empty_object() const -> bool final;
+
+        inline auto size_object() const -> std::size_t final;
+
+        inline auto clear_object() -> void final;
+
+        inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void final;
+
+        inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void final;
+
+        inline auto erase_object(std::string const & key) -> void final;
+
+        inline auto at_object(std::string const & key) const -> bag const & final;
+
+        inline auto at_object(std::string const & key) -> bag & final;
+
+        inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>> final;
+
+        inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>> final;
+
+        inline auto contains_object(std::string const & key) const -> bool final;
+
+        inline auto is_any() const -> bool final;
+
+        inline auto as_any(any & dest) const -> void final;
+
+        inline auto as_any(any & dest, std::vector<any> & unique) const -> void final;
+
+        inline auto to_any() const -> any final;
+
+        inline auto to_any(std::vector<any> & unique) const -> any final;
+
+        inline auto from_any() -> void final;
+
+        inline auto from_any(any const & src) -> void final;
+
+        inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void final;
+
+        inline auto make_any() const -> bag final;
+
+        inline auto make_any(any const & src) const -> bag final;
+
+        inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag final;
+
+        inline auto seal() -> void final;
+
+        inline auto unseal() -> void final;
+
+        inline auto sealed() const -> bool final;
+
+        inline auto is_binary() const -> bool final;
+
+        inline auto as_binary(std::string & binary) const -> void final;
+
+        inline auto to_binary() const -> std::string final;
+
+        inline auto from_binary(std::string const & binary) -> void final;
+
+        inline auto is_json() const -> bool final;
+
+        inline auto as_json(std::string & json) const -> void final;
+
+        inline auto to_json() const -> std::string final;
+
+        inline auto from_json(std::string const & json) -> void final;
+
+        inline auto is_yaml() const -> bool final;
+
+        inline auto as_yaml(std::string & yaml) const -> void final;
+
+        inline auto to_yaml() const -> std::string final;
+
+        inline auto from_yaml(std::string const & yaml) -> void final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> baggage_
+    {
+        return baggage_{baggage_::_derived::_static_shared_to_base(std::make_shared<baggage_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<baggage_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<baggage_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<baggage_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = baggage_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return baggage_::_derived::_static_shared_to_base(std::make_shared<baggage_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
 template<typename T>
 inline auto forward_const_iterator<T>::operator*() const -> T const &
 {
@@ -7641,6 +9856,2900 @@ template<typename _Thing, bool _Copy>
 inline auto token_<_Thing, _Copy>::_instance::operator>=(token const & other) const -> bool
 {
     return !operator<(other);
+}
+
+inline auto stuff::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto stuff::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
+}
+
+inline auto stuff::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
+inline auto stuff::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto stuff_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto stuff_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    _thing.pack(dest, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto stuff_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto stuff_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    _thing.unpack(src, unique);
+}
+
+inline auto bag::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto bag::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
+}
+
+inline auto bag::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
+inline auto bag::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
+}
+
+inline auto bag::swap(bag & other) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->swap(other);
+}
+
+inline auto bag::is_null() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_null();
+}
+
+inline auto bag::from_null() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_null();
+}
+
+inline auto bag::make_null() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_null();
+}
+
+inline auto bag::is_bool() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_bool();
+}
+
+inline auto bag::as_bool(bool & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_bool(dest);
+}
+
+inline auto bag::to_bool() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_bool();
+}
+
+inline auto bag::from_bool() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_bool();
+}
+
+inline auto bag::from_bool(bool src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_bool(src);
+}
+
+inline auto bag::make_bool() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_bool();
+}
+
+inline auto bag::make_bool(bool src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_bool(src);
+}
+
+inline auto bag::is_int64() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_int64();
+}
+
+inline auto bag::as_int64(int64_t & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_int64(dest);
+}
+
+inline auto bag::to_int64() const -> int64_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_int64();
+}
+
+inline auto bag::from_int64() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_int64();
+}
+
+inline auto bag::from_int64(int64_t src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_int64(src);
+}
+
+inline auto bag::make_int64() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_int64();
+}
+
+inline auto bag::make_int64(int64_t src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_int64(src);
+}
+
+inline auto bag::is_double() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_double();
+}
+
+inline auto bag::as_double(double & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_double(dest);
+}
+
+inline auto bag::to_double() const -> double
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_double();
+}
+
+inline auto bag::from_double() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_double();
+}
+
+inline auto bag::from_double(double src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_double(src);
+}
+
+inline auto bag::make_double() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_double();
+}
+
+inline auto bag::make_double(double src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_double(src);
+}
+
+inline auto bag::is_string() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_string();
+}
+
+inline auto bag::as_string(std::string & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_string(dest);
+}
+
+inline auto bag::to_string() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_string();
+}
+
+inline auto bag::from_string() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_string();
+}
+
+inline auto bag::from_string(std::string const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_string(src);
+}
+
+inline auto bag::make_string() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_string();
+}
+
+inline auto bag::make_string(std::string const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_string(src);
+}
+
+inline auto bag::is_array() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_array();
+}
+
+inline auto bag::as_array(std::vector<bag> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array(dest);
+}
+
+inline auto bag::to_array() const -> std::vector<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array();
+}
+
+inline auto bag::from_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array();
+}
+
+inline auto bag::from_array(std::vector<bag> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array(src);
+}
+
+inline auto bag::make_array() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array();
+}
+
+inline auto bag::make_array(std::vector<bag> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array(src);
+}
+
+inline auto bag::at_array(std::size_t index) const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_array(index);
+}
+
+inline auto bag::at_array(std::size_t index) -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_array(index);
+}
+
+inline auto bag::front_array() const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->front_array();
+}
+
+inline auto bag::front_array() -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->front_array();
+}
+
+inline auto bag::back_array() const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->back_array();
+}
+
+inline auto bag::back_array() -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->back_array();
+}
+
+inline auto bag::begin_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_array();
+}
+
+inline auto bag::begin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_array();
+}
+
+inline auto bag::cbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_array();
+}
+
+inline auto bag::end_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_array();
+}
+
+inline auto bag::end_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_array();
+}
+
+inline auto bag::cend_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_array();
+}
+
+inline auto bag::rbegin_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rbegin_array();
+}
+
+inline auto bag::rbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rbegin_array();
+}
+
+inline auto bag::crbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crbegin_array();
+}
+
+inline auto bag::rend_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rend_array();
+}
+
+inline auto bag::rend_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rend_array();
+}
+
+inline auto bag::crend_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crend_array();
+}
+
+inline auto bag::empty_array() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->empty_array();
+}
+
+inline auto bag::size_array() const -> std::size_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->size_array();
+}
+
+inline auto bag::reserve_array(std::size_t new_cap) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->reserve_array(new_cap);
+}
+
+inline auto bag::capacity_array() const -> std::size_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->capacity_array();
+}
+
+inline auto bag::clear_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_array();
+}
+
+inline auto bag::insert_array(std::size_t pos, bag const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_array(pos, value);
+}
+
+inline auto bag::erase_array(std::size_t pos) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_array(pos);
+}
+
+inline auto bag::push_front_array(bag const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->push_front_array(value);
+}
+
+inline auto bag::push_back_array(bag const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->push_back_array(value);
+}
+
+inline auto bag::pop_front_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_front_array();
+}
+
+inline auto bag::pop_back_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_back_array();
+}
+
+inline auto bag::resize_array(std::size_t count) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->resize_array(count);
+}
+
+inline auto bag::is_object() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_object();
+}
+
+inline auto bag::as_object(std::unordered_map<std::string, bag> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_object(dest);
+}
+
+inline auto bag::to_object() const -> std::unordered_map<std::string, bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_object();
+}
+
+inline auto bag::from_object() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_object();
+}
+
+inline auto bag::from_object(std::unordered_map<std::string, bag> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_object(src);
+}
+
+inline auto bag::make_object() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_object();
+}
+
+inline auto bag::make_object(std::unordered_map<std::string, bag> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_object(src);
+}
+
+inline auto bag::begin_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_object();
+}
+
+inline auto bag::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_object();
+}
+
+inline auto bag::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_object();
+}
+
+inline auto bag::end_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_object();
+}
+
+inline auto bag::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_object();
+}
+
+inline auto bag::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_object();
+}
+
+inline auto bag::empty_object() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->empty_object();
+}
+
+inline auto bag::size_object() const -> std::size_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->size_object();
+}
+
+inline auto bag::clear_object() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_object();
+}
+
+inline auto bag::insert_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key_value);
+}
+
+inline auto bag::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_or_assign_object(key_value);
+}
+
+inline auto bag::erase_object(std::string const & key) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
+}
+
+inline auto bag::at_object(std::string const & key) const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_object(key);
+}
+
+inline auto bag::at_object(std::string const & key) -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_object(key);
+}
+
+inline auto bag::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->find_object(key);
+}
+
+inline auto bag::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->find_object(key);
+}
+
+inline auto bag::contains_object(std::string const & key) const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->contains_object(key);
+}
+
+inline auto bag::is_any() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_any();
+}
+
+inline auto bag::as_any(any & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest);
+}
+
+inline auto bag::as_any(any & dest, std::vector<any> & unique) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest, unique);
+}
+
+inline auto bag::to_any() const -> any
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any();
+}
+
+inline auto bag::to_any(std::vector<any> & unique) const -> any
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any(unique);
+}
+
+inline auto bag::from_any() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any();
+}
+
+inline auto bag::from_any(any const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src);
+}
+
+inline auto bag::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src, unique);
+}
+
+inline auto bag::make_any() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any();
+}
+
+inline auto bag::make_any(any const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src);
+}
+
+inline auto bag::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    _thing.pack(dest, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    _thing.unpack(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::swap(bag & other) -> void
+{
+    _thing.swap(other.template _static<bag_<_Thing, _Copy>>()._thing());
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_null() const -> bool
+{
+    return _thing.is_null();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_null() -> void
+{
+    _thing.from_null();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_null() const -> bag
+{
+    return _thing.make_null();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_bool() const -> bool
+{
+    return _thing.is_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_bool(bool & dest) const -> void
+{
+    _thing.as_bool(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_bool() const -> bool
+{
+    return _thing.to_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_bool() -> void
+{
+    _thing.from_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_bool(bool src) -> void
+{
+    _thing.from_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_bool() const -> bag
+{
+    return _thing.make_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_bool(bool src) const -> bag
+{
+    return _thing.make_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_int64() const -> bool
+{
+    return _thing.is_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_int64(int64_t & dest) const -> void
+{
+    _thing.as_int64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_int64() const -> int64_t
+{
+    return _thing.to_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_int64() -> void
+{
+    _thing.from_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_int64(int64_t src) -> void
+{
+    _thing.from_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_int64() const -> bag
+{
+    return _thing.make_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_int64(int64_t src) const -> bag
+{
+    return _thing.make_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_double() const -> bool
+{
+    return _thing.is_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_double(double & dest) const -> void
+{
+    _thing.as_double(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_double() const -> double
+{
+    return _thing.to_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_double() -> void
+{
+    _thing.from_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_double(double src) -> void
+{
+    _thing.from_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_double() const -> bag
+{
+    return _thing.make_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_double(double src) const -> bag
+{
+    return _thing.make_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_string() const -> bool
+{
+    return _thing.is_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_string(std::string & dest) const -> void
+{
+    _thing.as_string(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_string() const -> std::string
+{
+    return _thing.to_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_string() -> void
+{
+    _thing.from_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_string(std::string const & src) -> void
+{
+    _thing.from_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_string() const -> bag
+{
+    return _thing.make_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_string(std::string const & src) const -> bag
+{
+    return _thing.make_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_array() const -> bool
+{
+    return _thing.is_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_array(std::vector<bag> & dest) const -> void
+{
+    _thing.as_array(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_array() const -> std::vector<bag>
+{
+    return _thing.to_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array() -> void
+{
+    _thing.from_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array(std::vector<bag> const & src) -> void
+{
+    _thing.from_array(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array() const -> bag
+{
+    return _thing.make_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array(std::vector<bag> const & src) const -> bag
+{
+    return _thing.make_array(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::at_array(std::size_t index) const -> bag const &
+{
+    return _thing.at_array(index);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::at_array(std::size_t index) -> bag &
+{
+    return _thing.at_array(index);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::front_array() const -> bag const &
+{
+    return _thing.front_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::front_array() -> bag &
+{
+    return _thing.front_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::back_array() const -> bag const &
+{
+    return _thing.back_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::back_array() -> bag &
+{
+    return _thing.back_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::begin_array() -> bidirectional_iterator<bag>
+{
+    return _thing.begin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::begin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.begin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::cbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.cbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::end_array() -> bidirectional_iterator<bag>
+{
+    return _thing.end_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::end_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.end_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::cend_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.cend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::rbegin_array() -> bidirectional_iterator<bag>
+{
+    return _thing.rbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::rbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.rbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::crbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.crbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::rend_array() -> bidirectional_iterator<bag>
+{
+    return _thing.rend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::rend_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.rend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::crend_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.crend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::empty_array() const -> bool
+{
+    return _thing.empty_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::size_array() const -> std::size_t
+{
+    return _thing.size_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::reserve_array(std::size_t new_cap) -> void
+{
+    _thing.reserve_array(new_cap);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::capacity_array() const -> std::size_t
+{
+    return _thing.capacity_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::clear_array() -> void
+{
+    _thing.clear_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::insert_array(std::size_t pos, bag const & value) -> void
+{
+    _thing.insert_array(pos, value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::erase_array(std::size_t pos) -> void
+{
+    _thing.erase_array(pos);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::push_front_array(bag const & value) -> void
+{
+    _thing.push_front_array(value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::push_back_array(bag const & value) -> void
+{
+    _thing.push_back_array(value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::pop_front_array() -> void
+{
+    _thing.pop_front_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::pop_back_array() -> void
+{
+    _thing.pop_back_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::resize_array(std::size_t count) -> void
+{
+    _thing.resize_array(count);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_object() const -> bool
+{
+    return _thing.is_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_object(std::unordered_map<std::string, bag> & dest) const -> void
+{
+    _thing.as_object(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_object() const -> std::unordered_map<std::string, bag>
+{
+    return _thing.to_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_object() -> void
+{
+    _thing.from_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_object(std::unordered_map<std::string, bag> const & src) -> void
+{
+    _thing.from_object(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_object() const -> bag
+{
+    return _thing.make_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_object(std::unordered_map<std::string, bag> const & src) const -> bag
+{
+    return _thing.make_object(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::begin_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    return _thing.begin_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.begin_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.cbegin_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::end_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    return _thing.end_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.end_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.cend_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::empty_object() const -> bool
+{
+    return _thing.empty_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::size_object() const -> std::size_t
+{
+    return _thing.size_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::clear_object() -> void
+{
+    _thing.clear_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::insert_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    _thing.insert_object(key_value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    _thing.insert_or_assign_object(key_value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> void
+{
+    _thing.erase_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::at_object(std::string const & key) const -> bag const &
+{
+    return _thing.at_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::at_object(std::string const & key) -> bag &
+{
+    return _thing.at_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.find_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
+{
+    return _thing.find_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::contains_object(std::string const & key) const -> bool
+{
+    return _thing.contains_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_any() const -> bool
+{
+    return _thing.is_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_any(any & dest) const -> void
+{
+    _thing.as_any(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_any(any & dest, std::vector<any> & unique) const -> void
+{
+    _thing.as_any(dest, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_any() const -> any
+{
+    return _thing.to_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_any(std::vector<any> & unique) const -> any
+{
+    return _thing.to_any(unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_any() -> void
+{
+    _thing.from_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_any(any const & src) -> void
+{
+    _thing.from_any(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
+{
+    _thing.from_any(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_any() const -> bag
+{
+    return _thing.make_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_any(any const & src) const -> bag
+{
+    return _thing.make_any(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
+{
+    return _thing.make_any(src, unique);
+}
+
+inline auto package::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto package::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
+}
+
+inline auto package::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
+inline auto package::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
+}
+
+inline auto package::seal() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->seal();
+}
+
+inline auto package::unseal() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->unseal();
+}
+
+inline auto package::sealed() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->sealed();
+}
+
+inline auto package::is_binary() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_binary();
+}
+
+inline auto package::as_binary(std::string & binary) const -> void
+{
+    std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->as_binary(binary);
+}
+
+inline auto package::to_binary() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->to_binary();
+}
+
+inline auto package::from_binary(std::string const & binary) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_binary(binary);
+}
+
+inline auto package::is_json() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_json();
+}
+
+inline auto package::as_json(std::string & json) const -> void
+{
+    std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->as_json(json);
+}
+
+inline auto package::to_json() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->to_json();
+}
+
+inline auto package::from_json(std::string const & json) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_json(json);
+}
+
+inline auto package::is_yaml() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_yaml();
+}
+
+inline auto package::as_yaml(std::string & yaml) const -> void
+{
+    std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->as_yaml(yaml);
+}
+
+inline auto package::to_yaml() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->to_yaml();
+}
+
+inline auto package::from_yaml(std::string const & yaml) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_yaml(yaml);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    _thing.pack(dest, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    _thing.unpack(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::seal() -> void
+{
+    _thing.seal();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::unseal() -> void
+{
+    _thing.unseal();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::sealed() const -> bool
+{
+    return _thing.sealed();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::is_binary() const -> bool
+{
+    return _thing.is_binary();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::as_binary(std::string & binary) const -> void
+{
+    _thing.as_binary(binary);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::to_binary() const -> std::string
+{
+    return _thing.to_binary();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::from_binary(std::string const & binary) -> void
+{
+    _thing.from_binary(binary);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::is_json() const -> bool
+{
+    return _thing.is_json();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::as_json(std::string & json) const -> void
+{
+    _thing.as_json(json);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::to_json() const -> std::string
+{
+    return _thing.to_json();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::from_json(std::string const & json) -> void
+{
+    _thing.from_json(json);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::is_yaml() const -> bool
+{
+    return _thing.is_yaml();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::as_yaml(std::string & yaml) const -> void
+{
+    _thing.as_yaml(yaml);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::to_yaml() const -> std::string
+{
+    return _thing.to_yaml();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::from_yaml(std::string const & yaml) -> void
+{
+    _thing.from_yaml(yaml);
+}
+
+inline auto baggage::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto baggage::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
+}
+
+inline auto baggage::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
+inline auto baggage::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
+}
+
+inline auto baggage::swap(bag & other) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->swap(other);
+}
+
+inline auto baggage::is_null() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_null();
+}
+
+inline auto baggage::from_null() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_null();
+}
+
+inline auto baggage::make_null() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_null();
+}
+
+inline auto baggage::is_bool() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_bool();
+}
+
+inline auto baggage::as_bool(bool & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_bool(dest);
+}
+
+inline auto baggage::to_bool() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_bool();
+}
+
+inline auto baggage::from_bool() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_bool();
+}
+
+inline auto baggage::from_bool(bool src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_bool(src);
+}
+
+inline auto baggage::make_bool() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_bool();
+}
+
+inline auto baggage::make_bool(bool src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_bool(src);
+}
+
+inline auto baggage::is_int64() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_int64();
+}
+
+inline auto baggage::as_int64(int64_t & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_int64(dest);
+}
+
+inline auto baggage::to_int64() const -> int64_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_int64();
+}
+
+inline auto baggage::from_int64() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_int64();
+}
+
+inline auto baggage::from_int64(int64_t src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_int64(src);
+}
+
+inline auto baggage::make_int64() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_int64();
+}
+
+inline auto baggage::make_int64(int64_t src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_int64(src);
+}
+
+inline auto baggage::is_double() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_double();
+}
+
+inline auto baggage::as_double(double & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_double(dest);
+}
+
+inline auto baggage::to_double() const -> double
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_double();
+}
+
+inline auto baggage::from_double() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_double();
+}
+
+inline auto baggage::from_double(double src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_double(src);
+}
+
+inline auto baggage::make_double() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_double();
+}
+
+inline auto baggage::make_double(double src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_double(src);
+}
+
+inline auto baggage::is_string() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_string();
+}
+
+inline auto baggage::as_string(std::string & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_string(dest);
+}
+
+inline auto baggage::to_string() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_string();
+}
+
+inline auto baggage::from_string() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_string();
+}
+
+inline auto baggage::from_string(std::string const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_string(src);
+}
+
+inline auto baggage::make_string() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_string();
+}
+
+inline auto baggage::make_string(std::string const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_string(src);
+}
+
+inline auto baggage::is_array() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_array();
+}
+
+inline auto baggage::as_array(std::vector<bag> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array(dest);
+}
+
+inline auto baggage::to_array() const -> std::vector<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array();
+}
+
+inline auto baggage::from_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array();
+}
+
+inline auto baggage::from_array(std::vector<bag> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array(src);
+}
+
+inline auto baggage::make_array() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array();
+}
+
+inline auto baggage::make_array(std::vector<bag> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array(src);
+}
+
+inline auto baggage::at_array(std::size_t index) const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_array(index);
+}
+
+inline auto baggage::at_array(std::size_t index) -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_array(index);
+}
+
+inline auto baggage::front_array() const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->front_array();
+}
+
+inline auto baggage::front_array() -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->front_array();
+}
+
+inline auto baggage::back_array() const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->back_array();
+}
+
+inline auto baggage::back_array() -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->back_array();
+}
+
+inline auto baggage::begin_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_array();
+}
+
+inline auto baggage::begin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_array();
+}
+
+inline auto baggage::cbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_array();
+}
+
+inline auto baggage::end_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_array();
+}
+
+inline auto baggage::end_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_array();
+}
+
+inline auto baggage::cend_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_array();
+}
+
+inline auto baggage::rbegin_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rbegin_array();
+}
+
+inline auto baggage::rbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rbegin_array();
+}
+
+inline auto baggage::crbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crbegin_array();
+}
+
+inline auto baggage::rend_array() -> bidirectional_iterator<bag>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rend_array();
+}
+
+inline auto baggage::rend_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rend_array();
+}
+
+inline auto baggage::crend_array() const -> bidirectional_const_iterator<bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crend_array();
+}
+
+inline auto baggage::empty_array() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->empty_array();
+}
+
+inline auto baggage::size_array() const -> std::size_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->size_array();
+}
+
+inline auto baggage::reserve_array(std::size_t new_cap) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->reserve_array(new_cap);
+}
+
+inline auto baggage::capacity_array() const -> std::size_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->capacity_array();
+}
+
+inline auto baggage::clear_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_array();
+}
+
+inline auto baggage::insert_array(std::size_t pos, bag const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_array(pos, value);
+}
+
+inline auto baggage::erase_array(std::size_t pos) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_array(pos);
+}
+
+inline auto baggage::push_front_array(bag const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->push_front_array(value);
+}
+
+inline auto baggage::push_back_array(bag const & value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->push_back_array(value);
+}
+
+inline auto baggage::pop_front_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_front_array();
+}
+
+inline auto baggage::pop_back_array() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_back_array();
+}
+
+inline auto baggage::resize_array(std::size_t count) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->resize_array(count);
+}
+
+inline auto baggage::is_object() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_object();
+}
+
+inline auto baggage::as_object(std::unordered_map<std::string, bag> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_object(dest);
+}
+
+inline auto baggage::to_object() const -> std::unordered_map<std::string, bag>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_object();
+}
+
+inline auto baggage::from_object() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_object();
+}
+
+inline auto baggage::from_object(std::unordered_map<std::string, bag> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_object(src);
+}
+
+inline auto baggage::make_object() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_object();
+}
+
+inline auto baggage::make_object(std::unordered_map<std::string, bag> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_object(src);
+}
+
+inline auto baggage::begin_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_object();
+}
+
+inline auto baggage::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_object();
+}
+
+inline auto baggage::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_object();
+}
+
+inline auto baggage::end_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_object();
+}
+
+inline auto baggage::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_object();
+}
+
+inline auto baggage::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_object();
+}
+
+inline auto baggage::empty_object() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->empty_object();
+}
+
+inline auto baggage::size_object() const -> std::size_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->size_object();
+}
+
+inline auto baggage::clear_object() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_object();
+}
+
+inline auto baggage::insert_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key_value);
+}
+
+inline auto baggage::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_or_assign_object(key_value);
+}
+
+inline auto baggage::erase_object(std::string const & key) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
+}
+
+inline auto baggage::at_object(std::string const & key) const -> bag const &
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_object(key);
+}
+
+inline auto baggage::at_object(std::string const & key) -> bag &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_object(key);
+}
+
+inline auto baggage::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->find_object(key);
+}
+
+inline auto baggage::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->find_object(key);
+}
+
+inline auto baggage::contains_object(std::string const & key) const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->contains_object(key);
+}
+
+inline auto baggage::is_any() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_any();
+}
+
+inline auto baggage::as_any(any & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest);
+}
+
+inline auto baggage::as_any(any & dest, std::vector<any> & unique) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest, unique);
+}
+
+inline auto baggage::to_any() const -> any
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any();
+}
+
+inline auto baggage::to_any(std::vector<any> & unique) const -> any
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any(unique);
+}
+
+inline auto baggage::from_any() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any();
+}
+
+inline auto baggage::from_any(any const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src);
+}
+
+inline auto baggage::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src, unique);
+}
+
+inline auto baggage::make_any() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any();
+}
+
+inline auto baggage::make_any(any const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src);
+}
+
+inline auto baggage::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src, unique);
+}
+
+inline auto baggage::seal() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->seal();
+}
+
+inline auto baggage::unseal() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->unseal();
+}
+
+inline auto baggage::sealed() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->sealed();
+}
+
+inline auto baggage::is_binary() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_binary();
+}
+
+inline auto baggage::as_binary(std::string & binary) const -> void
+{
+    std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->as_binary(binary);
+}
+
+inline auto baggage::to_binary() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->to_binary();
+}
+
+inline auto baggage::from_binary(std::string const & binary) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_binary(binary);
+}
+
+inline auto baggage::is_json() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_json();
+}
+
+inline auto baggage::as_json(std::string & json) const -> void
+{
+    std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->as_json(json);
+}
+
+inline auto baggage::to_json() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->to_json();
+}
+
+inline auto baggage::from_json(std::string const & json) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_json(json);
+}
+
+inline auto baggage::is_yaml() const -> bool
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_yaml();
+}
+
+inline auto baggage::as_yaml(std::string & yaml) const -> void
+{
+    std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->as_yaml(yaml);
+}
+
+inline auto baggage::to_yaml() const -> std::string
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->to_yaml();
+}
+
+inline auto baggage::from_yaml(std::string const & yaml) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_yaml(yaml);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
+{
+    _thing.pack(dest, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
+{
+    _thing.unpack(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::swap(bag & other) -> void
+{
+    _thing.swap(other.template _static<bag_<_Thing, _Copy>>()._thing());
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_null() const -> bool
+{
+    return _thing.is_null();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_null() -> void
+{
+    _thing.from_null();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_null() const -> bag
+{
+    return _thing.make_null();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_bool() const -> bool
+{
+    return _thing.is_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_bool(bool & dest) const -> void
+{
+    _thing.as_bool(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_bool() const -> bool
+{
+    return _thing.to_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_bool() -> void
+{
+    _thing.from_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_bool(bool src) -> void
+{
+    _thing.from_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_bool() const -> bag
+{
+    return _thing.make_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_bool(bool src) const -> bag
+{
+    return _thing.make_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_int64() const -> bool
+{
+    return _thing.is_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_int64(int64_t & dest) const -> void
+{
+    _thing.as_int64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_int64() const -> int64_t
+{
+    return _thing.to_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_int64() -> void
+{
+    _thing.from_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_int64(int64_t src) -> void
+{
+    _thing.from_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_int64() const -> bag
+{
+    return _thing.make_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_int64(int64_t src) const -> bag
+{
+    return _thing.make_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_double() const -> bool
+{
+    return _thing.is_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_double(double & dest) const -> void
+{
+    _thing.as_double(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_double() const -> double
+{
+    return _thing.to_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_double() -> void
+{
+    _thing.from_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_double(double src) -> void
+{
+    _thing.from_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_double() const -> bag
+{
+    return _thing.make_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_double(double src) const -> bag
+{
+    return _thing.make_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_string() const -> bool
+{
+    return _thing.is_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_string(std::string & dest) const -> void
+{
+    _thing.as_string(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_string() const -> std::string
+{
+    return _thing.to_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_string() -> void
+{
+    _thing.from_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_string(std::string const & src) -> void
+{
+    _thing.from_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_string() const -> bag
+{
+    return _thing.make_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_string(std::string const & src) const -> bag
+{
+    return _thing.make_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_array() const -> bool
+{
+    return _thing.is_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_array(std::vector<bag> & dest) const -> void
+{
+    _thing.as_array(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_array() const -> std::vector<bag>
+{
+    return _thing.to_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array() -> void
+{
+    _thing.from_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array(std::vector<bag> const & src) -> void
+{
+    _thing.from_array(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array() const -> bag
+{
+    return _thing.make_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array(std::vector<bag> const & src) const -> bag
+{
+    return _thing.make_array(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::at_array(std::size_t index) const -> bag const &
+{
+    return _thing.at_array(index);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::at_array(std::size_t index) -> bag &
+{
+    return _thing.at_array(index);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::front_array() const -> bag const &
+{
+    return _thing.front_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::front_array() -> bag &
+{
+    return _thing.front_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::back_array() const -> bag const &
+{
+    return _thing.back_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::back_array() -> bag &
+{
+    return _thing.back_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::begin_array() -> bidirectional_iterator<bag>
+{
+    return _thing.begin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::begin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.begin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::cbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.cbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::end_array() -> bidirectional_iterator<bag>
+{
+    return _thing.end_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::end_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.end_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::cend_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.cend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::rbegin_array() -> bidirectional_iterator<bag>
+{
+    return _thing.rbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::rbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.rbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::crbegin_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.crbegin_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::rend_array() -> bidirectional_iterator<bag>
+{
+    return _thing.rend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::rend_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.rend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::crend_array() const -> bidirectional_const_iterator<bag>
+{
+    return _thing.crend_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::empty_array() const -> bool
+{
+    return _thing.empty_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::size_array() const -> std::size_t
+{
+    return _thing.size_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::reserve_array(std::size_t new_cap) -> void
+{
+    _thing.reserve_array(new_cap);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::capacity_array() const -> std::size_t
+{
+    return _thing.capacity_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::clear_array() -> void
+{
+    _thing.clear_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::insert_array(std::size_t pos, bag const & value) -> void
+{
+    _thing.insert_array(pos, value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::erase_array(std::size_t pos) -> void
+{
+    _thing.erase_array(pos);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::push_front_array(bag const & value) -> void
+{
+    _thing.push_front_array(value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::push_back_array(bag const & value) -> void
+{
+    _thing.push_back_array(value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::pop_front_array() -> void
+{
+    _thing.pop_front_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::pop_back_array() -> void
+{
+    _thing.pop_back_array();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::resize_array(std::size_t count) -> void
+{
+    _thing.resize_array(count);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_object() const -> bool
+{
+    return _thing.is_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_object(std::unordered_map<std::string, bag> & dest) const -> void
+{
+    _thing.as_object(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_object() const -> std::unordered_map<std::string, bag>
+{
+    return _thing.to_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_object() -> void
+{
+    _thing.from_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_object(std::unordered_map<std::string, bag> const & src) -> void
+{
+    _thing.from_object(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_object() const -> bag
+{
+    return _thing.make_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_object(std::unordered_map<std::string, bag> const & src) const -> bag
+{
+    return _thing.make_object(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::begin_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    return _thing.begin_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.begin_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.cbegin_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::end_object() -> forward_iterator<std::pair<std::string, bag>>
+{
+    return _thing.end_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.end_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.cend_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::empty_object() const -> bool
+{
+    return _thing.empty_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::size_object() const -> std::size_t
+{
+    return _thing.size_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::clear_object() -> void
+{
+    _thing.clear_object();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::insert_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    _thing.insert_object(key_value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+{
+    _thing.insert_or_assign_object(key_value);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> void
+{
+    _thing.erase_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::at_object(std::string const & key) const -> bag const &
+{
+    return _thing.at_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::at_object(std::string const & key) -> bag &
+{
+    return _thing.at_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
+{
+    return _thing.find_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
+{
+    return _thing.find_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::contains_object(std::string const & key) const -> bool
+{
+    return _thing.contains_object(key);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_any() const -> bool
+{
+    return _thing.is_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_any(any & dest) const -> void
+{
+    _thing.as_any(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_any(any & dest, std::vector<any> & unique) const -> void
+{
+    _thing.as_any(dest, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_any() const -> any
+{
+    return _thing.to_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_any(std::vector<any> & unique) const -> any
+{
+    return _thing.to_any(unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_any() -> void
+{
+    _thing.from_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_any(any const & src) -> void
+{
+    _thing.from_any(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
+{
+    _thing.from_any(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_any() const -> bag
+{
+    return _thing.make_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_any(any const & src) const -> bag
+{
+    return _thing.make_any(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
+{
+    return _thing.make_any(src, unique);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::seal() -> void
+{
+    _thing.seal();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::unseal() -> void
+{
+    _thing.unseal();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::sealed() const -> bool
+{
+    return _thing.sealed();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_binary() const -> bool
+{
+    return _thing.is_binary();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_binary(std::string & binary) const -> void
+{
+    _thing.as_binary(binary);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_binary() const -> std::string
+{
+    return _thing.to_binary();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_binary(std::string const & binary) -> void
+{
+    _thing.from_binary(binary);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_json() const -> bool
+{
+    return _thing.is_json();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_json(std::string & json) const -> void
+{
+    _thing.as_json(json);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_json() const -> std::string
+{
+    return _thing.to_json();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_json(std::string const & json) -> void
+{
+    _thing.from_json(json);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_yaml() const -> bool
+{
+    return _thing.is_yaml();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_yaml(std::string & yaml) const -> void
+{
+    _thing.as_yaml(yaml);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_yaml() const -> std::string
+{
+    return _thing.to_yaml();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_yaml(std::string const & yaml) -> void
+{
+    _thing.from_yaml(yaml);
 }
 
 }

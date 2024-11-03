@@ -6,5 +6,6 @@
 int main()
 {
     std::cout << "baggage\n";
+    strange::implementation::baggage b;
     return 0;
 }

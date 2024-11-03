@@ -526,7 +526,7 @@ namespace strange
         [[strange::customisation("return !operator<(other)")]]
         auto operator>=(token const & other) const -> bool;
     };
-/*
+
     struct stuff : any
     {
         auto pack(bag & dest) const -> void;
@@ -621,7 +621,6 @@ namespace strange
         auto from_object(std::unordered_map<std::string, bag> const & src) -> void;
         auto make_object() const -> bag;
         auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag;
-        auto at_object(std::string const & key) const -> bag;
         auto begin_object() -> forward_iterator<std::pair<std::string, bag>>;
         auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
         auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
@@ -655,14 +654,30 @@ namespace strange
 
     struct package : stuff
     {
-        // seal, sealed, unseal, from_json, to_json,
-        // from_binary, to_binary, from_yaml, to_yaml
+        auto seal() -> void;
+        auto unseal() -> void;
+        auto sealed() const -> bool;
+
+        auto is_binary() const -> bool;
+        auto as_binary(std::string & binary) const -> void;
+        auto to_binary() const -> std::string;
+        auto from_binary(std::string const & binary) -> void;
+
+        auto is_json() const -> bool;
+        auto as_json(std::string & json) const -> void;
+        auto to_json() const -> std::string;
+        auto from_json(std::string const & json) -> void;
+
+        auto is_yaml() const -> bool;
+        auto as_yaml(std::string & yaml) const -> void;
+        auto to_yaml() const -> std::string;
+        auto from_yaml(std::string const & yaml) -> void;
     };
 
     struct baggage : bag, package
     {
     };
-
+/*
     template<typename R, typename ... Args>
     struct [[strange::thing("std::function<R(Args ...)>")]]
     const_function<R(Args ...)> : any
