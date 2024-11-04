@@ -5193,41 +5193,13 @@ protected:
 
         virtual auto make_array(std::vector<bag> const & src) const -> bag = 0;
 
-        virtual auto at_array(std::size_t index) const -> bag const & = 0;
+        virtual auto get_array(std::size_t index) const -> bag = 0;
 
-        virtual auto at_array(std::size_t index) -> bag & = 0;
+        virtual auto set_array(std::size_t index, bag const & value) -> void = 0;
 
-        virtual auto front_array() const -> bag const & = 0;
+        virtual auto front_array() const -> bag = 0;
 
-        virtual auto front_array() -> bag & = 0;
-
-        virtual auto back_array() const -> bag const & = 0;
-
-        virtual auto back_array() -> bag & = 0;
-
-        virtual auto begin_array() -> bidirectional_iterator<bag> = 0;
-
-        virtual auto begin_array() const -> bidirectional_const_iterator<bag> = 0;
-
-        virtual auto cbegin_array() const -> bidirectional_const_iterator<bag> = 0;
-
-        virtual auto end_array() -> bidirectional_iterator<bag> = 0;
-
-        virtual auto end_array() const -> bidirectional_const_iterator<bag> = 0;
-
-        virtual auto cend_array() const -> bidirectional_const_iterator<bag> = 0;
-
-        virtual auto rbegin_array() -> bidirectional_iterator<bag> = 0;
-
-        virtual auto rbegin_array() const -> bidirectional_const_iterator<bag> = 0;
-
-        virtual auto crbegin_array() const -> bidirectional_const_iterator<bag> = 0;
-
-        virtual auto rend_array() -> bidirectional_iterator<bag> = 0;
-
-        virtual auto rend_array() const -> bidirectional_const_iterator<bag> = 0;
-
-        virtual auto crend_array() const -> bidirectional_const_iterator<bag> = 0;
+        virtual auto back_array() const -> bag = 0;
 
         virtual auto empty_array() const -> bool = 0;
 
@@ -5247,9 +5219,9 @@ protected:
 
         virtual auto push_back_array(bag const & value) -> void = 0;
 
-        virtual auto pop_front_array() -> void = 0;
+        virtual auto pop_front_array() -> bag = 0;
 
-        virtual auto pop_back_array() -> void = 0;
+        virtual auto pop_back_array() -> bag = 0;
 
         virtual auto resize_array(std::size_t count) -> void = 0;
 
@@ -5267,37 +5239,19 @@ protected:
 
         virtual auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag = 0;
 
-        virtual auto begin_object() -> forward_iterator<std::pair<std::string, bag>> = 0;
-
-        virtual auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
-
-        virtual auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
-
-        virtual auto end_object() -> forward_iterator<std::pair<std::string, bag>> = 0;
-
-        virtual auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
-
-        virtual auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
-
         virtual auto empty_object() const -> bool = 0;
 
         virtual auto size_object() const -> std::size_t = 0;
 
         virtual auto clear_object() -> void = 0;
 
-        virtual auto insert_object(std::pair<std::string, bag> const & key_value) -> void = 0;
+        virtual auto insert_object(std::string const & key, bag const & value) -> bool = 0;
 
-        virtual auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void = 0;
+        virtual auto erase_object(std::string const & key) -> bool = 0;
 
-        virtual auto erase_object(std::string const & key) -> void = 0;
+        virtual auto get_object(std::string const & key) const -> bag = 0;
 
-        virtual auto at_object(std::string const & key) const -> bag const & = 0;
-
-        virtual auto at_object(std::string const & key) -> bag & = 0;
-
-        virtual auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>> = 0;
-
-        virtual auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>> = 0;
+        virtual auto set_object(std::string const & key, bag const & value) -> bool = 0;
 
         virtual auto contains_object(std::string const & key) const -> bool = 0;
 
@@ -5434,41 +5388,13 @@ public:
 
     inline auto make_array(std::vector<bag> const & src) const -> bag;
 
-    inline auto at_array(std::size_t index) const -> bag const &;
+    inline auto get_array(std::size_t index) const -> bag;
 
-    inline auto at_array(std::size_t index) -> bag &;
+    inline auto set_array(std::size_t index, bag const & value) -> void;
 
-    inline auto front_array() const -> bag const &;
+    inline auto front_array() const -> bag;
 
-    inline auto front_array() -> bag &;
-
-    inline auto back_array() const -> bag const &;
-
-    inline auto back_array() -> bag &;
-
-    inline auto begin_array() -> bidirectional_iterator<bag>;
-
-    inline auto begin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto cbegin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto end_array() -> bidirectional_iterator<bag>;
-
-    inline auto end_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto cend_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto rbegin_array() -> bidirectional_iterator<bag>;
-
-    inline auto rbegin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto crbegin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto rend_array() -> bidirectional_iterator<bag>;
-
-    inline auto rend_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto crend_array() const -> bidirectional_const_iterator<bag>;
+    inline auto back_array() const -> bag;
 
     inline auto empty_array() const -> bool;
 
@@ -5488,9 +5414,9 @@ public:
 
     inline auto push_back_array(bag const & value) -> void;
 
-    inline auto pop_front_array() -> void;
+    inline auto pop_front_array() -> bag;
 
-    inline auto pop_back_array() -> void;
+    inline auto pop_back_array() -> bag;
 
     inline auto resize_array(std::size_t count) -> void;
 
@@ -5508,37 +5434,19 @@ public:
 
     inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag;
 
-    inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>>;
-
-    inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto end_object() -> forward_iterator<std::pair<std::string, bag>>;
-
-    inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
     inline auto empty_object() const -> bool;
 
     inline auto size_object() const -> std::size_t;
 
     inline auto clear_object() -> void;
 
-    inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void;
+    inline auto insert_object(std::string const & key, bag const & value) -> bool;
 
-    inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void;
+    inline auto erase_object(std::string const & key) -> bool;
 
-    inline auto erase_object(std::string const & key) -> void;
+    inline auto get_object(std::string const & key) const -> bag;
 
-    inline auto at_object(std::string const & key) const -> bag const &;
-
-    inline auto at_object(std::string const & key) -> bag &;
-
-    inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>;
+    inline auto set_object(std::string const & key, bag const & value) -> bool;
 
     inline auto contains_object(std::string const & key) const -> bool;
 
@@ -5746,41 +5654,13 @@ private:
 
         inline auto make_array(std::vector<bag> const & src) const -> bag final;
 
-        inline auto at_array(std::size_t index) const -> bag const & final;
+        inline auto get_array(std::size_t index) const -> bag final;
 
-        inline auto at_array(std::size_t index) -> bag & final;
+        inline auto set_array(std::size_t index, bag const & value) -> void final;
 
-        inline auto front_array() const -> bag const & final;
+        inline auto front_array() const -> bag final;
 
-        inline auto front_array() -> bag & final;
-
-        inline auto back_array() const -> bag const & final;
-
-        inline auto back_array() -> bag & final;
-
-        inline auto begin_array() -> bidirectional_iterator<bag> final;
-
-        inline auto begin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto cbegin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto end_array() -> bidirectional_iterator<bag> final;
-
-        inline auto end_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto cend_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto rbegin_array() -> bidirectional_iterator<bag> final;
-
-        inline auto rbegin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto crbegin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto rend_array() -> bidirectional_iterator<bag> final;
-
-        inline auto rend_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto crend_array() const -> bidirectional_const_iterator<bag> final;
+        inline auto back_array() const -> bag final;
 
         inline auto empty_array() const -> bool final;
 
@@ -5800,9 +5680,9 @@ private:
 
         inline auto push_back_array(bag const & value) -> void final;
 
-        inline auto pop_front_array() -> void final;
+        inline auto pop_front_array() -> bag final;
 
-        inline auto pop_back_array() -> void final;
+        inline auto pop_back_array() -> bag final;
 
         inline auto resize_array(std::size_t count) -> void final;
 
@@ -5820,37 +5700,19 @@ private:
 
         inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag final;
 
-        inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>> final;
-
-        inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto end_object() -> forward_iterator<std::pair<std::string, bag>> final;
-
-        inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
         inline auto empty_object() const -> bool final;
 
         inline auto size_object() const -> std::size_t final;
 
         inline auto clear_object() -> void final;
 
-        inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void final;
+        inline auto insert_object(std::string const & key, bag const & value) -> bool final;
 
-        inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void final;
+        inline auto erase_object(std::string const & key) -> bool final;
 
-        inline auto erase_object(std::string const & key) -> void final;
+        inline auto get_object(std::string const & key) const -> bag final;
 
-        inline auto at_object(std::string const & key) const -> bag const & final;
-
-        inline auto at_object(std::string const & key) -> bag & final;
-
-        inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>> final;
+        inline auto set_object(std::string const & key, bag const & value) -> bool final;
 
         inline auto contains_object(std::string const & key) const -> bool final;
 
@@ -6405,41 +6267,13 @@ public:
 
     inline auto make_array(std::vector<bag> const & src) const -> bag;
 
-    inline auto at_array(std::size_t index) const -> bag const &;
+    inline auto get_array(std::size_t index) const -> bag;
 
-    inline auto at_array(std::size_t index) -> bag &;
+    inline auto set_array(std::size_t index, bag const & value) -> void;
 
-    inline auto front_array() const -> bag const &;
+    inline auto front_array() const -> bag;
 
-    inline auto front_array() -> bag &;
-
-    inline auto back_array() const -> bag const &;
-
-    inline auto back_array() -> bag &;
-
-    inline auto begin_array() -> bidirectional_iterator<bag>;
-
-    inline auto begin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto cbegin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto end_array() -> bidirectional_iterator<bag>;
-
-    inline auto end_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto cend_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto rbegin_array() -> bidirectional_iterator<bag>;
-
-    inline auto rbegin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto crbegin_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto rend_array() -> bidirectional_iterator<bag>;
-
-    inline auto rend_array() const -> bidirectional_const_iterator<bag>;
-
-    inline auto crend_array() const -> bidirectional_const_iterator<bag>;
+    inline auto back_array() const -> bag;
 
     inline auto empty_array() const -> bool;
 
@@ -6459,9 +6293,9 @@ public:
 
     inline auto push_back_array(bag const & value) -> void;
 
-    inline auto pop_front_array() -> void;
+    inline auto pop_front_array() -> bag;
 
-    inline auto pop_back_array() -> void;
+    inline auto pop_back_array() -> bag;
 
     inline auto resize_array(std::size_t count) -> void;
 
@@ -6479,37 +6313,19 @@ public:
 
     inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag;
 
-    inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>>;
-
-    inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto end_object() -> forward_iterator<std::pair<std::string, bag>>;
-
-    inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>;
-
     inline auto empty_object() const -> bool;
 
     inline auto size_object() const -> std::size_t;
 
     inline auto clear_object() -> void;
 
-    inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void;
+    inline auto insert_object(std::string const & key, bag const & value) -> bool;
 
-    inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void;
+    inline auto erase_object(std::string const & key) -> bool;
 
-    inline auto erase_object(std::string const & key) -> void;
+    inline auto get_object(std::string const & key) const -> bag;
 
-    inline auto at_object(std::string const & key) const -> bag const &;
-
-    inline auto at_object(std::string const & key) -> bag &;
-
-    inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>;
-
-    inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>;
+    inline auto set_object(std::string const & key, bag const & value) -> bool;
 
     inline auto contains_object(std::string const & key) const -> bool;
 
@@ -6747,41 +6563,13 @@ private:
 
         inline auto make_array(std::vector<bag> const & src) const -> bag final;
 
-        inline auto at_array(std::size_t index) const -> bag const & final;
+        inline auto get_array(std::size_t index) const -> bag final;
 
-        inline auto at_array(std::size_t index) -> bag & final;
+        inline auto set_array(std::size_t index, bag const & value) -> void final;
 
-        inline auto front_array() const -> bag const & final;
+        inline auto front_array() const -> bag final;
 
-        inline auto front_array() -> bag & final;
-
-        inline auto back_array() const -> bag const & final;
-
-        inline auto back_array() -> bag & final;
-
-        inline auto begin_array() -> bidirectional_iterator<bag> final;
-
-        inline auto begin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto cbegin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto end_array() -> bidirectional_iterator<bag> final;
-
-        inline auto end_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto cend_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto rbegin_array() -> bidirectional_iterator<bag> final;
-
-        inline auto rbegin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto crbegin_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto rend_array() -> bidirectional_iterator<bag> final;
-
-        inline auto rend_array() const -> bidirectional_const_iterator<bag> final;
-
-        inline auto crend_array() const -> bidirectional_const_iterator<bag> final;
+        inline auto back_array() const -> bag final;
 
         inline auto empty_array() const -> bool final;
 
@@ -6801,9 +6589,9 @@ private:
 
         inline auto push_back_array(bag const & value) -> void final;
 
-        inline auto pop_front_array() -> void final;
+        inline auto pop_front_array() -> bag final;
 
-        inline auto pop_back_array() -> void final;
+        inline auto pop_back_array() -> bag final;
 
         inline auto resize_array(std::size_t count) -> void final;
 
@@ -6821,37 +6609,19 @@ private:
 
         inline auto make_object(std::unordered_map<std::string, bag> const & src) const -> bag final;
 
-        inline auto begin_object() -> forward_iterator<std::pair<std::string, bag>> final;
-
-        inline auto begin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto end_object() -> forward_iterator<std::pair<std::string, bag>> final;
-
-        inline auto end_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto cend_object() const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
         inline auto empty_object() const -> bool final;
 
         inline auto size_object() const -> std::size_t final;
 
         inline auto clear_object() -> void final;
 
-        inline auto insert_object(std::pair<std::string, bag> const & key_value) -> void final;
+        inline auto insert_object(std::string const & key, bag const & value) -> bool final;
 
-        inline auto insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void final;
+        inline auto erase_object(std::string const & key) -> bool final;
 
-        inline auto erase_object(std::string const & key) -> void final;
+        inline auto get_object(std::string const & key) const -> bag final;
 
-        inline auto at_object(std::string const & key) const -> bag const & final;
-
-        inline auto at_object(std::string const & key) -> bag & final;
-
-        inline auto find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>> final;
-
-        inline auto find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>> final;
+        inline auto set_object(std::string const & key, bag const & value) -> bool final;
 
         inline auto contains_object(std::string const & key) const -> bool final;
 
@@ -10133,101 +9903,25 @@ inline auto bag::make_array(std::vector<bag> const & src) const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array(src);
 }
 
-inline auto bag::at_array(std::size_t index) const -> bag const &
+inline auto bag::get_array(std::size_t index) const -> bag
 {
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_array(index);
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->get_array(index);
 }
 
-inline auto bag::at_array(std::size_t index) -> bag &
+inline auto bag::set_array(std::size_t index, bag const & value) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_array(index);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_array(index, value);
 }
 
-inline auto bag::front_array() const -> bag const &
+inline auto bag::front_array() const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->front_array();
 }
 
-inline auto bag::front_array() -> bag &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->front_array();
-}
-
-inline auto bag::back_array() const -> bag const &
+inline auto bag::back_array() const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->back_array();
-}
-
-inline auto bag::back_array() -> bag &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->back_array();
-}
-
-inline auto bag::begin_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_array();
-}
-
-inline auto bag::begin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_array();
-}
-
-inline auto bag::cbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_array();
-}
-
-inline auto bag::end_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_array();
-}
-
-inline auto bag::end_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_array();
-}
-
-inline auto bag::cend_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_array();
-}
-
-inline auto bag::rbegin_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rbegin_array();
-}
-
-inline auto bag::rbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rbegin_array();
-}
-
-inline auto bag::crbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crbegin_array();
-}
-
-inline auto bag::rend_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rend_array();
-}
-
-inline auto bag::rend_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rend_array();
-}
-
-inline auto bag::crend_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crend_array();
 }
 
 inline auto bag::empty_array() const -> bool
@@ -10281,16 +9975,16 @@ inline auto bag::push_back_array(bag const & value) -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->push_back_array(value);
 }
 
-inline auto bag::pop_front_array() -> void
+inline auto bag::pop_front_array() -> bag
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_front_array();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_front_array();
 }
 
-inline auto bag::pop_back_array() -> void
+inline auto bag::pop_back_array() -> bag
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_back_array();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_back_array();
 }
 
 inline auto bag::resize_array(std::size_t count) -> void
@@ -10336,38 +10030,6 @@ inline auto bag::make_object(std::unordered_map<std::string, bag> const & src) c
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_object(src);
 }
 
-inline auto bag::begin_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_object();
-}
-
-inline auto bag::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_object();
-}
-
-inline auto bag::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_object();
-}
-
-inline auto bag::end_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_object();
-}
-
-inline auto bag::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_object();
-}
-
-inline auto bag::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_object();
-}
-
 inline auto bag::empty_object() const -> bool
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->empty_object();
@@ -10384,44 +10046,27 @@ inline auto bag::clear_object() -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_object();
 }
 
-inline auto bag::insert_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto bag::insert_object(std::string const & key, bag const & value) -> bool
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key_value);
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key, value);
 }
 
-inline auto bag::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto bag::erase_object(std::string const & key) -> bool
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_or_assign_object(key_value);
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
 }
 
-inline auto bag::erase_object(std::string const & key) -> void
+inline auto bag::get_object(std::string const & key) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->get_object(key);
+}
+
+inline auto bag::set_object(std::string const & key, bag const & value) -> bool
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
-}
-
-inline auto bag::at_object(std::string const & key) const -> bag const &
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_object(key);
-}
-
-inline auto bag::at_object(std::string const & key) -> bag &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_object(key);
-}
-
-inline auto bag::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->find_object(key);
-}
-
-inline auto bag::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->find_object(key);
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_object(key, value);
 }
 
 inline auto bag::contains_object(std::string const & key) const -> bool
@@ -10746,111 +10391,27 @@ inline auto bag_<_Thing, _Copy>::_instance::make_array(std::vector<bag> const & 
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::at_array(std::size_t index) const -> bag const &
+inline auto bag_<_Thing, _Copy>::_instance::get_array(std::size_t index) const -> bag
 {
-    return _thing.at_array(index);
+    return _thing.get_array(index);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::at_array(std::size_t index) -> bag &
+inline auto bag_<_Thing, _Copy>::_instance::set_array(std::size_t index, bag const & value) -> void
 {
-    return _thing.at_array(index);
+    _thing.set_array(index, value);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::front_array() const -> bag const &
+inline auto bag_<_Thing, _Copy>::_instance::front_array() const -> bag
 {
     return _thing.front_array();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::front_array() -> bag &
-{
-    return _thing.front_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::back_array() const -> bag const &
+inline auto bag_<_Thing, _Copy>::_instance::back_array() const -> bag
 {
     return _thing.back_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::back_array() -> bag &
-{
-    return _thing.back_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::begin_array() -> bidirectional_iterator<bag>
-{
-    return _thing.begin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::begin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.begin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::cbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.cbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::end_array() -> bidirectional_iterator<bag>
-{
-    return _thing.end_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::end_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.end_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::cend_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.cend_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::rbegin_array() -> bidirectional_iterator<bag>
-{
-    return _thing.rbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::rbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.rbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::crbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.crbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::rend_array() -> bidirectional_iterator<bag>
-{
-    return _thing.rend_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::rend_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.rend_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::crend_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.crend_array();
 }
 
 template<typename _Thing, bool _Copy>
@@ -10908,15 +10469,15 @@ inline auto bag_<_Thing, _Copy>::_instance::push_back_array(bag const & value) -
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::pop_front_array() -> void
+inline auto bag_<_Thing, _Copy>::_instance::pop_front_array() -> bag
 {
-    _thing.pop_front_array();
+    return _thing.pop_front_array();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::pop_back_array() -> void
+inline auto bag_<_Thing, _Copy>::_instance::pop_back_array() -> bag
 {
-    _thing.pop_back_array();
+    return _thing.pop_back_array();
 }
 
 template<typename _Thing, bool _Copy>
@@ -10968,42 +10529,6 @@ inline auto bag_<_Thing, _Copy>::_instance::make_object(std::unordered_map<std::
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::begin_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    return _thing.begin_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.begin_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.cbegin_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::end_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    return _thing.end_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.end_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.cend_object();
-}
-
-template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::empty_object() const -> bool
 {
     return _thing.empty_object();
@@ -11022,45 +10547,27 @@ inline auto bag_<_Thing, _Copy>::_instance::clear_object() -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::insert_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto bag_<_Thing, _Copy>::_instance::insert_object(std::string const & key, bag const & value) -> bool
 {
-    _thing.insert_object(key_value);
+    return _thing.insert_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto bag_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> bool
 {
-    _thing.insert_or_assign_object(key_value);
+    return _thing.erase_object(key);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> void
+inline auto bag_<_Thing, _Copy>::_instance::get_object(std::string const & key) const -> bag
 {
-    _thing.erase_object(key);
+    return _thing.get_object(key);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::at_object(std::string const & key) const -> bag const &
+inline auto bag_<_Thing, _Copy>::_instance::set_object(std::string const & key, bag const & value) -> bool
 {
-    return _thing.at_object(key);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::at_object(std::string const & key) -> bag &
-{
-    return _thing.at_object(key);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.find_object(key);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
-{
-    return _thing.find_object(key);
+    return _thing.set_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>
@@ -11580,101 +11087,25 @@ inline auto baggage::make_array(std::vector<bag> const & src) const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array(src);
 }
 
-inline auto baggage::at_array(std::size_t index) const -> bag const &
+inline auto baggage::get_array(std::size_t index) const -> bag
 {
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_array(index);
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->get_array(index);
 }
 
-inline auto baggage::at_array(std::size_t index) -> bag &
+inline auto baggage::set_array(std::size_t index, bag const & value) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_array(index);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_array(index, value);
 }
 
-inline auto baggage::front_array() const -> bag const &
+inline auto baggage::front_array() const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->front_array();
 }
 
-inline auto baggage::front_array() -> bag &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->front_array();
-}
-
-inline auto baggage::back_array() const -> bag const &
+inline auto baggage::back_array() const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->back_array();
-}
-
-inline auto baggage::back_array() -> bag &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->back_array();
-}
-
-inline auto baggage::begin_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_array();
-}
-
-inline auto baggage::begin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_array();
-}
-
-inline auto baggage::cbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_array();
-}
-
-inline auto baggage::end_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_array();
-}
-
-inline auto baggage::end_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_array();
-}
-
-inline auto baggage::cend_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_array();
-}
-
-inline auto baggage::rbegin_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rbegin_array();
-}
-
-inline auto baggage::rbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rbegin_array();
-}
-
-inline auto baggage::crbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crbegin_array();
-}
-
-inline auto baggage::rend_array() -> bidirectional_iterator<bag>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->rend_array();
-}
-
-inline auto baggage::rend_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->rend_array();
-}
-
-inline auto baggage::crend_array() const -> bidirectional_const_iterator<bag>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->crend_array();
 }
 
 inline auto baggage::empty_array() const -> bool
@@ -11728,16 +11159,16 @@ inline auto baggage::push_back_array(bag const & value) -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->push_back_array(value);
 }
 
-inline auto baggage::pop_front_array() -> void
+inline auto baggage::pop_front_array() -> bag
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_front_array();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_front_array();
 }
 
-inline auto baggage::pop_back_array() -> void
+inline auto baggage::pop_back_array() -> bag
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_back_array();
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->pop_back_array();
 }
 
 inline auto baggage::resize_array(std::size_t count) -> void
@@ -11783,38 +11214,6 @@ inline auto baggage::make_object(std::unordered_map<std::string, bag> const & sr
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_object(src);
 }
 
-inline auto baggage::begin_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->begin_object();
-}
-
-inline auto baggage::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->begin_object();
-}
-
-inline auto baggage::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cbegin_object();
-}
-
-inline auto baggage::end_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->end_object();
-}
-
-inline auto baggage::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->end_object();
-}
-
-inline auto baggage::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->cend_object();
-}
-
 inline auto baggage::empty_object() const -> bool
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->empty_object();
@@ -11831,44 +11230,27 @@ inline auto baggage::clear_object() -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_object();
 }
 
-inline auto baggage::insert_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto baggage::insert_object(std::string const & key, bag const & value) -> bool
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key_value);
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key, value);
 }
 
-inline auto baggage::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto baggage::erase_object(std::string const & key) -> bool
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_or_assign_object(key_value);
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
 }
 
-inline auto baggage::erase_object(std::string const & key) -> void
+inline auto baggage::get_object(std::string const & key) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->get_object(key);
+}
+
+inline auto baggage::set_object(std::string const & key, bag const & value) -> bool
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
-}
-
-inline auto baggage::at_object(std::string const & key) const -> bag const &
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->at_object(key);
-}
-
-inline auto baggage::at_object(std::string const & key) -> bag &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->at_object(key);
-}
-
-inline auto baggage::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->find_object(key);
-}
-
-inline auto baggage::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->find_object(key);
+    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_object(key, value);
 }
 
 inline auto baggage::contains_object(std::string const & key) const -> bool
@@ -12273,111 +11655,27 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_array(std::vector<bag> cons
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::at_array(std::size_t index) const -> bag const &
+inline auto baggage_<_Thing, _Copy>::_instance::get_array(std::size_t index) const -> bag
 {
-    return _thing.at_array(index);
+    return _thing.get_array(index);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::at_array(std::size_t index) -> bag &
+inline auto baggage_<_Thing, _Copy>::_instance::set_array(std::size_t index, bag const & value) -> void
 {
-    return _thing.at_array(index);
+    _thing.set_array(index, value);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::front_array() const -> bag const &
+inline auto baggage_<_Thing, _Copy>::_instance::front_array() const -> bag
 {
     return _thing.front_array();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::front_array() -> bag &
-{
-    return _thing.front_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::back_array() const -> bag const &
+inline auto baggage_<_Thing, _Copy>::_instance::back_array() const -> bag
 {
     return _thing.back_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::back_array() -> bag &
-{
-    return _thing.back_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::begin_array() -> bidirectional_iterator<bag>
-{
-    return _thing.begin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::begin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.begin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::cbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.cbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::end_array() -> bidirectional_iterator<bag>
-{
-    return _thing.end_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::end_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.end_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::cend_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.cend_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::rbegin_array() -> bidirectional_iterator<bag>
-{
-    return _thing.rbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::rbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.rbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::crbegin_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.crbegin_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::rend_array() -> bidirectional_iterator<bag>
-{
-    return _thing.rend_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::rend_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.rend_array();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::crend_array() const -> bidirectional_const_iterator<bag>
-{
-    return _thing.crend_array();
 }
 
 template<typename _Thing, bool _Copy>
@@ -12435,15 +11733,15 @@ inline auto baggage_<_Thing, _Copy>::_instance::push_back_array(bag const & valu
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::pop_front_array() -> void
+inline auto baggage_<_Thing, _Copy>::_instance::pop_front_array() -> bag
 {
-    _thing.pop_front_array();
+    return _thing.pop_front_array();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::pop_back_array() -> void
+inline auto baggage_<_Thing, _Copy>::_instance::pop_back_array() -> bag
 {
-    _thing.pop_back_array();
+    return _thing.pop_back_array();
 }
 
 template<typename _Thing, bool _Copy>
@@ -12495,42 +11793,6 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_object(std::unordered_map<s
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::begin_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    return _thing.begin_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::begin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.begin_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::cbegin_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.cbegin_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::end_object() -> forward_iterator<std::pair<std::string, bag>>
-{
-    return _thing.end_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::end_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.end_object();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::cend_object() const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.cend_object();
-}
-
-template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::empty_object() const -> bool
 {
     return _thing.empty_object();
@@ -12549,45 +11811,27 @@ inline auto baggage_<_Thing, _Copy>::_instance::clear_object() -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::insert_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto baggage_<_Thing, _Copy>::_instance::insert_object(std::string const & key, bag const & value) -> bool
 {
-    _thing.insert_object(key_value);
+    return _thing.insert_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::insert_or_assign_object(std::pair<std::string, bag> const & key_value) -> void
+inline auto baggage_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> bool
 {
-    _thing.insert_or_assign_object(key_value);
+    return _thing.erase_object(key);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> void
+inline auto baggage_<_Thing, _Copy>::_instance::get_object(std::string const & key) const -> bag
 {
-    _thing.erase_object(key);
+    return _thing.get_object(key);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::at_object(std::string const & key) const -> bag const &
+inline auto baggage_<_Thing, _Copy>::_instance::set_object(std::string const & key, bag const & value) -> bool
 {
-    return _thing.at_object(key);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::at_object(std::string const & key) -> bag &
-{
-    return _thing.at_object(key);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::find_object(std::string const & key) const -> forward_const_iterator<std::pair<std::string, bag>>
-{
-    return _thing.find_object(key);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::find_object(std::string const & key) -> forward_iterator<std::pair<std::string, bag>>
-{
-    return _thing.find_object(key);
+    return _thing.set_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>

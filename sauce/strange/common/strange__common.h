@@ -109,18 +109,20 @@ private:
     };
 
 public:
-    inline auto _mutate() -> void
+    inline auto _mutate() -> bool
     {
         if (_shared.use_count() > 1)
         {
             try
             {
                 _shared = _shared->_clone();
+                return true;
             }
             catch(_no_copy_constructor const &)
             {
             }
         }
+        return false;
     }
 
     inline auto _address() const -> void const *
