@@ -17,6 +17,10 @@ namespace comprehension
 {
 enum class cls;
 }
+namespace implementation
+{
+struct baggage;
+}
 }
 )~";
 

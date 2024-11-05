@@ -13,6 +13,10 @@ namespace comprehension
 {
 enum class cls;
 }
+namespace implementation
+{
+struct baggage;
+}
 }
 /*~
     // more meta code

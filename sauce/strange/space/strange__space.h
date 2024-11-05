@@ -8,6 +8,10 @@ namespace comprehension
 {
 enum class cls;
 }
+namespace implementation
+{
+struct baggage;
+}
 }
 #include <memory>
 #include <string>
@@ -5115,8 +5119,6 @@ protected:
             return stuff::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto swap(bag & other) -> void = 0;
-
         virtual auto is_null() const -> bool = 0;
 
         virtual auto from_null() -> void = 0;
@@ -5309,8 +5311,6 @@ public:
     inline auto unpack(bag const & src) -> void;
 
     inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
-
-    inline auto swap(bag & other) -> void;
 
     inline auto is_null() const -> bool;
 
@@ -5575,8 +5575,6 @@ private:
         inline auto unpack(bag const & src) -> void final;
 
         inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
-
-        inline auto swap(bag & other) -> void final;
 
         inline auto is_null() const -> bool final;
 
@@ -6189,8 +6187,6 @@ public:
 
     inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
 
-    inline auto swap(bag & other) -> void;
-
     inline auto is_null() const -> bool;
 
     inline auto from_null() -> void;
@@ -6484,8 +6480,6 @@ private:
         inline auto unpack(bag const & src) -> void final;
 
         inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
-
-        inline auto swap(bag & other) -> void final;
 
         inline auto is_null() const -> bool final;
 
@@ -8232,8 +8226,10 @@ template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
 {
     auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
+    if (strange::_common::_mutate())
+    {
+        pos = cbegin() + index;
+    }
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, value);
 }
 
@@ -8241,8 +8237,10 @@ template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
 {
     auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
+    if (strange::_common::_mutate())
+    {
+        pos = cbegin() + index;
+    }
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, std::move(value));
 }
 
@@ -8250,8 +8248,10 @@ template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
     auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
+    if (strange::_common::_mutate())
+    {
+        pos = cbegin() + index;
+    }
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, count, value);
 }
 
@@ -8259,8 +8259,10 @@ template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
     auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
+    if (strange::_common::_mutate())
+    {
+        pos = cbegin() + index;
+    }
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, first, last);
 }
 
@@ -8268,8 +8270,10 @@ template<typename T>
 inline auto vector<T>::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
 {
     auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
+    if (strange::_common::_mutate())
+    {
+        pos = cbegin() + index;
+    }
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->insert(pos, ilist);
 }
 
@@ -8277,8 +8281,10 @@ template<typename T>
 inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
 {
     auto const index = pos - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    pos = cbegin() + index;
+    if (strange::_common::_mutate())
+    {
+        pos = cbegin() + index;
+    }
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(pos);
 }
 
@@ -8287,9 +8293,11 @@ inline auto vector<T>::erase(typename strange::random_access_const_iterator<T> f
 {
     auto const first_index = first - cbegin();
     auto const last_index = last - cbegin();
-    strange::_common::_mutate(); // could invalidate iterators
-    first = cbegin() + first_index;
-    last = cbegin() + last_index;
+    if (strange::_common::_mutate())
+    {
+        first = cbegin() + first_index;
+        last = cbegin() + last_index;
+    }
     return std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->erase(first, last);
 }
 
@@ -9696,12 +9704,6 @@ inline auto bag::unpack(bag const & src, std::vector<any> & unique) -> void
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
 }
 
-inline auto bag::swap(bag & other) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->swap(other);
-}
-
 inline auto bag::is_null() const -> bool
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_null();
@@ -10154,12 +10156,6 @@ template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
 {
     _thing.unpack(src, unique);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::swap(bag & other) -> void
-{
-    _thing.swap(other.template _static<bag_<_Thing, _Copy>>()._thing());
 }
 
 template<typename _Thing, bool _Copy>
@@ -10880,12 +10876,6 @@ inline auto baggage::unpack(bag const & src, std::vector<any> & unique) -> void
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
 }
 
-inline auto baggage::swap(bag & other) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->swap(other);
-}
-
 inline auto baggage::is_null() const -> bool
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_null();
@@ -11418,12 +11408,6 @@ template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
 {
     _thing.unpack(src, unique);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::swap(bag & other) -> void
-{
-    _thing.swap(other.template _static<bag_<_Thing, _Copy>>()._thing());
 }
 
 template<typename _Thing, bool _Copy>
