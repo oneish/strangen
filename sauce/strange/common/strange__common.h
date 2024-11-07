@@ -218,6 +218,18 @@ public:
     }
 
     template<typename Other>
+    inline auto _reinterpret() const -> Other const &
+    {
+        return reinterpret_cast<Other const &>(*this);
+    }
+
+    template<typename Other>
+    inline auto _reinterpret() -> Other &
+    {
+        return reinterpret_cast<Other &>(*this);
+    }
+
+    template<typename Other>
     static inline auto _construct(std::string const & name) -> Other
     {
         auto it = _factory_.find(name);

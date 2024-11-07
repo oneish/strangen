@@ -544,9 +544,7 @@ namespace strange
     struct stuff : any
     {
         auto pack(bag & dest) const -> void;
-        auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
         auto unpack(bag const & src) -> void;
-        auto unpack(bag const & src, std::vector<any> & unique) -> void;
     };
 
     struct bag : stuff
@@ -621,23 +619,19 @@ namespace strange
         auto empty_object() const -> bool;
         auto size_object() const -> std::size_t;
         auto clear_object() -> void;
-        auto insert_object(std::string const & key, bag const & value) -> bool;
-        auto erase_object(std::string const & key) -> bool;
+        auto insert_object(std::string const & key, bag const & value) -> void;
+        auto erase_object(std::string const & key) -> void;
         auto get_object(std::string const & key) const -> bag;
-        auto set_object(std::string const & key, bag const & value) -> bool;
+        auto set_object(std::string const & key, bag const & value) -> void;
         auto contains_object(std::string const & key) const -> bool;
 
         auto is_any() const -> bool;
         auto as_any(any & dest) const -> void;
-        auto as_any(any & dest, std::vector<any> & unique) const -> void;
         auto to_any() const -> any;
-        auto to_any(std::vector<any> & unique) const -> any;
         auto from_any() -> void;
         auto from_any(any const & src) -> void;
-        auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void;
         auto make_any() const -> bag;
         auto make_any(any const & src) const -> bag;
-        auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag;
     };
 
     struct package : stuff

@@ -4883,11 +4883,7 @@ protected:
 
         virtual auto pack(bag & dest) const -> void = 0;
 
-        virtual auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void = 0;
-
         virtual auto unpack(bag const & src) -> void = 0;
-
-        virtual auto unpack(bag const & src, std::vector<any> & unique) -> void = 0;
     };
 
 public:
@@ -4916,11 +4912,7 @@ public:
 
     inline auto pack(bag & dest) const -> void;
 
-    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
-
     inline auto unpack(bag const & src) -> void;
-
-    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
 };
 
 template<typename _Thing, bool _Copy>
@@ -5020,11 +5012,7 @@ private:
 
         inline auto pack(bag & dest) const -> void final;
 
-        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
-
         inline auto unpack(bag const & src) -> void final;
-
-        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
 
         _Thing _thing;
     };
@@ -5247,13 +5235,13 @@ protected:
 
         virtual auto clear_object() -> void = 0;
 
-        virtual auto insert_object(std::string const & key, bag const & value) -> bool = 0;
+        virtual auto insert_object(std::string const & key, bag const & value) -> void = 0;
 
-        virtual auto erase_object(std::string const & key) -> bool = 0;
+        virtual auto erase_object(std::string const & key) -> void = 0;
 
         virtual auto get_object(std::string const & key) const -> bag = 0;
 
-        virtual auto set_object(std::string const & key, bag const & value) -> bool = 0;
+        virtual auto set_object(std::string const & key, bag const & value) -> void = 0;
 
         virtual auto contains_object(std::string const & key) const -> bool = 0;
 
@@ -5261,23 +5249,15 @@ protected:
 
         virtual auto as_any(any & dest) const -> void = 0;
 
-        virtual auto as_any(any & dest, std::vector<any> & unique) const -> void = 0;
-
         virtual auto to_any() const -> any = 0;
-
-        virtual auto to_any(std::vector<any> & unique) const -> any = 0;
 
         virtual auto from_any() -> void = 0;
 
         virtual auto from_any(any const & src) -> void = 0;
 
-        virtual auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void = 0;
-
         virtual auto make_any() const -> bag = 0;
 
         virtual auto make_any(any const & src) const -> bag = 0;
-
-        virtual auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag = 0;
     };
 
 public:
@@ -5306,11 +5286,7 @@ public:
 
     inline auto pack(bag & dest) const -> void;
 
-    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
-
     inline auto unpack(bag const & src) -> void;
-
-    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
 
     inline auto is_null() const -> bool;
 
@@ -5440,13 +5416,13 @@ public:
 
     inline auto clear_object() -> void;
 
-    inline auto insert_object(std::string const & key, bag const & value) -> bool;
+    inline auto insert_object(std::string const & key, bag const & value) -> void;
 
-    inline auto erase_object(std::string const & key) -> bool;
+    inline auto erase_object(std::string const & key) -> void;
 
     inline auto get_object(std::string const & key) const -> bag;
 
-    inline auto set_object(std::string const & key, bag const & value) -> bool;
+    inline auto set_object(std::string const & key, bag const & value) -> void;
 
     inline auto contains_object(std::string const & key) const -> bool;
 
@@ -5454,23 +5430,15 @@ public:
 
     inline auto as_any(any & dest) const -> void;
 
-    inline auto as_any(any & dest, std::vector<any> & unique) const -> void;
-
     inline auto to_any() const -> any;
-
-    inline auto to_any(std::vector<any> & unique) const -> any;
 
     inline auto from_any() -> void;
 
     inline auto from_any(any const & src) -> void;
 
-    inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void;
-
     inline auto make_any() const -> bag;
 
     inline auto make_any(any const & src) const -> bag;
-
-    inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag;
 };
 
 template<typename _Thing, bool _Copy>
@@ -5570,11 +5538,7 @@ private:
 
         inline auto pack(bag & dest) const -> void final;
 
-        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
-
         inline auto unpack(bag const & src) -> void final;
-
-        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
 
         inline auto is_null() const -> bool final;
 
@@ -5704,13 +5668,13 @@ private:
 
         inline auto clear_object() -> void final;
 
-        inline auto insert_object(std::string const & key, bag const & value) -> bool final;
+        inline auto insert_object(std::string const & key, bag const & value) -> void final;
 
-        inline auto erase_object(std::string const & key) -> bool final;
+        inline auto erase_object(std::string const & key) -> void final;
 
         inline auto get_object(std::string const & key) const -> bag final;
 
-        inline auto set_object(std::string const & key, bag const & value) -> bool final;
+        inline auto set_object(std::string const & key, bag const & value) -> void final;
 
         inline auto contains_object(std::string const & key) const -> bool final;
 
@@ -5718,23 +5682,15 @@ private:
 
         inline auto as_any(any & dest) const -> void final;
 
-        inline auto as_any(any & dest, std::vector<any> & unique) const -> void final;
-
         inline auto to_any() const -> any final;
-
-        inline auto to_any(std::vector<any> & unique) const -> any final;
 
         inline auto from_any() -> void final;
 
         inline auto from_any(any const & src) -> void final;
 
-        inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void final;
-
         inline auto make_any() const -> bag final;
 
         inline auto make_any(any const & src) const -> bag final;
-
-        inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag final;
 
         _Thing _thing;
     };
@@ -5886,11 +5842,7 @@ public:
 
     inline auto pack(bag & dest) const -> void;
 
-    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
-
     inline auto unpack(bag const & src) -> void;
-
-    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
 
     inline auto seal() -> void;
 
@@ -6020,11 +5972,7 @@ private:
 
         inline auto pack(bag & dest) const -> void final;
 
-        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
-
         inline auto unpack(bag const & src) -> void final;
-
-        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
 
         inline auto seal() -> void final;
 
@@ -6181,11 +6129,7 @@ public:
 
     inline auto pack(bag & dest) const -> void;
 
-    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void;
-
     inline auto unpack(bag const & src) -> void;
-
-    inline auto unpack(bag const & src, std::vector<any> & unique) -> void;
 
     inline auto is_null() const -> bool;
 
@@ -6315,13 +6259,13 @@ public:
 
     inline auto clear_object() -> void;
 
-    inline auto insert_object(std::string const & key, bag const & value) -> bool;
+    inline auto insert_object(std::string const & key, bag const & value) -> void;
 
-    inline auto erase_object(std::string const & key) -> bool;
+    inline auto erase_object(std::string const & key) -> void;
 
     inline auto get_object(std::string const & key) const -> bag;
 
-    inline auto set_object(std::string const & key, bag const & value) -> bool;
+    inline auto set_object(std::string const & key, bag const & value) -> void;
 
     inline auto contains_object(std::string const & key) const -> bool;
 
@@ -6329,23 +6273,15 @@ public:
 
     inline auto as_any(any & dest) const -> void;
 
-    inline auto as_any(any & dest, std::vector<any> & unique) const -> void;
-
     inline auto to_any() const -> any;
-
-    inline auto to_any(std::vector<any> & unique) const -> any;
 
     inline auto from_any() -> void;
 
     inline auto from_any(any const & src) -> void;
 
-    inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void;
-
     inline auto make_any() const -> bag;
 
     inline auto make_any(any const & src) const -> bag;
-
-    inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag;
 
     inline auto seal() -> void;
 
@@ -6475,11 +6411,7 @@ private:
 
         inline auto pack(bag & dest) const -> void final;
 
-        inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void final;
-
         inline auto unpack(bag const & src) -> void final;
-
-        inline auto unpack(bag const & src, std::vector<any> & unique) -> void final;
 
         inline auto is_null() const -> bool final;
 
@@ -6609,13 +6541,13 @@ private:
 
         inline auto clear_object() -> void final;
 
-        inline auto insert_object(std::string const & key, bag const & value) -> bool final;
+        inline auto insert_object(std::string const & key, bag const & value) -> void final;
 
-        inline auto erase_object(std::string const & key) -> bool final;
+        inline auto erase_object(std::string const & key) -> void final;
 
         inline auto get_object(std::string const & key) const -> bag final;
 
-        inline auto set_object(std::string const & key, bag const & value) -> bool final;
+        inline auto set_object(std::string const & key, bag const & value) -> void final;
 
         inline auto contains_object(std::string const & key) const -> bool final;
 
@@ -6623,23 +6555,15 @@ private:
 
         inline auto as_any(any & dest) const -> void final;
 
-        inline auto as_any(any & dest, std::vector<any> & unique) const -> void final;
-
         inline auto to_any() const -> any final;
-
-        inline auto to_any(std::vector<any> & unique) const -> any final;
 
         inline auto from_any() -> void final;
 
         inline auto from_any(any const & src) -> void final;
 
-        inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void final;
-
         inline auto make_any() const -> bag final;
 
         inline auto make_any(any const & src) const -> bag final;
-
-        inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag final;
 
         inline auto seal() -> void final;
 
@@ -9641,21 +9565,10 @@ inline auto stuff::pack(bag & dest) const -> void
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto stuff::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
-}
-
 inline auto stuff::unpack(bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
-}
-
-inline auto stuff::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
 }
 
 template<typename _Thing, bool _Copy>
@@ -9665,21 +9578,9 @@ inline auto stuff_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto stuff_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    _thing.pack(dest, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto stuff_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
 {
     _thing.unpack(src);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto stuff_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    _thing.unpack(src, unique);
 }
 
 inline auto bag::pack(bag & dest) const -> void
@@ -9687,21 +9588,10 @@ inline auto bag::pack(bag & dest) const -> void
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto bag::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
-}
-
 inline auto bag::unpack(bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
-}
-
-inline auto bag::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
 }
 
 inline auto bag::is_null() const -> bool
@@ -10048,16 +9938,16 @@ inline auto bag::clear_object() -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_object();
 }
 
-inline auto bag::insert_object(std::string const & key, bag const & value) -> bool
+inline auto bag::insert_object(std::string const & key, bag const & value) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key, value);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key, value);
 }
 
-inline auto bag::erase_object(std::string const & key) -> bool
+inline auto bag::erase_object(std::string const & key) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
 }
 
 inline auto bag::get_object(std::string const & key) const -> bag
@@ -10065,10 +9955,10 @@ inline auto bag::get_object(std::string const & key) const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->get_object(key);
 }
 
-inline auto bag::set_object(std::string const & key, bag const & value) -> bool
+inline auto bag::set_object(std::string const & key, bag const & value) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_object(key, value);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_object(key, value);
 }
 
 inline auto bag::contains_object(std::string const & key) const -> bool
@@ -10086,19 +9976,9 @@ inline auto bag::as_any(any & dest) const -> void
     std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest);
 }
 
-inline auto bag::as_any(any & dest, std::vector<any> & unique) const -> void
-{
-    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest, unique);
-}
-
 inline auto bag::to_any() const -> any
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any();
-}
-
-inline auto bag::to_any(std::vector<any> & unique) const -> any
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any(unique);
 }
 
 inline auto bag::from_any() -> void
@@ -10113,12 +9993,6 @@ inline auto bag::from_any(any const & src) -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src);
 }
 
-inline auto bag::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src, unique);
-}
-
 inline auto bag::make_any() const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any();
@@ -10129,11 +10003,6 @@ inline auto bag::make_any(any const & src) const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src);
 }
 
-inline auto bag::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src, unique);
-}
-
 template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
 {
@@ -10141,21 +10010,9 @@ inline auto bag_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    _thing.pack(dest, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
 {
     _thing.unpack(src);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    _thing.unpack(src, unique);
 }
 
 template<typename _Thing, bool _Copy>
@@ -10543,15 +10400,15 @@ inline auto bag_<_Thing, _Copy>::_instance::clear_object() -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::insert_object(std::string const & key, bag const & value) -> bool
+inline auto bag_<_Thing, _Copy>::_instance::insert_object(std::string const & key, bag const & value) -> void
 {
-    return _thing.insert_object(key, value);
+    _thing.insert_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> bool
+inline auto bag_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> void
 {
-    return _thing.erase_object(key);
+    _thing.erase_object(key);
 }
 
 template<typename _Thing, bool _Copy>
@@ -10561,9 +10418,9 @@ inline auto bag_<_Thing, _Copy>::_instance::get_object(std::string const & key) 
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::set_object(std::string const & key, bag const & value) -> bool
+inline auto bag_<_Thing, _Copy>::_instance::set_object(std::string const & key, bag const & value) -> void
 {
-    return _thing.set_object(key, value);
+    _thing.set_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>
@@ -10585,21 +10442,9 @@ inline auto bag_<_Thing, _Copy>::_instance::as_any(any & dest) const -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::as_any(any & dest, std::vector<any> & unique) const -> void
-{
-    _thing.as_any(dest, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::to_any() const -> any
 {
     return _thing.to_any();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::to_any(std::vector<any> & unique) const -> any
-{
-    return _thing.to_any(unique);
 }
 
 template<typename _Thing, bool _Copy>
@@ -10615,12 +10460,6 @@ inline auto bag_<_Thing, _Copy>::_instance::from_any(any const & src) -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
-{
-    _thing.from_any(src, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::make_any() const -> bag
 {
     return _thing.make_any();
@@ -10632,32 +10471,15 @@ inline auto bag_<_Thing, _Copy>::_instance::make_any(any const & src) const -> b
     return _thing.make_any(src);
 }
 
-template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
-{
-    return _thing.make_any(src, unique);
-}
-
 inline auto package::pack(bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
-}
-
-inline auto package::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
 }
 
 inline auto package::unpack(bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
-}
-
-inline auto package::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
 }
 
 inline auto package::seal() -> void
@@ -10747,21 +10569,9 @@ inline auto package_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto package_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    _thing.pack(dest, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto package_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
 {
     _thing.unpack(src);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto package_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    _thing.unpack(src, unique);
 }
 
 template<typename _Thing, bool _Copy>
@@ -10859,21 +10669,10 @@ inline auto baggage::pack(bag & dest) const -> void
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto baggage::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest, unique);
-}
-
 inline auto baggage::unpack(bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
-}
-
-inline auto baggage::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src, unique);
 }
 
 inline auto baggage::is_null() const -> bool
@@ -11220,16 +11019,16 @@ inline auto baggage::clear_object() -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->clear_object();
 }
 
-inline auto baggage::insert_object(std::string const & key, bag const & value) -> bool
+inline auto baggage::insert_object(std::string const & key, bag const & value) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key, value);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->insert_object(key, value);
 }
 
-inline auto baggage::erase_object(std::string const & key) -> bool
+inline auto baggage::erase_object(std::string const & key) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->erase_object(key);
 }
 
 inline auto baggage::get_object(std::string const & key) const -> bag
@@ -11237,10 +11036,10 @@ inline auto baggage::get_object(std::string const & key) const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->get_object(key);
 }
 
-inline auto baggage::set_object(std::string const & key, bag const & value) -> bool
+inline auto baggage::set_object(std::string const & key, bag const & value) -> void
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_object(key, value);
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->set_object(key, value);
 }
 
 inline auto baggage::contains_object(std::string const & key) const -> bool
@@ -11258,19 +11057,9 @@ inline auto baggage::as_any(any & dest) const -> void
     std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest);
 }
 
-inline auto baggage::as_any(any & dest, std::vector<any> & unique) const -> void
-{
-    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest, unique);
-}
-
 inline auto baggage::to_any() const -> any
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any();
-}
-
-inline auto baggage::to_any(std::vector<any> & unique) const -> any
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any(unique);
 }
 
 inline auto baggage::from_any() -> void
@@ -11285,12 +11074,6 @@ inline auto baggage::from_any(any const & src) -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src);
 }
 
-inline auto baggage::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src, unique);
-}
-
 inline auto baggage::make_any() const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any();
@@ -11299,11 +11082,6 @@ inline auto baggage::make_any() const -> bag
 inline auto baggage::make_any(any const & src) const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src);
-}
-
-inline auto baggage::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
-{
-    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src, unique);
 }
 
 inline auto baggage::seal() -> void
@@ -11393,21 +11171,9 @@ inline auto baggage_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-{
-    _thing.pack(dest, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
 {
     _thing.unpack(src);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::unpack(bag const & src, std::vector<any> & unique) -> void
-{
-    _thing.unpack(src, unique);
 }
 
 template<typename _Thing, bool _Copy>
@@ -11795,15 +11561,15 @@ inline auto baggage_<_Thing, _Copy>::_instance::clear_object() -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::insert_object(std::string const & key, bag const & value) -> bool
+inline auto baggage_<_Thing, _Copy>::_instance::insert_object(std::string const & key, bag const & value) -> void
 {
-    return _thing.insert_object(key, value);
+    _thing.insert_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> bool
+inline auto baggage_<_Thing, _Copy>::_instance::erase_object(std::string const & key) -> void
 {
-    return _thing.erase_object(key);
+    _thing.erase_object(key);
 }
 
 template<typename _Thing, bool _Copy>
@@ -11813,9 +11579,9 @@ inline auto baggage_<_Thing, _Copy>::_instance::get_object(std::string const & k
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::set_object(std::string const & key, bag const & value) -> bool
+inline auto baggage_<_Thing, _Copy>::_instance::set_object(std::string const & key, bag const & value) -> void
 {
-    return _thing.set_object(key, value);
+    _thing.set_object(key, value);
 }
 
 template<typename _Thing, bool _Copy>
@@ -11837,21 +11603,9 @@ inline auto baggage_<_Thing, _Copy>::_instance::as_any(any & dest) const -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::as_any(any & dest, std::vector<any> & unique) const -> void
-{
-    _thing.as_any(dest, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::to_any() const -> any
 {
     return _thing.to_any();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::to_any(std::vector<any> & unique) const -> any
-{
-    return _thing.to_any(unique);
 }
 
 template<typename _Thing, bool _Copy>
@@ -11867,12 +11621,6 @@ inline auto baggage_<_Thing, _Copy>::_instance::from_any(any const & src) -> voi
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void
-{
-    _thing.from_any(src, unique);
-}
-
-template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::make_any() const -> bag
 {
     return _thing.make_any();
@@ -11882,12 +11630,6 @@ template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::make_any(any const & src) const -> bag
 {
     return _thing.make_any(src);
-}
-
-template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag
-{
-    return _thing.make_any(src, unique);
 }
 
 template<typename _Thing, bool _Copy>

@@ -9,6 +9,8 @@ namespace implementation
 struct baggage
 {
     dart::packet packet = dart::packet::make_null();
+    mutable std::shared_ptr<std::vector<any>> unpack_unique;
+    mutable std::shared_ptr<std::unordered_map<void const *, std::size_t>> pack_unique;
 
     inline auto pack(bag & dest) const -> void
     {
@@ -21,11 +23,6 @@ struct baggage
         */
     }
 
-    inline auto pack(bag & dest, std::unordered_map<void const *, std::size_t> & unique) const -> void
-    {
-        pack(dest);
-    }
-
     inline auto unpack(bag const & src) -> void
     {
         /*
@@ -35,11 +32,6 @@ struct baggage
             packet = src_._thing().packet;
         }
         */
-    }
-
-    inline auto unpack(bag const & src, std::vector<any> & unique) -> void
-    {
-        unpack(src);
     }
 
     inline auto is_null() const -> bool
@@ -216,7 +208,7 @@ struct baggage
         dest.clear();
         for (auto const & item : packet)
         {
-            // dest.push_back(baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = item}));
+            // dest.push_back(baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = item, .unpack_unique = unpack_unique}));
         }
     }
 
@@ -225,7 +217,7 @@ struct baggage
         auto dest = std::vector<bag>{};
         for (auto const & item : packet)
         {
-            // dest.push_back(baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = item}));
+            // dest.push_back(baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = item, .unpack_unique = unpack_unique}));
         }
         return dest;
     }
@@ -275,7 +267,7 @@ struct baggage
 
     inline auto get_array(std::size_t index) const -> bag
     {
-        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.get(index)});
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.get(index), .unpack_unique = unpack_unique});
         return strange::bag{};
     }
 
@@ -292,13 +284,13 @@ struct baggage
 
     inline auto front_array() const -> bag
     {
-        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.front()});
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.front(), .unpack_unique = unpack_unique});
         return strange::bag{};
     }
 
     inline auto back_array() const -> bag
     {
-        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.back()});
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.back(), .unpack_unique = unpack_unique});
         return strange::bag{};
     }
 
@@ -367,13 +359,13 @@ struct baggage
 
     inline auto pop_front_array() -> bag
     {
-        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.pop_front()});
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.pop_front(), .unpack_unique = unpack_unique});
         return strange::bag{};
     }
 
     inline auto pop_back_array() -> bag
     {
-        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.pop_back()});
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.pop_back(), .unpack_unique = unpack_unique});
         return strange::bag{};
     }
 
@@ -392,7 +384,7 @@ struct baggage
         dest.clear();
         for (auto const & pair : packet)
         {
-            // dest.insert(pair.first, baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = pair.second}));
+            // dest.insert(pair.first, baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = pair.second, .unpack_unique = unpack_unique}));
         }
     }
 
@@ -401,7 +393,7 @@ struct baggage
         auto dest = std::unordered_map<std::string, bag>{};
         for (auto const & pair : packet)
         {
-            // dest.insert(pair.first, baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = pair.second}));
+            // dest.insert(pair.first, baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = pair.second, .unpack_unique = unpack_unique}));
         }
         return dest;
     }
@@ -464,7 +456,7 @@ struct baggage
         packet.clear();
     }
 
-    inline auto insert_object(std::string const & key, bag const & value) -> bool
+    inline auto insert_object(std::string const & key, bag const & value) -> void
     {
         /*
         auto value_ = value._dynamic<baggage_<strange::implementation::baggage>>();
@@ -475,18 +467,18 @@ struct baggage
         */
     }
 
-    inline auto erase_object(std::string const & key) -> bool
+    inline auto erase_object(std::string const & key) -> void
     {
         packet.erase(key);
     }
 
     inline auto get_object(std::string const & key) const -> bag
     {
-        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.get(key)});
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.get(key), .unpack_unique = unpack_unique});
         return strange::bag{};
     }
 
-    inline auto set_object(std::string const & key, bag const & value) -> bool
+    inline auto set_object(std::string const & key, bag const & value) -> void
     {
         /*
         auto value_ = value._dynamic<baggage_<strange::implementation::baggage>>();
@@ -509,39 +501,153 @@ struct baggage
 
     inline auto as_any(any & dest) const -> void
     {
-        std::vector<any> unique;
-        return as_any(dest, unique);
-    }
-
-    inline auto as_any(any & dest, std::vector<any> & unique) const -> void
-    {
         if (packet.is_null())
         {
             dest = any{};
+            return;
+        }
+        bool reset = !unpack_unique;
+        if (packet.is_str())
+        {
+            dest = _common::_construct<any>(packet.str());
+            if (!reset)
+            {
+                unpack_unique->push_back(dest);
+            }
+            return;
+        }
+        if (reset)
+        {
+            unpack_unique = std::make_shared<std::vector<any>>();
         }
         else if (packet.is_integer())
         {
-            dest = unique.at(packet.integer());
+            dest = unpack_unique->at(packet.integer());
+            return;
         }
-        else if (packet.is_str())
+        if (packet.is_array() && packet.size() >= 2 && packet.at(0).is_str())
         {
-            dest = _common::_construct<any>(packet.str());
+            auto index = unpack_unique->size();
+            unpack_unique->push_back(_common::_construct<any>(packet.at(0).str()));
+            // unpack_unique->at(index)._reinterpret<stuff>().unpack(baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.at(1), .unpack_unique = unpack_unique}));
+            dest = unpack_unique->at(index);
         }
-        else if (packet.is_array() && packet.size() >= 2 && packet.at(0).is_str())
+        if (reset)
         {
-            _common::_construct<any>(packet.at(0).str());
-            // dest._static<stuff>().unpack(baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.at(1)}), unique);
+            unpack_unique.reset();
         }
     }
 
-    inline auto to_any() const -> any;
-    inline auto to_any(std::vector<any> & unique) const -> any;
-    inline auto from_any() -> void;
-    inline auto from_any(any const & src) -> void;
-    inline auto from_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) -> void;
-    inline auto make_any() const -> bag;
-    inline auto make_any(any const & src) const -> bag;
-    inline auto make_any(any const & src, std::unordered_map<void const *, std::size_t> & unique) const -> bag;
+    inline auto to_any() const -> any
+    {
+        auto dest = any{};
+        as_any(dest);
+        return dest;
+    }
+
+    inline auto from_any() -> void
+    {
+        packet = dart::packet::make_null();
+    }
+
+    inline auto from_any(any const & src) -> void
+    {
+        if (!src._something())
+        {
+            packet = dart::packet::make_null();
+            return;
+        }
+        auto address = src._address();
+        auto stuff_ = src._dynamic<stuff>();
+        bool reset = stuff_._something() && !pack_unique;
+        if (reset)
+        {
+            pack_unique = std::make_shared<std::unordered_map<void const *, std::size_t>>();
+            pack_unique->emplace(address, 0);
+        }
+        else if (pack_unique)
+        {
+            auto it = pack_unique->find(address);
+            if (it != pack_unique->end())
+            {
+                packet = dart::packet::make_integer(it->second);
+                return;
+            }
+            pack_unique->emplace(address, pack_unique->size());
+        }
+        if (!stuff_._something())
+        {
+            packet = dart::packet::make_string(src._name());
+        }
+        else
+        {
+            packet = dart::packet::make_array();
+            packet.push_back(dart::packet::make_string(src._name()));
+            /*
+            auto pack_ = baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.pack_unique = pack_unique});
+            stuff_.pack(pack_);
+            packet.push_back(pack_._static<baggage_<strange::implementation::baggage>>()._thing().packet);
+            */
+        }
+        if (reset)
+        {
+            pack_unique.reset();
+        }
+    }
+
+    inline auto make_any() const -> bag
+    {
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{});
+        return strange::bag{};
+    }
+
+    inline auto make_any(any const & src) const -> bag
+    {
+        if (!src._something())
+        {
+            // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{});
+            return strange::bag{};
+        }
+        auto address = src._address();
+        auto stuff_ = src._dynamic<stuff>();
+        bool reset = stuff_._something() && !pack_unique;
+        dart::packet pack;
+        if (reset)
+        {
+            pack_unique = std::make_shared<std::unordered_map<void const *, std::size_t>>();
+            pack_unique->emplace(address, 0);
+        }
+        else if (pack_unique)
+        {
+            auto it = pack_unique->find(address);
+            if (it != pack_unique->end())
+            {
+                // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet::make_integer(it->second)});
+                return strange::bag{};
+            }
+            pack_unique->emplace(address, pack_unique->size());
+        }
+        if (!stuff_._something())
+        {
+            pack = dart::packet::make_string(src._name());
+        }
+        else
+        {
+            pack = dart::packet::make_array();
+            pack.push_back(dart::packet::make_string(src._name()));
+            /*
+            auto pack_ = baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.pack_unique = pack_unique});
+            stuff_.pack(pack_);
+            pack.push_back(pack_._static<baggage_<strange::implementation::baggage>>()._thing().packet);
+            */
+        }
+        if (reset)
+        {
+            pack_unique.reset();
+        }
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = pack});
+        return strange::bag{};
+    }
 
     inline auto seal() -> void;
     inline auto unseal() -> void;
