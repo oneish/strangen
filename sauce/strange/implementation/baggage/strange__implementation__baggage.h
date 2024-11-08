@@ -1,7 +1,8 @@
 #pragma once
 
-// #define DART_USE_SAJSON
-#define DART_HAS_YAML 0
+#define DART_HAS_RAPIDJSON 1
+#define DART_USE_SAJSON 1
+#define DART_HAS_YAML 1
 #include <dart.h>
 
 namespace strange
@@ -696,7 +697,7 @@ struct baggage
 
     inline auto is_json() const -> bool
     {
-#if DART_USE_SAJSON
+#if DART_HAS_RAPIDJSON
         return packet.is_finalized();
 #else
         return false;
@@ -705,14 +706,14 @@ struct baggage
 
     inline auto as_json(std::string & json) const -> void
     {
-#if DART_USE_SAJSON
+#if DART_HAS_RAPIDJSON
         json = packet.to_json();
 #endif
     }
 
     inline auto to_json() const -> std::string
     {
-#if DART_USE_SAJSON
+#if DART_HAS_RAPIDJSON
         return packet.to_json();
 #else
         return std::string{};
@@ -721,41 +722,17 @@ struct baggage
 
     inline auto from_json(std::string const & json) -> void
     {
-#if DART_USE_SAJSON
+#if DART_HAS_RAPIDJSON
         packet = dart::packet::from_json(json);
 #endif
     }
 
     inline auto make_json(std::string const & json) const -> package
     {
-#if DART_USE_SAJSON
+#if DART_HAS_RAPIDJSON
         // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet::from_json(json)});
-#endif
+#else
         return strange::package{};
-    }
-
-    inline auto is_yaml() const -> bool
-    {
-#if DART_HAS_YAML
-        return packet.is_finalized();
-#else
-        return false;
-#endif
-    }
-
-    inline auto as_yaml(std::string & yaml) const -> void
-    {
-#if DART_HAS_YAML
-        yaml = packet.to_yaml();
-#endif
-    }
-
-    inline auto to_yaml() const -> std::string
-    {
-#if DART_HAS_YAML
-        return packet.to_yaml();
-#else
-        return std::string{};
 #endif
     }
 

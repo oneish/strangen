@@ -652,9 +652,6 @@ namespace strange
         auto from_json(std::string const & json) -> void;
         auto make_json(std::string const & json) const -> package;
 
-        auto is_yaml() const -> bool;
-        auto as_yaml(std::string & yaml) const -> void;
-        auto to_yaml() const -> std::string;
         auto from_yaml(std::string const & yaml) -> void;
         auto make_yaml(std::string const & yaml) const -> package;
     };
