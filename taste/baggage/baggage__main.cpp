@@ -7,5 +7,6 @@ int main()
 {
     std::cout << "baggage\n";
     strange::implementation::baggage b;
+    auto b2 = strange::baggage::_make();
     return 0;
 }

@@ -2,7 +2,6 @@
 
 #define DART_HAS_RAPIDJSON 1
 #define DART_USE_SAJSON 1
-#define DART_HAS_YAML 1
 #include <dart.h>
 
 namespace strange
@@ -17,13 +16,11 @@ struct baggage
 
     inline auto pack(bag & dest) const -> void
     {
-        /*
         auto dest_ = dest._dynamic<baggage_<strange::implementation::baggage>>();
         if (dest_._something())
         {
             dest_._thing().packet = packet;
         }
-        */
     }
 
     inline auto unpack(bag const & src) -> void
@@ -731,22 +728,6 @@ struct baggage
     {
 #if DART_HAS_RAPIDJSON
         // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet::from_json(json)});
-#else
-        return strange::package{};
-#endif
-    }
-
-    inline auto from_yaml(std::string const & yaml) -> void
-    {
-#if DART_HAS_YAML
-        packet = dart::packet::from_yaml(yaml);
-#endif
-    }
-
-    inline auto make_yaml(std::string const & yaml) const -> package
-    {
-#if DART_HAS_YAML
-        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet::from_yaml(yaml)});
 #else
         return strange::package{};
 #endif

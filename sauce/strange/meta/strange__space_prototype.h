@@ -651,12 +651,9 @@ namespace strange
         auto to_json() const -> std::string;
         auto from_json(std::string const & json) -> void;
         auto make_json(std::string const & json) const -> package;
-
-        auto from_yaml(std::string const & yaml) -> void;
-        auto make_yaml(std::string const & yaml) const -> package;
     };
 
-    struct // [[strange::thing("strange::implementation::baggage")]]
+    struct [[strange::thing("strange::implementation::baggage")]]
     baggage : bag, package
     {
     };
