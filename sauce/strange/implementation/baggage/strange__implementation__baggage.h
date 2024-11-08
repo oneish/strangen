@@ -1,5 +1,7 @@
 #pragma once
 
+// #define DART_USE_SAJSON
+#define DART_HAS_YAML 0
 #include <dart.h>
 
 namespace strange
@@ -484,7 +486,7 @@ struct baggage
         auto value_ = value._dynamic<baggage_<strange::implementation::baggage>>();
         if (value_._something())
         {
-            packet.insert_or_assign(key, value_._thing().packet);
+            packet.set(key) = value_._thing().packet;
         }
         */
     }
@@ -649,24 +651,129 @@ struct baggage
         return strange::bag{};
     }
 
-    inline auto seal() -> void;
-    inline auto unseal() -> void;
-    inline auto sealed() const -> bool;
+    inline auto seal() -> void
+    {
+        packet.finalize();
+    }
 
-    inline auto is_binary() const -> bool;
-    inline auto as_binary(std::string & binary) const -> void;
-    inline auto to_binary() const -> std::string;
-    inline auto from_binary(std::string const & binary) -> void;
+    inline auto unseal() -> void
+    {
+        packet.definalize();
+    }
 
-    inline auto is_json() const -> bool;
-    inline auto as_json(std::string & json) const -> void;
-    inline auto to_json() const -> std::string;
-    inline auto from_json(std::string const & json) -> void;
+    inline auto sealed() const -> bool
+    {
+        return packet.is_finalized();
+    }
 
-    inline auto is_yaml() const -> bool;
-    inline auto as_yaml(std::string & yaml) const -> void;
-    inline auto to_yaml() const -> std::string;
-    inline auto from_yaml(std::string const & yaml) -> void;
+    inline auto is_binary() const -> bool
+    {
+        return packet.is_finalized();
+    }
+
+    inline auto as_binary(std::string & binary) const -> void
+    {
+        auto buffer = packet.get_bytes();
+        binary = std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+    }
+
+    inline auto to_binary() const -> std::string
+    {
+        auto buffer = packet.get_bytes();
+		return std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+    }
+
+    inline auto from_binary(std::string const & binary) -> void
+    {
+        packet = dart::packet{gsl::make_span(reinterpret_cast<gsl::byte const*>(binary.data()), binary.size())};
+    }
+
+    inline auto make_binary(std::string const & binary) const -> package
+    {
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet{gsl::make_span(reinterpret_cast<gsl::byte const*>(binary.data()), binary.size())}});
+        return strange::package{};
+    }
+
+    inline auto is_json() const -> bool
+    {
+#if DART_USE_SAJSON
+        return packet.is_finalized();
+#else
+        return false;
+#endif
+    }
+
+    inline auto as_json(std::string & json) const -> void
+    {
+#if DART_USE_SAJSON
+        json = packet.to_json();
+#endif
+    }
+
+    inline auto to_json() const -> std::string
+    {
+#if DART_USE_SAJSON
+        return packet.to_json();
+#else
+        return std::string{};
+#endif
+    }
+
+    inline auto from_json(std::string const & json) -> void
+    {
+#if DART_USE_SAJSON
+        packet = dart::packet::from_json(json);
+#endif
+    }
+
+    inline auto make_json(std::string const & json) const -> package
+    {
+#if DART_USE_SAJSON
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet::from_json(json)});
+#endif
+        return strange::package{};
+    }
+
+    inline auto is_yaml() const -> bool
+    {
+#if DART_HAS_YAML
+        return packet.is_finalized();
+#else
+        return false;
+#endif
+    }
+
+    inline auto as_yaml(std::string & yaml) const -> void
+    {
+#if DART_HAS_YAML
+        yaml = packet.to_yaml();
+#endif
+    }
+
+    inline auto to_yaml() const -> std::string
+    {
+#if DART_HAS_YAML
+        return packet.to_yaml();
+#else
+        return std::string{};
+#endif
+    }
+
+    inline auto from_yaml(std::string const & yaml) -> void
+    {
+#if DART_HAS_YAML
+        packet = dart::packet::from_yaml(yaml);
+#endif
+    }
+
+    inline auto make_yaml(std::string const & yaml) const -> package
+    {
+#if DART_HAS_YAML
+        // return baggage_._make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet::from_yaml(yaml)});
+#else
+        return strange::package{};
+#endif
+    }
 };
 }
 }

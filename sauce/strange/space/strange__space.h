@@ -5799,6 +5799,8 @@ protected:
 
         virtual auto from_binary(std::string const & binary) -> void = 0;
 
+        virtual auto make_binary(std::string const & binary) const -> package = 0;
+
         virtual auto is_json() const -> bool = 0;
 
         virtual auto as_json(std::string & json) const -> void = 0;
@@ -5807,6 +5809,8 @@ protected:
 
         virtual auto from_json(std::string const & json) -> void = 0;
 
+        virtual auto make_json(std::string const & json) const -> package = 0;
+
         virtual auto is_yaml() const -> bool = 0;
 
         virtual auto as_yaml(std::string & yaml) const -> void = 0;
@@ -5814,6 +5818,8 @@ protected:
         virtual auto to_yaml() const -> std::string = 0;
 
         virtual auto from_yaml(std::string const & yaml) -> void = 0;
+
+        virtual auto make_yaml(std::string const & yaml) const -> package = 0;
     };
 
 public:
@@ -5858,6 +5864,8 @@ public:
 
     inline auto from_binary(std::string const & binary) -> void;
 
+    inline auto make_binary(std::string const & binary) const -> package;
+
     inline auto is_json() const -> bool;
 
     inline auto as_json(std::string & json) const -> void;
@@ -5866,6 +5874,8 @@ public:
 
     inline auto from_json(std::string const & json) -> void;
 
+    inline auto make_json(std::string const & json) const -> package;
+
     inline auto is_yaml() const -> bool;
 
     inline auto as_yaml(std::string & yaml) const -> void;
@@ -5873,6 +5883,8 @@ public:
     inline auto to_yaml() const -> std::string;
 
     inline auto from_yaml(std::string const & yaml) -> void;
+
+    inline auto make_yaml(std::string const & yaml) const -> package;
 };
 
 template<typename _Thing, bool _Copy>
@@ -5988,6 +6000,8 @@ private:
 
         inline auto from_binary(std::string const & binary) -> void final;
 
+        inline auto make_binary(std::string const & binary) const -> package final;
+
         inline auto is_json() const -> bool final;
 
         inline auto as_json(std::string & json) const -> void final;
@@ -5996,6 +6010,8 @@ private:
 
         inline auto from_json(std::string const & json) -> void final;
 
+        inline auto make_json(std::string const & json) const -> package final;
+
         inline auto is_yaml() const -> bool final;
 
         inline auto as_yaml(std::string & yaml) const -> void final;
@@ -6003,6 +6019,8 @@ private:
         inline auto to_yaml() const -> std::string final;
 
         inline auto from_yaml(std::string const & yaml) -> void final;
+
+        inline auto make_yaml(std::string const & yaml) const -> package final;
 
         _Thing _thing;
     };
@@ -6297,6 +6315,8 @@ public:
 
     inline auto from_binary(std::string const & binary) -> void;
 
+    inline auto make_binary(std::string const & binary) const -> package;
+
     inline auto is_json() const -> bool;
 
     inline auto as_json(std::string & json) const -> void;
@@ -6305,6 +6325,8 @@ public:
 
     inline auto from_json(std::string const & json) -> void;
 
+    inline auto make_json(std::string const & json) const -> package;
+
     inline auto is_yaml() const -> bool;
 
     inline auto as_yaml(std::string & yaml) const -> void;
@@ -6312,6 +6334,8 @@ public:
     inline auto to_yaml() const -> std::string;
 
     inline auto from_yaml(std::string const & yaml) -> void;
+
+    inline auto make_yaml(std::string const & yaml) const -> package;
 };
 
 template<typename _Thing, bool _Copy>
@@ -6579,6 +6603,8 @@ private:
 
         inline auto from_binary(std::string const & binary) -> void final;
 
+        inline auto make_binary(std::string const & binary) const -> package final;
+
         inline auto is_json() const -> bool final;
 
         inline auto as_json(std::string & json) const -> void final;
@@ -6587,6 +6613,8 @@ private:
 
         inline auto from_json(std::string const & json) -> void final;
 
+        inline auto make_json(std::string const & json) const -> package final;
+
         inline auto is_yaml() const -> bool final;
 
         inline auto as_yaml(std::string & yaml) const -> void final;
@@ -6594,6 +6622,8 @@ private:
         inline auto to_yaml() const -> std::string final;
 
         inline auto from_yaml(std::string const & yaml) -> void final;
+
+        inline auto make_yaml(std::string const & yaml) const -> package final;
 
         _Thing _thing;
     };
@@ -10520,6 +10550,11 @@ inline auto package::from_binary(std::string const & binary) -> void
     std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_binary(binary);
 }
 
+inline auto package::make_binary(std::string const & binary) const -> package
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->make_binary(binary);
+}
+
 inline auto package::is_json() const -> bool
 {
     return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_json();
@@ -10541,6 +10576,11 @@ inline auto package::from_json(std::string const & json) -> void
     std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_json(json);
 }
 
+inline auto package::make_json(std::string const & json) const -> package
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->make_json(json);
+}
+
 inline auto package::is_yaml() const -> bool
 {
     return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_yaml();
@@ -10560,6 +10600,11 @@ inline auto package::from_yaml(std::string const & yaml) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_yaml(yaml);
+}
+
+inline auto package::make_yaml(std::string const & yaml) const -> package
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->make_yaml(yaml);
 }
 
 template<typename _Thing, bool _Copy>
@@ -10617,6 +10662,12 @@ inline auto package_<_Thing, _Copy>::_instance::from_binary(std::string const & 
 }
 
 template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::make_binary(std::string const & binary) const -> package
+{
+    return _thing.make_binary(binary);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto package_<_Thing, _Copy>::_instance::is_json() const -> bool
 {
     return _thing.is_json();
@@ -10641,6 +10692,12 @@ inline auto package_<_Thing, _Copy>::_instance::from_json(std::string const & js
 }
 
 template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::make_json(std::string const & json) const -> package
+{
+    return _thing.make_json(json);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto package_<_Thing, _Copy>::_instance::is_yaml() const -> bool
 {
     return _thing.is_yaml();
@@ -10662,6 +10719,12 @@ template<typename _Thing, bool _Copy>
 inline auto package_<_Thing, _Copy>::_instance::from_yaml(std::string const & yaml) -> void
 {
     _thing.from_yaml(yaml);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto package_<_Thing, _Copy>::_instance::make_yaml(std::string const & yaml) const -> package
+{
+    return _thing.make_yaml(yaml);
 }
 
 inline auto baggage::pack(bag & dest) const -> void
@@ -11122,6 +11185,11 @@ inline auto baggage::from_binary(std::string const & binary) -> void
     std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_binary(binary);
 }
 
+inline auto baggage::make_binary(std::string const & binary) const -> package
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->make_binary(binary);
+}
+
 inline auto baggage::is_json() const -> bool
 {
     return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_json();
@@ -11143,6 +11211,11 @@ inline auto baggage::from_json(std::string const & json) -> void
     std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_json(json);
 }
 
+inline auto baggage::make_json(std::string const & json) const -> package
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->make_json(json);
+}
+
 inline auto baggage::is_yaml() const -> bool
 {
     return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->is_yaml();
@@ -11162,6 +11235,11 @@ inline auto baggage::from_yaml(std::string const & yaml) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename package::_derived>(strange::_common::_shared)->from_yaml(yaml);
+}
+
+inline auto baggage::make_yaml(std::string const & yaml) const -> package
+{
+    return std::dynamic_pointer_cast<typename package::_derived const>(strange::_common::_shared)->make_yaml(yaml);
 }
 
 template<typename _Thing, bool _Copy>
@@ -11675,6 +11753,12 @@ inline auto baggage_<_Thing, _Copy>::_instance::from_binary(std::string const & 
 }
 
 template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_binary(std::string const & binary) const -> package
+{
+    return _thing.make_binary(binary);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::is_json() const -> bool
 {
     return _thing.is_json();
@@ -11699,6 +11783,12 @@ inline auto baggage_<_Thing, _Copy>::_instance::from_json(std::string const & js
 }
 
 template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_json(std::string const & json) const -> package
+{
+    return _thing.make_json(json);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::is_yaml() const -> bool
 {
     return _thing.is_yaml();
@@ -11720,6 +11810,12 @@ template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::from_yaml(std::string const & yaml) -> void
 {
     _thing.from_yaml(yaml);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_yaml(std::string const & yaml) const -> package
+{
+    return _thing.make_yaml(yaml);
 }
 
 }

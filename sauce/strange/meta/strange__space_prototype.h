@@ -644,16 +644,19 @@ namespace strange
         auto as_binary(std::string & binary) const -> void;
         auto to_binary() const -> std::string;
         auto from_binary(std::string const & binary) -> void;
+        auto make_binary(std::string const & binary) const -> package;
 
         auto is_json() const -> bool;
         auto as_json(std::string & json) const -> void;
         auto to_json() const -> std::string;
         auto from_json(std::string const & json) -> void;
+        auto make_json(std::string const & json) const -> package;
 
         auto is_yaml() const -> bool;
         auto as_yaml(std::string & yaml) const -> void;
         auto to_yaml() const -> std::string;
         auto from_yaml(std::string const & yaml) -> void;
+        auto make_yaml(std::string const & yaml) const -> package;
     };
 
     struct // [[strange::thing("strange::implementation::baggage")]]
