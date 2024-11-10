@@ -4246,6 +4246,10 @@ protected:
             return any::_derived::_static_shared_to_base(derived);
         }
 
+        virtual auto inclusions() const -> strange::vector<strange::abstraction> const & = 0;
+
+        virtual auto inclusions() -> strange::vector<strange::abstraction> & = 0;
+
         virtual auto name() const -> std::string const & = 0;
 
         virtual auto name() -> std::string & = 0;
@@ -4290,6 +4294,10 @@ public:
         cats.insert(_cat_);
         return cats;
     }();
+
+    inline auto inclusions() const -> strange::vector<strange::abstraction> const &;
+
+    inline auto inclusions() -> strange::vector<strange::abstraction> &;
 
     inline auto name() const -> std::string const &;
 
@@ -4407,6 +4415,10 @@ private:
             return space_::_name_;
         }
 
+        inline auto inclusions() const -> strange::vector<strange::abstraction> const & final;
+
+        inline auto inclusions() -> strange::vector<strange::abstraction> & final;
+
         inline auto name() const -> std::string const & final;
 
         inline auto name() -> std::string & final;
@@ -4480,6 +4492,9 @@ namespace implementation
 {
 struct space
 {
+    strange::vector<strange::abstraction> inclusions_ {strange::vector<strange::abstraction>::_make()};
+    inline auto inclusions() const -> strange::vector<strange::abstraction> const & { return inclusions_; };
+    inline auto inclusions() -> strange::vector<strange::abstraction> & { return inclusions_; };
     std::string name_ {};
     inline auto name() const -> std::string const & { return name_; };
     inline auto name() -> std::string & { return name_; };
@@ -9237,6 +9252,17 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator>=(abstraction const
     return !operator<(other);
 }
 
+inline auto space::inclusions() const -> strange::vector<strange::abstraction> const &
+{
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->inclusions();
+}
+
+inline auto space::inclusions() -> strange::vector<strange::abstraction> &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->inclusions();
+}
+
 inline auto space::name() const -> std::string const &
 {
     return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->name();
@@ -9290,6 +9316,18 @@ inline auto space::operator>=(space const & other) const -> bool
 }
 
 template<typename _Thing, bool _Copy>
+inline auto space_<_Thing, _Copy>::_instance::inclusions() const -> strange::vector<strange::abstraction> const &
+{
+    return _thing.inclusions();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_<_Thing, _Copy>::_instance::inclusions() -> strange::vector<strange::abstraction> &
+{
+    return _thing.inclusions();
+}
+
+template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::name() const -> std::string const &
 {
     return _thing.name();
@@ -9316,7 +9354,8 @@ inline auto space_<_Thing, _Copy>::_instance::abstractions() -> strange::vector<
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::operator==(space const & other) const -> bool
 {
-    return name() == other.name()
+    return inclusions() == other.inclusions()
+    && name() == other.name()
     && abstractions() == other.abstractions();
 }
 
@@ -9329,8 +9368,9 @@ inline auto space_<_Thing, _Copy>::_instance::operator!=(space const & other) co
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::operator<(space const & other) const -> bool
 {
-    return name() < other.name() || (name() == other.name()
-    && abstractions() < other.abstractions());
+    return inclusions() < other.inclusions() || (inclusions() == other.inclusions()
+    && (name() < other.name() || (name() == other.name()
+    && abstractions() < other.abstractions())));
 }
 
 template<typename _Thing, bool _Copy>

@@ -92,7 +92,8 @@ struct std::hash<strange::space>
 {
     inline auto operator()(strange::space const & spc) const -> size_t
     {
-        auto h = hash_init(spc.name());
+        auto h = hash_range(spc.inclusions());
+        hash_combine(h, spc.name());
         hash_combine(h, hash_range(spc.abstractions()));
         return h;
     }

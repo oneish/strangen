@@ -481,18 +481,21 @@ namespace strange
     struct [[strange::thing("strange::implementation::space")]]
     space : any
     {
+        strange::vector<strange::abstraction> inclusions {strange::vector<strange::abstraction>::_make()};
         std::string name {};
         strange::vector<strange::abstraction> abstractions {strange::vector<strange::abstraction>::_make()};
 
-        [[strange::customisation("return name() == other.name()"
+        [[strange::customisation("return inclusions() == other.inclusions()"
+        "    && name() == other.name()"
         "    && abstractions() == other.abstractions()")]]
         auto operator==(space const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
         auto operator!=(space const & other) const -> bool;
 
-        [[strange::customisation("return name() < other.name() || (name() == other.name()"
-        "    && abstractions() < other.abstractions())")]]
+        [[strange::customisation("return inclusions() < other.inclusions() || (inclusions() == other.inclusions()"
+        "    && (name() < other.name() || (name() == other.name()"
+        "    && abstractions() < other.abstractions())))")]]
         auto operator<(space const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]
