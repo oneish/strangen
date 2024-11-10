@@ -528,7 +528,7 @@ struct parser
                     }
                     continue;
                 }
-                if (tok.text() == "(")
+                if (tok.text() == "(" && oper.name() != "operator")
                 {
                     rtrim(oper.name());
                     break;

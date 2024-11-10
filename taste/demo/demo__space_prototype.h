@@ -34,4 +34,9 @@ namespace demo
         auto pick() -> void;
         auto picked() const -> bool;
     };
+
+    struct function
+    {
+        auto operator()() const -> void;
+    };
 }

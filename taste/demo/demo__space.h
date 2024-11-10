@@ -30,6 +30,11 @@ struct bunch_of_fruit;
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct bunch_of_fruit_;
 
+struct function;
+
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct function_;
+
 }
 
 namespace strange
@@ -104,6 +109,24 @@ struct reflection<demo::bunch_of_fruit_<_Thing, _Copy>>
     static inline auto name() -> std::string
     {
         return "demo::bunch_of_fruit_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<demo::function>
+{
+    static inline auto name() -> std::string
+    {
+        return "demo::function";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<demo::function_<_Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "demo::function_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -1076,6 +1099,221 @@ public:
     }();
 };
 
+struct function : virtual strange::_common
+{
+    inline function() = default;
+
+    inline function(function const & other)
+    :strange::_common{other}
+    {
+    }
+
+    inline function(function && other)
+    :strange::_common{std::move(other)}
+    {
+    }
+
+    inline auto operator=(function const & other) -> function &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(function && other) -> function &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline function(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    {
+    }
+
+    explicit inline function(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    {
+    }
+
+protected:
+    struct _derived : strange::_common::_base
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename function::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return derived;
+        }
+
+        virtual auto operator()() const -> void = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename function::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> function
+    {
+        return function{function::_derived::_static_shared_to_base(std::make_shared<typename function_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    using _Abstraction_ = function;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto operator()() const -> void;
+};
+
+template<typename _Thing, bool _Copy>
+struct function_ : function
+{
+    inline function_() = default;
+
+    inline function_(function_ const & other)
+    :strange::_common{other}
+    ,function{}
+    {
+    }
+
+    inline function_(function_ && other)
+    :strange::_common{std::move(other)}
+    ,function{}
+    {
+    }
+
+    inline auto operator=(function_ const & other) -> function_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(function_ && other) -> function_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline function_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,function{}
+    {
+    }
+
+    explicit inline function_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,function{}
+    {
+    }
+
+private:
+    friend struct function;
+
+    struct _instance final : function::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :function_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return function_::_derived::_static_shared_to_base(std::make_shared<function_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_no_copy_constructor{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return function::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return function::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return function_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return function_::_name_;
+        }
+
+        inline auto operator()() const -> void final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> function_
+    {
+        return function_{function_::_derived::_static_shared_to_base(std::make_shared<function_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<function_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<function_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<function_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = function_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return function_::_derived::_static_shared_to_base(std::make_shared<function_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
 inline auto food::eat() -> void
 {
     strange::_common::_mutate();
@@ -1300,6 +1538,17 @@ template<typename _Thing, bool _Copy>
 inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::picked() const -> bool
 {
     return _thing.picked();
+}
+
+inline auto function::operator()() const -> void
+{
+    std::dynamic_pointer_cast<typename function::_derived const>(strange::_common::_shared)->operator()();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto function_<_Thing, _Copy>::_instance::operator()() const -> void
+{
+    _thing.operator()();
 }
 
 }
