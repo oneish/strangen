@@ -9,11 +9,6 @@
 namespace demo
 {
 
-struct any;
-
-template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
-struct any_;
-
 struct food;
 
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
@@ -39,24 +34,6 @@ struct bunch_of_fruit_;
 
 namespace strange
 {
-
-template<>
-struct reflection<demo::any>
-{
-    static inline auto name() -> std::string
-    {
-        return "demo::any";
-    }
-};
-
-template<typename _Thing, bool _Copy>
-struct reflection<demo::any_<_Thing, _Copy>>
-{
-    static inline auto name() -> std::string
-    {
-        return "demo::any_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
-    }
-};
 
 template<>
 struct reflection<demo::food>
@@ -135,228 +112,19 @@ struct reflection<demo::bunch_of_fruit_<_Thing, _Copy>>
 namespace demo
 {
 
-struct any : virtual strange::_common
-{
-    inline any() = default;
-
-    inline any(any const & other)
-    :strange::_common{other}
-    {
-    }
-
-    inline any(any && other)
-    :strange::_common{std::move(other)}
-    {
-    }
-
-    inline auto operator=(any const & other) -> any &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(any && other) -> any &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline any(std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-    {
-    }
-
-    explicit inline any(std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-    {
-    }
-
-protected:
-    struct _derived : strange::_common::_base
-    {
-        static inline auto _static_shared_to_base(std::shared_ptr<typename any::_derived> derived) -> std::shared_ptr<strange::_common::_base>
-        {
-            return derived;
-        }
-    };
-
-public:
-    inline auto _valid() const -> bool
-    {
-        return std::dynamic_pointer_cast<typename any::_derived const>(strange::_common::_shared).operator bool();
-    }
-
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> any
-    {
-        return any{any::_derived::_static_shared_to_base(std::make_shared<typename any_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    using _Abstraction_ = any;
-
-    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
-
-    static inline std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(_cat_);
-        return cats;
-    }();
-};
-
-template<typename _Thing, bool _Copy>
-struct any_ : any
-{
-    inline any_() = default;
-
-    inline any_(any_ const & other)
-    :strange::_common{other}
-    ,any{}
-    {
-    }
-
-    inline any_(any_ && other)
-    :strange::_common{std::move(other)}
-    ,any{}
-    {
-    }
-
-    inline auto operator=(any_ const & other) -> any_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(any_ && other) -> any_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline any_(std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-    ,any{}
-    {
-    }
-
-    explicit inline any_(std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-    ,any{}
-    {
-    }
-
-private:
-    friend struct any;
-
-    struct _instance final : any::_derived
-    {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
-        :any_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
-        {
-        }
-
-        inline auto _address() const -> void const * final
-        {
-            return &_thing;
-        }
-
-        inline auto _sizeof() const -> size_t final
-        {
-            return sizeof(_thing);
-        }
-
-        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
-        {
-            if constexpr (_Copy)
-            {
-                return any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>(_thing));
-            }
-            else
-            {
-                throw strange::_no_copy_constructor{};
-            }
-        }
-
-        inline auto _cat() const -> std::string final
-        {
-            return any::_cat_;
-        }
-
-        inline auto _cats() const -> std::unordered_set<std::string> final
-        {
-            return any::_cats_;
-        }
-
-        inline auto _copy() const -> bool final
-        {
-            return any_::_copy_;
-        }
-
-        inline auto _name() const -> std::string final
-        {
-            return any_::_name_;
-        }
-
-        _Thing _thing;
-    };
-
-public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> any_
-    {
-        return any_{any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>(std::forward<_Args>(_args) ...))};
-    }
-
-    inline auto _valid() const -> bool
-    {
-        return std::dynamic_pointer_cast<any_::_instance const>(strange::_common::_shared).operator bool();
-    }
-
-    inline auto _thing() const -> _Thing const &
-    {
-        return std::dynamic_pointer_cast<any_::_instance const>(strange::_common::_shared)->_thing;
-    }
-
-    inline auto _thing() -> _Thing &
-    {
-        strange::_common::_mutate();
-        return std::dynamic_pointer_cast<any_::_instance>(strange::_common::_shared)->_thing;
-    }
-
-    using _Kind_ = any_;
-    using _Thing_ = _Thing;
-
-    static inline bool const _copy_ = _Copy;
-
-    static inline std::string const _name_ = []()
-    {
-        auto const name = strange::reflection<_Kind_>::name();
-        if constexpr (std::is_default_constructible_v<_Thing>)
-        {
-            strange::_common::_factory_.emplace(name, []()
-            {
-                return any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>());
-            });
-        }
-        return name;
-    }();
-};
-
-struct food : any
+struct food : strange::any
 {
     inline food() = default;
 
     inline food(food const & other)
     :strange::_common{other}
-    ,any{}
+    ,strange::any{}
     {
     }
 
     inline food(food && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,strange::any{}
     {
     }
 
@@ -374,22 +142,22 @@ struct food : any
 
     explicit inline food(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,strange::any{}
     {
     }
 
     explicit inline food(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,strange::any{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : strange::any::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename food::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return strange::any::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto eat() -> void = 0;
@@ -414,7 +182,7 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(strange::any::_cats_.cbegin(), strange::any::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
@@ -807,19 +575,19 @@ public:
 };
 
 template<typename Item>
-struct bunch : any
+struct bunch : strange::any
 {
     inline bunch() = default;
 
     inline bunch(bunch const & other)
     :strange::_common{other}
-    ,any{}
+    ,strange::any{}
     {
     }
 
     inline bunch(bunch && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,strange::any{}
     {
     }
 
@@ -837,22 +605,22 @@ struct bunch : any
 
     explicit inline bunch(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,strange::any{}
     {
     }
 
     explicit inline bunch(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,strange::any{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : strange::any::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename bunch::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return strange::any::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto push_back(Item const & item) -> void = 0;
@@ -885,7 +653,7 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(strange::any::_cats_.cbegin(), strange::any::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();

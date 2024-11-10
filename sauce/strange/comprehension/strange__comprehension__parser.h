@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 
 namespace strange
 {
@@ -35,17 +36,63 @@ struct parser
 
     auto parse() -> space
     {
-        err.clear();
-        parse_name();
-        if (!err.empty())
-        {
-            err = "parse() " + err;
-        }
-        else if (tok.text() != "namespace")
-        {
-            err = "parse() expected 'namespace', but got name";
-        }
         auto spc = space::_make();
+        err.clear();
+        while (err.empty())
+        {
+            parse_name_or_punctuation();
+            if (!err.empty())
+            {
+                err = "parse() " + err;
+            }
+            else if (tok.text() == "#")
+            {
+                parse_name();
+                if (!err.empty())
+                {
+                    err = "parse() " + err;
+                }
+                else if (tok.text() != "include")
+                {
+                    err = "parse() expected 'include', but got name";
+                }
+                else
+                {
+                    std::string prototype;
+                    parse_string(prototype, true);
+                    if (!err.empty())
+                    {
+                        err = "parse() " + err;
+                    }
+                    else
+                    {
+                        std::ifstream ifs{prototype, std::ios::binary};
+                        std::istreambuf_iterator<char> it{ifs};
+                        auto previous = toke;
+                        toke = toker{it, prototype};
+                        auto deep = parse();
+                        toke = previous;
+                        for (auto abstraction : deep.abstractions())
+                        {
+                            auto name = abstraction.name();
+                            if (name.find("::") == std::string::npos)
+                            {
+                                abstraction.name() = deep.name() + "::" + name;
+                            }
+                            spc.abstractions().push_back(abstraction);
+                        }
+                    }
+                }
+            }
+            else if (tok.text() != "namespace")
+            {
+                err = "parse() expected '#' or 'namespace', but got text";
+            }
+            else
+            {
+                break;
+            }
+        }
         if (err.empty())
         {
             parse_space(spc);
@@ -845,7 +892,7 @@ struct parser
         err = "parse_punctuation() reached end of tokens";
     }
 
-    void parse_string(std::string & text)
+    void parse_string(std::string & text, bool single = false)
     {
         while (!toke.end)
         {
@@ -876,6 +923,10 @@ struct parser
 )#";
                     }
                     text += tok.text();
+                    if (single)
+                    {
+                        return;
+                    }
                     break;
                 case cls::whitespace:
                     break;

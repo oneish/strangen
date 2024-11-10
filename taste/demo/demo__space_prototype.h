@@ -1,13 +1,9 @@
 // demo space prototype
+#include "../../sauce/strange/meta/strange__space_prototype.h"
 namespace demo
 {
     // abstraction
-    struct any
-    {
-    };
-
-    // inheritance
-    struct food : any
+    struct food : strange::any
     {
         auto eat() -> void;
     };
@@ -22,7 +18,7 @@ namespace demo
 
     // template
     template<typename Item>
-    struct bunch : any
+    struct bunch : strange::any
     {
         auto push_back(Item const & item) -> void;
         auto push_back(Item && item) -> void;

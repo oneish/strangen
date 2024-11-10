@@ -48,6 +48,10 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
+            if (abstraction.name().find("::") != std::string::npos)
+            {
+                continue;
+            }
             _out << R"#(
 )#";
             _abstraction_parameters(abstraction, true, true, false, false);
@@ -72,6 +76,10 @@ namespace strange
 )#";
         for (auto const & abstraction : _space.abstractions())
         {
+            if (abstraction.name().find("::") != std::string::npos)
+            {
+                continue;
+            }
             _out << R"#(
 )#";
             _abstraction_parameters(abstraction, true, false, false, true);
@@ -133,6 +141,10 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
+            if (abstraction.name().find("::") != std::string::npos)
+            {
+                continue;
+            }
             // type-erased version
             _abstraction_parameters(abstraction, true, false, false, false);
             _out << R"#(struct )#" << abstraction.name() << R"#( : )#";
@@ -430,6 +442,10 @@ public:
     {
         for (auto const & abstraction : _space.abstractions())
         {
+            if (abstraction.name().find("::") != std::string::npos)
+            {
+                continue;
+            }
             {
                 std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, true, false, unique);
@@ -443,6 +459,10 @@ public:
 )#";
         for (auto const & abstraction : _space.abstractions())
         {
+            if (abstraction.name().find("::") != std::string::npos)
+            {
+                continue;
+            }
             std::unordered_set<strange::operation> unique;
             _abstraction_operations(abstraction, abstraction, false, false, true, true, unique);
         }

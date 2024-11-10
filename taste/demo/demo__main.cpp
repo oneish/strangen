@@ -79,30 +79,8 @@ private:
     bool _peeled = false;
 };
 
+#include "../../sauce/strange/strange.h"
 #include "demo__space.h"
-
-namespace strange
-{
-
-template<>
-struct reflection<banana>
-{
-    static inline auto name() -> std::string
-    {
-        return "banana";
-    }
-};
-
-template<>
-struct reflection<no_banana>
-{
-    static inline auto name() -> std::string
-    {
-        return "no_banana";
-    }
-};
-
-}
 
 struct bunch_of_bananas : std::vector<demo::fruit>
 {
@@ -127,6 +105,38 @@ private:
     bool _picked = false;
 };
 
+namespace strange
+{
+
+template<>
+struct reflection<banana>
+{
+    static inline auto name() -> std::string
+    {
+        return "banana";
+    }
+};
+
+template<>
+struct reflection<no_banana>
+{
+    static inline auto name() -> std::string
+    {
+        return "no_banana";
+    }
+};
+
+template<>
+struct reflection<bunch_of_bananas>
+{
+    static inline auto name() -> std::string
+    {
+        return "bunch_of_bananas";
+    }
+};
+
+}
+
 int main()
 {
     std::cout << "demo\n";
@@ -149,7 +159,7 @@ int main()
     std::cout << "bunch_2.size(): " << bunch_2.size() << "\n";
 
     std::cout << "fruit_1._name(): " << fruit_1._name() << "\n";
-    auto fruit_3 = demo::any::_construct<demo::fruit>("demo::fruit_<banana, true>");
+    auto fruit_3 = strange::_common::_construct<demo::fruit>("demo::fruit_<banana, true>");
     std::cout << "fruit_3._valid(): " << fruit_3._valid() << "\n";
     std::cout << "fruit_3._name(): " << fruit_3._name() << "\n";
 

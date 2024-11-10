@@ -28,8 +28,8 @@ struct baggage;
     char const * const prototype = "strange__space_prototype.h";
     std::ifstream ifs{prototype, std::ios::binary};
     std::istreambuf_iterator<char> it{ifs};
-    strange::comprehension::toker toker(it, prototype);
-    strange::comprehension::parser parser(toker);
+    strange::comprehension::toker toker{it, prototype};
+    strange::comprehension::parser parser{toker};
     auto space = parser.parse();
     if (space._valid())
     {
