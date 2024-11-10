@@ -48,10 +48,6 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
-            if (abstraction.name().find("::") != std::string::npos)
-            {
-                continue;
-            }
             _out << R"#(
 )#";
             _abstraction_parameters(abstraction, true, true, false, false);
@@ -76,10 +72,6 @@ namespace strange
 )#";
         for (auto const & abstraction : _space.abstractions())
         {
-            if (abstraction.name().find("::") != std::string::npos)
-            {
-                continue;
-            }
             _out << R"#(
 )#";
             _abstraction_parameters(abstraction, true, false, false, true);
@@ -141,10 +133,6 @@ namespace )#" << _space.name() << R"#(
     {
         for (auto const & abstraction : _space.abstractions())
         {
-            if (abstraction.name().find("::") != std::string::npos)
-            {
-                continue;
-            }
             // type-erased version
             _abstraction_parameters(abstraction, true, false, false, false);
             _out << R"#(struct )#" << abstraction.name() << R"#( : )#";
@@ -442,10 +430,6 @@ public:
     {
         for (auto const & abstraction : _space.abstractions())
         {
-            if (abstraction.name().find("::") != std::string::npos)
-            {
-                continue;
-            }
             {
                 std::unordered_set<strange::operation> unique;
                 _abstraction_operations(abstraction, abstraction, false, false, true, false, unique);
@@ -459,10 +443,6 @@ public:
 )#";
         for (auto const & abstraction : _space.abstractions())
         {
-            if (abstraction.name().find("::") != std::string::npos)
-            {
-                continue;
-            }
             std::unordered_set<strange::operation> unique;
             _abstraction_operations(abstraction, abstraction, false, false, true, true, unique);
         }
@@ -656,6 +636,27 @@ namespace )#" << _space.name() << R"#(
 )#";
     }
 
+    auto _find_parent(std::string const & parent) -> strange::abstraction
+    {
+        auto match = [& parent](strange::abstraction const & candidate)
+            {
+                return candidate.name() == parent.substr(0, parent.find('<'));
+            };
+        auto it = std::find_if(_space.abstractions().cbegin(), _space.abstractions().cend(), match);
+        if (it != _space.abstractions().cend())
+        {
+            return *it;
+        }
+        it = std::find_if(_space.inclusions().cbegin(), _space.inclusions().cend(), match);
+        if (it != _space.inclusions().cend())
+        {
+            return *it;
+        }
+        _out << R"#(static_assert(false, "strange abstraction parent not recognised: )#" << parent << R"#(");
+)#";
+        return strange::abstraction{};
+    }
+
     auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, bool const implementation, std::unordered_set<strange::operation> & unique, std::string const & name = std::string{}) -> void
     {
         if ((!inner) || !pure)
@@ -663,19 +664,10 @@ namespace )#" << _space.name() << R"#(
             // override base class operations as well
             for (auto const & parent : abstraction.parents())
             {
-                auto it = std::find_if(_space.abstractions().cbegin(), _space.abstractions().cend(),
-                    [& parent](strange::abstraction const & candidate)
-                    {
-                        return candidate.name() == parent.substr(0, parent.find('<'));
-                    });
-                if (it != _space.abstractions().cend())
+                auto recurse = _find_parent(parent);
+                if (recurse._something())
                 {
-                    _abstraction_operations(*it, derived, inner, pure, definition, implementation, unique, parent);
-                }
-                else
-                {
-                    _out << R"#(static_assert(false, "strange abstraction parent not recognised: )#" << parent << R"#(");
-)#";
+                    _abstraction_operations(recurse, derived, inner, pure, definition, implementation, unique, parent);
                 }
             }
         }

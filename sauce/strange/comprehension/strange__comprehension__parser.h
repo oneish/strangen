@@ -72,14 +72,14 @@ struct parser
                         toke = toker{it, prototype};
                         auto deep = parse();
                         toke = previous;
+                        for (auto abstraction : deep.inclusions())
+                        {
+                            spc.inclusions().push_back(abstraction);
+                        }
                         for (auto abstraction : deep.abstractions())
                         {
-                            auto name = abstraction.name();
-                            if (name.find("::") == std::string::npos)
-                            {
-                                abstraction.name() = deep.name() + "::" + name;
-                            }
-                            spc.abstractions().push_back(abstraction);
+                            abstraction.name() = deep.name() + "::" + abstraction.name();
+                            spc.inclusions().push_back(abstraction);
                         }
                     }
                 }
