@@ -598,8 +598,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> any
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return any{};
         }
@@ -723,6 +723,16 @@ public:
         return any_{any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> any_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return any_{};
+        }
+        return any_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<any_::_instance const>(strange::_common::_shared).operator bool();
@@ -844,8 +854,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> forward_const_iterator
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return forward_const_iterator{};
         }
@@ -994,6 +1004,16 @@ public:
         return forward_const_iterator_{forward_const_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_const_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> forward_const_iterator_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return forward_const_iterator_{};
+        }
+        return forward_const_iterator_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<forward_const_iterator_::_instance const>(strange::_common::_shared).operator bool();
@@ -1111,8 +1131,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> forward_iterator
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return forward_iterator{};
         }
@@ -1277,6 +1297,16 @@ public:
         return forward_iterator_{forward_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> forward_iterator_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return forward_iterator_{};
+        }
+        return forward_iterator_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<forward_iterator_::_instance const>(strange::_common::_shared).operator bool();
@@ -1386,8 +1416,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> bidirectional_const_iterator
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return bidirectional_const_iterator{};
         }
@@ -1552,6 +1582,16 @@ public:
         return bidirectional_const_iterator_{bidirectional_const_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_const_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> bidirectional_const_iterator_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return bidirectional_const_iterator_{};
+        }
+        return bidirectional_const_iterator_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<bidirectional_const_iterator_::_instance const>(strange::_common::_shared).operator bool();
@@ -1669,8 +1709,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> bidirectional_iterator
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return bidirectional_iterator{};
         }
@@ -1860,6 +1900,16 @@ public:
         return bidirectional_iterator_{bidirectional_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> bidirectional_iterator_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return bidirectional_iterator_{};
+        }
+        return bidirectional_iterator_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<bidirectional_iterator_::_instance const>(strange::_common::_shared).operator bool();
@@ -1993,8 +2043,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> random_access_const_iterator
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return random_access_const_iterator{};
         }
@@ -2207,6 +2257,16 @@ public:
         return random_access_const_iterator_{random_access_const_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_const_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> random_access_const_iterator_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return random_access_const_iterator_{};
+        }
+        return random_access_const_iterator_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<random_access_const_iterator_::_instance const>(strange::_common::_shared).operator bool();
@@ -2340,8 +2400,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> random_access_iterator
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return random_access_iterator{};
         }
@@ -2619,6 +2679,16 @@ public:
         return random_access_iterator_{random_access_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> random_access_iterator_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return random_access_iterator_{};
+        }
+        return random_access_iterator_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<random_access_iterator_::_instance const>(strange::_common::_shared).operator bool();
@@ -2844,8 +2914,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> vector
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return vector{};
         }
@@ -3178,6 +3248,16 @@ public:
         return vector_{vector_::_derived::_static_shared_to_base(std::make_shared<vector_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> vector_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return vector_{};
+        }
+        return vector_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<vector_::_instance const>(strange::_common::_shared).operator bool();
@@ -3300,8 +3380,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> parameter
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return parameter{};
         }
@@ -3474,6 +3554,16 @@ public:
         return parameter_{parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> parameter_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return parameter_{};
+        }
+        return parameter_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<parameter_::_instance const>(strange::_common::_shared).operator bool();
@@ -3640,8 +3730,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> operation
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return operation{};
         }
@@ -3854,6 +3944,16 @@ public:
         return operation_{operation_::_derived::_static_shared_to_base(std::make_shared<operation_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> operation_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return operation_{};
+        }
+        return operation_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<operation_::_instance const>(strange::_common::_shared).operator bool();
@@ -4031,8 +4131,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> abstraction
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return abstraction{};
         }
@@ -4237,6 +4337,16 @@ public:
         return abstraction_{abstraction_::_derived::_static_shared_to_base(std::make_shared<abstraction_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> abstraction_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return abstraction_{};
+        }
+        return abstraction_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<abstraction_::_instance const>(strange::_common::_shared).operator bool();
@@ -4395,8 +4505,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> space
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return space{};
         }
@@ -4569,6 +4679,16 @@ public:
         return space_{space_::_derived::_static_shared_to_base(std::make_shared<space_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> space_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return space_{};
+        }
+        return space_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<space_::_instance const>(strange::_common::_shared).operator bool();
@@ -4723,8 +4843,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> token
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return token{};
         }
@@ -4913,6 +5033,16 @@ public:
         return token_{token_::_derived::_static_shared_to_base(std::make_shared<token_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> token_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return token_{};
+        }
+        return token_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<token_::_instance const>(strange::_common::_shared).operator bool();
@@ -5045,8 +5175,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> stuff
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return stuff{};
         }
@@ -5177,6 +5307,16 @@ public:
     static inline auto _make_(_Args && ... _args) -> stuff_
     {
         return stuff_{stuff_::_derived::_static_shared_to_base(std::make_shared<stuff_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble_(std::string const & name) -> stuff_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return stuff_{};
+        }
+        return stuff_{it->second()};
     }
 
     inline auto _valid() const -> bool
@@ -5429,8 +5569,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> bag
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return bag{};
         }
@@ -5867,6 +6007,16 @@ public:
         return bag_{bag_::_derived::_static_shared_to_base(std::make_shared<bag_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> bag_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return bag_{};
+        }
+        return bag_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<bag_::_instance const>(strange::_common::_shared).operator bool();
@@ -5991,8 +6141,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> package
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return package{};
         }
@@ -6177,6 +6327,16 @@ public:
         return package_{package_::_derived::_static_shared_to_base(std::make_shared<package_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> package_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return package_{};
+        }
+        return package_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<package_::_instance const>(strange::_common::_shared).operator bool();
@@ -6279,8 +6439,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> baggage
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return baggage{};
         }
@@ -6768,6 +6928,16 @@ public:
     static inline auto _make_(_Args && ... _args) -> baggage_
     {
         return baggage_{baggage_::_derived::_static_shared_to_base(std::make_shared<baggage_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble_(std::string const & name) -> baggage_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return baggage_{};
+        }
+        return baggage_{it->second()};
     }
 
     inline auto _valid() const -> bool

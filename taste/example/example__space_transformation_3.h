@@ -202,8 +202,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> widget
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return widget{};
         }
@@ -343,6 +343,16 @@ public:
         return widget_{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> widget_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return widget_{};
+        }
+        return widget_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<widget_::_instance const>(strange::_common::_shared).operator bool();
@@ -443,8 +453,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> button
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return button{};
         }
@@ -589,6 +599,16 @@ public:
         return button_{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> button_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return button_{};
+        }
+        return button_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<button_::_instance const>(strange::_common::_shared).operator bool();
@@ -687,8 +707,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> number
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return number{};
         }
@@ -820,6 +840,16 @@ public:
         return number_{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> number_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return number_{};
+        }
+        return number_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<number_::_instance const>(strange::_common::_shared).operator bool();
@@ -922,8 +952,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> widget_number
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return widget_number{};
         }
@@ -1069,6 +1099,16 @@ public:
         return widget_number_{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble_(std::string const & name) -> widget_number_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return widget_number_{};
+        }
+        return widget_number_{it->second()};
+    }
+
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<widget_number_::_instance const>(strange::_common::_shared).operator bool();
@@ -1174,8 +1214,8 @@ public:
 
     static inline auto _assemble(std::string const & name) -> numeric
     {
-        auto it = _common::_factory_.find(name);
-        if (it == _common::_factory_.end())
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
         {
             return numeric{};
         }
@@ -1318,6 +1358,16 @@ public:
     static inline auto _make_(_Args && ... _args) -> numeric_
     {
         return numeric_{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble_(std::string const & name) -> numeric_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return numeric_{};
+        }
+        return numeric_{it->second()};
     }
 
     inline auto _valid() const -> bool
