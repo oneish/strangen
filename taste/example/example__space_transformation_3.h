@@ -194,6 +194,11 @@ public:
         return std::dynamic_pointer_cast<typename widget::_derived const>(strange::_common::_shared).operator bool();
     }
 
+    inline auto _clone() const -> widget
+    {
+        return widget{strange::_common::_shared->_clone()};
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> widget
     {
@@ -353,9 +358,14 @@ public:
         return widget_{it->second()};
     }
 
-    inline auto _valid() const -> bool
+    inline auto _valid_() const -> bool
     {
         return std::dynamic_pointer_cast<widget_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> widget_
+    {
+        return widget_{strange::_common::_shared->_clone()};
     }
 
     inline auto _thing() const -> _Thing const &
@@ -443,6 +453,11 @@ public:
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<typename button::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> button
+    {
+        return button{strange::_common::_shared->_clone()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -609,9 +624,14 @@ public:
         return button_{it->second()};
     }
 
-    inline auto _valid() const -> bool
+    inline auto _valid_() const -> bool
     {
         return std::dynamic_pointer_cast<button_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> button_
+    {
+        return button_{strange::_common::_shared->_clone()};
     }
 
     inline auto _thing() const -> _Thing const &
@@ -697,6 +717,11 @@ public:
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<typename number::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> number
+    {
+        return number{strange::_common::_shared->_clone()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -850,9 +875,14 @@ public:
         return number_{it->second()};
     }
 
-    inline auto _valid() const -> bool
+    inline auto _valid_() const -> bool
     {
         return std::dynamic_pointer_cast<number_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> number_
+    {
+        return number_{strange::_common::_shared->_clone()};
     }
 
     inline auto _thing() const -> _Thing const &
@@ -942,6 +972,11 @@ public:
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<typename widget_number::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> widget_number
+    {
+        return widget_number{strange::_common::_shared->_clone()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1109,9 +1144,14 @@ public:
         return widget_number_{it->second()};
     }
 
-    inline auto _valid() const -> bool
+    inline auto _valid_() const -> bool
     {
         return std::dynamic_pointer_cast<widget_number_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> widget_number_
+    {
+        return widget_number_{strange::_common::_shared->_clone()};
     }
 
     inline auto _thing() const -> _Thing const &
@@ -1204,6 +1244,11 @@ public:
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<typename numeric::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> numeric
+    {
+        return numeric{strange::_common::_shared->_clone()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1370,9 +1415,14 @@ public:
         return numeric_{it->second()};
     }
 
-    inline auto _valid() const -> bool
+    inline auto _valid_() const -> bool
     {
         return std::dynamic_pointer_cast<numeric_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> numeric_
+    {
+        return numeric_{strange::_common::_shared->_clone()};
     }
 
     inline auto _thing() const -> _Thing const &

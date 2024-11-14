@@ -217,6 +217,11 @@ public:
         return std::dynamic_pointer_cast<typename )#" << abstraction.name() << R"#(::_derived const>(strange::_common::_shared).operator bool();
     }
 
+    inline auto _clone() const -> )#" << abstraction.name() << R"#(
+    {
+        return )#" << abstraction.name() << R"#({strange::_common::_shared->_clone()};
+    }
+
     template<typename _Thing)#";
     if (!abstraction.thing().empty())
     {
@@ -406,9 +411,14 @@ public:
         return )#" << abstraction.name() << R"#(_{it->second()};
     }
 
-    inline auto _valid() const -> bool
+    inline auto _valid_() const -> bool
     {
         return std::dynamic_pointer_cast<)#" << abstraction.name() << R"#(_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> )#" << abstraction.name() << R"#(_
+    {
+        return )#" << abstraction.name() << R"#(_{strange::_common::_shared->_clone()};
     }
 
     inline auto _thing() const -> _Thing const &
