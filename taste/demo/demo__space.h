@@ -198,6 +198,16 @@ public:
         return food{food::_derived::_static_shared_to_base(std::make_shared<typename food_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> food
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return food{};
+        }
+        return food{it->second()};
+    }
+
     using _Abstraction_ = food;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -422,6 +432,16 @@ public:
     static inline auto _make(_Args && ... _args) -> fruit
     {
         return fruit{fruit::_derived::_static_shared_to_base(std::make_shared<typename fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> fruit
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return fruit{};
+        }
+        return fruit{it->second()};
     }
 
     using _Abstraction_ = fruit;
@@ -669,6 +689,16 @@ public:
         return bunch{bunch::_derived::_static_shared_to_base(std::make_shared<typename bunch_<Item, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> bunch
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return bunch{};
+        }
+        return bunch{it->second()};
+    }
+
     using _Abstraction_ = bunch;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -911,6 +941,16 @@ public:
     static inline auto _make(_Args && ... _args) -> bunch_of_fruit
     {
         return bunch_of_fruit{bunch_of_fruit::_derived::_static_shared_to_base(std::make_shared<typename bunch_of_fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> bunch_of_fruit
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return bunch_of_fruit{};
+        }
+        return bunch_of_fruit{it->second()};
     }
 
     using _Abstraction_ = bunch_of_fruit;
@@ -1156,6 +1196,16 @@ public:
     static inline auto _make(_Args && ... _args) -> function
     {
         return function{function::_derived::_static_shared_to_base(std::make_shared<typename function_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> function
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return function{};
+        }
+        return function{it->second()};
     }
 
     using _Abstraction_ = function;

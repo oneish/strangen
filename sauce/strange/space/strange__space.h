@@ -596,6 +596,16 @@ public:
         return any{any::_derived::_static_shared_to_base(std::make_shared<typename any_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> any
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return any{};
+        }
+        return any{it->second()};
+    }
+
     using _Abstraction_ = any;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -830,6 +840,16 @@ public:
     static inline auto _make(_Args && ... _args) -> forward_const_iterator
     {
         return forward_const_iterator{forward_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename forward_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> forward_const_iterator
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return forward_const_iterator{};
+        }
+        return forward_const_iterator{it->second()};
     }
 
     using _Abstraction_ = forward_const_iterator;
@@ -1087,6 +1107,16 @@ public:
     static inline auto _make(_Args && ... _args) -> forward_iterator
     {
         return forward_iterator{forward_iterator::_derived::_static_shared_to_base(std::make_shared<typename forward_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> forward_iterator
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return forward_iterator{};
+        }
+        return forward_iterator{it->second()};
     }
 
     using _Abstraction_ = forward_iterator;
@@ -1352,6 +1382,16 @@ public:
     static inline auto _make(_Args && ... _args) -> bidirectional_const_iterator
     {
         return bidirectional_const_iterator{bidirectional_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename bidirectional_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> bidirectional_const_iterator
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return bidirectional_const_iterator{};
+        }
+        return bidirectional_const_iterator{it->second()};
     }
 
     using _Abstraction_ = bidirectional_const_iterator;
@@ -1625,6 +1665,16 @@ public:
     static inline auto _make(_Args && ... _args) -> bidirectional_iterator
     {
         return bidirectional_iterator{bidirectional_iterator::_derived::_static_shared_to_base(std::make_shared<typename bidirectional_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> bidirectional_iterator
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return bidirectional_iterator{};
+        }
+        return bidirectional_iterator{it->second()};
     }
 
     using _Abstraction_ = bidirectional_iterator;
@@ -1939,6 +1989,16 @@ public:
     static inline auto _make(_Args && ... _args) -> random_access_const_iterator
     {
         return random_access_const_iterator{random_access_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename random_access_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> random_access_const_iterator
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return random_access_const_iterator{};
+        }
+        return random_access_const_iterator{it->second()};
     }
 
     using _Abstraction_ = random_access_const_iterator;
@@ -2276,6 +2336,16 @@ public:
     static inline auto _make(_Args && ... _args) -> random_access_iterator
     {
         return random_access_iterator{random_access_iterator::_derived::_static_shared_to_base(std::make_shared<typename random_access_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> random_access_iterator
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return random_access_iterator{};
+        }
+        return random_access_iterator{it->second()};
     }
 
     using _Abstraction_ = random_access_iterator;
@@ -2772,6 +2842,16 @@ public:
         return vector{vector::_derived::_static_shared_to_base(std::make_shared<typename vector_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> vector
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return vector{};
+        }
+        return vector{it->second()};
+    }
+
     using _Abstraction_ = vector;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -3218,6 +3298,16 @@ public:
         return parameter{parameter::_derived::_static_shared_to_base(std::make_shared<typename parameter_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> parameter
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return parameter{};
+        }
+        return parameter{it->second()};
+    }
+
     using _Abstraction_ = parameter;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -3546,6 +3636,16 @@ public:
     static inline auto _make(_Args && ... _args) -> operation
     {
         return operation{operation::_derived::_static_shared_to_base(std::make_shared<typename operation_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> operation
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return operation{};
+        }
+        return operation{it->second()};
     }
 
     using _Abstraction_ = operation;
@@ -3929,6 +4029,16 @@ public:
         return abstraction{abstraction::_derived::_static_shared_to_base(std::make_shared<typename abstraction_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> abstraction
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return abstraction{};
+        }
+        return abstraction{it->second()};
+    }
+
     using _Abstraction_ = abstraction;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -4283,6 +4393,16 @@ public:
         return space{space::_derived::_static_shared_to_base(std::make_shared<typename space_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> space
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return space{};
+        }
+        return space{it->second()};
+    }
+
     using _Abstraction_ = space;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -4601,6 +4721,16 @@ public:
         return token{token::_derived::_static_shared_to_base(std::make_shared<typename token_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> token
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return token{};
+        }
+        return token{it->second()};
+    }
+
     using _Abstraction_ = token;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -4911,6 +5041,16 @@ public:
     static inline auto _make(_Args && ... _args) -> stuff
     {
         return stuff{stuff::_derived::_static_shared_to_base(std::make_shared<typename stuff_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> stuff
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return stuff{};
+        }
+        return stuff{it->second()};
     }
 
     using _Abstraction_ = stuff;
@@ -5285,6 +5425,16 @@ public:
     static inline auto _make(_Args && ... _args) -> bag
     {
         return bag{bag::_derived::_static_shared_to_base(std::make_shared<typename bag_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> bag
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return bag{};
+        }
+        return bag{it->second()};
     }
 
     using _Abstraction_ = bag;
@@ -5839,6 +5989,16 @@ public:
         return package{package::_derived::_static_shared_to_base(std::make_shared<typename package_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> package
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return package{};
+        }
+        return package{it->second()};
+    }
+
     using _Abstraction_ = package;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -6115,6 +6275,16 @@ public:
     static inline auto _make(_Args && ... _args) -> baggage
     {
         return baggage{baggage::_derived::_static_shared_to_base(std::make_shared<typename baggage_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> baggage
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return baggage{};
+        }
+        return baggage{it->second()};
     }
 
     using _Abstraction_ = baggage;

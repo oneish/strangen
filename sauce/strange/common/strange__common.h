@@ -216,16 +216,5 @@ public:
         }
         return Other{};
     }
-
-    template<typename Other>
-    static inline auto _construct(std::string const & name) -> Other
-    {
-        auto it = _factory_.find(name);
-        if (it == _factory_.end())
-        {
-            return Other{};
-        }
-        return Other{it->second()};
-    }
 };
 }

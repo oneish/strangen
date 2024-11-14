@@ -200,6 +200,16 @@ public:
         return widget{widget::_derived::_static_shared_to_base(std::make_shared<typename widget_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> widget
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return widget{};
+        }
+        return widget{it->second()};
+    }
+
     using _Abstraction_ = widget;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -429,6 +439,16 @@ public:
     static inline auto _make(_Args && ... _args) -> button
     {
         return button{button::_derived::_static_shared_to_base(std::make_shared<typename button_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> button
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return button{};
+        }
+        return button{it->second()};
     }
 
     using _Abstraction_ = button;
@@ -665,6 +685,16 @@ public:
         return number{number::_derived::_static_shared_to_base(std::make_shared<typename number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> number
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return number{};
+        }
+        return number{it->second()};
+    }
+
     using _Abstraction_ = number;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
@@ -888,6 +918,16 @@ public:
     static inline auto _make(_Args && ... _args) -> widget_number
     {
         return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<typename widget_number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> widget_number
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return widget_number{};
+        }
+        return widget_number{it->second()};
     }
 
     using _Abstraction_ = widget_number;
@@ -1130,6 +1170,16 @@ public:
     static inline auto _make(_Args && ... _args) -> numeric
     {
         return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<Data, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _assemble(std::string const & name) -> numeric
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return numeric{};
+        }
+        return numeric{it->second()};
     }
 
     using _Abstraction_ = numeric;

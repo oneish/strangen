@@ -470,11 +470,11 @@ struct baggage
         {
             if (reset)
             {
-                dest = _common::_construct<any>(packet.str());
+                dest = any::_assemble(packet.str());
             }
             else
             {
-                unpack_unique->push_back(_common::_construct<stuff>(packet.str()));
+                unpack_unique->push_back(stuff::_assemble(packet.str()));
                 dest = unpack_unique->back();
             }
             return;
@@ -491,7 +491,7 @@ struct baggage
         if (packet.is_array() && packet.size() >= 2 && packet.at(0).is_str())
         {
             auto index = unpack_unique->size();
-            unpack_unique->push_back(_common::_construct<stuff>(packet.at(0).str()));
+            unpack_unique->push_back(stuff::_assemble(packet.at(0).str()));
             unpack_unique->at(index).unpack(strange::baggage::_make<strange::implementation::baggage>(strange::implementation::baggage{.packet = packet.at(1), .unpack_unique = unpack_unique}));
             dest = unpack_unique->at(index);
         }

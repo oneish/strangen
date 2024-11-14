@@ -231,6 +231,16 @@ public:
             _out << R"#(::_instance>(std::forward<_Args>(_args) ...))};
     }
 
+    static inline auto _assemble(std::string const & name) -> )#" << abstraction.name() << R"#(
+    {
+        auto it = _common::_factory_.find(name);
+        if (it == _common::_factory_.end())
+        {
+            return )#" << abstraction.name() << R"#({};
+        }
+        return )#" << abstraction.name() << R"#({it->second()};
+    }
+
     using _Abstraction_ = )#" << abstraction.name() << R"#(;
 
     static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
