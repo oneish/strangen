@@ -222,7 +222,7 @@ public:
         return food{food::_derived::_static_shared_to_base(std::make_shared<typename food_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> food
+    static inline auto _manufacture(std::string const & name) -> food
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -366,7 +366,7 @@ public:
         return food_{food_::_derived::_static_shared_to_base(std::make_shared<food_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> food_
+    static inline auto _manufacture_(std::string const & name) -> food_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -528,7 +528,7 @@ public:
         return fruit{fruit::_derived::_static_shared_to_base(std::make_shared<typename fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> fruit
+    static inline auto _manufacture(std::string const & name) -> fruit
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -688,7 +688,7 @@ public:
         return fruit_{fruit_::_derived::_static_shared_to_base(std::make_shared<fruit_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> fruit_
+    static inline auto _manufacture_(std::string const & name) -> fruit_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -853,7 +853,7 @@ public:
         return bunch{bunch::_derived::_static_shared_to_base(std::make_shared<typename bunch_<Item, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> bunch
+    static inline auto _manufacture(std::string const & name) -> bunch
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1013,7 +1013,7 @@ public:
         return bunch_{bunch_::_derived::_static_shared_to_base(std::make_shared<bunch_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> bunch_
+    static inline auto _manufacture_(std::string const & name) -> bunch_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1177,7 +1177,7 @@ public:
         return bunch_of_fruit{bunch_of_fruit::_derived::_static_shared_to_base(std::make_shared<typename bunch_of_fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> bunch_of_fruit
+    static inline auto _manufacture(std::string const & name) -> bunch_of_fruit
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1350,7 +1350,7 @@ public:
         return bunch_of_fruit_{bunch_of_fruit_::_derived::_static_shared_to_base(std::make_shared<bunch_of_fruit_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> bunch_of_fruit_
+    static inline auto _manufacture_(std::string const & name) -> bunch_of_fruit_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1502,7 +1502,7 @@ public:
         return function{function::_derived::_static_shared_to_base(std::make_shared<typename function_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> function
+    static inline auto _manufacture(std::string const & name) -> function
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1645,7 +1645,7 @@ public:
         return function_{function_::_derived::_static_shared_to_base(std::make_shared<function_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> function_
+    static inline auto _manufacture_(std::string const & name) -> function_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())

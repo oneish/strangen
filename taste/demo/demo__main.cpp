@@ -159,7 +159,7 @@ int main()
     std::cout << "bunch_2.size(): " << bunch_2.size() << "\n";
 
     std::cout << "fruit_1._name(): " << fruit_1._name() << "\n";
-    auto fruit_3 = demo::fruit::_assemble("demo::fruit_<banana, true>");
+    auto fruit_3 = demo::fruit::_manufacture("demo::fruit_<banana, true>");
     std::cout << "fruit_3._valid(): " << fruit_3._valid() << "\n";
     std::cout << "fruit_3._name(): " << fruit_3._name() << "\n";
 

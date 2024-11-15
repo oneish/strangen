@@ -620,7 +620,7 @@ public:
         return any{any::_derived::_static_shared_to_base(std::make_shared<typename any_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> any
+    static inline auto _manufacture(std::string const & name) -> any
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -759,7 +759,7 @@ public:
         return any_{any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> any_
+    static inline auto _manufacture_(std::string const & name) -> any_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -936,7 +936,7 @@ public:
         return forward_const_iterator{forward_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename forward_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> forward_const_iterator
+    static inline auto _manufacture(std::string const & name) -> forward_const_iterator
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1100,7 +1100,7 @@ public:
         return forward_const_iterator_{forward_const_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_const_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> forward_const_iterator_
+    static inline auto _manufacture_(std::string const & name) -> forward_const_iterator_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1273,7 +1273,7 @@ public:
         return forward_iterator{forward_iterator::_derived::_static_shared_to_base(std::make_shared<typename forward_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> forward_iterator
+    static inline auto _manufacture(std::string const & name) -> forward_iterator
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1453,7 +1453,7 @@ public:
         return forward_iterator_{forward_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> forward_iterator_
+    static inline auto _manufacture_(std::string const & name) -> forward_iterator_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1618,7 +1618,7 @@ public:
         return bidirectional_const_iterator{bidirectional_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename bidirectional_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> bidirectional_const_iterator
+    static inline auto _manufacture(std::string const & name) -> bidirectional_const_iterator
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1798,7 +1798,7 @@ public:
         return bidirectional_const_iterator_{bidirectional_const_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_const_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> bidirectional_const_iterator_
+    static inline auto _manufacture_(std::string const & name) -> bidirectional_const_iterator_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -1971,7 +1971,7 @@ public:
         return bidirectional_iterator{bidirectional_iterator::_derived::_static_shared_to_base(std::make_shared<typename bidirectional_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> bidirectional_iterator
+    static inline auto _manufacture(std::string const & name) -> bidirectional_iterator
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -2176,7 +2176,7 @@ public:
         return bidirectional_iterator_{bidirectional_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> bidirectional_iterator_
+    static inline auto _manufacture_(std::string const & name) -> bidirectional_iterator_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -2365,7 +2365,7 @@ public:
         return random_access_const_iterator{random_access_const_iterator::_derived::_static_shared_to_base(std::make_shared<typename random_access_const_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> random_access_const_iterator
+    static inline auto _manufacture(std::string const & name) -> random_access_const_iterator
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -2593,7 +2593,7 @@ public:
         return random_access_const_iterator_{random_access_const_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_const_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> random_access_const_iterator_
+    static inline auto _manufacture_(std::string const & name) -> random_access_const_iterator_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -2782,7 +2782,7 @@ public:
         return random_access_iterator{random_access_iterator::_derived::_static_shared_to_base(std::make_shared<typename random_access_iterator_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> random_access_iterator
+    static inline auto _manufacture(std::string const & name) -> random_access_iterator
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -3075,7 +3075,7 @@ public:
         return random_access_iterator_{random_access_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_iterator_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> random_access_iterator_
+    static inline auto _manufacture_(std::string const & name) -> random_access_iterator_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -3356,7 +3356,7 @@ public:
         return vector{vector::_derived::_static_shared_to_base(std::make_shared<typename vector_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> vector
+    static inline auto _manufacture(std::string const & name) -> vector
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -3704,7 +3704,7 @@ public:
         return vector_{vector_::_derived::_static_shared_to_base(std::make_shared<vector_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> vector_
+    static inline auto _manufacture_(std::string const & name) -> vector_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -3882,7 +3882,7 @@ public:
         return parameter{parameter::_derived::_static_shared_to_base(std::make_shared<typename parameter_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> parameter
+    static inline auto _manufacture(std::string const & name) -> parameter
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -4070,7 +4070,7 @@ public:
         return parameter_{parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> parameter_
+    static inline auto _manufacture_(std::string const & name) -> parameter_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -4292,7 +4292,7 @@ public:
         return operation{operation::_derived::_static_shared_to_base(std::make_shared<typename operation_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> operation
+    static inline auto _manufacture(std::string const & name) -> operation
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -4520,7 +4520,7 @@ public:
         return operation_{operation_::_derived::_static_shared_to_base(std::make_shared<operation_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> operation_
+    static inline auto _manufacture_(std::string const & name) -> operation_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -4753,7 +4753,7 @@ public:
         return abstraction{abstraction::_derived::_static_shared_to_base(std::make_shared<typename abstraction_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> abstraction
+    static inline auto _manufacture(std::string const & name) -> abstraction
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -4973,7 +4973,7 @@ public:
         return abstraction_{abstraction_::_derived::_static_shared_to_base(std::make_shared<abstraction_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> abstraction_
+    static inline auto _manufacture_(std::string const & name) -> abstraction_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -5187,7 +5187,7 @@ public:
         return space{space::_derived::_static_shared_to_base(std::make_shared<typename space_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> space
+    static inline auto _manufacture(std::string const & name) -> space
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -5375,7 +5375,7 @@ public:
         return space_{space_::_derived::_static_shared_to_base(std::make_shared<space_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> space_
+    static inline auto _manufacture_(std::string const & name) -> space_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -5585,7 +5585,7 @@ public:
         return token{token::_derived::_static_shared_to_base(std::make_shared<typename token_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> token
+    static inline auto _manufacture(std::string const & name) -> token
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -5789,7 +5789,7 @@ public:
         return token_{token_::_derived::_static_shared_to_base(std::make_shared<token_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> token_
+    static inline auto _manufacture_(std::string const & name) -> token_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -5977,7 +5977,7 @@ public:
         return stuff{stuff::_derived::_static_shared_to_base(std::make_shared<typename stuff_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> stuff
+    static inline auto _manufacture(std::string const & name) -> stuff
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -6125,7 +6125,7 @@ public:
         return stuff_{stuff_::_derived::_static_shared_to_base(std::make_shared<stuff_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> stuff_
+    static inline auto _manufacture_(std::string const & name) -> stuff_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -6431,7 +6431,7 @@ public:
         return bag{bag::_derived::_static_shared_to_base(std::make_shared<typename bag_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> bag
+    static inline auto _manufacture(std::string const & name) -> bag
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -6883,7 +6883,7 @@ public:
         return bag_{bag_::_derived::_static_shared_to_base(std::make_shared<bag_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> bag_
+    static inline auto _manufacture_(std::string const & name) -> bag_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -7063,7 +7063,7 @@ public:
         return package{package::_derived::_static_shared_to_base(std::make_shared<typename package_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> package
+    static inline auto _manufacture(std::string const & name) -> package
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -7263,7 +7263,7 @@ public:
         return package_{package_::_derived::_static_shared_to_base(std::make_shared<package_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> package_
+    static inline auto _manufacture_(std::string const & name) -> package_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -7421,7 +7421,7 @@ public:
         return baggage{baggage::_derived::_static_shared_to_base(std::make_shared<typename baggage_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> baggage
+    static inline auto _manufacture(std::string const & name) -> baggage
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -7926,7 +7926,7 @@ public:
         return baggage_{baggage_::_derived::_static_shared_to_base(std::make_shared<baggage_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> baggage_
+    static inline auto _manufacture_(std::string const & name) -> baggage_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())

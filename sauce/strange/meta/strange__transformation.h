@@ -255,7 +255,7 @@ public:
             _out << R"#(::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble(std::string const & name) -> )#" << abstraction.name() << R"#(
+    static inline auto _manufacture(std::string const & name) -> )#" << abstraction.name() << R"#(
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
@@ -434,7 +434,7 @@ public:
         return )#" << abstraction.name() << R"#(_{)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
     }
 
-    static inline auto _assemble_(std::string const & name) -> )#" << abstraction.name() << R"#(_
+    static inline auto _manufacture_(std::string const & name) -> )#" << abstraction.name() << R"#(_
     {
         auto it = strange::_common::_factory_.find(name);
         if (it == strange::_common::_factory_.end())
