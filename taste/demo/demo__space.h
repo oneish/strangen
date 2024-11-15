@@ -194,7 +194,14 @@ public:
 
     inline auto _clone() const -> food
     {
-        return food{strange::_common::_shared->_clone()};
+        try
+        {
+            return food{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return food{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -299,7 +306,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -352,7 +359,14 @@ public:
 
     inline auto _clone_() const -> food_
     {
-        return food_{strange::_common::_shared->_clone()};
+        try
+        {
+            return food_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return food_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -450,7 +464,14 @@ public:
 
     inline auto _clone() const -> fruit
     {
-        return fruit{strange::_common::_shared->_clone()};
+        try
+        {
+            return fruit{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return fruit{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -563,7 +584,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -624,7 +645,14 @@ public:
 
     inline auto _clone_() const -> fruit_
     {
-        return fruit_{strange::_common::_shared->_clone()};
+        try
+        {
+            return fruit_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return fruit_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -725,7 +753,14 @@ public:
 
     inline auto _clone() const -> bunch
     {
-        return bunch{strange::_common::_shared->_clone()};
+        try
+        {
+            return bunch{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return bunch{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -838,7 +873,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -899,7 +934,14 @@ public:
 
     inline auto _clone_() const -> bunch_
     {
-        return bunch_{strange::_common::_shared->_clone()};
+        try
+        {
+            return bunch_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return bunch_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -999,7 +1041,14 @@ public:
 
     inline auto _clone() const -> bunch_of_fruit
     {
-        return bunch_of_fruit{strange::_common::_shared->_clone()};
+        try
+        {
+            return bunch_of_fruit{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return bunch_of_fruit{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1119,7 +1168,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -1186,7 +1235,14 @@ public:
 
     inline auto _clone_() const -> bunch_of_fruit_
     {
-        return bunch_of_fruit_{strange::_common::_shared->_clone()};
+        try
+        {
+            return bunch_of_fruit_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return bunch_of_fruit_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -1274,7 +1330,14 @@ public:
 
     inline auto _clone() const -> function
     {
-        return function{strange::_common::_shared->_clone()};
+        try
+        {
+            return function{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return function{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1378,7 +1441,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -1431,7 +1494,14 @@ public:
 
     inline auto _clone_() const -> function_
     {
-        return function_{strange::_common::_shared->_clone()};
+        try
+        {
+            return function_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return function_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &

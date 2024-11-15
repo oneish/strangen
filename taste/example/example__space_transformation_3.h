@@ -196,7 +196,14 @@ public:
 
     inline auto _clone() const -> widget
     {
-        return widget{strange::_common::_shared->_clone()};
+        try
+        {
+            return widget{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return widget{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -306,7 +313,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -365,7 +372,14 @@ public:
 
     inline auto _clone_() const -> widget_
     {
-        return widget_{strange::_common::_shared->_clone()};
+        try
+        {
+            return widget_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return widget_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -457,7 +471,14 @@ public:
 
     inline auto _clone() const -> button
     {
-        return button{strange::_common::_shared->_clone()};
+        try
+        {
+            return button{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return button{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -570,7 +591,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -631,7 +652,14 @@ public:
 
     inline auto _clone_() const -> button_
     {
-        return button_{strange::_common::_shared->_clone()};
+        try
+        {
+            return button_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return button_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -721,7 +749,14 @@ public:
 
     inline auto _clone() const -> number
     {
-        return number{strange::_common::_shared->_clone()};
+        try
+        {
+            return number{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return number{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -827,7 +862,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -882,7 +917,14 @@ public:
 
     inline auto _clone_() const -> number_
     {
-        return number_{strange::_common::_shared->_clone()};
+        try
+        {
+            return number_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return number_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -976,7 +1018,14 @@ public:
 
     inline auto _clone() const -> widget_number
     {
-        return widget_number{strange::_common::_shared->_clone()};
+        try
+        {
+            return widget_number{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return widget_number{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1090,7 +1139,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -1151,7 +1200,14 @@ public:
 
     inline auto _clone_() const -> widget_number_
     {
-        return widget_number_{strange::_common::_shared->_clone()};
+        try
+        {
+            return widget_number_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return widget_number_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
@@ -1248,7 +1304,14 @@ public:
 
     inline auto _clone() const -> numeric
     {
-        return numeric{strange::_common::_shared->_clone()};
+        try
+        {
+            return numeric{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return numeric{};
+        }
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1361,7 +1424,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -1422,7 +1485,14 @@ public:
 
     inline auto _clone_() const -> numeric_
     {
-        return numeric_{strange::_common::_shared->_clone()};
+        try
+        {
+            return numeric_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return numeric_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &

@@ -219,7 +219,14 @@ public:
 
     inline auto _clone() const -> )#" << abstraction.name() << R"#(
     {
-        return )#" << abstraction.name() << R"#({strange::_common::_shared->_clone()};
+        try
+        {
+            return )#" << abstraction.name() << R"#({strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return )#" << abstraction.name() << R"#({};
+        }
     }
 
     template<typename _Thing)#";
@@ -358,7 +365,7 @@ private:
             }
             else
             {
-                throw strange::_no_copy_constructor{};
+                throw strange::_common::_no_copy{};
             }
         }
 
@@ -418,7 +425,14 @@ public:
 
     inline auto _clone_() const -> )#" << abstraction.name() << R"#(_
     {
-        return )#" << abstraction.name() << R"#(_{strange::_common::_shared->_clone()};
+        try
+        {
+            return )#" << abstraction.name() << R"#(_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return )#" << abstraction.name() << R"#(_{};
+        }
     }
 
     inline auto _thing() const -> _Thing const &
