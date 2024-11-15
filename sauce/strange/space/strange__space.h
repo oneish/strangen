@@ -602,6 +602,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> any
+    {
+        try
+        {
+            return any{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return any{};
+        }
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> any
     {
@@ -705,6 +717,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return any_::_derived::_static_shared_to_base(std::make_shared<any_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return any::_cat_;
@@ -757,6 +781,18 @@ public:
             return any_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return any_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> any_
+    {
+        try
+        {
+            return any_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return any_{};
         }
@@ -882,6 +918,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> forward_const_iterator
+    {
+        try
+        {
+            return forward_const_iterator{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return forward_const_iterator{};
+        }
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> forward_const_iterator
     {
@@ -998,6 +1046,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return forward_const_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_const_iterator_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return forward_const_iterator<T>::_cat_;
@@ -1062,6 +1122,18 @@ public:
             return forward_const_iterator_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return forward_const_iterator_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> forward_const_iterator_
+    {
+        try
+        {
+            return forward_const_iterator_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return forward_const_iterator_{};
         }
@@ -1178,6 +1250,18 @@ public:
             return forward_iterator{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return forward_iterator{};
+        }
+    }
+
+    inline auto _reproduce() const -> forward_iterator
+    {
+        try
+        {
+            return forward_iterator{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return forward_iterator{};
         }
@@ -1307,6 +1391,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return forward_iterator_::_derived::_static_shared_to_base(std::make_shared<forward_iterator_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return forward_iterator<T>::_cat_;
@@ -1379,6 +1475,18 @@ public:
             return forward_iterator_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return forward_iterator_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> forward_iterator_
+    {
+        try
+        {
+            return forward_iterator_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return forward_iterator_{};
         }
@@ -1487,6 +1595,18 @@ public:
             return bidirectional_const_iterator{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bidirectional_const_iterator{};
+        }
+    }
+
+    inline auto _reproduce() const -> bidirectional_const_iterator
+    {
+        try
+        {
+            return bidirectional_const_iterator{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bidirectional_const_iterator{};
         }
@@ -1616,6 +1736,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return bidirectional_const_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_const_iterator_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return bidirectional_const_iterator<T>::_cat_;
@@ -1688,6 +1820,18 @@ public:
             return bidirectional_const_iterator_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bidirectional_const_iterator_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> bidirectional_const_iterator_
+    {
+        try
+        {
+            return bidirectional_const_iterator_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bidirectional_const_iterator_{};
         }
@@ -1804,6 +1948,18 @@ public:
             return bidirectional_iterator{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bidirectional_iterator{};
+        }
+    }
+
+    inline auto _reproduce() const -> bidirectional_iterator
+    {
+        try
+        {
+            return bidirectional_iterator{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bidirectional_iterator{};
         }
@@ -1946,6 +2102,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return bidirectional_iterator_::_derived::_static_shared_to_base(std::make_shared<bidirectional_iterator_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return bidirectional_iterator<T>::_cat_;
@@ -2030,6 +2198,18 @@ public:
             return bidirectional_iterator_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bidirectional_iterator_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> bidirectional_iterator_
+    {
+        try
+        {
+            return bidirectional_iterator_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bidirectional_iterator_{};
         }
@@ -2162,6 +2342,18 @@ public:
             return random_access_const_iterator{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return random_access_const_iterator{};
+        }
+    }
+
+    inline auto _reproduce() const -> random_access_const_iterator
+    {
+        try
+        {
+            return random_access_const_iterator{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return random_access_const_iterator{};
         }
@@ -2315,6 +2507,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return random_access_const_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_const_iterator_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return random_access_const_iterator<T>::_cat_;
@@ -2411,6 +2615,18 @@ public:
             return random_access_const_iterator_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return random_access_const_iterator_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> random_access_const_iterator_
+    {
+        try
+        {
+            return random_access_const_iterator_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return random_access_const_iterator_{};
         }
@@ -2543,6 +2759,18 @@ public:
             return random_access_iterator{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return random_access_iterator{};
+        }
+    }
+
+    inline auto _reproduce() const -> random_access_iterator
+    {
+        try
+        {
+            return random_access_iterator{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return random_access_iterator{};
         }
@@ -2729,6 +2957,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return random_access_iterator_::_derived::_static_shared_to_base(std::make_shared<random_access_iterator_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return random_access_iterator<T>::_cat_;
@@ -2857,6 +3097,18 @@ public:
             return random_access_iterator_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return random_access_iterator_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> random_access_iterator_
+    {
+        try
+        {
+            return random_access_iterator_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return random_access_iterator_{};
         }
@@ -3086,6 +3338,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> vector
+    {
+        try
+        {
+            return vector{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return vector{};
+        }
+    }
+
     template<typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> vector
     {
@@ -3294,6 +3558,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return vector_::_derived::_static_shared_to_base(std::make_shared<vector_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return vector<T>::_cat_;
@@ -3455,6 +3731,18 @@ public:
         }
     }
 
+    inline auto _reproduce_() const -> vector_
+    {
+        try
+        {
+            return vector_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return vector_{};
+        }
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<vector_::_instance const>(strange::_common::_shared)->_thing;
@@ -3571,6 +3859,18 @@ public:
             return parameter{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return parameter{};
+        }
+    }
+
+    inline auto _reproduce() const -> parameter
+    {
+        try
+        {
+            return parameter{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return parameter{};
         }
@@ -3704,6 +4004,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return parameter_::_derived::_static_shared_to_base(std::make_shared<parameter_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return parameter::_cat_;
@@ -3780,6 +4092,18 @@ public:
             return parameter_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return parameter_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> parameter_
+    {
+        try
+        {
+            return parameter_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return parameter_{};
         }
@@ -3950,6 +4274,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> operation
+    {
+        try
+        {
+            return operation{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return operation{};
+        }
+    }
+
     template<typename _Thing = strange::implementation::operation, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> operation
     {
@@ -4098,6 +4434,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return operation_::_derived::_static_shared_to_base(std::make_shared<operation_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return operation::_cat_;
@@ -4194,6 +4542,18 @@ public:
             return operation_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return operation_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> operation_
+    {
+        try
+        {
+            return operation_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return operation_{};
         }
@@ -4375,6 +4735,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> abstraction
+    {
+        try
+        {
+            return abstraction{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return abstraction{};
+        }
+    }
+
     template<typename _Thing = strange::implementation::abstraction, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> abstraction
     {
@@ -4519,6 +4891,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return abstraction_::_derived::_static_shared_to_base(std::make_shared<abstraction_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return abstraction::_cat_;
@@ -4611,6 +4995,18 @@ public:
             return abstraction_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return abstraction_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> abstraction_
+    {
+        try
+        {
+            return abstraction_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return abstraction_{};
         }
@@ -4773,6 +5169,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> space
+    {
+        try
+        {
+            return space{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return space{};
+        }
+    }
+
     template<typename _Thing = strange::implementation::space, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> space
     {
@@ -4901,6 +5309,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return space_::_derived::_static_shared_to_base(std::make_shared<space_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return space::_cat_;
@@ -4977,6 +5397,18 @@ public:
             return space_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return space_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> space_
+    {
+        try
+        {
+            return space_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return space_{};
         }
@@ -5135,6 +5567,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> token
+    {
+        try
+        {
+            return token{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return token{};
+        }
+    }
+
     template<typename _Thing = strange::implementation::token, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> token
     {
@@ -5271,6 +5715,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return token_::_derived::_static_shared_to_base(std::make_shared<token_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return token::_cat_;
@@ -5355,6 +5811,18 @@ public:
             return token_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return token_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> token_
+    {
+        try
+        {
+            return token_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return token_{};
         }
@@ -5491,6 +5959,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> stuff
+    {
+        try
+        {
+            return stuff{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return stuff{};
+        }
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> stuff
     {
@@ -5599,6 +6079,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return stuff_::_derived::_static_shared_to_base(std::make_shared<stuff_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return stuff::_cat_;
@@ -5655,6 +6147,18 @@ public:
             return stuff_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return stuff_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> stuff_
+    {
+        try
+        {
+            return stuff_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return stuff_{};
         }
@@ -5904,6 +6408,18 @@ public:
             return bag{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bag{};
+        }
+    }
+
+    inline auto _reproduce() const -> bag
+    {
+        try
+        {
+            return bag{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bag{};
         }
@@ -6169,6 +6685,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return bag_::_derived::_static_shared_to_base(std::make_shared<bag_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return bag::_cat_;
@@ -6382,6 +6910,18 @@ public:
         }
     }
 
+    inline auto _reproduce_() const -> bag_
+    {
+        try
+        {
+            return bag_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return bag_{};
+        }
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<bag_::_instance const>(strange::_common::_shared)->_thing;
@@ -6500,6 +7040,18 @@ public:
             return package{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return package{};
+        }
+    }
+
+    inline auto _reproduce() const -> package
+    {
+        try
+        {
+            return package{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return package{};
         }
@@ -6639,6 +7191,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return package_::_derived::_static_shared_to_base(std::make_shared<package_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return package::_cat_;
@@ -6721,6 +7285,18 @@ public:
             return package_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return package_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> package_
+    {
+        try
+        {
+            return package_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return package_{};
         }
@@ -6822,6 +7398,18 @@ public:
             return baggage{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return baggage{};
+        }
+    }
+
+    inline auto _reproduce() const -> baggage
+    {
+        try
+        {
+            return baggage{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return baggage{};
         }
@@ -7114,6 +7702,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return baggage_::_derived::_static_shared_to_base(std::make_shared<baggage_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return baggage::_cat_;
@@ -7348,6 +7948,18 @@ public:
             return baggage_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return baggage_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> baggage_
+    {
+        try
+        {
+            return baggage_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return baggage_{};
         }

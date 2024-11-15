@@ -204,6 +204,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> food
+    {
+        try
+        {
+            return food{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return food{};
+        }
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> food
     {
@@ -310,6 +322,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return food_::_derived::_static_shared_to_base(std::make_shared<food_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return food::_cat_;
@@ -364,6 +388,18 @@ public:
             return food_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return food_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> food_
+    {
+        try
+        {
+            return food_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return food_{};
         }
@@ -469,6 +505,18 @@ public:
             return fruit{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return fruit{};
+        }
+    }
+
+    inline auto _reproduce() const -> fruit
+    {
+        try
+        {
+            return fruit{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return fruit{};
         }
@@ -588,6 +636,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return fruit_::_derived::_static_shared_to_base(std::make_shared<fruit_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return fruit::_cat_;
@@ -650,6 +710,18 @@ public:
             return fruit_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return fruit_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> fruit_
+    {
+        try
+        {
+            return fruit_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return fruit_{};
         }
@@ -758,6 +830,18 @@ public:
             return bunch{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bunch{};
+        }
+    }
+
+    inline auto _reproduce() const -> bunch
+    {
+        try
+        {
+            return bunch{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bunch{};
         }
@@ -877,6 +961,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return bunch_::_derived::_static_shared_to_base(std::make_shared<bunch_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return bunch<Item>::_cat_;
@@ -939,6 +1035,18 @@ public:
             return bunch_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bunch_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> bunch_
+    {
+        try
+        {
+            return bunch_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bunch_{};
         }
@@ -1046,6 +1154,18 @@ public:
             return bunch_of_fruit{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bunch_of_fruit{};
+        }
+    }
+
+    inline auto _reproduce() const -> bunch_of_fruit
+    {
+        try
+        {
+            return bunch_of_fruit{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bunch_of_fruit{};
         }
@@ -1172,6 +1292,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return bunch_of_fruit_::_derived::_static_shared_to_base(std::make_shared<bunch_of_fruit_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return bunch_of_fruit::_cat_;
@@ -1240,6 +1372,18 @@ public:
             return bunch_of_fruit_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return bunch_of_fruit_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> bunch_of_fruit_
+    {
+        try
+        {
+            return bunch_of_fruit_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return bunch_of_fruit_{};
         }
@@ -1335,6 +1479,18 @@ public:
             return function{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return function{};
+        }
+    }
+
+    inline auto _reproduce() const -> function
+    {
+        try
+        {
+            return function{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return function{};
         }
@@ -1445,6 +1601,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return function_::_derived::_static_shared_to_base(std::make_shared<function_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return function::_cat_;
@@ -1499,6 +1667,18 @@ public:
             return function_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return function_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> function_
+    {
+        try
+        {
+            return function_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return function_{};
         }

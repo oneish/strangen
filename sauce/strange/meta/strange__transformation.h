@@ -229,6 +229,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> )#" << abstraction.name() << R"#(
+    {
+        try
+        {
+            return )#" << abstraction.name() << R"#({strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return )#" << abstraction.name() << R"#({};
+        }
+    }
+
     template<typename _Thing)#";
     if (!abstraction.thing().empty())
     {
@@ -369,6 +381,20 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+)#";
+            _out << R"#(                return )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#"
+                << abstraction.name() << R"#(_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return )#";
@@ -430,6 +456,18 @@ public:
             return )#" << abstraction.name() << R"#(_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return )#" << abstraction.name() << R"#(_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> )#" << abstraction.name() << R"#(_
+    {
+        try
+        {
+            return )#" << abstraction.name() << R"#(_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return )#" << abstraction.name() << R"#(_{};
         }

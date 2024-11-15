@@ -25,6 +25,7 @@ protected:
         virtual auto _address() const -> void const * = 0;
         virtual auto _sizeof() const -> size_t = 0;
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
+        virtual auto _reproduce() const -> std::shared_ptr<_common::_base> = 0;
         virtual inline auto _cat() const -> std::string = 0;
         virtual inline auto _cats() const -> std::unordered_set<std::string> = 0;
         virtual inline auto _copy() const -> bool = 0;
@@ -78,6 +79,11 @@ private:
         inline auto _clone() const -> std::shared_ptr<_common::_base> final
         {
             throw _no_copy{};
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<_common::_base> final
+        {
+            throw _no_default{};
         }
 
         virtual inline auto _cat() const -> std::string final

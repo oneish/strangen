@@ -206,6 +206,18 @@ public:
         }
     }
 
+    inline auto _reproduce() const -> widget
+    {
+        try
+        {
+            return widget{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return widget{};
+        }
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> widget
     {
@@ -317,6 +329,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return widget::_cat_;
@@ -377,6 +401,18 @@ public:
             return widget_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return widget_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> widget_
+    {
+        try
+        {
+            return widget_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return widget_{};
         }
@@ -476,6 +512,18 @@ public:
             return button{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return button{};
+        }
+    }
+
+    inline auto _reproduce() const -> button
+    {
+        try
+        {
+            return button{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return button{};
         }
@@ -595,6 +643,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return button::_cat_;
@@ -657,6 +717,18 @@ public:
             return button_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return button_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> button_
+    {
+        try
+        {
+            return button_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return button_{};
         }
@@ -754,6 +826,18 @@ public:
             return number{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return number{};
+        }
+    }
+
+    inline auto _reproduce() const -> number
+    {
+        try
+        {
+            return number{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return number{};
         }
@@ -866,6 +950,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return number::_cat_;
@@ -922,6 +1018,18 @@ public:
             return number_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return number_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> number_
+    {
+        try
+        {
+            return number_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return number_{};
         }
@@ -1023,6 +1131,18 @@ public:
             return widget_number{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return widget_number{};
+        }
+    }
+
+    inline auto _reproduce() const -> widget_number
+    {
+        try
+        {
+            return widget_number{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return widget_number{};
         }
@@ -1143,6 +1263,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return widget_number::_cat_;
@@ -1205,6 +1337,18 @@ public:
             return widget_number_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return widget_number_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> widget_number_
+    {
+        try
+        {
+            return widget_number_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return widget_number_{};
         }
@@ -1309,6 +1453,18 @@ public:
             return numeric{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return numeric{};
+        }
+    }
+
+    inline auto _reproduce() const -> numeric
+    {
+        try
+        {
+            return numeric{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return numeric{};
         }
@@ -1428,6 +1584,18 @@ private:
             }
         }
 
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
         inline auto _cat() const -> std::string final
         {
             return numeric<Data>::_cat_;
@@ -1490,6 +1658,18 @@ public:
             return numeric_{strange::_common::_shared->_clone()};
         }
         catch(strange::_common::_no_copy const &)
+        {
+            return numeric_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> numeric_
+    {
+        try
+        {
+            return numeric_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
         {
             return numeric_{};
         }
