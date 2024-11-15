@@ -40,7 +40,7 @@ namespace example
 {
 namespace meta
 {
-inline auto parents(std::vector<std::string> pars) -> strange::vector<std::string>
+inline auto parents(strange::implementation::vector<std::string> pars) -> strange::vector<std::string>
 {
     return strange::vector<std::string>::_make(pars);
 }
@@ -50,7 +50,7 @@ inline auto parameter(strange::implementation::parameter param) -> strange::para
     return strange::parameter::_make(param);
 }
 
-inline auto parameters(std::vector<strange::parameter> params) -> strange::vector<strange::parameter>
+inline auto parameters(strange::implementation::vector<strange::parameter> params) -> strange::vector<strange::parameter>
 {
     return strange::vector<strange::parameter>::_make(params);
 }
@@ -60,7 +60,7 @@ inline auto operation(strange::implementation::operation oper) -> strange::opera
     return strange::operation::_make(oper);
 }
 
-inline auto operations(std::vector<strange::operation> opers) -> strange::vector<strange::operation>
+inline auto operations(strange::implementation::vector<strange::operation> opers) -> strange::vector<strange::operation>
 {
     return strange::vector<strange::operation>::_make(opers);
 }
@@ -70,7 +70,7 @@ inline auto abstraction(strange::implementation::abstraction abstract) -> strang
     return strange::abstraction::_make(abstract);
 }
 
-inline auto abstractions(std::vector<strange::abstraction> abstracts) -> strange::vector<strange::abstraction>
+inline auto abstractions(strange::implementation::vector<strange::abstraction> abstracts) -> strange::vector<strange::abstraction>
 {
     return strange::vector<strange::abstraction>::_make(abstracts);
 }

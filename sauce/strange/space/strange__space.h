@@ -1,7 +1,7 @@
 #pragma once
 #include "../common/strange__common.h"
 #include "../reflection/strange__reflection.h"
-#include <vector>
+#include "../implementation/vector/strange__implementation__vector.h"
 namespace strange
 {
 namespace comprehension
@@ -65,7 +65,7 @@ struct random_access_iterator_;
 template<typename T>
 struct vector;
 
-template<typename T, typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename T, typename _Thing = strange::implementation::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct vector_;
 
 struct parameter;
@@ -3350,7 +3350,7 @@ public:
         }
     }
 
-    template<typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> vector
     {
         return vector{vector::_derived::_static_shared_to_base(std::make_shared<typename vector_<T, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -13058,3 +13058,60 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_json(std::string const & js
 
 }
 
+template<typename T>
+inline auto strange::implementation::vector<T>::pack(bag & dest) const -> void
+{
+    dest.from_array();
+    for (auto const & item : *this)
+    {
+        if constexpr (std::is_same_v<bool, T>)
+        {
+            dest.push_back_array(dest.make_bool(item));
+        }
+        else if constexpr (std::is_integral_v<T>)
+        {
+            dest.push_back_array(dest.make_int64(item));
+        }
+        else if constexpr (std::is_floating_point_v<T>)
+        {
+            dest.push_back_array(dest.make_double(item));
+        }
+        else if constexpr (std::is_same_v<std::string, T>)
+        {
+            dest.push_back_array(dest.make_string(item));
+        }
+        else if constexpr (std::is_base_of_v<strange::any, T>)
+        {
+            dest.push_back_array(dest.make_any(item));
+        }
+    }
+}
+template<typename T>
+inline auto strange::implementation::vector<T>::unpack(bag const & src) -> void
+{
+    std::vector<T>::clear();
+    auto source = src.to_array();
+    for (auto const & item : source)
+    {
+        if constexpr (std::is_same_v<bool, T>)
+        {
+            std::vector<T>::push_back(item.to_bool());
+        }
+        else if constexpr (std::is_integral_v<T>)
+        {
+            std::vector<T>::push_back(item.to_int64());
+        }
+        else if constexpr (std::is_floating_point_v<T>)
+        {
+            std::vector<T>::push_back(item.to_double());
+        }
+        else if constexpr (std::is_same_v<std::string, T>)
+        {
+            std::vector<T>::push_back(item.to_string());
+        }
+        else if constexpr (std::is_base_of_v<strange::any, T>)
+        {
+            std::vector<T>::push_back(item.to_any());
+        }
+    }
+}
