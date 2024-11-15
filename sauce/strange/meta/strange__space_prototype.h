@@ -395,7 +395,7 @@ namespace strange
     operation : any
     {
         std::string name {};
-        strange::vector<strange::parameter> parameters {strange::vector<strange::parameter>::_make()};
+        std::vector<strange::parameter> parameters {};
         bool constness {false};
         std::string result {};
         bool data {false};
@@ -439,11 +439,11 @@ namespace strange
     struct [[strange::thing("strange::implementation::abstraction")]]
     abstraction : any
     {
-        strange::vector<strange::parameter> parameters {strange::vector<strange::parameter>::_make()};
+        std::vector<strange::parameter> parameters {};
         std::string name {};
-        strange::vector<std::string> parents {strange::vector<std::string>::_make()};
-        strange::vector<strange::parameter> types {strange::vector<strange::parameter>::_make()};
-        strange::vector<strange::operation> operations {strange::vector<strange::operation>::_make()};
+        std::vector<std::string> parents {};
+        std::vector<strange::parameter> types {};
+        std::vector<strange::operation> operations {};
         std::string thing {};
         std::string implementation {};
 
@@ -481,9 +481,9 @@ namespace strange
     struct [[strange::thing("strange::implementation::space")]]
     space : any
     {
-        strange::vector<strange::abstraction> inclusions {strange::vector<strange::abstraction>::_make()};
+        std::vector<strange::abstraction> inclusions {};
         std::string name {};
-        strange::vector<strange::abstraction> abstractions {strange::vector<strange::abstraction>::_make()};
+        std::vector<strange::abstraction> abstractions {};
 
         [[strange::customisation("return inclusions() == other.inclusions()"
         "    && name() == other.name()"

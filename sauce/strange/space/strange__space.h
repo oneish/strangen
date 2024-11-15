@@ -4215,9 +4215,9 @@ protected:
 
         virtual auto name() -> std::string & = 0;
 
-        virtual auto parameters() const -> strange::vector<strange::parameter> const & = 0;
+        virtual auto parameters() const -> std::vector<strange::parameter> const & = 0;
 
-        virtual auto parameters() -> strange::vector<strange::parameter> & = 0;
+        virtual auto parameters() -> std::vector<strange::parameter> & = 0;
 
         virtual auto constness() const -> bool const & = 0;
 
@@ -4318,9 +4318,9 @@ public:
 
     inline auto name() -> std::string &;
 
-    inline auto parameters() const -> strange::vector<strange::parameter> const &;
+    inline auto parameters() const -> std::vector<strange::parameter> const &;
 
-    inline auto parameters() -> strange::vector<strange::parameter> &;
+    inline auto parameters() -> std::vector<strange::parameter> &;
 
     inline auto constness() const -> bool const &;
 
@@ -4470,9 +4470,9 @@ private:
 
         inline auto name() -> std::string & final;
 
-        inline auto parameters() const -> strange::vector<strange::parameter> const & final;
+        inline auto parameters() const -> std::vector<strange::parameter> const & final;
 
-        inline auto parameters() -> strange::vector<strange::parameter> & final;
+        inline auto parameters() -> std::vector<strange::parameter> & final;
 
         inline auto constness() const -> bool const & final;
 
@@ -4600,9 +4600,9 @@ struct operation
     std::string name_ {};
     inline auto name() const -> std::string const & { return name_; };
     inline auto name() -> std::string & { return name_; };
-    strange::vector<strange::parameter> parameters_ {strange::vector<strange::parameter>::_make()};
-    inline auto parameters() const -> strange::vector<strange::parameter> const & { return parameters_; };
-    inline auto parameters() -> strange::vector<strange::parameter> & { return parameters_; };
+    std::vector<strange::parameter> parameters_ {};
+    inline auto parameters() const -> std::vector<strange::parameter> const & { return parameters_; };
+    inline auto parameters() -> std::vector<strange::parameter> & { return parameters_; };
     bool constness_ {false};
     inline auto constness() const -> bool const & { return constness_; };
     inline auto constness() -> bool & { return constness_; };
@@ -4676,25 +4676,25 @@ protected:
             return any::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto parameters() const -> strange::vector<strange::parameter> const & = 0;
+        virtual auto parameters() const -> std::vector<strange::parameter> const & = 0;
 
-        virtual auto parameters() -> strange::vector<strange::parameter> & = 0;
+        virtual auto parameters() -> std::vector<strange::parameter> & = 0;
 
         virtual auto name() const -> std::string const & = 0;
 
         virtual auto name() -> std::string & = 0;
 
-        virtual auto parents() const -> strange::vector<std::string> const & = 0;
+        virtual auto parents() const -> std::vector<std::string> const & = 0;
 
-        virtual auto parents() -> strange::vector<std::string> & = 0;
+        virtual auto parents() -> std::vector<std::string> & = 0;
 
-        virtual auto types() const -> strange::vector<strange::parameter> const & = 0;
+        virtual auto types() const -> std::vector<strange::parameter> const & = 0;
 
-        virtual auto types() -> strange::vector<strange::parameter> & = 0;
+        virtual auto types() -> std::vector<strange::parameter> & = 0;
 
-        virtual auto operations() const -> strange::vector<strange::operation> const & = 0;
+        virtual auto operations() const -> std::vector<strange::operation> const & = 0;
 
-        virtual auto operations() -> strange::vector<strange::operation> & = 0;
+        virtual auto operations() -> std::vector<strange::operation> & = 0;
 
         virtual auto thing() const -> std::string const & = 0;
 
@@ -4775,25 +4775,25 @@ public:
         return cats;
     }();
 
-    inline auto parameters() const -> strange::vector<strange::parameter> const &;
+    inline auto parameters() const -> std::vector<strange::parameter> const &;
 
-    inline auto parameters() -> strange::vector<strange::parameter> &;
+    inline auto parameters() -> std::vector<strange::parameter> &;
 
     inline auto name() const -> std::string const &;
 
     inline auto name() -> std::string &;
 
-    inline auto parents() const -> strange::vector<std::string> const &;
+    inline auto parents() const -> std::vector<std::string> const &;
 
-    inline auto parents() -> strange::vector<std::string> &;
+    inline auto parents() -> std::vector<std::string> &;
 
-    inline auto types() const -> strange::vector<strange::parameter> const &;
+    inline auto types() const -> std::vector<strange::parameter> const &;
 
-    inline auto types() -> strange::vector<strange::parameter> &;
+    inline auto types() -> std::vector<strange::parameter> &;
 
-    inline auto operations() const -> strange::vector<strange::operation> const &;
+    inline auto operations() const -> std::vector<strange::operation> const &;
 
-    inline auto operations() -> strange::vector<strange::operation> &;
+    inline auto operations() -> std::vector<strange::operation> &;
 
     inline auto thing() const -> std::string const &;
 
@@ -4923,25 +4923,25 @@ private:
             return abstraction_::_name_;
         }
 
-        inline auto parameters() const -> strange::vector<strange::parameter> const & final;
+        inline auto parameters() const -> std::vector<strange::parameter> const & final;
 
-        inline auto parameters() -> strange::vector<strange::parameter> & final;
+        inline auto parameters() -> std::vector<strange::parameter> & final;
 
         inline auto name() const -> std::string const & final;
 
         inline auto name() -> std::string & final;
 
-        inline auto parents() const -> strange::vector<std::string> const & final;
+        inline auto parents() const -> std::vector<std::string> const & final;
 
-        inline auto parents() -> strange::vector<std::string> & final;
+        inline auto parents() -> std::vector<std::string> & final;
 
-        inline auto types() const -> strange::vector<strange::parameter> const & final;
+        inline auto types() const -> std::vector<strange::parameter> const & final;
 
-        inline auto types() -> strange::vector<strange::parameter> & final;
+        inline auto types() -> std::vector<strange::parameter> & final;
 
-        inline auto operations() const -> strange::vector<strange::operation> const & final;
+        inline auto operations() const -> std::vector<strange::operation> const & final;
 
-        inline auto operations() -> strange::vector<strange::operation> & final;
+        inline auto operations() -> std::vector<strange::operation> & final;
 
         inline auto thing() const -> std::string const & final;
 
@@ -5050,21 +5050,21 @@ namespace implementation
 {
 struct abstraction
 {
-    strange::vector<strange::parameter> parameters_ {strange::vector<strange::parameter>::_make()};
-    inline auto parameters() const -> strange::vector<strange::parameter> const & { return parameters_; };
-    inline auto parameters() -> strange::vector<strange::parameter> & { return parameters_; };
+    std::vector<strange::parameter> parameters_ {};
+    inline auto parameters() const -> std::vector<strange::parameter> const & { return parameters_; };
+    inline auto parameters() -> std::vector<strange::parameter> & { return parameters_; };
     std::string name_ {};
     inline auto name() const -> std::string const & { return name_; };
     inline auto name() -> std::string & { return name_; };
-    strange::vector<std::string> parents_ {strange::vector<std::string>::_make()};
-    inline auto parents() const -> strange::vector<std::string> const & { return parents_; };
-    inline auto parents() -> strange::vector<std::string> & { return parents_; };
-    strange::vector<strange::parameter> types_ {strange::vector<strange::parameter>::_make()};
-    inline auto types() const -> strange::vector<strange::parameter> const & { return types_; };
-    inline auto types() -> strange::vector<strange::parameter> & { return types_; };
-    strange::vector<strange::operation> operations_ {strange::vector<strange::operation>::_make()};
-    inline auto operations() const -> strange::vector<strange::operation> const & { return operations_; };
-    inline auto operations() -> strange::vector<strange::operation> & { return operations_; };
+    std::vector<std::string> parents_ {};
+    inline auto parents() const -> std::vector<std::string> const & { return parents_; };
+    inline auto parents() -> std::vector<std::string> & { return parents_; };
+    std::vector<strange::parameter> types_ {};
+    inline auto types() const -> std::vector<strange::parameter> const & { return types_; };
+    inline auto types() -> std::vector<strange::parameter> & { return types_; };
+    std::vector<strange::operation> operations_ {};
+    inline auto operations() const -> std::vector<strange::operation> const & { return operations_; };
+    inline auto operations() -> std::vector<strange::operation> & { return operations_; };
     std::string thing_ {};
     inline auto thing() const -> std::string const & { return thing_; };
     inline auto thing() -> std::string & { return thing_; };
@@ -5126,17 +5126,17 @@ protected:
             return any::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto inclusions() const -> strange::vector<strange::abstraction> const & = 0;
+        virtual auto inclusions() const -> std::vector<strange::abstraction> const & = 0;
 
-        virtual auto inclusions() -> strange::vector<strange::abstraction> & = 0;
+        virtual auto inclusions() -> std::vector<strange::abstraction> & = 0;
 
         virtual auto name() const -> std::string const & = 0;
 
         virtual auto name() -> std::string & = 0;
 
-        virtual auto abstractions() const -> strange::vector<strange::abstraction> const & = 0;
+        virtual auto abstractions() const -> std::vector<strange::abstraction> const & = 0;
 
-        virtual auto abstractions() -> strange::vector<strange::abstraction> & = 0;
+        virtual auto abstractions() -> std::vector<strange::abstraction> & = 0;
 
         virtual auto operator==(space const & other) const -> bool = 0;
 
@@ -5209,17 +5209,17 @@ public:
         return cats;
     }();
 
-    inline auto inclusions() const -> strange::vector<strange::abstraction> const &;
+    inline auto inclusions() const -> std::vector<strange::abstraction> const &;
 
-    inline auto inclusions() -> strange::vector<strange::abstraction> &;
+    inline auto inclusions() -> std::vector<strange::abstraction> &;
 
     inline auto name() const -> std::string const &;
 
     inline auto name() -> std::string &;
 
-    inline auto abstractions() const -> strange::vector<strange::abstraction> const &;
+    inline auto abstractions() const -> std::vector<strange::abstraction> const &;
 
-    inline auto abstractions() -> strange::vector<strange::abstraction> &;
+    inline auto abstractions() -> std::vector<strange::abstraction> &;
 
     inline auto operator==(space const & other) const -> bool;
 
@@ -5341,17 +5341,17 @@ private:
             return space_::_name_;
         }
 
-        inline auto inclusions() const -> strange::vector<strange::abstraction> const & final;
+        inline auto inclusions() const -> std::vector<strange::abstraction> const & final;
 
-        inline auto inclusions() -> strange::vector<strange::abstraction> & final;
+        inline auto inclusions() -> std::vector<strange::abstraction> & final;
 
         inline auto name() const -> std::string const & final;
 
         inline auto name() -> std::string & final;
 
-        inline auto abstractions() const -> strange::vector<strange::abstraction> const & final;
+        inline auto abstractions() const -> std::vector<strange::abstraction> const & final;
 
-        inline auto abstractions() -> strange::vector<strange::abstraction> & final;
+        inline auto abstractions() -> std::vector<strange::abstraction> & final;
 
         inline auto operator==(space const & other) const -> bool final;
 
@@ -5452,15 +5452,15 @@ namespace implementation
 {
 struct space
 {
-    strange::vector<strange::abstraction> inclusions_ {strange::vector<strange::abstraction>::_make()};
-    inline auto inclusions() const -> strange::vector<strange::abstraction> const & { return inclusions_; };
-    inline auto inclusions() -> strange::vector<strange::abstraction> & { return inclusions_; };
+    std::vector<strange::abstraction> inclusions_ {};
+    inline auto inclusions() const -> std::vector<strange::abstraction> const & { return inclusions_; };
+    inline auto inclusions() -> std::vector<strange::abstraction> & { return inclusions_; };
     std::string name_ {};
     inline auto name() const -> std::string const & { return name_; };
     inline auto name() -> std::string & { return name_; };
-    strange::vector<strange::abstraction> abstractions_ {strange::vector<strange::abstraction>::_make()};
-    inline auto abstractions() const -> strange::vector<strange::abstraction> const & { return abstractions_; };
-    inline auto abstractions() -> strange::vector<strange::abstraction> & { return abstractions_; };
+    std::vector<strange::abstraction> abstractions_ {};
+    inline auto abstractions() const -> std::vector<strange::abstraction> const & { return abstractions_; };
+    inline auto abstractions() -> std::vector<strange::abstraction> & { return abstractions_; };
 };
 }
 }
@@ -10120,12 +10120,12 @@ inline auto operation::name() -> std::string &
     return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->name();
 }
 
-inline auto operation::parameters() const -> strange::vector<strange::parameter> const &
+inline auto operation::parameters() const -> std::vector<strange::parameter> const &
 {
     return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->parameters();
 }
 
-inline auto operation::parameters() -> strange::vector<strange::parameter> &
+inline auto operation::parameters() -> std::vector<strange::parameter> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->parameters();
@@ -10240,13 +10240,13 @@ inline auto operation_<_Thing, _Copy>::_instance::name() -> std::string &
 }
 
 template<typename _Thing, bool _Copy>
-inline auto operation_<_Thing, _Copy>::_instance::parameters() const -> strange::vector<strange::parameter> const &
+inline auto operation_<_Thing, _Copy>::_instance::parameters() const -> std::vector<strange::parameter> const &
 {
     return _thing.parameters();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto operation_<_Thing, _Copy>::_instance::parameters() -> strange::vector<strange::parameter> &
+inline auto operation_<_Thing, _Copy>::_instance::parameters() -> std::vector<strange::parameter> &
 {
     return _thing.parameters();
 }
@@ -10373,12 +10373,12 @@ inline auto operation_<_Thing, _Copy>::_instance::operator>=(operation const & o
     return !operator<(other);
 }
 
-inline auto abstraction::parameters() const -> strange::vector<strange::parameter> const &
+inline auto abstraction::parameters() const -> std::vector<strange::parameter> const &
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->parameters();
 }
 
-inline auto abstraction::parameters() -> strange::vector<strange::parameter> &
+inline auto abstraction::parameters() -> std::vector<strange::parameter> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->parameters();
@@ -10395,34 +10395,34 @@ inline auto abstraction::name() -> std::string &
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->name();
 }
 
-inline auto abstraction::parents() const -> strange::vector<std::string> const &
+inline auto abstraction::parents() const -> std::vector<std::string> const &
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->parents();
 }
 
-inline auto abstraction::parents() -> strange::vector<std::string> &
+inline auto abstraction::parents() -> std::vector<std::string> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->parents();
 }
 
-inline auto abstraction::types() const -> strange::vector<strange::parameter> const &
+inline auto abstraction::types() const -> std::vector<strange::parameter> const &
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->types();
 }
 
-inline auto abstraction::types() -> strange::vector<strange::parameter> &
+inline auto abstraction::types() -> std::vector<strange::parameter> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->types();
 }
 
-inline auto abstraction::operations() const -> strange::vector<strange::operation> const &
+inline auto abstraction::operations() const -> std::vector<strange::operation> const &
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operations();
 }
 
-inline auto abstraction::operations() -> strange::vector<strange::operation> &
+inline auto abstraction::operations() -> std::vector<strange::operation> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->operations();
@@ -10481,13 +10481,13 @@ inline auto abstraction::operator>=(abstraction const & other) const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::parameters() const -> strange::vector<strange::parameter> const &
+inline auto abstraction_<_Thing, _Copy>::_instance::parameters() const -> std::vector<strange::parameter> const &
 {
     return _thing.parameters();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::parameters() -> strange::vector<strange::parameter> &
+inline auto abstraction_<_Thing, _Copy>::_instance::parameters() -> std::vector<strange::parameter> &
 {
     return _thing.parameters();
 }
@@ -10505,37 +10505,37 @@ inline auto abstraction_<_Thing, _Copy>::_instance::name() -> std::string &
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::parents() const -> strange::vector<std::string> const &
+inline auto abstraction_<_Thing, _Copy>::_instance::parents() const -> std::vector<std::string> const &
 {
     return _thing.parents();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::parents() -> strange::vector<std::string> &
+inline auto abstraction_<_Thing, _Copy>::_instance::parents() -> std::vector<std::string> &
 {
     return _thing.parents();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::types() const -> strange::vector<strange::parameter> const &
+inline auto abstraction_<_Thing, _Copy>::_instance::types() const -> std::vector<strange::parameter> const &
 {
     return _thing.types();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::types() -> strange::vector<strange::parameter> &
+inline auto abstraction_<_Thing, _Copy>::_instance::types() -> std::vector<strange::parameter> &
 {
     return _thing.types();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::operations() const -> strange::vector<strange::operation> const &
+inline auto abstraction_<_Thing, _Copy>::_instance::operations() const -> std::vector<strange::operation> const &
 {
     return _thing.operations();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::operations() -> strange::vector<strange::operation> &
+inline auto abstraction_<_Thing, _Copy>::_instance::operations() -> std::vector<strange::operation> &
 {
     return _thing.operations();
 }
@@ -10612,12 +10612,12 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator>=(abstraction const
     return !operator<(other);
 }
 
-inline auto space::inclusions() const -> strange::vector<strange::abstraction> const &
+inline auto space::inclusions() const -> std::vector<strange::abstraction> const &
 {
     return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->inclusions();
 }
 
-inline auto space::inclusions() -> strange::vector<strange::abstraction> &
+inline auto space::inclusions() -> std::vector<strange::abstraction> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->inclusions();
@@ -10634,12 +10634,12 @@ inline auto space::name() -> std::string &
     return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->name();
 }
 
-inline auto space::abstractions() const -> strange::vector<strange::abstraction> const &
+inline auto space::abstractions() const -> std::vector<strange::abstraction> const &
 {
     return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->abstractions();
 }
 
-inline auto space::abstractions() -> strange::vector<strange::abstraction> &
+inline auto space::abstractions() -> std::vector<strange::abstraction> &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->abstractions();
@@ -10676,13 +10676,13 @@ inline auto space::operator>=(space const & other) const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto space_<_Thing, _Copy>::_instance::inclusions() const -> strange::vector<strange::abstraction> const &
+inline auto space_<_Thing, _Copy>::_instance::inclusions() const -> std::vector<strange::abstraction> const &
 {
     return _thing.inclusions();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto space_<_Thing, _Copy>::_instance::inclusions() -> strange::vector<strange::abstraction> &
+inline auto space_<_Thing, _Copy>::_instance::inclusions() -> std::vector<strange::abstraction> &
 {
     return _thing.inclusions();
 }
@@ -10700,13 +10700,13 @@ inline auto space_<_Thing, _Copy>::_instance::name() -> std::string &
 }
 
 template<typename _Thing, bool _Copy>
-inline auto space_<_Thing, _Copy>::_instance::abstractions() const -> strange::vector<strange::abstraction> const &
+inline auto space_<_Thing, _Copy>::_instance::abstractions() const -> std::vector<strange::abstraction> const &
 {
     return _thing.abstractions();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto space_<_Thing, _Copy>::_instance::abstractions() -> strange::vector<strange::abstraction> &
+inline auto space_<_Thing, _Copy>::_instance::abstractions() -> std::vector<strange::abstraction> &
 {
     return _thing.abstractions();
 }
