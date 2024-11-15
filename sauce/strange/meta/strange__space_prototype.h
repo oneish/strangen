@@ -170,7 +170,7 @@ namespace strange
     };
 
     template<typename T>
-    struct [[strange::thing("strange::implementation::vector<T>")]]
+    struct [[strange::thing("std::vector<T>")]]
     vector : any
     {
         using value_type = T;
