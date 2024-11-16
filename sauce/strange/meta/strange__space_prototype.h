@@ -511,7 +511,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::parameter")]]
-    parameter : any
+    parameter : stuff
     {
         std::string type {};
         std::string name {};
@@ -541,7 +541,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::operation")]]
-    operation : any
+    operation : stuff
     {
         std::string name {};
         std::vector<strange::parameter> parameters {};
@@ -586,7 +586,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::abstraction")]]
-    abstraction : any
+    abstraction : stuff
     {
         std::vector<strange::parameter> parameters {};
         std::string name {};
@@ -628,7 +628,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::space")]]
-    space : any
+    space : stuff
     {
         std::vector<strange::abstraction> inclusions {};
         std::string name {};

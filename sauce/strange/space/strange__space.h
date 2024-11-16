@@ -6190,19 +6190,19 @@ public:
     }();
 };
 
-struct parameter : any
+struct parameter : stuff
 {
     inline parameter() = default;
 
     inline parameter(parameter const & other)
     :strange::_common{other}
-    ,any{}
+    ,stuff{}
     {
     }
 
     inline parameter(parameter && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,stuff{}
     {
     }
 
@@ -6220,22 +6220,22 @@ struct parameter : any
 
     explicit inline parameter(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,stuff{}
     {
     }
 
     explicit inline parameter(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,stuff{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename parameter::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return stuff::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto type() const -> std::string const & = 0;
@@ -6316,10 +6316,14 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
 
     inline auto type() const -> std::string const &;
 
@@ -6453,6 +6457,10 @@ private:
             return parameter_::_name_;
         }
 
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
+
         inline auto type() const -> std::string const & final;
 
         inline auto type() -> std::string & final;
@@ -6573,6 +6581,18 @@ struct parameter
     std::string argument_ {};
     inline auto argument() const -> std::string const & { return argument_; };
     inline auto argument() -> std::string & { return argument_; };
+
+    inline auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        dest.set_object("type", dest.make_string(type()));
+        dest.set_object("name", dest.make_string(name()));
+        dest.set_object("argument", dest.make_string(argument()));
+    }
+
+    inline auto unpack(strange::bag const & src) -> void
+    {
+    }
 };
 }
 }
@@ -6580,19 +6600,19 @@ struct parameter
 namespace strange
 {
 
-struct operation : any
+struct operation : stuff
 {
     inline operation() = default;
 
     inline operation(operation const & other)
     :strange::_common{other}
-    ,any{}
+    ,stuff{}
     {
     }
 
     inline operation(operation && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,stuff{}
     {
     }
 
@@ -6610,22 +6630,22 @@ struct operation : any
 
     explicit inline operation(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,stuff{}
     {
     }
 
     explicit inline operation(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,stuff{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename operation::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return stuff::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto name() const -> std::string const & = 0;
@@ -6726,10 +6746,14 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
 
     inline auto name() const -> std::string const &;
 
@@ -6882,6 +6906,10 @@ private:
         {
             return operation_::_name_;
         }
+
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
 
         inline auto name() const -> std::string const & final;
 
@@ -7038,6 +7066,30 @@ struct operation
     std::string implementation_ {};
     inline auto implementation() const -> std::string const & { return implementation_; };
     inline auto implementation() -> std::string & { return implementation_; };
+
+    inline auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        dest.set_object("name", dest.make_string(name()));
+        {
+            auto _array = dest.make_array();
+            for (auto const & _item : parameters())
+            {
+                _array.push_back_array(dest.make_any(_item));
+            }
+            dest.set_object("parameters", _array);
+        }
+        dest.set_object("constness", dest.make_bool(constness()));
+        dest.set_object("result", dest.make_string(result()));
+        dest.set_object("data", dest.make_bool(data()));
+        dest.set_object("modification", dest.make_string(modification()));
+        dest.set_object("customisation", dest.make_string(customisation()));
+        dest.set_object("implementation", dest.make_string(implementation()));
+    }
+
+    inline auto unpack(strange::bag const & src) -> void
+    {
+    }
 };
 }
 }
@@ -7045,19 +7097,19 @@ struct operation
 namespace strange
 {
 
-struct abstraction : any
+struct abstraction : stuff
 {
     inline abstraction() = default;
 
     inline abstraction(abstraction const & other)
     :strange::_common{other}
-    ,any{}
+    ,stuff{}
     {
     }
 
     inline abstraction(abstraction && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,stuff{}
     {
     }
 
@@ -7075,22 +7127,22 @@ struct abstraction : any
 
     explicit inline abstraction(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,stuff{}
     {
     }
 
     explicit inline abstraction(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,stuff{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename abstraction::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return stuff::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto parameters() const -> std::vector<strange::parameter> const & = 0;
@@ -7187,10 +7239,14 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
 
     inline auto parameters() const -> std::vector<strange::parameter> const &;
 
@@ -7340,6 +7396,10 @@ private:
             return abstraction_::_name_;
         }
 
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
+
         inline auto parameters() const -> std::vector<strange::parameter> const & final;
 
         inline auto parameters() -> std::vector<strange::parameter> & final;
@@ -7488,6 +7548,43 @@ struct abstraction
     std::string implementation_ {};
     inline auto implementation() const -> std::string const & { return implementation_; };
     inline auto implementation() -> std::string & { return implementation_; };
+
+    inline auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        {
+            auto _array = dest.make_array();
+            for (auto const & _item : parameters())
+            {
+                _array.push_back_array(dest.make_any(_item));
+            }
+            dest.set_object("parameters", _array);
+        }
+        dest.set_object("name", dest.make_string(name()));
+        dest.set_object("parents", dest.make_array_string(parents()));
+        {
+            auto _array = dest.make_array();
+            for (auto const & _item : types())
+            {
+                _array.push_back_array(dest.make_any(_item));
+            }
+            dest.set_object("types", _array);
+        }
+        {
+            auto _array = dest.make_array();
+            for (auto const & _item : operations())
+            {
+                _array.push_back_array(dest.make_any(_item));
+            }
+            dest.set_object("operations", _array);
+        }
+        dest.set_object("thing", dest.make_string(thing()));
+        dest.set_object("implementation", dest.make_string(implementation()));
+    }
+
+    inline auto unpack(strange::bag const & src) -> void
+    {
+    }
 };
 }
 }
@@ -7495,19 +7592,19 @@ struct abstraction
 namespace strange
 {
 
-struct space : any
+struct space : stuff
 {
     inline space() = default;
 
     inline space(space const & other)
     :strange::_common{other}
-    ,any{}
+    ,stuff{}
     {
     }
 
     inline space(space && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,stuff{}
     {
     }
 
@@ -7525,22 +7622,22 @@ struct space : any
 
     explicit inline space(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,stuff{}
     {
     }
 
     explicit inline space(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,stuff{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename space::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return stuff::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto inclusions() const -> std::vector<strange::abstraction> const & = 0;
@@ -7621,10 +7718,14 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
+
+    inline auto pack(bag & dest) const -> void;
+
+    inline auto unpack(bag const & src) -> void;
 
     inline auto inclusions() const -> std::vector<strange::abstraction> const &;
 
@@ -7758,6 +7859,10 @@ private:
             return space_::_name_;
         }
 
+        inline auto pack(bag & dest) const -> void final;
+
+        inline auto unpack(bag const & src) -> void final;
+
         inline auto inclusions() const -> std::vector<strange::abstraction> const & final;
 
         inline auto inclusions() -> std::vector<strange::abstraction> & final;
@@ -7878,6 +7983,32 @@ struct space
     std::vector<strange::abstraction> abstractions_ {};
     inline auto abstractions() const -> std::vector<strange::abstraction> const & { return abstractions_; };
     inline auto abstractions() -> std::vector<strange::abstraction> & { return abstractions_; };
+
+    inline auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        {
+            auto _array = dest.make_array();
+            for (auto const & _item : inclusions())
+            {
+                _array.push_back_array(dest.make_any(_item));
+            }
+            dest.set_object("inclusions", _array);
+        }
+        dest.set_object("name", dest.make_string(name()));
+        {
+            auto _array = dest.make_array();
+            for (auto const & _item : abstractions())
+            {
+                _array.push_back_array(dest.make_any(_item));
+            }
+            dest.set_object("abstractions", _array);
+        }
+    }
+
+    inline auto unpack(strange::bag const & src) -> void
+    {
+    }
 };
 }
 }
@@ -13094,6 +13225,17 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_json(std::string const & js
     return _thing.make_json(json);
 }
 
+inline auto parameter::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto parameter::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
 inline auto parameter::type() const -> std::string const &
 {
     return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->type();
@@ -13155,6 +13297,18 @@ inline auto parameter::operator>(parameter const & other) const -> bool
 inline auto parameter::operator>=(parameter const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator>=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
 }
 
 template<typename _Thing, bool _Copy>
@@ -13231,6 +13385,17 @@ template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::operator>=(parameter const & other) const -> bool
 {
     return !operator<(other);
+}
+
+inline auto operation::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto operation::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
 }
 
 inline auto operation::name() const -> std::string const &
@@ -13349,6 +13514,18 @@ inline auto operation::operator>(operation const & other) const -> bool
 inline auto operation::operator>=(operation const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator>=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
 }
 
 template<typename _Thing, bool _Copy>
@@ -13497,6 +13674,17 @@ inline auto operation_<_Thing, _Copy>::_instance::operator>=(operation const & o
     return !operator<(other);
 }
 
+inline auto abstraction::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto abstraction::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
 inline auto abstraction::parameters() const -> std::vector<strange::parameter> const &
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->parameters();
@@ -13602,6 +13790,18 @@ inline auto abstraction::operator>(abstraction const & other) const -> bool
 inline auto abstraction::operator>=(abstraction const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator>=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
 }
 
 template<typename _Thing, bool _Copy>
@@ -13736,6 +13936,17 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator>=(abstraction const
     return !operator<(other);
 }
 
+inline auto space::pack(bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto space::unpack(bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
 inline auto space::inclusions() const -> std::vector<strange::abstraction> const &
 {
     return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->inclusions();
@@ -13797,6 +14008,18 @@ inline auto space::operator>(space const & other) const -> bool
 inline auto space::operator>=(space const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->operator>=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+{
+    _thing.unpack(src);
 }
 
 template<typename _Thing, bool _Copy>
