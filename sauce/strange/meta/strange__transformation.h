@@ -803,7 +803,98 @@ public:
 
     inline auto unpack(strange::bag const & src) -> void
     {
-    }
+)#";
+                    {
+                        std::unordered_set<strange::operation> unique;
+                        for (auto const & operation : abstraction.operations())
+                        {
+                            if (operation.implementation().empty() || (!operation.data()) || operation.constness() || unique.count(operation))
+                            {
+                                continue;
+                            }
+                            unique.insert(operation);
+                            if (operation.result() == "bool &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_bool()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "int64_t &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_int64()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "uint64_t &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_uint64()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "double &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_double()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "std::string &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_string()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "std::vector<strange::bag> &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "std::vector<bool> &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_bool()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "std::vector<int64_t> &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_int64()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "std::vector<uint64_t> &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_uint64()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "std::vector<double> &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_double()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result() == "std::vector<std::string> &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_string()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else if (operation.result().substr(0, 12) == "std::vector<")
+                            {
+                                _out << R"#(        {
+            auto _array = src.get_object(")#" << operation.name() << R"#(").to_array();
+            auto _size = _array.size();
+            )#" << operation.name() << R"#(().clear();
+            )#" << operation.name() << R"#(().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any()#" << operation.name() << R"#(()[_index]);
+            }
+        }
+)#";
+                            }
+                            else if (operation.result() == "std::unordered_map<std::string, bag> &")
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_object()#" << operation.name() << R"#(());
+)#";
+                            }
+                            else
+                            {
+                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_any()#" << operation.name() << R"#(());
+)#";
+                            }
+                        }
+                    }
+                    _out << R"#(    }
 )#";
                     break;
                 }
@@ -1153,7 +1244,7 @@ namespace )#" << _space.name() << R"#(
                     _out << R"#( = )#" << parameter.argument();
                 }
             }
-            else if ((parameter.type().size() >= 2) && (parameter.type().substr(parameter.type().size() - 2) == "&&"))
+            else if ((parameter.type().length() >= 2) && (parameter.type().substr(parameter.type().length() - 2) == "&&"))
             {
                 _out << R"#(std::move()#" << parameter.name() << R"#())#";
             }

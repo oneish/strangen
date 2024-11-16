@@ -6592,6 +6592,9 @@ struct parameter
 
     inline auto unpack(strange::bag const & src) -> void
     {
+        src.get_object("type").as_string(type());
+        src.get_object("name").as_string(name());
+        src.get_object("argument").as_string(argument());
     }
 };
 }
@@ -7089,6 +7092,23 @@ struct operation
 
     inline auto unpack(strange::bag const & src) -> void
     {
+        src.get_object("name").as_string(name());
+        {
+            auto _array = src.get_object("parameters").to_array();
+            auto _size = _array.size();
+            parameters().clear();
+            parameters().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any(parameters()[_index]);
+            }
+        }
+        src.get_object("constness").as_bool(constness());
+        src.get_object("result").as_string(result());
+        src.get_object("data").as_bool(data());
+        src.get_object("modification").as_string(modification());
+        src.get_object("customisation").as_string(customisation());
+        src.get_object("implementation").as_string(implementation());
     }
 };
 }
@@ -7584,6 +7604,40 @@ struct abstraction
 
     inline auto unpack(strange::bag const & src) -> void
     {
+        {
+            auto _array = src.get_object("parameters").to_array();
+            auto _size = _array.size();
+            parameters().clear();
+            parameters().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any(parameters()[_index]);
+            }
+        }
+        src.get_object("name").as_string(name());
+        src.get_object("parents").as_array_string(parents());
+        {
+            auto _array = src.get_object("types").to_array();
+            auto _size = _array.size();
+            types().clear();
+            types().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any(types()[_index]);
+            }
+        }
+        {
+            auto _array = src.get_object("operations").to_array();
+            auto _size = _array.size();
+            operations().clear();
+            operations().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any(operations()[_index]);
+            }
+        }
+        src.get_object("thing").as_string(thing());
+        src.get_object("implementation").as_string(implementation());
     }
 };
 }
@@ -8008,6 +8062,27 @@ struct space
 
     inline auto unpack(strange::bag const & src) -> void
     {
+        {
+            auto _array = src.get_object("inclusions").to_array();
+            auto _size = _array.size();
+            inclusions().clear();
+            inclusions().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any(inclusions()[_index]);
+            }
+        }
+        src.get_object("name").as_string(name());
+        {
+            auto _array = src.get_object("abstractions").to_array();
+            auto _size = _array.size();
+            abstractions().clear();
+            abstractions().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any(abstractions()[_index]);
+            }
+        }
     }
 };
 }
