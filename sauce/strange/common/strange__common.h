@@ -223,5 +223,16 @@ public:
         }
         return Other{};
     }
+
+    template<typename Other>
+    inline auto _dynamic_() const -> Other
+    {
+        Other other{_shared};
+        if (other._valid_())
+        {
+            return other;
+        }
+        return Other{};
+    }
 };
 }

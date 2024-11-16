@@ -6276,6 +6276,20 @@ protected:
 
         virtual auto make_int64(int64_t src) const -> bag = 0;
 
+        virtual auto is_uint64() const -> bool = 0;
+
+        virtual auto as_uint64(uint64_t & dest) const -> void = 0;
+
+        virtual auto to_uint64() const -> uint64_t = 0;
+
+        virtual auto from_uint64() -> void = 0;
+
+        virtual auto from_uint64(uint64_t src) -> void = 0;
+
+        virtual auto make_uint64() const -> bag = 0;
+
+        virtual auto make_uint64(uint64_t src) const -> bag = 0;
+
         virtual auto is_double() const -> bool = 0;
 
         virtual auto as_double(double & dest) const -> void = 0;
@@ -6349,6 +6363,54 @@ protected:
         virtual auto pop_back_array() -> bag = 0;
 
         virtual auto resize_array(std::size_t count) -> void = 0;
+
+        virtual auto as_array_bool(std::vector<bool> & dest) const -> void = 0;
+
+        virtual auto as_array_int64(std::vector<int64_t> & dest) const -> void = 0;
+
+        virtual auto as_array_uint64(std::vector<uint64_t> & dest) const -> void = 0;
+
+        virtual auto as_array_double(std::vector<double> & dest) const -> void = 0;
+
+        virtual auto as_array_string(std::vector<std::string> & dest) const -> void = 0;
+
+        virtual auto as_array_any(std::vector<strange::any> & dest) const -> void = 0;
+
+        virtual auto to_array_bool() const -> std::vector<bool> = 0;
+
+        virtual auto to_array_int64() const -> std::vector<int64_t> = 0;
+
+        virtual auto to_array_uint64() const -> std::vector<uint64_t> = 0;
+
+        virtual auto to_array_double() const -> std::vector<double> = 0;
+
+        virtual auto to_array_string() const -> std::vector<std::string> = 0;
+
+        virtual auto to_array_any() const -> std::vector<strange::any> = 0;
+
+        virtual auto from_array_bool(std::vector<bool> const & src) -> void = 0;
+
+        virtual auto from_array_int64(std::vector<int64_t> const & src) -> void = 0;
+
+        virtual auto from_array_uint64(std::vector<uint64_t> const & src) -> void = 0;
+
+        virtual auto from_array_double(std::vector<double> const & src) -> void = 0;
+
+        virtual auto from_array_string(std::vector<std::string> const & src) -> void = 0;
+
+        virtual auto from_array_any(std::vector<strange::any> const & src) -> void = 0;
+
+        virtual auto make_array_bool(std::vector<bool> const & src) const -> bag = 0;
+
+        virtual auto make_array_int64(std::vector<int64_t> const & src) const -> bag = 0;
+
+        virtual auto make_array_uint64(std::vector<uint64_t> const & src) const -> bag = 0;
+
+        virtual auto make_array_double(std::vector<double> const & src) const -> bag = 0;
+
+        virtual auto make_array_string(std::vector<std::string> const & src) const -> bag = 0;
+
+        virtual auto make_array_any(std::vector<strange::any> const & src) const -> bag = 0;
 
         virtual auto is_object() const -> bool = 0;
 
@@ -6491,6 +6553,20 @@ public:
 
     inline auto make_int64(int64_t src) const -> bag;
 
+    inline auto is_uint64() const -> bool;
+
+    inline auto as_uint64(uint64_t & dest) const -> void;
+
+    inline auto to_uint64() const -> uint64_t;
+
+    inline auto from_uint64() -> void;
+
+    inline auto from_uint64(uint64_t src) -> void;
+
+    inline auto make_uint64() const -> bag;
+
+    inline auto make_uint64(uint64_t src) const -> bag;
+
     inline auto is_double() const -> bool;
 
     inline auto as_double(double & dest) const -> void;
@@ -6564,6 +6640,54 @@ public:
     inline auto pop_back_array() -> bag;
 
     inline auto resize_array(std::size_t count) -> void;
+
+    inline auto as_array_bool(std::vector<bool> & dest) const -> void;
+
+    inline auto as_array_int64(std::vector<int64_t> & dest) const -> void;
+
+    inline auto as_array_uint64(std::vector<uint64_t> & dest) const -> void;
+
+    inline auto as_array_double(std::vector<double> & dest) const -> void;
+
+    inline auto as_array_string(std::vector<std::string> & dest) const -> void;
+
+    inline auto as_array_any(std::vector<strange::any> & dest) const -> void;
+
+    inline auto to_array_bool() const -> std::vector<bool>;
+
+    inline auto to_array_int64() const -> std::vector<int64_t>;
+
+    inline auto to_array_uint64() const -> std::vector<uint64_t>;
+
+    inline auto to_array_double() const -> std::vector<double>;
+
+    inline auto to_array_string() const -> std::vector<std::string>;
+
+    inline auto to_array_any() const -> std::vector<strange::any>;
+
+    inline auto from_array_bool(std::vector<bool> const & src) -> void;
+
+    inline auto from_array_int64(std::vector<int64_t> const & src) -> void;
+
+    inline auto from_array_uint64(std::vector<uint64_t> const & src) -> void;
+
+    inline auto from_array_double(std::vector<double> const & src) -> void;
+
+    inline auto from_array_string(std::vector<std::string> const & src) -> void;
+
+    inline auto from_array_any(std::vector<strange::any> const & src) -> void;
+
+    inline auto make_array_bool(std::vector<bool> const & src) const -> bag;
+
+    inline auto make_array_int64(std::vector<int64_t> const & src) const -> bag;
+
+    inline auto make_array_uint64(std::vector<uint64_t> const & src) const -> bag;
+
+    inline auto make_array_double(std::vector<double> const & src) const -> bag;
+
+    inline auto make_array_string(std::vector<std::string> const & src) const -> bag;
+
+    inline auto make_array_any(std::vector<strange::any> const & src) const -> bag;
 
     inline auto is_object() const -> bool;
 
@@ -6755,6 +6879,20 @@ private:
 
         inline auto make_int64(int64_t src) const -> bag final;
 
+        inline auto is_uint64() const -> bool final;
+
+        inline auto as_uint64(uint64_t & dest) const -> void final;
+
+        inline auto to_uint64() const -> uint64_t final;
+
+        inline auto from_uint64() -> void final;
+
+        inline auto from_uint64(uint64_t src) -> void final;
+
+        inline auto make_uint64() const -> bag final;
+
+        inline auto make_uint64(uint64_t src) const -> bag final;
+
         inline auto is_double() const -> bool final;
 
         inline auto as_double(double & dest) const -> void final;
@@ -6828,6 +6966,54 @@ private:
         inline auto pop_back_array() -> bag final;
 
         inline auto resize_array(std::size_t count) -> void final;
+
+        inline auto as_array_bool(std::vector<bool> & dest) const -> void final;
+
+        inline auto as_array_int64(std::vector<int64_t> & dest) const -> void final;
+
+        inline auto as_array_uint64(std::vector<uint64_t> & dest) const -> void final;
+
+        inline auto as_array_double(std::vector<double> & dest) const -> void final;
+
+        inline auto as_array_string(std::vector<std::string> & dest) const -> void final;
+
+        inline auto as_array_any(std::vector<strange::any> & dest) const -> void final;
+
+        inline auto to_array_bool() const -> std::vector<bool> final;
+
+        inline auto to_array_int64() const -> std::vector<int64_t> final;
+
+        inline auto to_array_uint64() const -> std::vector<uint64_t> final;
+
+        inline auto to_array_double() const -> std::vector<double> final;
+
+        inline auto to_array_string() const -> std::vector<std::string> final;
+
+        inline auto to_array_any() const -> std::vector<strange::any> final;
+
+        inline auto from_array_bool(std::vector<bool> const & src) -> void final;
+
+        inline auto from_array_int64(std::vector<int64_t> const & src) -> void final;
+
+        inline auto from_array_uint64(std::vector<uint64_t> const & src) -> void final;
+
+        inline auto from_array_double(std::vector<double> const & src) -> void final;
+
+        inline auto from_array_string(std::vector<std::string> const & src) -> void final;
+
+        inline auto from_array_any(std::vector<strange::any> const & src) -> void final;
+
+        inline auto make_array_bool(std::vector<bool> const & src) const -> bag final;
+
+        inline auto make_array_int64(std::vector<int64_t> const & src) const -> bag final;
+
+        inline auto make_array_uint64(std::vector<uint64_t> const & src) const -> bag final;
+
+        inline auto make_array_double(std::vector<double> const & src) const -> bag final;
+
+        inline auto make_array_string(std::vector<std::string> const & src) const -> bag final;
+
+        inline auto make_array_any(std::vector<strange::any> const & src) const -> bag final;
 
         inline auto is_object() const -> bool final;
 
@@ -7482,6 +7668,20 @@ public:
 
     inline auto make_int64(int64_t src) const -> bag;
 
+    inline auto is_uint64() const -> bool;
+
+    inline auto as_uint64(uint64_t & dest) const -> void;
+
+    inline auto to_uint64() const -> uint64_t;
+
+    inline auto from_uint64() -> void;
+
+    inline auto from_uint64(uint64_t src) -> void;
+
+    inline auto make_uint64() const -> bag;
+
+    inline auto make_uint64(uint64_t src) const -> bag;
+
     inline auto is_double() const -> bool;
 
     inline auto as_double(double & dest) const -> void;
@@ -7555,6 +7755,54 @@ public:
     inline auto pop_back_array() -> bag;
 
     inline auto resize_array(std::size_t count) -> void;
+
+    inline auto as_array_bool(std::vector<bool> & dest) const -> void;
+
+    inline auto as_array_int64(std::vector<int64_t> & dest) const -> void;
+
+    inline auto as_array_uint64(std::vector<uint64_t> & dest) const -> void;
+
+    inline auto as_array_double(std::vector<double> & dest) const -> void;
+
+    inline auto as_array_string(std::vector<std::string> & dest) const -> void;
+
+    inline auto as_array_any(std::vector<strange::any> & dest) const -> void;
+
+    inline auto to_array_bool() const -> std::vector<bool>;
+
+    inline auto to_array_int64() const -> std::vector<int64_t>;
+
+    inline auto to_array_uint64() const -> std::vector<uint64_t>;
+
+    inline auto to_array_double() const -> std::vector<double>;
+
+    inline auto to_array_string() const -> std::vector<std::string>;
+
+    inline auto to_array_any() const -> std::vector<strange::any>;
+
+    inline auto from_array_bool(std::vector<bool> const & src) -> void;
+
+    inline auto from_array_int64(std::vector<int64_t> const & src) -> void;
+
+    inline auto from_array_uint64(std::vector<uint64_t> const & src) -> void;
+
+    inline auto from_array_double(std::vector<double> const & src) -> void;
+
+    inline auto from_array_string(std::vector<std::string> const & src) -> void;
+
+    inline auto from_array_any(std::vector<strange::any> const & src) -> void;
+
+    inline auto make_array_bool(std::vector<bool> const & src) const -> bag;
+
+    inline auto make_array_int64(std::vector<int64_t> const & src) const -> bag;
+
+    inline auto make_array_uint64(std::vector<uint64_t> const & src) const -> bag;
+
+    inline auto make_array_double(std::vector<double> const & src) const -> bag;
+
+    inline auto make_array_string(std::vector<std::string> const & src) const -> bag;
+
+    inline auto make_array_any(std::vector<strange::any> const & src) const -> bag;
 
     inline auto is_object() const -> bool;
 
@@ -7772,6 +8020,20 @@ private:
 
         inline auto make_int64(int64_t src) const -> bag final;
 
+        inline auto is_uint64() const -> bool final;
+
+        inline auto as_uint64(uint64_t & dest) const -> void final;
+
+        inline auto to_uint64() const -> uint64_t final;
+
+        inline auto from_uint64() -> void final;
+
+        inline auto from_uint64(uint64_t src) -> void final;
+
+        inline auto make_uint64() const -> bag final;
+
+        inline auto make_uint64(uint64_t src) const -> bag final;
+
         inline auto is_double() const -> bool final;
 
         inline auto as_double(double & dest) const -> void final;
@@ -7845,6 +8107,54 @@ private:
         inline auto pop_back_array() -> bag final;
 
         inline auto resize_array(std::size_t count) -> void final;
+
+        inline auto as_array_bool(std::vector<bool> & dest) const -> void final;
+
+        inline auto as_array_int64(std::vector<int64_t> & dest) const -> void final;
+
+        inline auto as_array_uint64(std::vector<uint64_t> & dest) const -> void final;
+
+        inline auto as_array_double(std::vector<double> & dest) const -> void final;
+
+        inline auto as_array_string(std::vector<std::string> & dest) const -> void final;
+
+        inline auto as_array_any(std::vector<strange::any> & dest) const -> void final;
+
+        inline auto to_array_bool() const -> std::vector<bool> final;
+
+        inline auto to_array_int64() const -> std::vector<int64_t> final;
+
+        inline auto to_array_uint64() const -> std::vector<uint64_t> final;
+
+        inline auto to_array_double() const -> std::vector<double> final;
+
+        inline auto to_array_string() const -> std::vector<std::string> final;
+
+        inline auto to_array_any() const -> std::vector<strange::any> final;
+
+        inline auto from_array_bool(std::vector<bool> const & src) -> void final;
+
+        inline auto from_array_int64(std::vector<int64_t> const & src) -> void final;
+
+        inline auto from_array_uint64(std::vector<uint64_t> const & src) -> void final;
+
+        inline auto from_array_double(std::vector<double> const & src) -> void final;
+
+        inline auto from_array_string(std::vector<std::string> const & src) -> void final;
+
+        inline auto from_array_any(std::vector<strange::any> const & src) -> void final;
+
+        inline auto make_array_bool(std::vector<bool> const & src) const -> bag final;
+
+        inline auto make_array_int64(std::vector<int64_t> const & src) const -> bag final;
+
+        inline auto make_array_uint64(std::vector<uint64_t> const & src) const -> bag final;
+
+        inline auto make_array_double(std::vector<double> const & src) const -> bag final;
+
+        inline auto make_array_string(std::vector<std::string> const & src) const -> bag final;
+
+        inline auto make_array_any(std::vector<strange::any> const & src) const -> bag final;
 
         inline auto is_object() const -> bool final;
 
@@ -11064,6 +11374,43 @@ inline auto bag::make_int64(int64_t src) const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_int64(src);
 }
 
+inline auto bag::is_uint64() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_uint64();
+}
+
+inline auto bag::as_uint64(uint64_t & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_uint64(dest);
+}
+
+inline auto bag::to_uint64() const -> uint64_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_uint64();
+}
+
+inline auto bag::from_uint64() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_uint64();
+}
+
+inline auto bag::from_uint64(uint64_t src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_uint64(src);
+}
+
+inline auto bag::make_uint64() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_uint64();
+}
+
+inline auto bag::make_uint64(uint64_t src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_uint64(src);
+}
+
 inline auto bag::is_double() const -> bool
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_double();
@@ -11263,6 +11610,132 @@ inline auto bag::resize_array(std::size_t count) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->resize_array(count);
+}
+
+inline auto bag::as_array_bool(std::vector<bool> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_bool(dest);
+}
+
+inline auto bag::as_array_int64(std::vector<int64_t> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_int64(dest);
+}
+
+inline auto bag::as_array_uint64(std::vector<uint64_t> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_uint64(dest);
+}
+
+inline auto bag::as_array_double(std::vector<double> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_double(dest);
+}
+
+inline auto bag::as_array_string(std::vector<std::string> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_string(dest);
+}
+
+inline auto bag::as_array_any(std::vector<strange::any> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_any(dest);
+}
+
+inline auto bag::to_array_bool() const -> std::vector<bool>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_bool();
+}
+
+inline auto bag::to_array_int64() const -> std::vector<int64_t>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_int64();
+}
+
+inline auto bag::to_array_uint64() const -> std::vector<uint64_t>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_uint64();
+}
+
+inline auto bag::to_array_double() const -> std::vector<double>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_double();
+}
+
+inline auto bag::to_array_string() const -> std::vector<std::string>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_string();
+}
+
+inline auto bag::to_array_any() const -> std::vector<strange::any>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_any();
+}
+
+inline auto bag::from_array_bool(std::vector<bool> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_bool(src);
+}
+
+inline auto bag::from_array_int64(std::vector<int64_t> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_int64(src);
+}
+
+inline auto bag::from_array_uint64(std::vector<uint64_t> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_uint64(src);
+}
+
+inline auto bag::from_array_double(std::vector<double> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_double(src);
+}
+
+inline auto bag::from_array_string(std::vector<std::string> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_string(src);
+}
+
+inline auto bag::from_array_any(std::vector<strange::any> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_any(src);
+}
+
+inline auto bag::make_array_bool(std::vector<bool> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_bool(src);
+}
+
+inline auto bag::make_array_int64(std::vector<int64_t> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_int64(src);
+}
+
+inline auto bag::make_array_uint64(std::vector<uint64_t> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_uint64(src);
+}
+
+inline auto bag::make_array_double(std::vector<double> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_double(src);
+}
+
+inline auto bag::make_array_string(std::vector<std::string> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_string(src);
+}
+
+inline auto bag::make_array_any(std::vector<strange::any> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_any(src);
 }
 
 inline auto bag::is_object() const -> bool
@@ -11498,6 +11971,48 @@ inline auto bag_<_Thing, _Copy>::_instance::make_int64(int64_t src) const -> bag
 }
 
 template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::is_uint64() const -> bool
+{
+    return _thing.is_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_uint64(uint64_t & dest) const -> void
+{
+    _thing.as_uint64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_uint64() const -> uint64_t
+{
+    return _thing.to_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_uint64() -> void
+{
+    _thing.from_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_uint64(uint64_t src) -> void
+{
+    _thing.from_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_uint64() const -> bag
+{
+    return _thing.make_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_uint64(uint64_t src) const -> bag
+{
+    return _thing.make_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::is_double() const -> bool
 {
     return _thing.is_double();
@@ -11717,6 +12232,150 @@ template<typename _Thing, bool _Copy>
 inline auto bag_<_Thing, _Copy>::_instance::resize_array(std::size_t count) -> void
 {
     _thing.resize_array(count);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_array_bool(std::vector<bool> & dest) const -> void
+{
+    _thing.as_array_bool(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_array_int64(std::vector<int64_t> & dest) const -> void
+{
+    _thing.as_array_int64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_array_uint64(std::vector<uint64_t> & dest) const -> void
+{
+    _thing.as_array_uint64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_array_double(std::vector<double> & dest) const -> void
+{
+    _thing.as_array_double(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_array_string(std::vector<std::string> & dest) const -> void
+{
+    _thing.as_array_string(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::as_array_any(std::vector<strange::any> & dest) const -> void
+{
+    _thing.as_array_any(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_array_bool() const -> std::vector<bool>
+{
+    return _thing.to_array_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_array_int64() const -> std::vector<int64_t>
+{
+    return _thing.to_array_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_array_uint64() const -> std::vector<uint64_t>
+{
+    return _thing.to_array_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_array_double() const -> std::vector<double>
+{
+    return _thing.to_array_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_array_string() const -> std::vector<std::string>
+{
+    return _thing.to_array_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::to_array_any() const -> std::vector<strange::any>
+{
+    return _thing.to_array_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array_bool(std::vector<bool> const & src) -> void
+{
+    _thing.from_array_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array_int64(std::vector<int64_t> const & src) -> void
+{
+    _thing.from_array_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array_uint64(std::vector<uint64_t> const & src) -> void
+{
+    _thing.from_array_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array_double(std::vector<double> const & src) -> void
+{
+    _thing.from_array_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array_string(std::vector<std::string> const & src) -> void
+{
+    _thing.from_array_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::from_array_any(std::vector<strange::any> const & src) -> void
+{
+    _thing.from_array_any(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array_bool(std::vector<bool> const & src) const -> bag
+{
+    return _thing.make_array_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array_int64(std::vector<int64_t> const & src) const -> bag
+{
+    return _thing.make_array_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array_uint64(std::vector<uint64_t> const & src) const -> bag
+{
+    return _thing.make_array_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array_double(std::vector<double> const & src) const -> bag
+{
+    return _thing.make_array_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array_string(std::vector<std::string> const & src) const -> bag
+{
+    return _thing.make_array_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bag_<_Thing, _Copy>::_instance::make_array_any(std::vector<strange::any> const & src) const -> bag
+{
+    return _thing.make_array_any(src);
 }
 
 template<typename _Thing, bool _Copy>
@@ -12122,6 +12781,43 @@ inline auto baggage::make_int64(int64_t src) const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_int64(src);
 }
 
+inline auto baggage::is_uint64() const -> bool
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_uint64();
+}
+
+inline auto baggage::as_uint64(uint64_t & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_uint64(dest);
+}
+
+inline auto baggage::to_uint64() const -> uint64_t
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_uint64();
+}
+
+inline auto baggage::from_uint64() -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_uint64();
+}
+
+inline auto baggage::from_uint64(uint64_t src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_uint64(src);
+}
+
+inline auto baggage::make_uint64() const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_uint64();
+}
+
+inline auto baggage::make_uint64(uint64_t src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_uint64(src);
+}
+
 inline auto baggage::is_double() const -> bool
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_double();
@@ -12321,6 +13017,132 @@ inline auto baggage::resize_array(std::size_t count) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->resize_array(count);
+}
+
+inline auto baggage::as_array_bool(std::vector<bool> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_bool(dest);
+}
+
+inline auto baggage::as_array_int64(std::vector<int64_t> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_int64(dest);
+}
+
+inline auto baggage::as_array_uint64(std::vector<uint64_t> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_uint64(dest);
+}
+
+inline auto baggage::as_array_double(std::vector<double> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_double(dest);
+}
+
+inline auto baggage::as_array_string(std::vector<std::string> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_string(dest);
+}
+
+inline auto baggage::as_array_any(std::vector<strange::any> & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_array_any(dest);
+}
+
+inline auto baggage::to_array_bool() const -> std::vector<bool>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_bool();
+}
+
+inline auto baggage::to_array_int64() const -> std::vector<int64_t>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_int64();
+}
+
+inline auto baggage::to_array_uint64() const -> std::vector<uint64_t>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_uint64();
+}
+
+inline auto baggage::to_array_double() const -> std::vector<double>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_double();
+}
+
+inline auto baggage::to_array_string() const -> std::vector<std::string>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_string();
+}
+
+inline auto baggage::to_array_any() const -> std::vector<strange::any>
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_array_any();
+}
+
+inline auto baggage::from_array_bool(std::vector<bool> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_bool(src);
+}
+
+inline auto baggage::from_array_int64(std::vector<int64_t> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_int64(src);
+}
+
+inline auto baggage::from_array_uint64(std::vector<uint64_t> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_uint64(src);
+}
+
+inline auto baggage::from_array_double(std::vector<double> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_double(src);
+}
+
+inline auto baggage::from_array_string(std::vector<std::string> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_string(src);
+}
+
+inline auto baggage::from_array_any(std::vector<strange::any> const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_array_any(src);
+}
+
+inline auto baggage::make_array_bool(std::vector<bool> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_bool(src);
+}
+
+inline auto baggage::make_array_int64(std::vector<int64_t> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_int64(src);
+}
+
+inline auto baggage::make_array_uint64(std::vector<uint64_t> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_uint64(src);
+}
+
+inline auto baggage::make_array_double(std::vector<double> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_double(src);
+}
+
+inline auto baggage::make_array_string(std::vector<std::string> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_string(src);
+}
+
+inline auto baggage::make_array_any(std::vector<strange::any> const & src) const -> bag
+{
+    return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_array_any(src);
 }
 
 inline auto baggage::is_object() const -> bool
@@ -12625,6 +13447,48 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_int64(int64_t src) const ->
 }
 
 template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::is_uint64() const -> bool
+{
+    return _thing.is_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_uint64(uint64_t & dest) const -> void
+{
+    _thing.as_uint64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_uint64() const -> uint64_t
+{
+    return _thing.to_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_uint64() -> void
+{
+    _thing.from_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_uint64(uint64_t src) -> void
+{
+    _thing.from_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_uint64() const -> bag
+{
+    return _thing.make_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_uint64(uint64_t src) const -> bag
+{
+    return _thing.make_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::is_double() const -> bool
 {
     return _thing.is_double();
@@ -12844,6 +13708,150 @@ template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::resize_array(std::size_t count) -> void
 {
     _thing.resize_array(count);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_array_bool(std::vector<bool> & dest) const -> void
+{
+    _thing.as_array_bool(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_array_int64(std::vector<int64_t> & dest) const -> void
+{
+    _thing.as_array_int64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_array_uint64(std::vector<uint64_t> & dest) const -> void
+{
+    _thing.as_array_uint64(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_array_double(std::vector<double> & dest) const -> void
+{
+    _thing.as_array_double(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_array_string(std::vector<std::string> & dest) const -> void
+{
+    _thing.as_array_string(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::as_array_any(std::vector<strange::any> & dest) const -> void
+{
+    _thing.as_array_any(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_array_bool() const -> std::vector<bool>
+{
+    return _thing.to_array_bool();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_array_int64() const -> std::vector<int64_t>
+{
+    return _thing.to_array_int64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_array_uint64() const -> std::vector<uint64_t>
+{
+    return _thing.to_array_uint64();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_array_double() const -> std::vector<double>
+{
+    return _thing.to_array_double();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_array_string() const -> std::vector<std::string>
+{
+    return _thing.to_array_string();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::to_array_any() const -> std::vector<strange::any>
+{
+    return _thing.to_array_any();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array_bool(std::vector<bool> const & src) -> void
+{
+    _thing.from_array_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array_int64(std::vector<int64_t> const & src) -> void
+{
+    _thing.from_array_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array_uint64(std::vector<uint64_t> const & src) -> void
+{
+    _thing.from_array_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array_double(std::vector<double> const & src) -> void
+{
+    _thing.from_array_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array_string(std::vector<std::string> const & src) -> void
+{
+    _thing.from_array_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::from_array_any(std::vector<strange::any> const & src) -> void
+{
+    _thing.from_array_any(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array_bool(std::vector<bool> const & src) const -> bag
+{
+    return _thing.make_array_bool(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array_int64(std::vector<int64_t> const & src) const -> bag
+{
+    return _thing.make_array_int64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array_uint64(std::vector<uint64_t> const & src) const -> bag
+{
+    return _thing.make_array_uint64(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array_double(std::vector<double> const & src) const -> bag
+{
+    return _thing.make_array_double(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array_string(std::vector<std::string> const & src) const -> bag
+{
+    return _thing.make_array_string(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto baggage_<_Thing, _Copy>::_instance::make_array_any(std::vector<strange::any> const & src) const -> bag
+{
+    return _thing.make_array_any(src);
 }
 
 template<typename _Thing, bool _Copy>

@@ -572,6 +572,14 @@ namespace strange
         auto make_int64() const -> bag;
         auto make_int64(int64_t src) const -> bag;
 
+        auto is_uint64() const -> bool;
+        auto as_uint64(uint64_t & dest) const -> void;
+        auto to_uint64() const -> uint64_t;
+        auto from_uint64() -> void;
+        auto from_uint64(uint64_t src) -> void;
+        auto make_uint64() const -> bag;
+        auto make_uint64(uint64_t src) const -> bag;
+
         auto is_double() const -> bool;
         auto as_double(double & dest) const -> void;
         auto to_double() const -> double;
@@ -611,6 +619,30 @@ namespace strange
         auto pop_front_array() -> bag;
         auto pop_back_array() -> bag;
         auto resize_array(std::size_t count) -> void;
+        auto as_array_bool(std::vector<bool> & dest) const -> void;
+        auto as_array_int64(std::vector<int64_t> & dest) const -> void;
+        auto as_array_uint64(std::vector<uint64_t> & dest) const -> void;
+        auto as_array_double(std::vector<double> & dest) const -> void;
+        auto as_array_string(std::vector<std::string> & dest) const -> void;
+        auto as_array_any(std::vector<strange::any> & dest) const -> void;
+        auto to_array_bool() const -> std::vector<bool>;
+        auto to_array_int64() const -> std::vector<int64_t>;
+        auto to_array_uint64() const -> std::vector<uint64_t>;
+        auto to_array_double() const -> std::vector<double>;
+        auto to_array_string() const -> std::vector<std::string>;
+        auto to_array_any() const -> std::vector<strange::any>;
+        auto from_array_bool(std::vector<bool> const & src) -> void;
+        auto from_array_int64(std::vector<int64_t> const & src) -> void;
+        auto from_array_uint64(std::vector<uint64_t> const & src) -> void;
+        auto from_array_double(std::vector<double> const & src) -> void;
+        auto from_array_string(std::vector<std::string> const & src) -> void;
+        auto from_array_any(std::vector<strange::any> const & src) -> void;
+        auto make_array_bool(std::vector<bool> const & src) const -> bag;
+        auto make_array_int64(std::vector<int64_t> const & src) const -> bag;
+        auto make_array_uint64(std::vector<uint64_t> const & src) const -> bag;
+        auto make_array_double(std::vector<double> const & src) const -> bag;
+        auto make_array_string(std::vector<std::string> const & src) const -> bag;
+        auto make_array_any(std::vector<strange::any> const & src) const -> bag;
 
         auto is_object() const -> bool;
         auto as_object(std::unordered_map<std::string, bag> & dest) const -> void;
