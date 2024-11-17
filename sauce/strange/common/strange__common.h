@@ -35,6 +35,11 @@ protected:
         {
             return std::string{};
         }
+
+        virtual inline auto _lock() const -> std::shared_ptr<_common::_base>
+        {
+            return std::shared_ptr<_common::_base>{};
+        }
     };
 
     std::shared_ptr<_common::_base> _shared;
@@ -113,6 +118,62 @@ private:
 
     private:
         std::string const message;
+    };
+
+    struct _weak_ptr final : _common::_base
+    {
+        inline _weak_ptr(std::shared_ptr<_common::_base> const & shared)
+        :weak{shared}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &weak;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(weak);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<_common::_base> final
+        {
+            throw _no_copy{};
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<_common::_base> final
+        {
+            throw _no_default{};
+        }
+
+        virtual inline auto _cat() const -> std::string final
+        {
+            return std::string{};
+        }
+
+        virtual inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return std::unordered_set<std::string>{};
+        }
+
+        virtual inline auto _copy() const -> bool final
+        {
+            return false;
+        }
+
+        virtual inline auto _name() const -> std::string final
+        {
+            return std::string{};
+        }
+
+        virtual inline auto _lock() const -> std::shared_ptr<_common::_base> final
+        {
+            return weak.lock();
+        }
+
+    private:
+        std::weak_ptr<_common::_base> const weak;
     };
 
 public:
@@ -233,6 +294,18 @@ public:
             return other;
         }
         return Other{};
+    }
+
+    template<typename Other>
+    inline auto _weak() const -> Other
+    {
+        return Other{_weak_ptr{_shared}};
+    }
+
+    template<typename Other>
+    inline auto _strong() const -> Other
+    {
+        return Other{_shared->_lock()};
     }
 };
 }
