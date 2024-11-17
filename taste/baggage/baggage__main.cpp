@@ -131,16 +131,26 @@ dart::packet pkt = dynimmut;
     }
     b.from_any(space);
     auto json = b.to_json();
-    std::cout << "\noriginal:\n" << json << "\n";
+    std::cout << "original:\n" << std::hash<std::string>{}(json) << "\n";
 
     auto c = strange::baggage::_make();
     c.from_json(json);
-    std::cout << "\nclone:\n" << c.to_json() << "\n";
+    std::cout << "clone:\n" << std::hash<std::string>{}(c.to_json()) << "\n";
     auto clone = c.to_any();
 
     auto d = strange::baggage::_make();
     d.from_any(clone);
-    std::cout << "\nduplicate:\n" << d.to_json() << "\n";
+    std::cout << "duplicate:\n" << std::hash<std::string>{}(d.to_json()) << "\n";
+
+    auto binary = b.to_binary();
+    auto e = strange::baggage::_make();
+    e.from_binary(binary);
+    auto any = e.to_any();
+    std::cout << any._name() << "\n";
+
+    auto f = strange::baggage::_make();
+    f.from_any(any);
+    std::cout << "from binary:\n" << std::hash<std::string>{}(f.to_json()) << "\n";
 
     return 0;
 }
