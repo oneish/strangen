@@ -6585,9 +6585,9 @@ struct parameter
     inline auto pack(strange::bag & dest) const -> void
     {
         dest.from_object();
-        dest.set_object("type", dest.make_string(type()));
-        dest.set_object("name", dest.make_string(name()));
-        dest.set_object("argument", dest.make_string(argument()));
+        dest.insert_object("type", dest.make_string(type()));
+        dest.insert_object("name", dest.make_string(name()));
+        dest.insert_object("argument", dest.make_string(argument()));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -7073,21 +7073,21 @@ struct operation
     inline auto pack(strange::bag & dest) const -> void
     {
         dest.from_object();
-        dest.set_object("name", dest.make_string(name()));
+        dest.insert_object("name", dest.make_string(name()));
         {
             auto _array = dest.make_array();
             for (auto const & _item : parameters())
             {
                 _array.push_back_array(dest.make_any(_item));
             }
-            dest.set_object("parameters", _array);
+            dest.insert_object("parameters", _array);
         }
-        dest.set_object("constness", dest.make_bool(constness()));
-        dest.set_object("result", dest.make_string(result()));
-        dest.set_object("data", dest.make_bool(data()));
-        dest.set_object("modification", dest.make_string(modification()));
-        dest.set_object("customisation", dest.make_string(customisation()));
-        dest.set_object("implementation", dest.make_string(implementation()));
+        dest.insert_object("constness", dest.make_bool(constness()));
+        dest.insert_object("result", dest.make_string(result()));
+        dest.insert_object("data", dest.make_bool(data()));
+        dest.insert_object("modification", dest.make_string(modification()));
+        dest.insert_object("customisation", dest.make_string(customisation()));
+        dest.insert_object("implementation", dest.make_string(implementation()));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -7578,17 +7578,17 @@ struct abstraction
             {
                 _array.push_back_array(dest.make_any(_item));
             }
-            dest.set_object("parameters", _array);
+            dest.insert_object("parameters", _array);
         }
-        dest.set_object("name", dest.make_string(name()));
-        dest.set_object("parents", dest.make_array_string(parents()));
+        dest.insert_object("name", dest.make_string(name()));
+        dest.insert_object("parents", dest.make_array_string(parents()));
         {
             auto _array = dest.make_array();
             for (auto const & _item : types())
             {
                 _array.push_back_array(dest.make_any(_item));
             }
-            dest.set_object("types", _array);
+            dest.insert_object("types", _array);
         }
         {
             auto _array = dest.make_array();
@@ -7596,10 +7596,10 @@ struct abstraction
             {
                 _array.push_back_array(dest.make_any(_item));
             }
-            dest.set_object("operations", _array);
+            dest.insert_object("operations", _array);
         }
-        dest.set_object("thing", dest.make_string(thing()));
-        dest.set_object("implementation", dest.make_string(implementation()));
+        dest.insert_object("thing", dest.make_string(thing()));
+        dest.insert_object("implementation", dest.make_string(implementation()));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -8047,16 +8047,16 @@ struct space
             {
                 _array.push_back_array(dest.make_any(_item));
             }
-            dest.set_object("inclusions", _array);
+            dest.insert_object("inclusions", _array);
         }
-        dest.set_object("name", dest.make_string(name()));
+        dest.insert_object("name", dest.make_string(name()));
         {
             auto _array = dest.make_array();
             for (auto const & _item : abstractions())
             {
                 _array.push_back_array(dest.make_any(_item));
             }
-            dest.set_object("abstractions", _array);
+            dest.insert_object("abstractions", _array);
         }
     }
 

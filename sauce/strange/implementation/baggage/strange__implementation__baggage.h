@@ -948,12 +948,18 @@ struct baggage
 
     inline auto seal() -> void
     {
-        packet.finalize();
+        if (packet.is_object())
+        {
+            packet.finalize();
+        }
     }
 
     inline auto unseal() -> void
     {
-        packet.definalize();
+        if (packet.is_object())
+        {
+            packet.definalize();
+        }
     }
 
     inline auto sealed() const -> bool
@@ -968,30 +974,68 @@ struct baggage
 
     inline auto as_binary(std::string & binary) const -> void
     {
-        auto buffer = packet.get_bytes();
-        binary = std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+        if (packet.is_finalized())
+        {
+            auto buffer = packet.get_bytes();
+            binary = std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+        }
+        else if (packet.is_object())
+        {
+            auto buf = packet;
+            buf.finalize();
+            auto buffer = buf.get_bytes();
+            binary = std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+        }
+        else
+        {
+            auto buf = dart::buffer::object{"", packet};
+            auto buffer = buf.get_bytes();
+            binary = std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+        }
     }
 
     inline auto to_binary() const -> std::string
     {
-        auto buffer = packet.get_bytes();
-		return std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+        if (packet.is_finalized())
+        {
+            auto buffer = packet.get_bytes();
+            return std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+        }
+        if (packet.is_object())
+        {
+            auto buf = packet;
+            buf.finalize();
+            auto buffer = buf.get_bytes();
+            return std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
+        }
+        auto buf = dart::buffer::object{"", packet};
+        auto buffer = buf.get_bytes();
+        return std::string{reinterpret_cast<char const*>(buffer.data()), buffer.size()};
     }
 
     inline auto from_binary(std::string const & binary) -> void
     {
         packet = dart::packet{gsl::make_span(reinterpret_cast<gsl::byte const*>(binary.data()), binary.size())};
+        if (packet.size() == 1 && packet.has_key(""))
+        {
+            packet = packet.get("");
+        }
     }
 
     inline auto make_binary(std::string const & binary) const -> package
     {
-        return strange::baggage::_make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet{gsl::make_span(reinterpret_cast<gsl::byte const*>(binary.data()), binary.size())}});
+        auto pack = dart::packet{gsl::make_span(reinterpret_cast<gsl::byte const*>(binary.data()), binary.size())};
+        if (pack.size() == 1 && pack.has_key(""))
+        {
+            pack = pack.get("");
+        }
+        return strange::baggage::_make<strange::implementation::baggage>(strange::implementation::baggage{.packet = pack});
     }
 
     inline auto is_json() const -> bool
     {
 #if DART_HAS_RAPIDJSON
-        return packet.is_finalized();
+        return true;
 #else
         return false;
 #endif
@@ -1000,14 +1044,29 @@ struct baggage
     inline auto as_json(std::string & json) const -> void
     {
 #if DART_HAS_RAPIDJSON
-        json = packet.to_json();
+        if (packet.is_object())
+        {
+            json = packet.to_json();
+        }
+        else
+        {
+            auto obj = dart::packet::make_object("", packet);
+            json = obj.to_json();
+        }
+#else
+        json = std::string{};
 #endif
     }
 
     inline auto to_json() const -> std::string
     {
 #if DART_HAS_RAPIDJSON
-        return packet.to_json();
+        if (packet.is_object())
+        {
+            return packet.to_json();
+        }
+        auto obj = dart::packet::make_object("", packet);
+        return obj.to_json();
 #else
         return std::string{};
 #endif
@@ -1017,13 +1076,24 @@ struct baggage
     {
 #if DART_HAS_RAPIDJSON
         packet = dart::packet::from_json(json);
+        if (packet.size() == 1 && packet.has_key(""))
+        {
+            packet = packet.get("");
+        }
+#else
+        packet = dart::packet::make_null();
 #endif
     }
 
     inline auto make_json(std::string const & json) const -> package
     {
 #if DART_HAS_RAPIDJSON
-        return strange::baggage::_make<strange::implementation::baggage>(strange::implementation::baggage{.packet = dart::packet::from_json(json)});
+        auto pack = dart::packet::from_json(json);
+        if (pack.size() == 1 && pack.has_key(""))
+        {
+            pack = pack.get("");
+        }
+        return strange::baggage::_make<strange::implementation::baggage>(strange::implementation::baggage{.packet = pack});
 #else
         return strange::package{};
 #endif
