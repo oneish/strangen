@@ -152,5 +152,27 @@ dart::packet pkt = dynimmut;
     f.from_any(any);
     std::cout << "from binary:\n" << std::hash<std::string>{}(f.to_json()) << "\n";
 
+    auto spc = strange::space::_make();
+    spc.name() = "spc";
+    auto abs1 = strange::abstraction::_make();
+    abs1.name() = "abs1";
+    auto abs2 = strange::abstraction::_make();
+    abs2.name() = "abs2";
+    auto abs3 = strange::abstraction::_make();
+    abs3.name() = "other::abs3";
+    spc.abstractions().push_back(abs1);
+    spc.abstractions().push_back(abs2);
+    spc.inclusions().push_back(abs3);
+    spc.inclusions().push_back(abs3);
+    auto bag = b.make_any(spc);
+    auto jag = bag._dynamic<strange::package>().to_json();
+    std::cout << "jag:" << jag << "\n";
+    auto pag = b.make_json(jag);
+    auto tag = pag._dynamic<strange::bag>().to_any();
+    std::cout << tag._dynamic<strange::space>().abstractions()[0]._address() << "\n";
+    std::cout << tag._dynamic<strange::space>().abstractions()[1]._address() << "\n";
+    std::cout << tag._dynamic<strange::space>().inclusions()[0]._address() << "\n";
+    std::cout << tag._dynamic<strange::space>().inclusions()[1]._address() << "\n";
+
     return 0;
 }
