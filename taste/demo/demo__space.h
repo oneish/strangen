@@ -216,6 +216,16 @@ public:
         }
     }
 
+    inline auto _weak() const -> food
+    {
+        return food{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> food
+    {
+        return food{strange::_common::_shared->_strong()};
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> food
     {
@@ -405,6 +415,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> food_
+    {
+        return food_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> food_
+    {
+        return food_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<food_::_instance const>(strange::_common::_shared)->_thing;
@@ -520,6 +540,16 @@ public:
         {
             return fruit{};
         }
+    }
+
+    inline auto _weak() const -> fruit
+    {
+        return fruit{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> fruit
+    {
+        return fruit{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -727,6 +757,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> fruit_
+    {
+        return fruit_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> fruit_
+    {
+        return fruit_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<fruit_::_instance const>(strange::_common::_shared)->_thing;
@@ -845,6 +885,16 @@ public:
         {
             return bunch{};
         }
+    }
+
+    inline auto _weak() const -> bunch
+    {
+        return bunch{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> bunch
+    {
+        return bunch{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1052,6 +1102,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> bunch_
+    {
+        return bunch_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> bunch_
+    {
+        return bunch_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<bunch_::_instance const>(strange::_common::_shared)->_thing;
@@ -1169,6 +1229,16 @@ public:
         {
             return bunch_of_fruit{};
         }
+    }
+
+    inline auto _weak() const -> bunch_of_fruit
+    {
+        return bunch_of_fruit{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> bunch_of_fruit
+    {
+        return bunch_of_fruit{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1389,6 +1459,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> bunch_of_fruit_
+    {
+        return bunch_of_fruit_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> bunch_of_fruit_
+    {
+        return bunch_of_fruit_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<bunch_of_fruit_::_instance const>(strange::_common::_shared)->_thing;
@@ -1494,6 +1574,16 @@ public:
         {
             return function{};
         }
+    }
+
+    inline auto _weak() const -> function
+    {
+        return function{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> function
+    {
+        return function{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1682,6 +1772,16 @@ public:
         {
             return function_{};
         }
+    }
+
+    inline auto _weak_() const -> function_
+    {
+        return function_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> function_
+    {
+        return function_{strange::_common::_shared->_strong()};
     }
 
     inline auto _thing() const -> _Thing const &

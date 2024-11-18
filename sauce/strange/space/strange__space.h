@@ -614,6 +614,16 @@ public:
         }
     }
 
+    inline auto _weak() const -> any
+    {
+        return any{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> any
+    {
+        return any{strange::_common::_shared->_strong()};
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> any
     {
@@ -798,6 +808,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> any_
+    {
+        return any_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> any_
+    {
+        return any_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<any_::_instance const>(strange::_common::_shared)->_thing;
@@ -928,6 +948,16 @@ public:
         {
             return forward_const_iterator{};
         }
+    }
+
+    inline auto _weak() const -> forward_const_iterator
+    {
+        return forward_const_iterator{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> forward_const_iterator
+    {
+        return forward_const_iterator{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1139,6 +1169,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> forward_const_iterator_
+    {
+        return forward_const_iterator_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> forward_const_iterator_
+    {
+        return forward_const_iterator_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<forward_const_iterator_::_instance const>(strange::_common::_shared)->_thing;
@@ -1265,6 +1305,16 @@ public:
         {
             return forward_iterator{};
         }
+    }
+
+    inline auto _weak() const -> forward_iterator
+    {
+        return forward_iterator{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> forward_iterator
+    {
+        return forward_iterator{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1492,6 +1542,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> forward_iterator_
+    {
+        return forward_iterator_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> forward_iterator_
+    {
+        return forward_iterator_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<forward_iterator_::_instance const>(strange::_common::_shared)->_thing;
@@ -1610,6 +1670,16 @@ public:
         {
             return bidirectional_const_iterator{};
         }
+    }
+
+    inline auto _weak() const -> bidirectional_const_iterator
+    {
+        return bidirectional_const_iterator{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> bidirectional_const_iterator
+    {
+        return bidirectional_const_iterator{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1837,6 +1907,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> bidirectional_const_iterator_
+    {
+        return bidirectional_const_iterator_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> bidirectional_const_iterator_
+    {
+        return bidirectional_const_iterator_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<bidirectional_const_iterator_::_instance const>(strange::_common::_shared)->_thing;
@@ -1963,6 +2043,16 @@ public:
         {
             return bidirectional_iterator{};
         }
+    }
+
+    inline auto _weak() const -> bidirectional_iterator
+    {
+        return bidirectional_iterator{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> bidirectional_iterator
+    {
+        return bidirectional_iterator{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -2215,6 +2305,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> bidirectional_iterator_
+    {
+        return bidirectional_iterator_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> bidirectional_iterator_
+    {
+        return bidirectional_iterator_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<bidirectional_iterator_::_instance const>(strange::_common::_shared)->_thing;
@@ -2357,6 +2457,16 @@ public:
         {
             return random_access_const_iterator{};
         }
+    }
+
+    inline auto _weak() const -> random_access_const_iterator
+    {
+        return random_access_const_iterator{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> random_access_const_iterator
+    {
+        return random_access_const_iterator{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -2632,6 +2742,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> random_access_const_iterator_
+    {
+        return random_access_const_iterator_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> random_access_const_iterator_
+    {
+        return random_access_const_iterator_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<random_access_const_iterator_::_instance const>(strange::_common::_shared)->_thing;
@@ -2774,6 +2894,16 @@ public:
         {
             return random_access_iterator{};
         }
+    }
+
+    inline auto _weak() const -> random_access_iterator
+    {
+        return random_access_iterator{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> random_access_iterator
+    {
+        return random_access_iterator{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -3114,6 +3244,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> random_access_iterator_
+    {
+        return random_access_iterator_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> random_access_iterator_
+    {
+        return random_access_iterator_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<random_access_iterator_::_instance const>(strange::_common::_shared)->_thing;
@@ -3348,6 +3488,16 @@ public:
         {
             return vector{};
         }
+    }
+
+    inline auto _weak() const -> vector
+    {
+        return vector{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> vector
+    {
+        return vector{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing = std::vector<T>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -3743,6 +3893,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> vector_
+    {
+        return vector_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> vector_
+    {
+        return vector_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<vector_::_instance const>(strange::_common::_shared)->_thing;
@@ -3854,6 +4014,16 @@ public:
         {
             return stuff{};
         }
+    }
+
+    inline auto _weak() const -> stuff
+    {
+        return stuff{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> stuff
+    {
+        return stuff{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -4047,6 +4217,16 @@ public:
         {
             return stuff_{};
         }
+    }
+
+    inline auto _weak_() const -> stuff_
+    {
+        return stuff_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> stuff_
+    {
+        return stuff_{strange::_common::_shared->_strong()};
     }
 
     inline auto _thing() const -> _Thing const &
@@ -4370,6 +4550,16 @@ public:
         {
             return bag{};
         }
+    }
+
+    inline auto _weak() const -> bag
+    {
+        return bag{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> bag
+    {
+        return bag{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -4993,6 +5183,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> bag_
+    {
+        return bag_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> bag_
+    {
+        return bag_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<bag_::_instance const>(strange::_common::_shared)->_thing;
@@ -5126,6 +5326,16 @@ public:
         {
             return package{};
         }
+    }
+
+    inline auto _weak() const -> package
+    {
+        return package{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> package
+    {
+        return package{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -5373,6 +5583,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> package_
+    {
+        return package_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> package_
+    {
+        return package_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<package_::_instance const>(strange::_common::_shared)->_thing;
@@ -5484,6 +5704,16 @@ public:
         {
             return baggage{};
         }
+    }
+
+    inline auto _weak() const -> baggage
+    {
+        return baggage{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> baggage
+    {
+        return baggage{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing = strange::implementation::baggage, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -6160,6 +6390,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> baggage_
+    {
+        return baggage_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> baggage_
+    {
+        return baggage_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<baggage_::_instance const>(strange::_common::_shared)->_thing;
@@ -6291,6 +6531,16 @@ public:
         {
             return parameter{};
         }
+    }
+
+    inline auto _weak() const -> parameter
+    {
+        return parameter{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> parameter
+    {
+        return parameter{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing = strange::implementation::parameter, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -6534,6 +6784,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> parameter_
+    {
+        return parameter_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> parameter_
+    {
+        return parameter_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<parameter_::_instance const>(strange::_common::_shared)->_thing;
@@ -6724,6 +6984,16 @@ public:
         {
             return operation{};
         }
+    }
+
+    inline auto _weak() const -> operation
+    {
+        return operation{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> operation
+    {
+        return operation{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing = strange::implementation::operation, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -7007,6 +7277,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> operation_
+    {
+        return operation_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> operation_
+    {
+        return operation_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<operation_::_instance const>(strange::_common::_shared)->_thing;
@@ -7234,6 +7514,16 @@ public:
         {
             return abstraction{};
         }
+    }
+
+    inline auto _weak() const -> abstraction
+    {
+        return abstraction{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> abstraction
+    {
+        return abstraction{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing = strange::implementation::abstraction, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -7509,6 +7799,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> abstraction_
+    {
+        return abstraction_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> abstraction_
+    {
+        return abstraction_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<abstraction_::_instance const>(strange::_common::_shared)->_thing;
@@ -7747,6 +8047,16 @@ public:
         {
             return space{};
         }
+    }
+
+    inline auto _weak() const -> space
+    {
+        return space{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> space
+    {
+        return space{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing = strange::implementation::space, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -7990,6 +8300,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> space_
+    {
+        return space_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> space_
+    {
+        return space_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<space_::_instance const>(strange::_common::_shared)->_thing;
@@ -8200,6 +8520,16 @@ public:
         {
             return token{};
         }
+    }
+
+    inline auto _weak() const -> token
+    {
+        return token{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> token
+    {
+        return token{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing = strange::implementation::token, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -8449,6 +8779,16 @@ public:
         {
             return token_{};
         }
+    }
+
+    inline auto _weak_() const -> token_
+    {
+        return token_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> token_
+    {
+        return token_{strange::_common::_shared->_strong()};
     }
 
     inline auto _thing() const -> _Thing const &

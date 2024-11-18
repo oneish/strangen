@@ -36,13 +36,22 @@ protected:
             return std::string{};
         }
 
-        virtual inline auto _lock() const -> std::shared_ptr<_common::_base>
+        virtual inline auto _strong() const -> std::shared_ptr<_common::_base>
         {
             return std::shared_ptr<_common::_base>{};
         }
     };
 
     std::shared_ptr<_common::_base> _shared;
+
+    inline auto _weak_base() const -> std::shared_ptr<_common::_base>
+    {
+        if (_is_weak() || !_something())
+        {
+            return _shared;
+        }
+        return std::make_shared<_common::_weak_ptr>(_shared);
+    }
 
     static inline std::unordered_map<std::string, std::function<std::shared_ptr<_common::_base>()>> _factory_;
 
@@ -167,7 +176,7 @@ private:
             return std::string{};
         }
 
-        virtual inline auto _lock() const -> std::shared_ptr<_common::_base> final
+        virtual inline auto _strong() const -> std::shared_ptr<_common::_base> final
         {
             return weak.lock();
         }
@@ -296,16 +305,9 @@ public:
         return Other{};
     }
 
-    template<typename Other>
-    inline auto _weak() const -> Other
+    inline auto _is_weak() const -> bool
     {
-        return Other{_weak_ptr{_shared}};
-    }
-
-    template<typename Other>
-    inline auto _strong() const -> Other
-    {
-        return Other{_shared->_lock()};
+        return std::dynamic_pointer_cast<_weak_ptr>(_shared).operator bool();
     }
 };
 }

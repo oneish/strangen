@@ -241,6 +241,16 @@ public:
         }
     }
 
+    inline auto _weak() const -> )#" << abstraction.name() << R"#(
+    {
+        return )#" << abstraction.name() << R"#({strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> )#" << abstraction.name() << R"#(
+    {
+        return )#" << abstraction.name() << R"#({strange::_common::_shared->_strong()};
+    }
+
     template<typename _Thing)#";
     if (!abstraction.thing().empty())
     {
@@ -471,6 +481,16 @@ public:
         {
             return )#" << abstraction.name() << R"#(_{};
         }
+    }
+
+    inline auto _weak_() const -> )#" << abstraction.name() << R"#(_
+    {
+        return )#" << abstraction.name() << R"#(_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> )#" << abstraction.name() << R"#(_
+    {
+        return )#" << abstraction.name() << R"#(_{strange::_common::_shared->_strong()};
     }
 
     inline auto _thing() const -> _Thing const &

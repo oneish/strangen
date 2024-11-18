@@ -218,6 +218,16 @@ public:
         }
     }
 
+    inline auto _weak() const -> widget
+    {
+        return widget{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> widget
+    {
+        return widget{strange::_common::_shared->_strong()};
+    }
+
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> widget
     {
@@ -418,6 +428,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> widget_
+    {
+        return widget_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> widget_
+    {
+        return widget_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<widget_::_instance const>(strange::_common::_shared)->_thing;
@@ -527,6 +547,16 @@ public:
         {
             return button{};
         }
+    }
+
+    inline auto _weak() const -> button
+    {
+        return button{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> button
+    {
+        return button{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -734,6 +764,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> button_
+    {
+        return button_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> button_
+    {
+        return button_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<button_::_instance const>(strange::_common::_shared)->_thing;
@@ -841,6 +881,16 @@ public:
         {
             return number{};
         }
+    }
+
+    inline auto _weak() const -> number
+    {
+        return number{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> number
+    {
+        return number{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1035,6 +1085,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> number_
+    {
+        return number_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> number_
+    {
+        return number_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<number_::_instance const>(strange::_common::_shared)->_thing;
@@ -1146,6 +1206,16 @@ public:
         {
             return widget_number{};
         }
+    }
+
+    inline auto _weak() const -> widget_number
+    {
+        return widget_number{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> widget_number
+    {
+        return widget_number{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1354,6 +1424,16 @@ public:
         }
     }
 
+    inline auto _weak_() const -> widget_number_
+    {
+        return widget_number_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> widget_number_
+    {
+        return widget_number_{strange::_common::_shared->_strong()};
+    }
+
     inline auto _thing() const -> _Thing const &
     {
         return std::dynamic_pointer_cast<widget_number_::_instance const>(strange::_common::_shared)->_thing;
@@ -1468,6 +1548,16 @@ public:
         {
             return numeric{};
         }
+    }
+
+    inline auto _weak() const -> numeric
+    {
+        return numeric{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> numeric
+    {
+        return numeric{strange::_common::_shared->_strong()};
     }
 
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
@@ -1673,6 +1763,16 @@ public:
         {
             return numeric_{};
         }
+    }
+
+    inline auto _weak_() const -> numeric_
+    {
+        return numeric_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> numeric_
+    {
+        return numeric_{strange::_common::_shared->_strong()};
     }
 
     inline auto _thing() const -> _Thing const &
