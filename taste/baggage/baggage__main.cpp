@@ -164,6 +164,7 @@ dart::packet pkt = dynimmut;
     spc.abstractions().push_back(abs2);
     spc.inclusions().push_back(abs3);
     spc.inclusions().push_back(abs3);
+    spc.inclusions().push_back(abs3._weak());
     auto bag = b.make_any(spc);
     auto jag = bag._dynamic<strange::package>().to_json();
     std::cout << "jag:" << jag << "\n";
@@ -173,6 +174,8 @@ dart::packet pkt = dynimmut;
     std::cout << tag._dynamic<strange::space>().abstractions()[1]._address() << "\n";
     std::cout << tag._dynamic<strange::space>().inclusions()[0]._address() << "\n";
     std::cout << tag._dynamic<strange::space>().inclusions()[1]._address() << "\n";
+    std::cout << tag._dynamic<strange::space>().inclusions()[2]._address() << "\n";
+    std::cout << tag._dynamic<strange::space>().inclusions()[2]._strong()._address() << "\n";
 
     return 0;
 }
