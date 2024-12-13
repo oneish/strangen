@@ -455,19 +455,21 @@ public:
     }();
 };
 
-struct fruit : food
+struct fruit : food, strange::stuff
 {
     inline fruit() = default;
 
     inline fruit(fruit const & other)
     :strange::_common{other}
     ,food{}
+    ,strange::stuff{}
     {
     }
 
     inline fruit(fruit && other)
     :strange::_common{std::move(other)}
     ,food{}
+    ,strange::stuff{}
     {
     }
 
@@ -486,17 +488,19 @@ struct fruit : food
     explicit inline fruit(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
     ,food{}
+    ,strange::stuff{}
     {
     }
 
     explicit inline fruit(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
     ,food{}
+    ,strange::stuff{}
     {
     }
 
 protected:
-    struct _derived : food::_derived
+    struct _derived : food::_derived, strange::stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename fruit::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
@@ -576,11 +580,16 @@ public:
     {
         std::unordered_set<std::string> cats;
         cats.insert(food::_cats_.cbegin(), food::_cats_.cend());
+        cats.insert(strange::stuff::_cats_.cbegin(), strange::stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
 
     inline auto eat() -> void;
+
+    inline auto pack(strange::bag & dest) const -> void;
+
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto ripen() -> void;
 
@@ -699,6 +708,10 @@ private:
         }
 
         inline auto eat() -> void final;
+
+        inline auto pack(strange::bag & dest) const -> void final;
+
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto ripen() -> void final;
 
@@ -1142,7 +1155,7 @@ public:
     }();
 };
 
-struct bunch_of_fruit : food, bunch<fruit>
+struct bunch_of_fruit : food, bunch<fruit>, strange::stuff
 {
     inline bunch_of_fruit() = default;
 
@@ -1150,6 +1163,7 @@ struct bunch_of_fruit : food, bunch<fruit>
     :strange::_common{other}
     ,food{}
     ,bunch<fruit>{}
+    ,strange::stuff{}
     {
     }
 
@@ -1157,6 +1171,7 @@ struct bunch_of_fruit : food, bunch<fruit>
     :strange::_common{std::move(other)}
     ,food{}
     ,bunch<fruit>{}
+    ,strange::stuff{}
     {
     }
 
@@ -1176,6 +1191,7 @@ struct bunch_of_fruit : food, bunch<fruit>
     :strange::_common{shared}
     ,food{}
     ,bunch<fruit>{}
+    ,strange::stuff{}
     {
     }
 
@@ -1183,13 +1199,14 @@ struct bunch_of_fruit : food, bunch<fruit>
     :strange::_common{std::move(shared)}
     ,food{}
     ,bunch<fruit>{}
+    ,strange::stuff{}
     {
     }
 
     using Item = fruit;
 
 protected:
-    struct _derived : food::_derived, bunch<fruit>::_derived
+    struct _derived : food::_derived, bunch<fruit>::_derived, strange::stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename bunch_of_fruit::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
@@ -1266,6 +1283,7 @@ public:
         std::unordered_set<std::string> cats;
         cats.insert(food::_cats_.cbegin(), food::_cats_.cend());
         cats.insert(bunch<fruit>::_cats_.cbegin(), bunch<fruit>::_cats_.cend());
+        cats.insert(strange::stuff::_cats_.cbegin(), strange::stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
@@ -1281,6 +1299,10 @@ public:
     inline auto operator[](std::size_t pos) const -> Item const &;
 
     inline auto operator[](std::size_t pos) -> Item &;
+
+    inline auto pack(strange::bag & dest) const -> void;
+
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto pick() -> void;
 
@@ -1405,6 +1427,10 @@ private:
         inline auto operator[](std::size_t pos) const -> Item const & final;
 
         inline auto operator[](std::size_t pos) -> Item & final;
+
+        inline auto pack(strange::bag & dest) const -> void final;
+
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto pick() -> void final;
 
@@ -1832,6 +1858,17 @@ inline auto fruit::eat() -> void
     std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
 }
 
+inline auto fruit::pack(strange::bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename strange::stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto fruit::unpack(strange::bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename strange::stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
 inline auto fruit::ripen() -> void
 {
     strange::_common::_mutate();
@@ -1858,6 +1895,18 @@ template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::eat() -> void
 {
     _thing.eat();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto fruit_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto fruit_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
+{
+    _thing.unpack(src);
 }
 
 template<typename _Thing, bool _Copy>
@@ -1981,6 +2030,17 @@ inline auto bunch_of_fruit::operator[](std::size_t pos) -> Item &
     return std::dynamic_pointer_cast<typename bunch<fruit>::_derived>(strange::_common::_shared)->operator[](pos);
 }
 
+inline auto bunch_of_fruit::pack(strange::bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename strange::stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto bunch_of_fruit::unpack(strange::bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename strange::stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
 inline auto bunch_of_fruit::pick() -> void
 {
     strange::_common::_mutate();
@@ -2026,6 +2086,18 @@ template<typename _Thing, bool _Copy>
 inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::operator[](std::size_t pos) -> Item &
 {
     return _thing.operator[](pos);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
+{
+    _thing.unpack(src);
 }
 
 template<typename _Thing, bool _Copy>

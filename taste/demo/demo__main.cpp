@@ -1,3 +1,7 @@
+#include "../../sauce/strange/strange.h"
+#include "../../sauce/strange/implementation/baggage/strange__implementation__baggage.h"
+#include "demo__space.h"
+
 #include <iostream>
 #include <string>
 
@@ -30,6 +34,19 @@ struct banana
     {
         std::cout << "banana.peeled():" << (_peeled ? "yes" : "no") << "\n";
         return _peeled;
+    }
+
+    auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        dest.insert_object("ripe", dest.make_bool(_ripe));
+        dest.insert_object("peeled", dest.make_bool(_peeled));
+    }
+
+    auto unpack(strange::bag const & src) -> void
+    {
+        src.get_object("ripe").as_bool(_ripe);
+        src.get_object("peeled").as_bool(_peeled);
     }
 
 private:
@@ -74,13 +91,23 @@ struct no_banana
         return _peeled;
     }
 
+    auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        dest.insert_object("ripe", dest.make_bool(_ripe));
+        dest.insert_object("peeled", dest.make_bool(_peeled));
+    }
+
+    auto unpack(strange::bag const & src) -> void
+    {
+        src.get_object("ripe").as_bool(_ripe);
+        src.get_object("peeled").as_bool(_peeled);
+    }
+
 private:
     bool _ripe = false;
     bool _peeled = false;
 };
-
-#include "../../sauce/strange/strange.h"
-#include "demo__space.h"
 
 struct bunch_of_bananas : std::vector<demo::fruit>
 {
@@ -99,6 +126,35 @@ struct bunch_of_bananas : std::vector<demo::fruit>
     {
         std::cout << "bunch_of_bananas.picked():" << (_picked ? "yes" : "no") << "\n";
         return _picked;
+    }
+
+    auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        {
+            auto _array = dest.make_array();
+            for (auto const & _item : *this)
+            {
+                _array.push_back_array(dest.make_any(_item._static<strange::any>()));
+            }
+            dest.insert_object("fruit", _array);
+        }
+        dest.insert_object("picked", dest.make_bool(_picked));
+    }
+
+    auto unpack(strange::bag const & src) -> void
+    {
+        {
+            auto _array = src.get_object("fruit").to_array();
+            auto _size = _array.size();
+            clear();
+            resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                (*this)[_index] = _array[_index].to_any()._static<demo::fruit>();
+            }
+        }
+        src.get_object("picked").as_bool(_picked);
     }
 
 private:
@@ -157,6 +213,12 @@ int main()
     bunch_2.push_back(fruit_1);
     bunch_2.push_back(fruit_2);
     std::cout << "bunch_2.size(): " << bunch_2.size() << "\n";
+
+    auto bag_1 = strange::baggage::_make();
+    bag_1.from_any(bunch_2._static<strange::any>());
+    std::cout << "bag_1.to_json(): " << bag_1.to_json() << "\n";
+    auto bunch_3 = bag_1.to_any()._static<demo::bunch_of_fruit>();
+    std::cout << "bunch_3.size(): " << bunch_3.size() << "\n";
 
     std::cout << "fruit_1._name(): " << fruit_1._name() << "\n";
     auto fruit_3 = demo::fruit::_manufacture("demo::fruit_<banana, true>");

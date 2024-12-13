@@ -8,7 +8,8 @@ namespace demo
         auto eat() -> void;
     };
 
-    struct fruit : food
+    // inheritance
+    struct fruit : food, strange::stuff
     {
         auto ripen() -> void;
         auto ripe() const -> bool;
@@ -28,7 +29,7 @@ namespace demo
     };
 
     // multiple inheritance
-    struct bunch_of_fruit : food, bunch<fruit>
+    struct bunch_of_fruit : food, bunch<fruit>, strange::stuff
     {
         using Item = fruit;
         auto pick() -> void;

@@ -936,11 +936,12 @@ namespace )#" << _space.name() << R"#(
 )#";
     }
 
-    auto _find_parent(std::string const & parent) -> strange::abstraction
+    auto _find_parent(std::string const & parent, std::string const & space) -> strange::abstraction
     {
-        auto match = [& parent](strange::abstraction const & candidate)
+        auto name = parent.substr(0, parent.find('<'));
+        auto match = [& name](strange::abstraction const & candidate)
             {
-                return candidate.name() == parent.substr(0, parent.find('<'));
+                return candidate.name() == name;
             };
         auto it = std::find_if(_space.abstractions().cbegin(), _space.abstractions().cend(), match);
         if (it != _space.abstractions().cend())
@@ -952,6 +953,15 @@ namespace )#" << _space.name() << R"#(
         {
             return *it;
         }
+        if (!space.empty())
+        {
+            name = space + name;
+            it = std::find_if(_space.inclusions().cbegin(), _space.inclusions().cend(), match);
+            if (it != _space.inclusions().cend())
+            {
+                return *it;
+            }
+        }
         _out << R"#(static_assert(false, "strange abstraction parent not recognised: )#" << parent << R"#(");
 )#";
         return strange::abstraction{};
@@ -962,9 +972,16 @@ namespace )#" << _space.name() << R"#(
         if ((!inner) || !pure)
         {
             // override base class operations as well
+            std::string space;
+            auto name = abstraction.name();
+            auto pos = name.find("::");
+            if (pos != std::string::npos)
+            {
+                space = name.substr(0, pos + 2);
+            }
             for (auto const & parent : abstraction.parents())
             {
-                auto recurse = _find_parent(parent);
+                auto recurse = _find_parent(parent, space);
                 if (recurse._something())
                 {
                     _abstraction_operations(recurse, derived, inner, pure, definition, implementation, unique, parent);

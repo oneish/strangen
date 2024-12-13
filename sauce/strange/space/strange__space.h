@@ -3359,7 +3359,7 @@ protected:
 
         virtual auto assign(std::size_t count, T const & value) -> void = 0;
 
-        virtual auto assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void = 0;
+        virtual auto assign(typename strange::forward_const_iterator<T> first, typename strange::forward_const_iterator<T> last) -> void = 0;
 
         virtual auto assign(std::initializer_list<T> ilist) -> void = 0;
 
@@ -3532,7 +3532,7 @@ public:
 
     inline auto assign(std::size_t count, T const & value) -> void;
 
-    inline auto assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void;
+    inline auto assign(typename strange::forward_const_iterator<T> first, typename strange::forward_const_iterator<T> last) -> void;
 
     inline auto assign(std::initializer_list<T> ilist) -> void;
 
@@ -3744,7 +3744,7 @@ private:
 
         inline auto assign(std::size_t count, T const & value) -> void final;
 
-        inline auto assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void final;
+        inline auto assign(typename strange::forward_const_iterator<T> first, typename strange::forward_const_iterator<T> last) -> void final;
 
         inline auto assign(std::initializer_list<T> ilist) -> void final;
 
@@ -3981,9 +3981,9 @@ protected:
             return any::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto pack(bag & dest) const -> void = 0;
+        virtual auto pack(strange::bag & dest) const -> void = 0;
 
-        virtual auto unpack(bag const & src) -> void = 0;
+        virtual auto unpack(strange::bag const & src) -> void = 0;
     };
 
 public:
@@ -4054,9 +4054,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 };
 
 template<typename _Thing, bool _Copy>
@@ -4166,9 +4166,9 @@ private:
             return stuff_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         _Thing _thing;
     };
@@ -4509,17 +4509,17 @@ protected:
 
         virtual auto is_any() const -> bool = 0;
 
-        virtual auto as_any(any & dest) const -> void = 0;
+        virtual auto as_any(strange::any & dest) const -> void = 0;
 
-        virtual auto to_any() const -> any = 0;
+        virtual auto to_any() const -> strange::any = 0;
 
         virtual auto from_any() -> void = 0;
 
-        virtual auto from_any(any const & src) -> void = 0;
+        virtual auto from_any(strange::any const & src) -> void = 0;
 
         virtual auto make_any() const -> bag = 0;
 
-        virtual auto make_any(any const & src) const -> bag = 0;
+        virtual auto make_any(strange::any const & src) const -> bag = 0;
     };
 
 public:
@@ -4590,9 +4590,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto is_null() const -> bool;
 
@@ -4796,17 +4796,17 @@ public:
 
     inline auto is_any() const -> bool;
 
-    inline auto as_any(any & dest) const -> void;
+    inline auto as_any(strange::any & dest) const -> void;
 
-    inline auto to_any() const -> any;
+    inline auto to_any() const -> strange::any;
 
     inline auto from_any() -> void;
 
-    inline auto from_any(any const & src) -> void;
+    inline auto from_any(strange::any const & src) -> void;
 
     inline auto make_any() const -> bag;
 
-    inline auto make_any(any const & src) const -> bag;
+    inline auto make_any(strange::any const & src) const -> bag;
 };
 
 template<typename _Thing, bool _Copy>
@@ -4916,9 +4916,9 @@ private:
             return bag_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto is_null() const -> bool final;
 
@@ -5122,17 +5122,17 @@ private:
 
         inline auto is_any() const -> bool final;
 
-        inline auto as_any(any & dest) const -> void final;
+        inline auto as_any(strange::any & dest) const -> void final;
 
-        inline auto to_any() const -> any final;
+        inline auto to_any() const -> strange::any final;
 
         inline auto from_any() -> void final;
 
-        inline auto from_any(any const & src) -> void final;
+        inline auto from_any(strange::any const & src) -> void final;
 
         inline auto make_any() const -> bag final;
 
-        inline auto make_any(any const & src) const -> bag final;
+        inline auto make_any(strange::any const & src) const -> bag final;
 
         _Thing _thing;
     };
@@ -5366,9 +5366,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto seal() -> void;
 
@@ -5504,9 +5504,9 @@ private:
             return package_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto seal() -> void final;
 
@@ -5745,9 +5745,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto is_null() const -> bool;
 
@@ -5951,17 +5951,17 @@ public:
 
     inline auto is_any() const -> bool;
 
-    inline auto as_any(any & dest) const -> void;
+    inline auto as_any(strange::any & dest) const -> void;
 
-    inline auto to_any() const -> any;
+    inline auto to_any() const -> strange::any;
 
     inline auto from_any() -> void;
 
-    inline auto from_any(any const & src) -> void;
+    inline auto from_any(strange::any const & src) -> void;
 
     inline auto make_any() const -> bag;
 
-    inline auto make_any(any const & src) const -> bag;
+    inline auto make_any(strange::any const & src) const -> bag;
 
     inline auto seal() -> void;
 
@@ -6097,9 +6097,9 @@ private:
             return baggage_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto is_null() const -> bool final;
 
@@ -6303,17 +6303,17 @@ private:
 
         inline auto is_any() const -> bool final;
 
-        inline auto as_any(any & dest) const -> void final;
+        inline auto as_any(strange::any & dest) const -> void final;
 
-        inline auto to_any() const -> any final;
+        inline auto to_any() const -> strange::any final;
 
         inline auto from_any() -> void final;
 
-        inline auto from_any(any const & src) -> void final;
+        inline auto from_any(strange::any const & src) -> void final;
 
         inline auto make_any() const -> bag final;
 
-        inline auto make_any(any const & src) const -> bag final;
+        inline auto make_any(strange::any const & src) const -> bag final;
 
         inline auto seal() -> void final;
 
@@ -6571,9 +6571,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto type() const -> std::string const &;
 
@@ -6707,9 +6707,9 @@ private:
             return parameter_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto type() const -> std::string const & final;
 
@@ -7024,9 +7024,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto name() const -> std::string const &;
 
@@ -7180,9 +7180,9 @@ private:
             return operation_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto name() const -> std::string const & final;
 
@@ -7554,9 +7554,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto parameters() const -> std::vector<strange::parameter> const &;
 
@@ -7706,9 +7706,9 @@ private:
             return abstraction_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto parameters() const -> std::vector<strange::parameter> const & final;
 
@@ -8087,9 +8087,9 @@ public:
         return cats;
     }();
 
-    inline auto pack(bag & dest) const -> void;
+    inline auto pack(strange::bag & dest) const -> void;
 
-    inline auto unpack(bag const & src) -> void;
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto inclusions() const -> std::vector<strange::abstraction> const &;
 
@@ -8223,9 +8223,9 @@ private:
             return space_::_name_;
         }
 
-        inline auto pack(bag & dest) const -> void final;
+        inline auto pack(strange::bag & dest) const -> void final;
 
-        inline auto unpack(bag const & src) -> void final;
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto inclusions() const -> std::vector<strange::abstraction> const & final;
 
@@ -10158,7 +10158,7 @@ inline auto vector<T>::assign(std::size_t count, T const & value) -> void
 }
 
 template<typename T>
-inline auto vector<T>::assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void
+inline auto vector<T>::assign(typename strange::forward_const_iterator<T> first, typename strange::forward_const_iterator<T> last) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename vector<T>::_derived>(strange::_common::_shared)->assign(first, last);
@@ -10527,7 +10527,7 @@ inline auto vector_<T, _Thing, _Copy>::_instance::assign(std::size_t count, T co
 }
 
 template<typename T, typename _Thing, bool _Copy>
-inline auto vector_<T, _Thing, _Copy>::_instance::assign(forward_const_iterator<T> first, forward_const_iterator<T> last) -> void
+inline auto vector_<T, _Thing, _Copy>::_instance::assign(typename strange::forward_const_iterator<T> first, typename strange::forward_const_iterator<T> last) -> void
 {
     _thing.assign(first, last);
 }
@@ -10601,73 +10601,73 @@ inline auto vector_<T, _Thing, _Copy>::_instance::data() const -> T const *
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::begin() -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::begin() const -> typename strange::random_access_const_iterator<T>
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
+    return strange::random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin());
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::cbegin() const -> typename strange::random_access_const_iterator<T>
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin());
+    return strange::random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin());
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::end() -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::end() const -> typename strange::random_access_const_iterator<T>
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
+    return strange::random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end());
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::cend() const -> typename strange::random_access_const_iterator<T>
 {
-    return random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend());
+    return strange::random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend());
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() -> typename std::reverse_iterator<strange::random_access_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
+    return typename std::reverse_iterator<strange::random_access_iterator<T>>{strange::random_access_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::rbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{strange::random_access_const_iterator<T>::template _make<decltype(_thing.end())>(_thing.end())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::crbegin() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())};
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{strange::random_access_const_iterator<T>::template _make<decltype(_thing.cend())>(_thing.cend())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::rend() -> typename std::reverse_iterator<strange::random_access_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_iterator<T>>{random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
+    return typename std::reverse_iterator<strange::random_access_iterator<T>>{strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::rend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{strange::random_access_const_iterator<T>::template _make<decltype(_thing.begin())>(_thing.begin())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::crend() const -> typename std::reverse_iterator<strange::random_access_const_iterator<T>>
 {
-    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())};
+    return typename std::reverse_iterator<strange::random_access_const_iterator<T>>{strange::random_access_const_iterator<T>::template _make<decltype(_thing.cbegin())>(_thing.cbegin())};
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -10715,43 +10715,43 @@ inline auto vector_<T, _Thing, _Copy>::_instance::clear() -> void
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T const & value) -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value));
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), value));
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, T && value) -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)));
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), std::move(value)));
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, std::size_t count, T const & value) -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value));
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), count, value));
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, forward_const_iterator<T> first, forward_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last));
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), first, last));
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::insert(typename strange::random_access_const_iterator<T> pos, std::initializer_list<T> ilist) -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist));
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.insert(pos.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), ilist));
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> pos) -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(pos.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::erase(typename strange::random_access_const_iterator<T> first, typename strange::random_access_const_iterator<T> last) -> typename strange::random_access_iterator<T>
 {
-    return random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
+    return strange::random_access_iterator<T>::template _make<decltype(_thing.begin())>(_thing.erase(first.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing(), last.template _static<strange::random_access_const_iterator_<T, decltype(_thing.cbegin())>>()._thing()));
 }
 
 template<typename T, typename _Thing, bool _Copy>
@@ -10787,74 +10787,74 @@ inline auto vector_<T, _Thing, _Copy>::_instance::resize(std::size_t count, T co
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::swap(vector<T> & other) -> void
 {
-    _thing.swap(other.template _static<vector_<T, _Thing, _Copy>>()._thing());
+    _thing.swap(other.template _static<strange::vector_<T, _Thing, _Copy>>()._thing());
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator==(vector<T> const & other) const -> bool
 {
-    return _thing == other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+    return _thing == other.template _static<strange::vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator!=(vector<T> const & other) const -> bool
 {
-    return _thing != other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+    return _thing != other.template _static<strange::vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator<(vector<T> const & other) const -> bool
 {
-    return _thing < other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+    return _thing < other.template _static<strange::vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator>(vector<T> const & other) const -> bool
 {
-    return _thing > other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+    return _thing > other.template _static<strange::vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator<=(vector<T> const & other) const -> bool
 {
-    return _thing <= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+    return _thing <= other.template _static<strange::vector_<T, _Thing, _Copy> const>()._thing();
 }
 
 template<typename T, typename _Thing, bool _Copy>
 inline auto vector_<T, _Thing, _Copy>::_instance::operator>=(vector<T> const & other) const -> bool
 {
-    return _thing >= other.template _static<vector_<T, _Thing, _Copy> const>()._thing();
+    return _thing >= other.template _static<strange::vector_<T, _Thing, _Copy> const>()._thing();
 }
 
-inline auto stuff::pack(bag & dest) const -> void
+inline auto stuff::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto stuff::unpack(bag const & src) -> void
+inline auto stuff::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto stuff_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto stuff_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto stuff_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto stuff_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
 
-inline auto bag::pack(bag & dest) const -> void
+inline auto bag::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto bag::unpack(bag const & src) -> void
+inline auto bag::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
@@ -11400,12 +11400,12 @@ inline auto bag::is_any() const -> bool
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_any();
 }
 
-inline auto bag::as_any(any & dest) const -> void
+inline auto bag::as_any(strange::any & dest) const -> void
 {
     std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest);
 }
 
-inline auto bag::to_any() const -> any
+inline auto bag::to_any() const -> strange::any
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any();
 }
@@ -11416,7 +11416,7 @@ inline auto bag::from_any() -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any();
 }
 
-inline auto bag::from_any(any const & src) -> void
+inline auto bag::from_any(strange::any const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src);
@@ -11427,19 +11427,19 @@ inline auto bag::make_any() const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any();
 }
 
-inline auto bag::make_any(any const & src) const -> bag
+inline auto bag::make_any(strange::any const & src) const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto bag_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto bag_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
@@ -12051,13 +12051,13 @@ inline auto bag_<_Thing, _Copy>::_instance::is_any() const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::as_any(any & dest) const -> void
+inline auto bag_<_Thing, _Copy>::_instance::as_any(strange::any & dest) const -> void
 {
     _thing.as_any(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::to_any() const -> any
+inline auto bag_<_Thing, _Copy>::_instance::to_any() const -> strange::any
 {
     return _thing.to_any();
 }
@@ -12069,7 +12069,7 @@ inline auto bag_<_Thing, _Copy>::_instance::from_any() -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::from_any(any const & src) -> void
+inline auto bag_<_Thing, _Copy>::_instance::from_any(strange::any const & src) -> void
 {
     _thing.from_any(src);
 }
@@ -12081,17 +12081,17 @@ inline auto bag_<_Thing, _Copy>::_instance::make_any() const -> bag
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bag_<_Thing, _Copy>::_instance::make_any(any const & src) const -> bag
+inline auto bag_<_Thing, _Copy>::_instance::make_any(strange::any const & src) const -> bag
 {
     return _thing.make_any(src);
 }
 
-inline auto package::pack(bag & dest) const -> void
+inline auto package::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto package::unpack(bag const & src) -> void
+inline auto package::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
@@ -12167,13 +12167,13 @@ inline auto package::make_json(std::string const & json) const -> package
 }
 
 template<typename _Thing, bool _Copy>
-inline auto package_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto package_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto package_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto package_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
@@ -12256,12 +12256,12 @@ inline auto package_<_Thing, _Copy>::_instance::make_json(std::string const & js
     return _thing.make_json(json);
 }
 
-inline auto baggage::pack(bag & dest) const -> void
+inline auto baggage::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto baggage::unpack(bag const & src) -> void
+inline auto baggage::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
@@ -12807,12 +12807,12 @@ inline auto baggage::is_any() const -> bool
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->is_any();
 }
 
-inline auto baggage::as_any(any & dest) const -> void
+inline auto baggage::as_any(strange::any & dest) const -> void
 {
     std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->as_any(dest);
 }
 
-inline auto baggage::to_any() const -> any
+inline auto baggage::to_any() const -> strange::any
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->to_any();
 }
@@ -12823,7 +12823,7 @@ inline auto baggage::from_any() -> void
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any();
 }
 
-inline auto baggage::from_any(any const & src) -> void
+inline auto baggage::from_any(strange::any const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename bag::_derived>(strange::_common::_shared)->from_any(src);
@@ -12834,7 +12834,7 @@ inline auto baggage::make_any() const -> bag
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any();
 }
 
-inline auto baggage::make_any(any const & src) const -> bag
+inline auto baggage::make_any(strange::any const & src) const -> bag
 {
     return std::dynamic_pointer_cast<typename bag::_derived const>(strange::_common::_shared)->make_any(src);
 }
@@ -12909,13 +12909,13 @@ inline auto baggage::make_json(std::string const & json) const -> package
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto baggage_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto baggage_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
@@ -13527,13 +13527,13 @@ inline auto baggage_<_Thing, _Copy>::_instance::is_any() const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::as_any(any & dest) const -> void
+inline auto baggage_<_Thing, _Copy>::_instance::as_any(strange::any & dest) const -> void
 {
     _thing.as_any(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::to_any() const -> any
+inline auto baggage_<_Thing, _Copy>::_instance::to_any() const -> strange::any
 {
     return _thing.to_any();
 }
@@ -13545,7 +13545,7 @@ inline auto baggage_<_Thing, _Copy>::_instance::from_any() -> void
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::from_any(any const & src) -> void
+inline auto baggage_<_Thing, _Copy>::_instance::from_any(strange::any const & src) -> void
 {
     _thing.from_any(src);
 }
@@ -13557,7 +13557,7 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_any() const -> bag
 }
 
 template<typename _Thing, bool _Copy>
-inline auto baggage_<_Thing, _Copy>::_instance::make_any(any const & src) const -> bag
+inline auto baggage_<_Thing, _Copy>::_instance::make_any(strange::any const & src) const -> bag
 {
     return _thing.make_any(src);
 }
@@ -13640,12 +13640,12 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_json(std::string const & js
     return _thing.make_json(json);
 }
 
-inline auto parameter::pack(bag & dest) const -> void
+inline auto parameter::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto parameter::unpack(bag const & src) -> void
+inline auto parameter::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
@@ -13715,13 +13715,13 @@ inline auto parameter::operator>=(parameter const & other) const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto parameter_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto parameter_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto parameter_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
@@ -13802,12 +13802,12 @@ inline auto parameter_<_Thing, _Copy>::_instance::operator>=(parameter const & o
     return !operator<(other);
 }
 
-inline auto operation::pack(bag & dest) const -> void
+inline auto operation::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto operation::unpack(bag const & src) -> void
+inline auto operation::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
@@ -13932,13 +13932,13 @@ inline auto operation::operator>=(operation const & other) const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto operation_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto operation_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto operation_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto operation_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
@@ -14089,12 +14089,12 @@ inline auto operation_<_Thing, _Copy>::_instance::operator>=(operation const & o
     return !operator<(other);
 }
 
-inline auto abstraction::pack(bag & dest) const -> void
+inline auto abstraction::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto abstraction::unpack(bag const & src) -> void
+inline auto abstraction::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
@@ -14208,13 +14208,13 @@ inline auto abstraction::operator>=(abstraction const & other) const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto abstraction_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto abstraction_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto abstraction_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
@@ -14351,12 +14351,12 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator>=(abstraction const
     return !operator<(other);
 }
 
-inline auto space::pack(bag & dest) const -> void
+inline auto space::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
 }
 
-inline auto space::unpack(bag const & src) -> void
+inline auto space::unpack(strange::bag const & src) -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
@@ -14426,13 +14426,13 @@ inline auto space::operator>=(space const & other) const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto space_<_Thing, _Copy>::_instance::pack(bag & dest) const -> void
+inline auto space_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
     _thing.pack(dest);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto space_<_Thing, _Copy>::_instance::unpack(bag const & src) -> void
+inline auto space_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
 {
     _thing.unpack(src);
 }
