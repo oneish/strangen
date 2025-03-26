@@ -184,6 +184,7 @@ protected:
         }
 
         virtual auto eat() -> void = 0;
+        virtual auto eat_lambda() -> std::function<auto () -> void> = 0;
     };
 
 public:
@@ -255,6 +256,7 @@ public:
     }();
 
     inline auto eat() -> void;
+    inline auto eat_lambda() -> std::function<auto () -> void>;
 };
 
 template<typename _Thing, bool _Copy>
@@ -365,6 +367,7 @@ private:
         }
 
         inline auto eat() -> void final;
+        inline auto eat_lambda() -> std::function<auto () -> void> final;
 
         _Thing _thing;
     };
@@ -586,6 +589,7 @@ public:
     }();
 
     inline auto eat() -> void;
+    inline auto eat_lambda() -> std::function<auto () -> void>;
 
     inline auto pack(strange::bag & dest) const -> void;
 
@@ -708,6 +712,7 @@ private:
         }
 
         inline auto eat() -> void final;
+        inline auto eat_lambda() -> std::function<auto () -> void> final;
 
         inline auto pack(strange::bag & dest) const -> void final;
 
@@ -1289,6 +1294,7 @@ public:
     }();
 
     inline auto eat() -> void;
+    inline auto eat_lambda() -> std::function<auto () -> void>;
 
     inline auto push_back(Item const & item) -> void;
 
@@ -1417,6 +1423,7 @@ private:
         }
 
         inline auto eat() -> void final;
+        inline auto eat_lambda() -> std::function<auto () -> void> final;
 
         inline auto push_back(Item const & item) -> void final;
 
@@ -1846,16 +1853,37 @@ inline auto food::eat() -> void
     std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
 }
 
+inline auto food::eat_lambda() -> std::function<auto () -> void>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat_lambda();
+}
+
 template<typename _Thing, bool _Copy>
 inline auto food_<_Thing, _Copy>::_instance::eat() -> void
 {
     _thing.eat();
 }
 
+template<typename _Thing, bool _Copy>
+inline auto food_<_Thing, _Copy>::_instance::eat_lambda() -> std::function<auto () -> void>
+{
+    return [this]() -> void
+    {
+        _thing.eat();
+    };
+}
+
 inline auto fruit::eat() -> void
 {
     strange::_common::_mutate();
     std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
+}
+
+inline auto fruit::eat_lambda() -> std::function<auto () -> void>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat_lambda();
 }
 
 inline auto fruit::pack(strange::bag & dest) const -> void
@@ -1896,6 +1924,16 @@ inline auto fruit_<_Thing, _Copy>::_instance::eat() -> void
 {
     _thing.eat();
 }
+
+template<typename _Thing, bool _Copy>
+inline auto fruit_<_Thing, _Copy>::_instance::eat_lambda() -> std::function<auto () -> void>
+{
+    return [this]() -> void
+    {
+        _thing.eat();
+    };
+}
+
 
 template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
@@ -2002,6 +2040,12 @@ inline auto bunch_of_fruit::eat() -> void
     std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
 }
 
+inline auto bunch_of_fruit::eat_lambda() -> std::function<auto () -> void>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat_lambda();
+}
+
 inline auto bunch_of_fruit::push_back(Item const & item) -> void
 {
     strange::_common::_mutate();
@@ -2056,6 +2100,15 @@ template<typename _Thing, bool _Copy>
 inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::eat() -> void
 {
     _thing.eat();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::eat_lambda() -> std::function<auto () -> void>
+{
+    return [this]() -> void
+    {
+        _thing.eat();
+    };
 }
 
 template<typename _Thing, bool _Copy>
