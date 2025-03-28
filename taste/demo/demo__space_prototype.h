@@ -5,6 +5,7 @@ namespace demo
     // abstraction
     struct food : strange::any
     {
+        [[strange::closure("eat_closure_")]]
         auto eat() -> void;
     };
 

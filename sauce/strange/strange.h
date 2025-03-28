@@ -64,6 +64,7 @@ struct std::hash<strange::operation>
         hash_combine(h, oper.constness());
         hash_combine(h, oper.result());
         hash_combine(h, oper.data());
+        hash_combine(h, oper.closure());
         hash_combine(h, oper.modification());
         hash_combine(h, oper.customisation());
         hash_combine(h, oper.implementation());

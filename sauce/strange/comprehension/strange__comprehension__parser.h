@@ -668,10 +668,15 @@ struct parser
             return;
         }
         bool result = false;
+        bool closure = false;
         bool modification = false;
         if (tok.text() == "result")
         {
             result = true;
+        }
+        else if (tok.text() == "closure")
+        {
+            closure = true;
         }
         else if (tok.text() == "modification")
         {
@@ -679,7 +684,7 @@ struct parser
         }
         else if (tok.text() != "customisation")
         {
-            err = "parse_operation_attribute() expected 'result', 'modification' or 'customisation', but got name";
+            err = "parse_operation_attribute() expected 'result', 'closure', 'modification' or 'customisation', but got name";
             return;
         }
         parse_punctuation();
@@ -708,6 +713,10 @@ struct parser
         if (result)
         {
             oper.result() = text;
+        }
+        else if (closure)
+        {
+            oper.closure() = text;
         }
         else if (modification)
         {

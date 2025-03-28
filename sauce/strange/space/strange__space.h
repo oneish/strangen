@@ -6931,6 +6931,10 @@ protected:
 
         virtual auto data() -> bool & = 0;
 
+        virtual auto closure() const -> std::string const & = 0;
+
+        virtual auto closure() -> std::string & = 0;
+
         virtual auto modification() const -> std::string const & = 0;
 
         virtual auto modification() -> std::string & = 0;
@@ -7047,6 +7051,10 @@ public:
     inline auto data() const -> bool const &;
 
     inline auto data() -> bool &;
+
+    inline auto closure() const -> std::string const &;
+
+    inline auto closure() -> std::string &;
 
     inline auto modification() const -> std::string const &;
 
@@ -7204,6 +7212,10 @@ private:
 
         inline auto data() -> bool & final;
 
+        inline auto closure() const -> std::string const & final;
+
+        inline auto closure() -> std::string & final;
+
         inline auto modification() const -> std::string const & final;
 
         inline auto modification() -> std::string & final;
@@ -7340,6 +7352,9 @@ struct operation
     bool data_ {false};
     inline auto data() const -> bool const & { return data_; };
     inline auto data() -> bool & { return data_; };
+    std::string closure_ {};
+    inline auto closure() const -> std::string const & { return closure_; };
+    inline auto closure() -> std::string & { return closure_; };
     std::string modification_ {};
     inline auto modification() const -> std::string const & { return modification_; };
     inline auto modification() -> std::string & { return modification_; };
@@ -7365,6 +7380,7 @@ struct operation
         dest.insert_object("constness", dest.make_bool(constness()));
         dest.insert_object("result", dest.make_string(result()));
         dest.insert_object("data", dest.make_bool(data()));
+        dest.insert_object("closure", dest.make_string(closure()));
         dest.insert_object("modification", dest.make_string(modification()));
         dest.insert_object("customisation", dest.make_string(customisation()));
         dest.insert_object("implementation", dest.make_string(implementation()));
@@ -7386,6 +7402,7 @@ struct operation
         src.get_object("constness").as_bool(constness());
         src.get_object("result").as_string(result());
         src.get_object("data").as_bool(data());
+        src.get_object("closure").as_string(closure());
         src.get_object("modification").as_string(modification());
         src.get_object("customisation").as_string(customisation());
         src.get_object("implementation").as_string(implementation());
@@ -13868,6 +13885,17 @@ inline auto operation::data() -> bool &
     return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->data();
 }
 
+inline auto operation::closure() const -> std::string const &
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->closure();
+}
+
+inline auto operation::closure() -> std::string &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->closure();
+}
+
 inline auto operation::modification() const -> std::string const &
 {
     return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->modification();
@@ -14001,6 +14029,18 @@ template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::data() -> bool &
 {
     return _thing.data();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_<_Thing, _Copy>::_instance::closure() const -> std::string const &
+{
+    return _thing.closure();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_<_Thing, _Copy>::_instance::closure() -> std::string &
+{
+    return _thing.closure();
 }
 
 template<typename _Thing, bool _Copy>

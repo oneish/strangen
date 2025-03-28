@@ -548,6 +548,7 @@ namespace strange
         bool constness {false};
         std::string result {};
         bool data {false};
+        std::string closure {};
         std::string modification {};
         std::string customisation {};
         std::string implementation {};
