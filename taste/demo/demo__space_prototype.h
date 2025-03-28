@@ -13,6 +13,7 @@ namespace demo
     struct fruit : food, strange::stuff
     {
         auto ripen() -> void;
+        [[strange::closure("ripe_closure_")]]
         auto ripe() const -> bool;
         auto peel() -> void;
         auto peeled() const -> bool;

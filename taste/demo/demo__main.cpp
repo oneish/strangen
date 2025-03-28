@@ -204,6 +204,10 @@ int main()
     fruit_1.peel();
     fruit_1.peeled();
     fruit_1.eat();
+    auto closure_1 = fruit_1.eat_closure_();
+    closure_1();
+    auto closure_2 = fruit_2.ripe_closure_();
+    closure_2();
 
     auto bunch_1 = demo::bunch<demo::fruit>::_make<std::vector<demo::fruit>>();
     bunch_1.push_back(fruit_1);

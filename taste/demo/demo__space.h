@@ -517,6 +517,8 @@ protected:
 
         virtual auto ripe() const -> bool = 0;
 
+        virtual auto ripe_closure_() const -> std::function<auto () -> bool> = 0;
+
         virtual auto peel() -> void = 0;
 
         virtual auto peeled() const -> bool = 0;
@@ -602,6 +604,8 @@ public:
     inline auto ripen() -> void;
 
     inline auto ripe() const -> bool;
+
+    inline auto ripe_closure_() const -> std::function<auto () -> bool>;
 
     inline auto peel() -> void;
 
@@ -726,6 +730,8 @@ private:
         inline auto ripen() -> void final;
 
         inline auto ripe() const -> bool final;
+
+        inline auto ripe_closure_() const -> std::function<auto () -> bool> final;
 
         inline auto peel() -> void final;
 
@@ -1915,6 +1921,11 @@ inline auto fruit::ripe() const -> bool
     return std::dynamic_pointer_cast<typename fruit::_derived const>(strange::_common::_shared)->ripe();
 }
 
+inline auto fruit::ripe_closure_() const -> std::function<auto () -> bool>
+{
+    return std::dynamic_pointer_cast<typename fruit::_derived const>(strange::_common::_shared)->ripe_closure_();
+}
+
 inline auto fruit::peel() -> void
 {
     strange::_common::_mutate();
@@ -1963,6 +1974,15 @@ template<typename _Thing, bool _Copy>
 inline auto fruit_<_Thing, _Copy>::_instance::ripe() const -> bool
 {
     return _thing.ripe();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto fruit_<_Thing, _Copy>::_instance::ripe_closure_() const -> std::function<auto () -> bool>
+{
+    return [this]() -> bool
+    {
+        return _thing.ripe();
+    };
 }
 
 template<typename _Thing, bool _Copy>
