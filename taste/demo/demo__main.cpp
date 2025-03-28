@@ -212,11 +212,17 @@ int main()
     auto bunch_1 = demo::bunch<demo::fruit>::_make<std::vector<demo::fruit>>();
     bunch_1.push_back(fruit_1);
     std::cout << "bunch_1.size(): " << bunch_1.size() << "\n";
+    auto closure_3 = bunch_1.push_back_closure_();
+    closure_3(fruit_2);
+    std::cout << "bunch_1.size(): " << bunch_1.size() << "\n";
 
     auto bunch_2 = demo::bunch_of_fruit::_make<bunch_of_bananas>();
     bunch_2.push_back(fruit_1);
     bunch_2.push_back(fruit_2);
     std::cout << "bunch_2.size(): " << bunch_2.size() << "\n";
+    auto closure_4 = bunch_2.operator_array_closure_();
+    std::cout << "closure_4(0).ripe()\n";
+    closure_4(0).ripe();
 
     auto bag_1 = strange::baggage::_make();
     bag_1.from_any(bunch_2._static<strange::any>());

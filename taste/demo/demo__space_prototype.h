@@ -23,9 +23,11 @@ namespace demo
     template<typename Item>
     struct bunch : strange::any
     {
+        [[strange::closure("push_back_closure_")]]
         auto push_back(Item const & item) -> void;
         auto push_back(Item && item) -> void;
         auto size() const -> std::size_t;
+        [[strange::closure("operator_array_closure_")]]
         auto operator[](std::size_t pos) const -> Item const &;
         auto operator[](std::size_t pos) -> Item &;
     };

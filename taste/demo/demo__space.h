@@ -877,11 +877,15 @@ protected:
 
         virtual auto push_back(Item const & item) -> void = 0;
 
+        virtual auto push_back_closure_() -> std::function<auto (Item const & item) -> void> = 0;
+
         virtual auto push_back(Item && item) -> void = 0;
 
         virtual auto size() const -> std::size_t = 0;
 
         virtual auto operator[](std::size_t pos) const -> Item const & = 0;
+
+        virtual auto operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &> = 0;
 
         virtual auto operator[](std::size_t pos) -> Item & = 0;
     };
@@ -956,11 +960,15 @@ public:
 
     inline auto push_back(Item const & item) -> void;
 
+    inline auto push_back_closure_() -> std::function<auto (Item const & item) -> void>;
+
     inline auto push_back(Item && item) -> void;
 
     inline auto size() const -> std::size_t;
 
     inline auto operator[](std::size_t pos) const -> Item const &;
+
+    inline auto operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>;
 
     inline auto operator[](std::size_t pos) -> Item &;
 };
@@ -1074,11 +1082,15 @@ private:
 
         inline auto push_back(Item const & item) -> void final;
 
+        inline auto push_back_closure_() -> std::function<auto (Item const & item) -> void> final;
+
         inline auto push_back(Item && item) -> void final;
 
         inline auto size() const -> std::size_t final;
 
         inline auto operator[](std::size_t pos) const -> Item const & final;
+
+        inline auto operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &> final;
 
         inline auto operator[](std::size_t pos) -> Item & final;
 
@@ -1310,11 +1322,15 @@ public:
 
     inline auto push_back(Item const & item) -> void;
 
+    inline auto push_back_closure_() -> std::function<auto (Item const & item) -> void>;
+
     inline auto push_back(Item && item) -> void;
 
     inline auto size() const -> std::size_t;
 
     inline auto operator[](std::size_t pos) const -> Item const &;
+
+    inline auto operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>;
 
     inline auto operator[](std::size_t pos) -> Item &;
 
@@ -1440,11 +1456,15 @@ private:
 
         inline auto push_back(Item const & item) -> void final;
 
+        inline auto push_back_closure_() -> std::function<auto (Item const & item) -> void> final;
+
         inline auto push_back(Item && item) -> void final;
 
         inline auto size() const -> std::size_t final;
 
         inline auto operator[](std::size_t pos) const -> Item const & final;
+
+        inline auto operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &> final;
 
         inline auto operator[](std::size_t pos) -> Item & final;
 
@@ -2005,6 +2025,13 @@ inline auto bunch<Item>::push_back(Item const & item) -> void
 }
 
 template<typename Item>
+inline auto bunch<Item>::push_back_closure_() -> std::function<auto (Item const & item) -> void>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bunch<Item>::_derived>(strange::_common::_shared)->push_back_closure_();
+}
+
+template<typename Item>
 inline auto bunch<Item>::push_back(Item && item) -> void
 {
     strange::_common::_mutate();
@@ -2024,6 +2051,12 @@ inline auto bunch<Item>::operator[](std::size_t pos) const -> Item const &
 }
 
 template<typename Item>
+inline auto bunch<Item>::operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>
+{
+    return std::dynamic_pointer_cast<typename bunch<Item>::_derived const>(strange::_common::_shared)->operator_array_closure_();
+}
+
+template<typename Item>
 inline auto bunch<Item>::operator[](std::size_t pos) -> Item &
 {
     strange::_common::_mutate();
@@ -2034,6 +2067,15 @@ template<typename Item, typename _Thing, bool _Copy>
 inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back(Item const & item) -> void
 {
     _thing.push_back(item);
+}
+
+template<typename Item, typename _Thing, bool _Copy>
+inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back_closure_() -> std::function<auto (Item const & item) -> void>
+{
+    return [this](Item const & item) -> void
+    {
+        _thing.push_back(item);
+    };
 }
 
 template<typename Item, typename _Thing, bool _Copy>
@@ -2052,6 +2094,15 @@ template<typename Item, typename _Thing, bool _Copy>
 inline auto bunch_<Item, _Thing, _Copy>::_instance::operator[](std::size_t pos) const -> Item const &
 {
     return _thing.operator[](pos);
+}
+
+template<typename Item, typename _Thing, bool _Copy>
+inline auto bunch_<Item, _Thing, _Copy>::_instance::operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>
+{
+    return [this](std::size_t pos) -> Item const &
+    {
+        return _thing.operator[](pos);
+    };
 }
 
 template<typename Item, typename _Thing, bool _Copy>
@@ -2078,6 +2129,12 @@ inline auto bunch_of_fruit::push_back(Item const & item) -> void
     std::dynamic_pointer_cast<typename bunch<fruit>::_derived>(strange::_common::_shared)->push_back(item);
 }
 
+inline auto bunch_of_fruit::push_back_closure_() -> std::function<auto (Item const & item) -> void>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename bunch<fruit>::_derived>(strange::_common::_shared)->push_back_closure_();
+}
+
 inline auto bunch_of_fruit::push_back(Item && item) -> void
 {
     strange::_common::_mutate();
@@ -2092,6 +2149,11 @@ inline auto bunch_of_fruit::size() const -> std::size_t
 inline auto bunch_of_fruit::operator[](std::size_t pos) const -> Item const &
 {
     return std::dynamic_pointer_cast<typename bunch<fruit>::_derived const>(strange::_common::_shared)->operator[](pos);
+}
+
+inline auto bunch_of_fruit::operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>
+{
+    return std::dynamic_pointer_cast<typename bunch<fruit>::_derived const>(strange::_common::_shared)->operator_array_closure_();
 }
 
 inline auto bunch_of_fruit::operator[](std::size_t pos) -> Item &
@@ -2144,6 +2206,15 @@ inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::push_back(Item const & it
 }
 
 template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::push_back_closure_() -> std::function<auto (Item const & item) -> void>
+{
+    return [this](Item const & item) -> void
+    {
+        _thing.push_back(item);
+    };
+}
+
+template<typename _Thing, bool _Copy>
 inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::push_back(Item && item) -> void
 {
     _thing.push_back(std::move(item));
@@ -2159,6 +2230,15 @@ template<typename _Thing, bool _Copy>
 inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::operator[](std::size_t pos) const -> Item const &
 {
     return _thing.operator[](pos);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>
+{
+    return [this](std::size_t pos) -> Item const &
+    {
+        return _thing.operator[](pos);
+    };
 }
 
 template<typename _Thing, bool _Copy>
