@@ -6,6 +6,6 @@ int main()
 {
     std::cout << "currant\n";
 
-    stlab::v2::pre_exit();
+    stlab::pre_exit();
     return 0;
 }
