@@ -39,7 +39,7 @@ assert(!data.is_finalized());
 data.finalize(); // <-- could also use data.lower();
 assert(data.is_finalized());
 // data.add_field("can't", "do it"); // <-- BOOM
-gsl::span<gsl::byte const> bytes = data.get_bytes();
+gsl::span<std::byte const> bytes = data.get_bytes();
 // file.write(bytes.data(), bytes.size());
 assert(data.is_finalized());
 data.definalize(); // <-- could also use data.lift();

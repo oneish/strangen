@@ -292,5 +292,8 @@ namespace comprehension
 enum class cls;
 }
 }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
 #include "example__parser_input.h"
+#pragma GCC diagnostic pop
 }

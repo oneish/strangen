@@ -2,7 +2,11 @@
 
 #define DART_HAS_RAPIDJSON 1
 #define DART_USE_SAJSON 1
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #include <dart.h>
+#pragma GCC diagnostic pop
 
 namespace strange
 {
@@ -998,7 +1002,7 @@ struct baggage
 
     inline auto from_binary(std::string const & binary) -> void
     {
-        packet = dart::packet{gsl::make_span(reinterpret_cast<gsl::byte const*>(binary.data()), binary.size())};
+        packet = dart::packet{gsl::make_span(reinterpret_cast<std::byte const*>(binary.data()), binary.size())};
         if (packet.size() == 1 && packet.has_key(""))
         {
             packet = packet.get("");
@@ -1007,7 +1011,7 @@ struct baggage
 
     inline auto make_binary(std::string const & binary) const -> package
     {
-        auto pack = dart::packet{gsl::make_span(reinterpret_cast<gsl::byte const*>(binary.data()), binary.size())};
+        auto pack = dart::packet{gsl::make_span(reinterpret_cast<std::byte const*>(binary.data()), binary.size())};
         if (pack.size() == 1 && pack.has_key(""))
         {
             pack = pack.get("");
