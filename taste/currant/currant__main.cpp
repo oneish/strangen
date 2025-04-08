@@ -15,18 +15,10 @@ struct sum
 int main()
 {
     std::cout << "currant\n";
-    {
+    {   // single channel
         stlab::sender<int> send;
-        send(42);
-
         stlab::receiver<int> receive;
-        std::cout << "receive.ready(): " << receive.ready() << "\n";
-        receive.set_ready();
-        std::cout << "receive.ready(): " << receive.ready() << "\n";
-
-        auto chan = stlab::channel<int>(stlab::default_executor);
-        send = chan.first;
-        receive = chan.second;
+        std::tie(send, receive) = stlab::channel<int>(stlab::default_executor);
         auto discard = receive | [](int x) {
             std::cout << "received: " << x << "\n";
         };
@@ -34,9 +26,10 @@ int main()
         receive.set_ready();
         std::cout << "receive.ready(): " << receive.ready() << "\n";
         send(42);
+        std::cout << "sleep\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
-    {
+    {   // non-std coroutine
         stlab::sender<int> send;
         stlab::receiver<int> receive;
         std::tie(send, receive) = stlab::channel<int>(stlab::default_executor);
@@ -47,9 +40,56 @@ int main()
         send(1);
         send(2);
         send(3);
-        send.close();
+        std::cout << "sleep\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        /*prints 1 3 6 6*/
+        /*prints 1 3 6*/
+    }
+    {   // split
+        stlab::sender<int> send1;
+        stlab::receiver<int> receive1;
+        std::tie(send1, receive1) = stlab::channel<int>(stlab::default_executor);
+        auto hold1a = receive1
+            | [](int x){ std::cout << "receive1a:" << x << '\n'; };
+        auto hold1b = receive1
+            | [](int x){ std::cout << "receive1b:" << x << '\n'; };
+        receive1.set_ready();
+        send1(1);
+        send1(2);
+        send1(3);
+        std::cout << "sleep\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        /*prints 1 1 2 2 3 3*/
+    }
+    {   // split & join
+        stlab::sender<int> send1;
+        stlab::receiver<int> receive1;
+        std::tie(send1, receive1) = stlab::channel<int>(stlab::default_executor);
+        stlab::sender<int> send2;
+        stlab::receiver<int> receive2;
+        std::tie(send2, receive2) = stlab::channel<int>(stlab::default_executor);
+        stlab::sender<int> send3;
+        stlab::receiver<int> receive3;
+        std::tie(send3, receive3) = stlab::channel<int>(stlab::default_executor);
+        auto hold1a = receive1
+            | [&send2](int x){ send2(x); };
+        auto hold1b = receive1
+            | [&send3](int x){ send3(x); };
+        auto zipped = stlab::zip(stlab::default_executor,
+                receive2,
+                receive3)
+            | [](std::tuple<int, int> v) {
+                std::cout << "receive zip:" << std::get<0>(v) << " " << std::get<1>(v) << '\n';
+            };
+
+        receive1.set_ready();
+        receive2.set_ready();
+        receive3.set_ready();
+        send1(1);
+        send1(2);
+        send1(3);
+        std::cout << "sleep\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        /*prints 1 1  2 2  3 3*/
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
