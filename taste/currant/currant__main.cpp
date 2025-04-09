@@ -1,3 +1,4 @@
+#include "../../sauce/strange/strange.h"
 #include <stlab/concurrency/concurrency.hpp>
 #include <stlab/pre_exit.hpp>
 #include <iostream>
@@ -24,6 +25,58 @@ auto get_fun() -> std::function<auto (std::tuple<int, int, int> v) -> void>
     };
 }
 
+template <typename Senders, typename Receivers, typename Inputs>
+struct processor
+{
+    auto senders() const -> Senders const &
+    {
+        return _senders;
+    }
+
+    auto receivers() const -> Receivers const &
+    {
+        return _receivers;
+    }
+
+    auto senders() -> Senders &
+    {
+        return _senders;
+    }
+
+    auto receivers() -> Receivers &
+    {
+        return _receivers;
+    }
+
+    //TODO hold?
+
+    auto set_ready() -> void
+    {
+        std::apply([](auto && ... recv) {
+            ((recv.set_ready()),...);
+        }, _receivers);
+    }
+
+    auto process(Inputs inputs) -> void
+    {
+        std::cout << "process\n";
+        std::apply([](auto && ... send) {
+            ((send(strange::any{}),std::cout << "sent\n"),...);
+        }, _senders);
+    }
+
+    auto process_closure_() -> std::function<auto (Inputs) -> void>
+    {
+        return [this](Inputs inputs) {
+            process(inputs);
+        };
+    }
+
+private:
+    Senders _senders;
+    Receivers _receivers;
+};
+
 int main()
 {
     std::cout << "currant\n";
@@ -39,7 +92,7 @@ int main()
         std::cout << "receive.ready(): " << receive.ready() << "\n";
         send(42);
         std::cout << "sleep\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     {   // non-std coroutine
         stlab::sender<int> send;
@@ -53,7 +106,7 @@ int main()
         send(2);
         send(3);
         std::cout << "sleep\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         /*prints 1 3 6*/
     }
     {   // split
@@ -69,7 +122,7 @@ int main()
         send1(2);
         send1(3);
         std::cout << "sleep\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         /*prints 1 1 2 2 3 3*/
     }
     {   // split & join
@@ -100,7 +153,7 @@ int main()
         send1(2);
         send1(3);
         std::cout << "sleep\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         /*prints 12,13 22,23 32,33*/
     }
     {   // three-way split & join
@@ -136,8 +189,47 @@ int main()
         send1(2);
         send1(3);
         std::cout << "sleep\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         /*prints 12,13,14 22,23,24 32,33,34*/
+    }
+    {
+        processor<std::tuple<stlab::sender<strange::any>, stlab::sender<strange::any>, stlab::sender<strange::any>>,
+            std::tuple<stlab::receiver<strange::any>>,
+            std::tuple<strange::any>>
+            proc1;
+        processor<std::tuple<stlab::sender<strange::any>>,
+            std::tuple<stlab::receiver<strange::any>, stlab::receiver<strange::any>, stlab::receiver<strange::any>>,
+            std::tuple<strange::any, strange::any, strange::any>>
+            proc2;
+        stlab::sender<strange::any> send;
+        stlab::receiver<strange::any> receiver;
+        std::tie(send, std::get<0>(proc1.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
+        std::tie(std::get<0>(proc1.senders()), std::get<0>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
+        std::tie(std::get<1>(proc1.senders()), std::get<1>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
+        std::tie(std::get<2>(proc1.senders()), std::get<2>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
+        std::tie(std::get<0>(proc2.senders()), receiver) = stlab::channel<strange::any>(stlab::default_executor);
+        //auto hold1 = std::get<0>(proc1.receivers())
+        //    | proc1.process_closure_();
+        auto hold1 = stlab::zip(stlab::default_executor,
+                std::get<0>(proc1.receivers()))
+            | proc1.process_closure_();
+        auto hold2 = stlab::zip(stlab::default_executor,
+                std::get<0>(proc2.receivers()),
+                std::get<1>(proc2.receivers()),
+                std::get<2>(proc2.receivers()))
+            | proc2.process_closure_();
+        auto hold3 = receiver
+            | [](strange::any x) {
+                std::cout << "received\n";
+            };
+        proc1.set_ready();
+        proc2.set_ready();
+        receiver.set_ready();
+        send(strange::any{});
+        send(strange::any{});
+        send(strange::any{});
+        std::cout << "sleep\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
