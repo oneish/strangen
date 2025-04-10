@@ -25,20 +25,38 @@ auto get_fun() -> std::function<auto (std::tuple<int, int, int> v) -> void>
     };
 }
 
-template <typename Senders, typename Receivers, typename Inputs>
+template <typename Inputs, typename Outputs>
 struct processor
 {
-    auto senders() const -> Senders const &
+private:
+    template <typename Tuple>
+    struct _tuple_senders;
+
+    template <typename ... Elements>
+    struct _tuple_senders<std::tuple<Elements ...>>
     {
-        return _senders;
-    }
+        using type = std::tuple<stlab::sender<Elements> ...>;
+    };
+
+    template <typename Tuple>
+    struct _tuple_receivers;
+
+    template <typename ... Elements>
+    struct _tuple_receivers<std::tuple<Elements ...>>
+    {
+        using type = std::tuple<stlab::receiver<Elements> ...>;
+    };
+
+public:
+    using Receivers = typename _tuple_receivers<Inputs>::type;
+    using Senders = typename _tuple_senders<Outputs>::type;
 
     auto receivers() const -> Receivers const &
     {
         return _receivers;
     }
 
-    auto senders() -> Senders &
+    auto senders() const -> Senders const &
     {
         return _senders;
     }
@@ -48,23 +66,29 @@ struct processor
         return _receivers;
     }
 
-    auto set_hold() -> void
+    auto senders() -> Senders &
+    {
+        return _senders;
+    }
+
+    auto on_your_marks() -> void
     {
         std::apply([this](auto && ... recv) {
             auto hold = stlab::zip(stlab::default_executor,
-                recv...) | process_closure_();
+                recv ...) | _process_closure();
             _hold = strange::any::_make<decltype(hold)>(std::move(hold));
         }, _receivers);
     }
 
-    auto set_ready() -> void
+    auto get_set() -> void
     {
         std::apply([](auto && ... recv) {
             ((recv.set_ready()), ...);
         }, _receivers);
     }
 
-    auto process(Inputs inputs) -> void
+private:
+    auto _process(Inputs inputs) -> void
     {
         std::cout << "process\n";
         std::apply([](auto && ... send) {
@@ -72,14 +96,13 @@ struct processor
         }, _senders);
     }
 
-    auto process_closure_() -> std::function<auto (Inputs) -> void>
+    auto _process_closure() -> std::function<auto (Inputs) -> void>
     {
         return [this](Inputs inputs) {
-            process(inputs);
+            _process(inputs);
         };
     }
 
-private:
     Senders _senders;
     Receivers _receivers;
     strange::any _hold;
@@ -87,7 +110,7 @@ private:
 
 int main()
 {
-    std::cout << "currant\n";
+    std::cout << "currants\n";
     {   // single channel
         stlab::sender<int> send;
         stlab::receiver<int> receive;
@@ -201,13 +224,11 @@ int main()
         /*prints 12,13,14 22,23,24 32,33,34*/
     }
     {   // processors
-        processor<std::tuple<stlab::sender<strange::any>, stlab::sender<strange::any>, stlab::sender<strange::any>>,
-            std::tuple<stlab::receiver<strange::any>>,
-            std::tuple<strange::any>>
-            proc1;
-        processor<std::tuple<stlab::sender<strange::any>>,
-            std::tuple<stlab::receiver<strange::any>, stlab::receiver<strange::any>, stlab::receiver<strange::any>>,
+        processor<std::tuple<strange::any>,
             std::tuple<strange::any, strange::any, strange::any>>
+            proc1;
+        processor<std::tuple<strange::any, strange::any, strange::any>,
+            std::tuple<strange::any>>
             proc2;
         stlab::sender<strange::any> send;
         stlab::receiver<strange::any> receiver;
@@ -216,14 +237,14 @@ int main()
         std::tie(std::get<1>(proc1.senders()), std::get<1>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
         std::tie(std::get<2>(proc1.senders()), std::get<2>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
         std::tie(std::get<0>(proc2.senders()), receiver) = stlab::channel<strange::any>(stlab::default_executor);
-        proc1.set_hold();
-        proc2.set_hold();
+        proc1.on_your_marks();
+        proc2.on_your_marks();
         auto hold = receiver
             | [](strange::any x) {
                 std::cout << "received\n";
             };
-        proc1.set_ready();
-        proc2.set_ready();
+        proc1.get_set();
+        proc2.get_set();
         receiver.set_ready();
         send(strange::any{});
         send(strange::any{});
