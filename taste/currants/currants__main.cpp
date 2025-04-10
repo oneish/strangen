@@ -48,12 +48,19 @@ struct processor
         return _receivers;
     }
 
-    //TODO hold?
+    auto set_hold() -> void
+    {
+        std::apply([this](auto && ... recv) {
+            auto hold = stlab::zip(stlab::default_executor,
+                recv...) | process_closure_();
+            _hold = strange::any::_make<decltype(hold)>(std::move(hold));
+        }, _receivers);
+    }
 
     auto set_ready() -> void
     {
         std::apply([](auto && ... recv) {
-            ((recv.set_ready()),...);
+            ((recv.set_ready()), ...);
         }, _receivers);
     }
 
@@ -61,7 +68,7 @@ struct processor
     {
         std::cout << "process\n";
         std::apply([](auto && ... send) {
-            ((send(strange::any{}),std::cout << "sent\n"),...);
+            ((send(strange::any{}), std::cout << "sent\n"), ...);
         }, _senders);
     }
 
@@ -75,6 +82,7 @@ struct processor
 private:
     Senders _senders;
     Receivers _receivers;
+    strange::any _hold;
 };
 
 int main()
@@ -192,7 +200,7 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         /*prints 12,13,14 22,23,24 32,33,34*/
     }
-    {
+    {   // processors
         processor<std::tuple<stlab::sender<strange::any>, stlab::sender<strange::any>, stlab::sender<strange::any>>,
             std::tuple<stlab::receiver<strange::any>>,
             std::tuple<strange::any>>
@@ -208,17 +216,9 @@ int main()
         std::tie(std::get<1>(proc1.senders()), std::get<1>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
         std::tie(std::get<2>(proc1.senders()), std::get<2>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
         std::tie(std::get<0>(proc2.senders()), receiver) = stlab::channel<strange::any>(stlab::default_executor);
-        //auto hold1 = std::get<0>(proc1.receivers())
-        //    | proc1.process_closure_();
-        auto hold1 = stlab::zip(stlab::default_executor,
-                std::get<0>(proc1.receivers()))
-            | proc1.process_closure_();
-        auto hold2 = stlab::zip(stlab::default_executor,
-                std::get<0>(proc2.receivers()),
-                std::get<1>(proc2.receivers()),
-                std::get<2>(proc2.receivers()))
-            | proc2.process_closure_();
-        auto hold3 = receiver
+        proc1.set_hold();
+        proc2.set_hold();
+        auto hold = receiver
             | [](strange::any x) {
                 std::cout << "received\n";
             };
