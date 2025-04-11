@@ -54,27 +54,39 @@ public:
     using Receivers = typename _tuple_receivers<Inputs>::type;
     using Senders = typename _tuple_senders<Outputs>::type;
 
-    auto receivers() const -> Receivers const &
+    inline auto receivers() const -> Receivers const &
     {
         return _receivers;
     }
 
-    auto senders() const -> Senders const &
+    inline auto senders() const -> Senders const &
     {
         return _senders;
     }
 
-    auto receivers() -> Receivers &
+    inline auto receivers() -> Receivers &
     {
         return _receivers;
     }
 
-    auto senders() -> Senders &
+    inline auto senders() -> Senders &
     {
         return _senders;
     }
 
-    auto on_your_marks() -> void
+    template <std::size_t From, std::size_t To, typename Processor>
+    inline auto from(Processor & other) -> void
+    {
+        std::tie(std::get<From>(other.senders()), std::get<To>(_receivers)) = stlab::channel<std::tuple_element_t<To, Inputs>>(stlab::default_executor);
+    }
+
+    template <std::size_t From, std::size_t To, typename Processor>
+    inline auto to(Processor & other) -> void
+    {
+        std::tie(std::get<From>(_senders), std::get<To>(other.receivers())) = stlab::channel<std::tuple_element_t<From, Outputs>>(stlab::default_executor);
+    }
+
+    inline auto on_your_marks() -> void
     {
         if constexpr (std::tuple_size_v<Inputs> != 0)
         {
@@ -88,7 +100,7 @@ public:
         }
     }
 
-    auto get_set() -> void
+    inline auto get_set() -> void
     {
         if constexpr (std::tuple_size_v<Inputs> != 0)
         {
@@ -98,17 +110,17 @@ public:
         }
     }
 
-    auto go(Inputs const & inputs) -> void
+    inline auto go(Inputs const & inputs) -> void
     {
         send(operator()(inputs));
     }
 
-    auto send(Outputs const & outputs) -> void
+    inline auto send(Outputs const & outputs) -> void
     {
         send_rest(outputs);
     }
 
-    auto operator()(Inputs const & inputs) -> Outputs
+    inline auto operator()(Inputs const & inputs) -> Outputs
     {
         std::cout << "operator()\n";
         return Outputs{};
@@ -116,13 +128,13 @@ public:
 
 private:
     template <std::size_t Index>
-    auto send_one(Outputs const & outputs) -> void
+    inline auto send_one(Outputs const & outputs) -> void
     {
         std::get<Index>(_senders)(std::get<Index>(outputs));
     }
 
     template <std::size_t Index = 0>
-    auto send_rest(Outputs const & outputs) -> void
+    inline auto send_rest(Outputs const & outputs) -> void
     {
         if constexpr (Index < std::tuple_size_v<Outputs>)
         {
@@ -264,11 +276,11 @@ int main()
             proc2;
         processor<std::tuple<strange::any>>
             proc3;
-        std::tie(std::get<0>(proc0.senders()), std::get<0>(proc1.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
-        std::tie(std::get<0>(proc1.senders()), std::get<0>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
-        std::tie(std::get<1>(proc1.senders()), std::get<1>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
-        std::tie(std::get<2>(proc1.senders()), std::get<2>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
-        std::tie(std::get<0>(proc2.senders()), std::get<0>(proc3.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
+        proc0.to<0, 0>(proc1);
+        proc1.to<0, 0>(proc2);
+        proc2.from<1, 1>(proc1);
+        proc2.from<2, 2>(proc1);
+        proc2.to<0, 0>(proc3);
         proc0.on_your_marks();
         proc1.on_your_marks();
         proc2.on_your_marks();
