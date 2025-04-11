@@ -122,8 +122,23 @@ public:
 
     inline auto operator()(Inputs const & inputs) -> Outputs
     {
-        std::cout << "operator()\n";
-        return Outputs{};
+        std::string concat = ":";
+        if (std::tuple_size_v<Inputs> != 0)
+        {
+            std::apply([&concat](auto && ... inpt) {
+                ((concat += inpt), ...);
+            }, inputs);
+        }
+        concat += ".";
+        Outputs outputs;
+        if (std::tuple_size_v<Outputs> != 0)
+        {
+            std::apply([&concat](auto && ... outp) {
+                ((outp = concat), ...);
+            }, outputs);
+        }
+        std::cout << "operator() " << concat << "\n";
+        return outputs;
     }
 
 private:
