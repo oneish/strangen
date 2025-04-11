@@ -32,59 +32,16 @@ struct processor;
 template <typename Inputs, typename Outputs>
 struct processor
 {
-private:
-    template <typename Tuple>
-    struct _tuple_senders;
-
-    template <typename ... Elements>
-    struct _tuple_senders<std::tuple<Elements ...>>
-    {
-        using type = std::tuple<stlab::sender<Elements> ...>;
-    };
-
-    template <typename Tuple>
-    struct _tuple_receivers;
-
-    template <typename ... Elements>
-    struct _tuple_receivers<std::tuple<Elements ...>>
-    {
-        using type = std::tuple<stlab::receiver<Elements> ...>;
-    };
-
-public:
-    using Receivers = typename _tuple_receivers<Inputs>::type;
-    using Senders = typename _tuple_senders<Outputs>::type;
-
-    inline auto receivers() const -> Receivers const &
-    {
-        return _receivers;
-    }
-
-    inline auto senders() const -> Senders const &
-    {
-        return _senders;
-    }
-
-    inline auto receivers() -> Receivers &
-    {
-        return _receivers;
-    }
-
-    inline auto senders() -> Senders &
-    {
-        return _senders;
-    }
-
     template <std::size_t From, std::size_t To, typename Processor>
     inline auto from(Processor & other) -> void
     {
-        std::tie(std::get<From>(other.senders()), std::get<To>(_receivers)) = stlab::channel<std::tuple_element_t<To, Inputs>>(stlab::default_executor);
+        std::tie(std::get<From>(other._senders), std::get<To>(_receivers)) = stlab::channel<std::tuple_element_t<To, Inputs>>(stlab::default_executor);
     }
 
     template <std::size_t From, std::size_t To, typename Processor>
     inline auto to(Processor & other) -> void
     {
-        std::tie(std::get<From>(_senders), std::get<To>(other.receivers())) = stlab::channel<std::tuple_element_t<From, Outputs>>(stlab::default_executor);
+        std::tie(std::get<From>(_senders), std::get<To>(other._receivers)) = stlab::channel<std::tuple_element_t<From, Outputs>>(stlab::default_executor);
     }
 
     inline auto on_your_marks() -> void
@@ -110,17 +67,17 @@ public:
         }
     }
 
-    inline auto go(Inputs const & inputs) -> void
+    inline auto go(Inputs const & inputs) const -> void
     {
-        send(operator()(inputs));
+        send(process(inputs));
     }
 
-    inline auto send(Outputs const & outputs) -> void
+    inline auto send(Outputs const & outputs) const -> void
     {
         send_rest(outputs);
     }
 
-    inline auto operator()(Inputs const & inputs) -> Outputs
+    static inline auto process(Inputs const & inputs) -> Outputs
     {
         std::string concat = ":";
         if (std::tuple_size_v<Inputs> != 0)
@@ -143,13 +100,13 @@ public:
 
 private:
     template <std::size_t Index>
-    inline auto send_one(Outputs const & outputs) -> void
+    inline auto send_one(Outputs const & outputs) const -> void
     {
         std::get<Index>(_senders)(std::get<Index>(outputs));
     }
 
     template <std::size_t Index = 0>
-    inline auto send_rest(Outputs const & outputs) -> void
+    inline auto send_rest(Outputs const & outputs) const -> void
     {
         if constexpr (Index < std::tuple_size_v<Outputs>)
         {
@@ -159,9 +116,30 @@ private:
         }
     }
 
-    Senders _senders;
-    Receivers _receivers;
+    template <typename Tuple>
+    struct _tuple_senders;
+
+    template <typename ... Elements>
+    struct _tuple_senders<std::tuple<Elements ...>>
+    {
+        using type = std::tuple<stlab::sender<Elements> ...>;
+    };
+
+    template <typename Tuple>
+    struct _tuple_receivers;
+
+    template <typename ... Elements>
+    struct _tuple_receivers<std::tuple<Elements ...>>
+    {
+        using type = std::tuple<stlab::receiver<Elements> ...>;
+    };
+
+    typename _tuple_senders<Outputs>::type _senders;
+    typename _tuple_receivers<Inputs>::type _receivers;
     std::any _zip;
+
+    template <typename Ins, typename Outs>
+    friend struct processor;
 };
 
 int main()
