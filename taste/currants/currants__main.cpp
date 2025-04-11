@@ -1,4 +1,3 @@
-#include "../../sauce/strange/strange.h"
 #include <stlab/concurrency/concurrency.hpp>
 #include <stlab/pre_exit.hpp>
 #include <iostream>
@@ -7,6 +6,8 @@
 #include <chrono>
 #include <tuple>
 #include <thread>
+#include <any>
+#include <string>
 
 struct sum
 {
@@ -91,11 +92,10 @@ public:
         if constexpr (std::tuple_size_v<Inputs> != 0)
         {
             std::apply([this](auto && ... recv) {
-                auto hold = stlab::zip(stlab::default_executor,
-                    recv ...) | [this](Inputs inputs) {
+                _hold = stlab::zip(stlab::default_executor,
+                    recv ...) | [this](Inputs const & inputs) {
                         go(inputs);
                     };
-                _hold = strange::any::_make<decltype(hold)>(std::move(hold));
             }, _receivers);
         }
     }
@@ -146,7 +146,7 @@ private:
 
     Senders _senders;
     Receivers _receivers;
-    strange::any _hold;
+    std::any _hold;
 };
 
 int main()
@@ -266,15 +266,15 @@ int main()
     }
     {   // processors
         processor<std::tuple<>,
-            std::tuple<strange::any>>
+            std::tuple<std::string>>
             proc0;
-        processor<std::tuple<strange::any>,
-            std::tuple<strange::any, strange::any, strange::any>>
+        processor<std::tuple<std::string>,
+            std::tuple<std::string, std::string, std::string>>
             proc1;
-        processor<std::tuple<strange::any, strange::any, strange::any>,
-            std::tuple<strange::any>>
+        processor<std::tuple<std::string, std::string, std::string>,
+            std::tuple<std::string>>
             proc2;
-        processor<std::tuple<strange::any>>
+        processor<std::tuple<std::string>>
             proc3;
         proc0.to<0, 0>(proc1);
         proc1.to<0, 0>(proc2);
