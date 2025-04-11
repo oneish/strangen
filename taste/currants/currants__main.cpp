@@ -92,7 +92,7 @@ public:
         if constexpr (std::tuple_size_v<Inputs> != 0)
         {
             std::apply([this](auto && ... recv) {
-                _hold = stlab::zip(stlab::default_executor,
+                _zip = stlab::zip(stlab::default_executor,
                     recv ...) | [this](Inputs const & inputs) {
                         go(inputs);
                     };
@@ -146,7 +146,7 @@ private:
 
     Senders _senders;
     Receivers _receivers;
-    std::any _hold;
+    std::any _zip;
 };
 
 int main()
