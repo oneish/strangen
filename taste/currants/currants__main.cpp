@@ -75,7 +75,9 @@ public:
     {
         std::apply([this](auto && ... recv) {
             auto hold = stlab::zip(stlab::default_executor,
-                recv ...) | _process_closure();
+                recv ...) | [this](Inputs inputs) {
+                    go(inputs);
+                };
             _hold = strange::any::_make<decltype(hold)>(std::move(hold));
         }, _receivers);
     }
@@ -87,22 +89,15 @@ public:
         }, _receivers);
     }
 
-private:
-    auto _process(Inputs inputs) -> void
+    auto go(Inputs inputs) -> void
     {
-        std::cout << "process\n";
+        std::cout << "go\n";
         std::apply([](auto && ... send) {
             ((send(strange::any{}), std::cout << "sent\n"), ...);
         }, _senders);
     }
 
-    auto _process_closure() -> std::function<auto (Inputs) -> void>
-    {
-        return [this](Inputs inputs) {
-            _process(inputs);
-        };
-    }
-
+private:
     Senders _senders;
     Receivers _receivers;
     strange::any _hold;
