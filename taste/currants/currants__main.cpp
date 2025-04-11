@@ -25,6 +25,9 @@ auto get_fun() -> std::function<auto (std::tuple<int, int, int> v) -> void>
     };
 }
 
+template <typename Inputs = std::tuple<>, typename Outputs = std::tuple<>>
+struct processor;
+
 template <typename Inputs, typename Outputs>
 struct processor
 {
@@ -73,31 +76,62 @@ public:
 
     auto on_your_marks() -> void
     {
-        std::apply([this](auto && ... recv) {
-            auto hold = stlab::zip(stlab::default_executor,
-                recv ...) | [this](Inputs inputs) {
-                    go(inputs);
-                };
-            _hold = strange::any::_make<decltype(hold)>(std::move(hold));
-        }, _receivers);
+        if constexpr (std::tuple_size_v<Inputs> != 0)
+        {
+            std::apply([this](auto && ... recv) {
+                auto hold = stlab::zip(stlab::default_executor,
+                    recv ...) | [this](Inputs inputs) {
+                        go(inputs);
+                    };
+                _hold = strange::any::_make<decltype(hold)>(std::move(hold));
+            }, _receivers);
+        }
     }
 
     auto get_set() -> void
     {
-        std::apply([](auto && ... recv) {
-            ((recv.set_ready()), ...);
-        }, _receivers);
+        if constexpr (std::tuple_size_v<Inputs> != 0)
+        {
+            std::apply([](auto && ... recv) {
+                ((recv.set_ready()), ...);
+            }, _receivers);
+        }
     }
 
-    auto go(Inputs inputs) -> void
+    auto go(Inputs const & inputs) -> void
     {
-        std::cout << "go\n";
-        std::apply([](auto && ... send) {
-            ((send(strange::any{}), std::cout << "sent\n"), ...);
-        }, _senders);
+        send(operator()(inputs));
+    }
+
+    auto send(Outputs const & outputs) -> void
+    {
+        send_rest(outputs);
+    }
+
+    auto operator()(Inputs const & inputs) -> Outputs
+    {
+        std::cout << "operator()\n";
+        return Outputs{};
     }
 
 private:
+    template <std::size_t Index>
+    auto send_one(Outputs const & outputs) -> void
+    {
+        std::get<Index>(_senders)(std::get<Index>(outputs));
+    }
+
+    template <std::size_t Index = 0>
+    auto send_rest(Outputs const & outputs) -> void
+    {
+        if constexpr (Index < std::tuple_size_v<Outputs>)
+        {
+            send_one<Index>(outputs);
+            std::cout << "sent\n";
+            send_rest<Index + 1>(outputs);
+        }
+    }
+
     Senders _senders;
     Receivers _receivers;
     strange::any _hold;
@@ -219,31 +253,33 @@ int main()
         /*prints 12,13,14 22,23,24 32,33,34*/
     }
     {   // processors
+        processor<std::tuple<>,
+            std::tuple<strange::any>>
+            proc0;
         processor<std::tuple<strange::any>,
             std::tuple<strange::any, strange::any, strange::any>>
             proc1;
         processor<std::tuple<strange::any, strange::any, strange::any>,
             std::tuple<strange::any>>
             proc2;
-        stlab::sender<strange::any> send;
-        stlab::receiver<strange::any> receiver;
-        std::tie(send, std::get<0>(proc1.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
+        processor<std::tuple<strange::any>>
+            proc3;
+        std::tie(std::get<0>(proc0.senders()), std::get<0>(proc1.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
         std::tie(std::get<0>(proc1.senders()), std::get<0>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
         std::tie(std::get<1>(proc1.senders()), std::get<1>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
         std::tie(std::get<2>(proc1.senders()), std::get<2>(proc2.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
-        std::tie(std::get<0>(proc2.senders()), receiver) = stlab::channel<strange::any>(stlab::default_executor);
+        std::tie(std::get<0>(proc2.senders()), std::get<0>(proc3.receivers())) = stlab::channel<strange::any>(stlab::default_executor);
+        proc0.on_your_marks();
         proc1.on_your_marks();
         proc2.on_your_marks();
-        auto hold = receiver
-            | [](strange::any x) {
-                std::cout << "received\n";
-            };
+        proc3.on_your_marks();
+        proc0.get_set();
         proc1.get_set();
         proc2.get_set();
-        receiver.set_ready();
-        send(strange::any{});
-        send(strange::any{});
-        send(strange::any{});
+        proc3.get_set();
+        proc0.go(std::make_tuple());
+        proc0.go(std::make_tuple());
+        proc0.go(std::make_tuple());
         std::cout << "sleep\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
