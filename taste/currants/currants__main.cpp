@@ -9,6 +9,7 @@
 #include <any>
 #include <string>
 #include <vector>
+#include <set>
 
 struct sum
 {
@@ -73,11 +74,6 @@ struct processor
         send(process(inputs));
     }
 
-    inline auto send(Outputs outputs) const -> void
-    {
-        send_rest(outputs);
-    }
-
     static inline auto process(Inputs inputs) -> Outputs
     {
         std::string concat = ":";
@@ -97,6 +93,11 @@ struct processor
         }
         std::cout << "process " << concat << "\n";
         return outputs;
+    }
+
+    inline auto send(Outputs outputs) const -> void
+    {
+        send_rest(outputs);
     }
 
 private:
@@ -146,79 +147,100 @@ private:
 template <typename Signal>
 struct signal_processor
 {
-    inline signal_processor(std::size_t inputs, std::size_t outputs)
-        : _receivers(inputs), _senders(outputs), _zip{}
+    inline signal_processor(std::size_t ins, std::size_t outs)
+        : _receivers(ins), _senders(outs)
     {
     }
 
-    inline auto from(signal_processor & other, std::size_t input, std::size_t output) -> void
+    inline auto from(signal_processor & other, std::size_t in, std::size_t out) -> void
     {
-        std::tie(other._senders[output], _receivers[input]) = stlab::channel<Signal>(stlab::default_executor);
+        std::tie(other._senders[out], _receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
+        if (!other._set_senders.insert(out).second)
+        {
+            throw std::runtime_error("other sender already connected");
+        }
+        if (!_set_receivers.insert(in).second)
+        {
+            throw std::runtime_error("receiver already connected");
+        }
     }
 
-    inline auto to(signal_processor & other, std::size_t input, std::size_t output) -> void
+    inline auto to(signal_processor & other, std::size_t in, std::size_t out) -> void
     {
-        std::tie(_senders[output], other._receivers[input]) = stlab::channel<Signal>(stlab::default_executor);
+        std::tie(_senders[out], other._receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
+        if (!_set_senders.insert(out).second)
+        {
+            throw std::runtime_error("sender already connected");
+        }
+        if (!other._set_receivers.insert(in).second)
+        {
+            throw std::runtime_error("other receiver already connected");
+        }
     }
 
     inline auto on_your_marks() -> void
     {
-        switch (_receivers.size())
+        for (auto in : _set_receivers)
+        {
+            _connected_receivers.push_back(&_receivers[in]);
+        }
+        for (auto out : _set_senders)
+        {
+            _connected_senders.push_back(&_senders[out]);
+        }
+        switch (_connected_receivers.size())
         {
             case 0:
                 return;
             case 1:
-                _zip = _receivers[0] | [this](Signal input) {
-                        go(std::vector<Signal>{input});
+                _zip = (*_connected_receivers[0]) | [this](Signal connected_input) {
+                        go(std::vector<Signal>{connected_input});
                     };
                 return;
             case 2:
                 _zip = stlab::zip(stlab::default_executor,
-                    _receivers[0],
-                    _receivers[1]) | [this](std::tuple<Signal, Signal> inputs) {
-                        go(std::apply([](auto ... input) {
-                            return std::vector<Signal>{input ...};
-                        }, inputs));
+                    *_connected_receivers[0],
+                    *_connected_receivers[1]) | [this](std::tuple<Signal, Signal> connected_inputs) {
+                        go(std::apply([](auto ... connected_input) {
+                            return std::vector<Signal>{connected_input ...};
+                        }, connected_inputs));
                     };
                 return;
             case 3:
                 _zip = stlab::zip(stlab::default_executor,
-                    _receivers[0],
-                    _receivers[1],
-                    _receivers[2]) | [this](std::tuple<Signal, Signal, Signal> inputs) {
-                        go(std::apply([](auto ... input) {
-                            return std::vector<Signal>{input ...};
-                        }, inputs));
+                    *_connected_receivers[0],
+                    *_connected_receivers[1],
+                    *_connected_receivers[2]) | [this](std::tuple<Signal, Signal, Signal> connected_inputs) {
+                        go(std::apply([](auto ... connected_input) {
+                            return std::vector<Signal>{connected_input ...};
+                        }, connected_inputs));
                     };
                 return;
             default:
-                throw std::runtime_error("too many inputs");
+                throw std::runtime_error("too many connected receivers");
         }
     }
 
     inline auto get_set() -> void
     {
-        for (auto & recv : _receivers)
+        for (auto * connected_receiver : _connected_receivers)
         {
-            recv.set_ready();
+            connected_receiver->set_ready();
         }
     }
 
-    inline auto go(std::vector<Signal> inputs) const -> void
+    inline auto go(std::vector<Signal> connected_inputs) const -> void
     {
+        std::vector<Signal> inputs(_receivers.size());
+        std::size_t con = 0;
+        for (auto in : _set_receivers)
+        {
+            inputs[in] = connected_inputs[con++];
+        }
         send(process(inputs));
     }
 
-    inline auto send(std::vector<Signal> outputs) const -> void
-    {
-        for (std::size_t i = 0; i < outputs.size(); ++i)
-        {
-            _senders[i](outputs[i]);
-            std::cout << "sent\n";
-        }
-    }
-
-    inline auto process(std::vector<Signal> inputs) const -> std::vector<Signal>
+    static inline auto process(std::vector<Signal> inputs) -> std::vector<Signal>
     {
         std::string concat = ":";
         for (auto input : inputs)
@@ -227,12 +249,26 @@ struct signal_processor
         }
         concat += ".";
         std::cout << "process signal " << concat << "\n";
-        return std::vector<Signal>(_senders.size(), concat);
+        return std::vector<Signal>(3, concat);
+    }
+
+    inline auto send(std::vector<Signal> outputs) const -> void
+    {
+        std::size_t con = 0;
+        for (auto out : _set_senders)
+        {
+            (*_connected_senders[con++])(outputs[out]);
+            std::cout << "sent\n";
+        }
     }
 
 private:
     std::vector<stlab::receiver<Signal>> _receivers;
     std::vector<stlab::sender<Signal>> _senders;
+    std::set<std::size_t> _set_receivers;
+    std::set<std::size_t> _set_senders;
+    std::vector<stlab::receiver<Signal> *> _connected_receivers;
+    std::vector<stlab::sender<Signal> *> _connected_senders;
     std::any _zip;
 };
 
@@ -388,9 +424,9 @@ int main()
         signal_processor<std::string> proc2{3, 1};
         signal_processor<std::string> proc3{1, 0};
         proc0.to(proc1, 0, 0);
-        proc1.to(proc2, 0, 0);
+        //proc1.to(proc2, 0, 0);
         proc2.from(proc1, 1, 1);
-        proc2.from(proc1, 2, 2);
+        //proc2.from(proc1, 2, 2);
         proc2.to(proc3, 0, 0);
         proc0.on_your_marks();
         proc1.on_your_marks();
