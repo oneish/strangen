@@ -180,27 +180,25 @@ struct signal_processor
 
     inline auto on_your_marks() -> void
     {
+        std::vector<stlab::receiver<Signal> *> connected_receivers;
+        connected_receivers.reserve(_set_receivers.size());
         for (auto in : _set_receivers)
         {
-            _connected_receivers.push_back(&_receivers[in]);
+            connected_receivers.push_back(&_receivers[in]);
         }
-        for (auto out : _set_senders)
-        {
-            _connected_senders.push_back(&_senders[out]);
-        }
-        switch (_connected_receivers.size())
+        switch (connected_receivers.size())
         {
             case 0:
                 return;
             case 1:
-                _zip = (*_connected_receivers[0]) | [this](Signal connected_input) {
+                _zip = (*connected_receivers[0]) | [this](Signal connected_input) {
                         go(std::vector<Signal>{connected_input});
                     };
                 return;
             case 2:
                 _zip = stlab::zip(stlab::default_executor,
-                    *_connected_receivers[0],
-                    *_connected_receivers[1]) | [this](std::tuple<Signal, Signal> connected_inputs) {
+                    *connected_receivers[0],
+                    *connected_receivers[1]) | [this](std::tuple<Signal, Signal> connected_inputs) {
                         go(std::apply([](auto ... connected_input) {
                             return std::vector<Signal>{connected_input ...};
                         }, connected_inputs));
@@ -208,9 +206,9 @@ struct signal_processor
                 return;
             case 3:
                 _zip = stlab::zip(stlab::default_executor,
-                    *_connected_receivers[0],
-                    *_connected_receivers[1],
-                    *_connected_receivers[2]) | [this](std::tuple<Signal, Signal, Signal> connected_inputs) {
+                    *connected_receivers[0],
+                    *connected_receivers[1],
+                    *connected_receivers[2]) | [this](std::tuple<Signal, Signal, Signal> connected_inputs) {
                         go(std::apply([](auto ... connected_input) {
                             return std::vector<Signal>{connected_input ...};
                         }, connected_inputs));
@@ -223,9 +221,9 @@ struct signal_processor
 
     inline auto get_set() -> void
     {
-        for (auto * connected_receiver : _connected_receivers)
+        for (auto in : _set_receivers)
         {
-            connected_receiver->set_ready();
+            _receivers[in].set_ready();
         }
     }
 
@@ -254,10 +252,9 @@ struct signal_processor
 
     inline auto send(std::vector<Signal> outputs) const -> void
     {
-        std::size_t con = 0;
         for (auto out : _set_senders)
         {
-            (*_connected_senders[con++])(outputs[out]);
+            _senders[out](outputs[out]);
             std::cout << "sent\n";
         }
     }
@@ -267,8 +264,6 @@ private:
     std::vector<stlab::sender<Signal>> _senders;
     std::set<std::size_t> _set_receivers;
     std::set<std::size_t> _set_senders;
-    std::vector<stlab::receiver<Signal> *> _connected_receivers;
-    std::vector<stlab::sender<Signal> *> _connected_senders;
     std::any _zip;
 };
 
