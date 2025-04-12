@@ -8,6 +8,7 @@
 #include <thread>
 #include <any>
 #include <string>
+#include <vector>
 
 struct sum
 {
@@ -48,9 +49,9 @@ struct processor
     {
         if constexpr (std::tuple_size_v<Inputs> != 0)
         {
-            std::apply([this](auto && ... recv) {
+            std::apply([this](auto const & ... recv) {
                 _zip = stlab::zip(stlab::default_executor,
-                    recv ...) | [this](Inputs const & inputs) {
+                    recv ...) | [this](Inputs inputs) {
                         go(inputs);
                     };
             }, _receivers);
@@ -61,28 +62,28 @@ struct processor
     {
         if constexpr (std::tuple_size_v<Inputs> != 0)
         {
-            std::apply([](auto && ... recv) {
+            std::apply([](auto & ... recv) {
                 ((recv.set_ready()), ...);
             }, _receivers);
         }
     }
 
-    inline auto go(Inputs const & inputs) const -> void
+    inline auto go(Inputs inputs) const -> void
     {
         send(process(inputs));
     }
 
-    inline auto send(Outputs const & outputs) const -> void
+    inline auto send(Outputs outputs) const -> void
     {
         send_rest(outputs);
     }
 
-    static inline auto process(Inputs const & inputs) -> Outputs
+    static inline auto process(Inputs inputs) -> Outputs
     {
         std::string concat = ":";
         if (std::tuple_size_v<Inputs> != 0)
         {
-            std::apply([&concat](auto && ... inpt) {
+            std::apply([&concat](auto ... inpt) {
                 ((concat += inpt), ...);
             }, inputs);
         }
@@ -90,23 +91,23 @@ struct processor
         Outputs outputs;
         if (std::tuple_size_v<Outputs> != 0)
         {
-            std::apply([&concat](auto && ... outp) {
+            std::apply([&concat](auto & ... outp) {
                 ((outp = concat), ...);
             }, outputs);
         }
-        std::cout << "operator() " << concat << "\n";
+        std::cout << "process " << concat << "\n";
         return outputs;
     }
 
 private:
     template <std::size_t Index>
-    inline auto send_one(Outputs const & outputs) const -> void
+    inline auto send_one(Outputs outputs) const -> void
     {
         std::get<Index>(_senders)(std::get<Index>(outputs));
     }
 
     template <std::size_t Index = 0>
-    inline auto send_rest(Outputs const & outputs) const -> void
+    inline auto send_rest(Outputs outputs) const -> void
     {
         if constexpr (Index < std::tuple_size_v<Outputs>)
         {
@@ -140,6 +141,99 @@ private:
 
     template <typename Ins, typename Outs>
     friend struct processor;
+};
+
+template <typename Signal>
+struct signal_processor
+{
+    inline signal_processor(std::size_t inputs, std::size_t outputs)
+        : _receivers(inputs), _senders(outputs), _zip{}
+    {
+    }
+
+    inline auto from(signal_processor & other, std::size_t input, std::size_t output) -> void
+    {
+        std::tie(other._senders[output], _receivers[input]) = stlab::channel<Signal>(stlab::default_executor);
+    }
+
+    inline auto to(signal_processor & other, std::size_t input, std::size_t output) -> void
+    {
+        std::tie(_senders[output], other._receivers[input]) = stlab::channel<Signal>(stlab::default_executor);
+    }
+
+    inline auto on_your_marks() -> void
+    {
+        switch (_receivers.size())
+        {
+            case 0:
+                return;
+            case 1:
+                _zip = _receivers[0] | [this](Signal input) {
+                        go(std::vector<Signal>{input});
+                    };
+                return;
+            case 2:
+                _zip = stlab::zip(stlab::default_executor,
+                    _receivers[0],
+                    _receivers[1]) | [this](std::tuple<Signal, Signal> inputs) {
+                        go(std::apply([](auto ... input) {
+                            return std::vector<Signal>{input ...};
+                        }, inputs));
+                    };
+                return;
+            case 3:
+                _zip = stlab::zip(stlab::default_executor,
+                    _receivers[0],
+                    _receivers[1],
+                    _receivers[2]) | [this](std::tuple<Signal, Signal, Signal> inputs) {
+                        go(std::apply([](auto ... input) {
+                            return std::vector<Signal>{input ...};
+                        }, inputs));
+                    };
+                return;
+            default:
+                throw std::runtime_error("too many inputs");
+        }
+    }
+
+    inline auto get_set() -> void
+    {
+        for (auto & recv : _receivers)
+        {
+            recv.set_ready();
+        }
+    }
+
+    inline auto go(std::vector<Signal> inputs) const -> void
+    {
+        send(process(inputs));
+    }
+
+    inline auto send(std::vector<Signal> outputs) const -> void
+    {
+        for (std::size_t i = 0; i < outputs.size(); ++i)
+        {
+            _senders[i](outputs[i]);
+            std::cout << "sent\n";
+        }
+    }
+
+    inline auto process(std::vector<Signal> inputs) const -> std::vector<Signal>
+    {
+        std::string concat = ":";
+        for (auto input : inputs)
+        {
+            concat += input;
+        }
+        concat += ".";
+        std::cout << "process signal " << concat << "\n";
+        return std::vector<Signal>(_senders.size(), concat);
+    }
+
+private:
+    std::vector<stlab::receiver<Signal>> _receivers;
+    std::vector<stlab::sender<Signal>> _senders;
+    std::any _zip;
 };
 
 int main()
@@ -285,6 +379,30 @@ int main()
         proc0.go(std::make_tuple());
         proc0.go(std::make_tuple());
         proc0.go(std::make_tuple());
+        std::cout << "sleep\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    {   // signal processors
+        signal_processor<std::string> proc0{0, 1};
+        signal_processor<std::string> proc1{1, 3};
+        signal_processor<std::string> proc2{3, 1};
+        signal_processor<std::string> proc3{1, 0};
+        proc0.to(proc1, 0, 0);
+        proc1.to(proc2, 0, 0);
+        proc2.from(proc1, 1, 1);
+        proc2.from(proc1, 2, 2);
+        proc2.to(proc3, 0, 0);
+        proc0.on_your_marks();
+        proc1.on_your_marks();
+        proc2.on_your_marks();
+        proc3.on_your_marks();
+        proc0.get_set();
+        proc1.get_set();
+        proc2.get_set();
+        proc3.get_set();
+        proc0.go(std::vector<std::string>{});
+        proc0.go(std::vector<std::string>{});
+        proc0.go(std::vector<std::string>{});
         std::cout << "sleep\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
