@@ -28,131 +28,15 @@ auto get_fun() -> std::function<auto (std::tuple<int, int, int> v) -> void>
     };
 }
 
-template <typename Inputs = std::tuple<>, typename Outputs = std::tuple<>>
-struct processor;
-
-template <typename Inputs, typename Outputs>
+template <typename Signal>
 struct processor
 {
-    template <std::size_t From, std::size_t To, typename Processor>
-    inline auto from(Processor & other) -> void
-    {
-        std::tie(std::get<From>(other._senders), std::get<To>(_receivers)) = stlab::channel<std::tuple_element_t<To, Inputs>>(stlab::default_executor);
-    }
-
-    template <std::size_t From, std::size_t To, typename Processor>
-    inline auto to(Processor & other) -> void
-    {
-        std::tie(std::get<From>(_senders), std::get<To>(other._receivers)) = stlab::channel<std::tuple_element_t<From, Outputs>>(stlab::default_executor);
-    }
-
-    inline auto on_your_marks() -> void
-    {
-        if constexpr (std::tuple_size_v<Inputs> != 0)
-        {
-            std::apply([this](auto const & ... recv) {
-                _zip = stlab::zip(stlab::default_executor,
-                    recv ...) | [this](Inputs inputs) {
-                        go(inputs);
-                    };
-            }, _receivers);
-        }
-    }
-
-    inline auto get_set() -> void
-    {
-        if constexpr (std::tuple_size_v<Inputs> != 0)
-        {
-            std::apply([](auto & ... recv) {
-                ((recv.set_ready()), ...);
-            }, _receivers);
-        }
-    }
-
-    inline auto go(Inputs inputs) const -> void
-    {
-        send(process(inputs));
-    }
-
-    static inline auto process(Inputs inputs) -> Outputs
-    {
-        std::string concat = ":";
-        if (std::tuple_size_v<Inputs> != 0)
-        {
-            std::apply([&concat](auto ... inpt) {
-                ((concat += inpt), ...);
-            }, inputs);
-        }
-        concat += ".";
-        Outputs outputs;
-        if (std::tuple_size_v<Outputs> != 0)
-        {
-            std::apply([&concat](auto & ... outp) {
-                ((outp = concat), ...);
-            }, outputs);
-        }
-        std::cout << "process " << concat << "\n";
-        return outputs;
-    }
-
-    inline auto send(Outputs outputs) const -> void
-    {
-        send_rest(outputs);
-    }
-
-private:
-    template <std::size_t Index>
-    inline auto send_one(Outputs outputs) const -> void
-    {
-        std::get<Index>(_senders)(std::get<Index>(outputs));
-    }
-
-    template <std::size_t Index = 0>
-    inline auto send_rest(Outputs outputs) const -> void
-    {
-        if constexpr (Index < std::tuple_size_v<Outputs>)
-        {
-            send_one<Index>(outputs);
-            std::cout << "sent\n";
-            send_rest<Index + 1>(outputs);
-        }
-    }
-
-    template <typename Tuple>
-    struct _tuple_senders;
-
-    template <typename ... Elements>
-    struct _tuple_senders<std::tuple<Elements ...>>
-    {
-        using type = std::tuple<stlab::sender<Elements> ...>;
-    };
-
-    template <typename Tuple>
-    struct _tuple_receivers;
-
-    template <typename ... Elements>
-    struct _tuple_receivers<std::tuple<Elements ...>>
-    {
-        using type = std::tuple<stlab::receiver<Elements> ...>;
-    };
-
-    typename _tuple_senders<Outputs>::type _senders;
-    typename _tuple_receivers<Inputs>::type _receivers;
-    std::any _zip;
-
-    template <typename Ins, typename Outs>
-    friend struct processor;
-};
-
-template <typename Signal>
-struct signal_processor
-{
-    inline signal_processor(std::size_t ins, std::size_t outs)
+    inline processor(std::size_t ins, std::size_t outs)
         : _receivers(ins), _senders(outs)
     {
     }
 
-    inline auto from(signal_processor & other, std::size_t in, std::size_t out) -> void
+    inline auto from(processor & other, std::size_t in, std::size_t out) -> void
     {
         std::tie(other._senders[out], _receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
         if (!other._set_senders.insert(out).second)
@@ -165,7 +49,7 @@ struct signal_processor
         }
     }
 
-    inline auto to(signal_processor & other, std::size_t in, std::size_t out) -> void
+    inline auto to(processor & other, std::size_t in, std::size_t out) -> void
     {
         std::tie(_senders[out], other._receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
         if (!_set_senders.insert(out).second)
@@ -246,7 +130,7 @@ struct signal_processor
             concat += input;
         }
         concat += ".";
-        std::cout << "process signal " << concat << "\n";
+        std::cout << "process " << concat << "\n";
         return std::vector<Signal>(3, concat);
     }
 
@@ -383,41 +267,10 @@ int main()
         /*prints 12,13,14 22,23,24 32,33,34*/
     }
     {   // processors
-        processor<std::tuple<>,
-            std::tuple<std::string>>
-            proc0;
-        processor<std::tuple<std::string>,
-            std::tuple<std::string, std::string, std::string>>
-            proc1;
-        processor<std::tuple<std::string, std::string, std::string>,
-            std::tuple<std::string>>
-            proc2;
-        processor<std::tuple<std::string>>
-            proc3;
-        proc0.to<0, 0>(proc1);
-        proc1.to<0, 0>(proc2);
-        proc2.from<1, 1>(proc1);
-        proc2.from<2, 2>(proc1);
-        proc2.to<0, 0>(proc3);
-        proc0.on_your_marks();
-        proc1.on_your_marks();
-        proc2.on_your_marks();
-        proc3.on_your_marks();
-        proc0.get_set();
-        proc1.get_set();
-        proc2.get_set();
-        proc3.get_set();
-        proc0.go(std::make_tuple());
-        proc0.go(std::make_tuple());
-        proc0.go(std::make_tuple());
-        std::cout << "sleep\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-    {   // signal processors
-        signal_processor<std::string> proc0{0, 1};
-        signal_processor<std::string> proc1{1, 3};
-        signal_processor<std::string> proc2{3, 1};
-        signal_processor<std::string> proc3{1, 0};
+        processor<std::string> proc0{0, 1};
+        processor<std::string> proc1{1, 3};
+        processor<std::string> proc2{3, 1};
+        processor<std::string> proc3{1, 0};
         proc0.to(proc1, 0, 0);
         //proc1.to(proc2, 0, 0);
         proc2.from(proc1, 1, 1);
