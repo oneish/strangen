@@ -31,8 +31,13 @@ auto get_fun() -> std::function<auto (std::tuple<int, int, int> v) -> void>
 template <typename Signal>
 struct processor
 {
-    inline processor(std::size_t ins, std::size_t outs)
-        : _receivers(ins), _senders(outs)
+    inline processor(
+        std::size_t ins,
+        std::size_t outs,
+        std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun)
+        :_receivers(ins)
+        ,_senders(outs)
+        ,_function(fun)
     {
     }
 
@@ -119,19 +124,7 @@ struct processor
         {
             inputs[in] = connected_inputs[con++];
         }
-        send(process(inputs));
-    }
-
-    static inline auto process(std::vector<Signal> inputs) -> std::vector<Signal>
-    {
-        std::string concat = ":";
-        for (auto input : inputs)
-        {
-            concat += input;
-        }
-        concat += ".";
-        std::cout << "process " << concat << "\n";
-        return std::vector<Signal>(3, concat);
+        send(_function(inputs));
     }
 
     inline auto send(std::vector<Signal> outputs) const -> void
@@ -146,6 +139,7 @@ struct processor
 private:
     std::vector<stlab::receiver<Signal>> _receivers;
     std::vector<stlab::sender<Signal>> _senders;
+    std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
     std::set<std::size_t> _set_receivers;
     std::set<std::size_t> _set_senders;
     std::any _zip;
@@ -267,10 +261,20 @@ int main()
         /*prints 12,13,14 22,23,24 32,33,34*/
     }
     {   // processors
-        processor<std::string> proc0{0, 1};
-        processor<std::string> proc1{1, 3};
-        processor<std::string> proc2{3, 1};
-        processor<std::string> proc3{1, 0};
+        std::function<auto (std::vector<std::string>) -> std::vector<std::string>> fun = [](std::vector<std::string> inputs) {
+            std::string concat = ":";
+            for (auto input : inputs)
+            {
+                concat += input;
+            }
+            concat += ".";
+            std::cout << "process " << concat << "\n";
+            return std::vector<std::string>(3, concat);
+        };
+        processor<std::string> proc0{0, 1, fun};
+        processor<std::string> proc1{1, 3, fun};
+        processor<std::string> proc2{3, 1, fun};
+        processor<std::string> proc3{1, 0, fun};
         proc0.to(proc1, 0, 0);
         //proc1.to(proc2, 0, 0);
         proc2.from(proc1, 1, 1);
