@@ -118,11 +118,22 @@ struct processor
 
     inline auto go(std::vector<Signal> connected_inputs) const -> void
     {
-        std::vector<Signal> inputs(_receivers.size());
+        std::vector<Signal> inputs;
+        auto ins = _receivers.size();
+        inputs.reserve(ins);
+        auto it = _set_receivers.cbegin();
         std::size_t con = 0;
-        for (auto in : _set_receivers)
+        for (std::size_t in = 0; in < ins; ++in)
         {
-            inputs[in] = connected_inputs[con++];
+            if (it != _set_receivers.cend() && *it == in)
+            {
+                inputs.push_back(std::move(connected_inputs[con++]));
+                ++it;
+            }
+            else
+            {
+                inputs.emplace_back();
+            }
         }
         send(_function(inputs));
     }
