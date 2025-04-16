@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <future>
 
 struct sum
 {
@@ -240,6 +241,63 @@ private:
     std::any _zip;
 };
 
+template <typename Signal>
+struct graph
+{
+    inline graph(
+        std::size_t ins,
+        std::size_t outs)
+        :_inputs(ins)
+    {
+        _processors.emplace_back(0, ins, [this](std::vector<Signal> inputs) {
+            return _inputs;
+        });
+        _processors.emplace_back(outs, 0, [this](std::vector<Signal> inputs) {
+            _promise.set_value(inputs);
+            return std::vector<Signal>{};
+        });
+    }
+
+    inline auto interconnect() -> void
+    {
+        for (std::size_t in = 0; in < _inputs.size(); ++in)
+        {
+            _processors[0].to(_processors[1], in, in);
+        }
+    }
+
+    inline auto on_your_marks() -> void
+    {
+        for (auto & proc : _processors)
+        {
+            proc.on_your_marks();
+        }
+    }
+
+    inline auto get_set() -> void
+    {
+        for (auto & proc : _processors)
+        {
+            proc.get_set();
+        }
+    }
+
+    inline auto operator()(std::vector<Signal> inputs) -> std::vector<Signal>
+    {
+        std::cout << "graph operator()\n";
+        _inputs = inputs;
+        _promise = std::promise<std::vector<Signal>>{};
+        auto future = _promise.get_future();
+        _processors[0].go();
+        return future.get();
+    }
+
+private:
+    std::vector<processor<Signal>> _processors;
+    std::vector<Signal> _inputs;
+    std::promise<std::vector<Signal>> _promise;
+};
+
 int main()
 {
     std::cout << "currants\n";
@@ -388,6 +446,25 @@ int main()
         proc0.go();
         std::cout << "sleep\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    {   // graph
+        graph<std::string> g(3, 3);
+        g.interconnect();
+        g.on_your_marks();
+        g.get_set();
+        std::vector<std::string> inputs {"hello", "world", "!"};
+        for (auto input : inputs)
+        {
+            auto outputs = g(inputs);
+            std::cout << "graph outputs: ";
+            for (auto output : outputs)
+            {
+                std::cout << output << " ";
+            }
+            std::cout << "\n";
+            std::swap(inputs[0], inputs[1]);
+            std::swap(inputs[1], inputs[2]);
+        }
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
