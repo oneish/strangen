@@ -82,7 +82,7 @@ struct processor
                 return;
             case 1:
                 _zip = (*connected_receivers[0]) | [this](Signal connected_input) {
-                        go(std::tuple<Signal>{connected_input});
+                        process(std::tuple<Signal>{connected_input});
                     };
                 return;
             case 2:
@@ -90,7 +90,7 @@ struct processor
                     *connected_receivers[0],
                     *connected_receivers[1]) |
                     [this](std::tuple<Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 3:
@@ -99,7 +99,7 @@ struct processor
                     *connected_receivers[1],
                     *connected_receivers[2]) |
                     [this](std::tuple<Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 4:
@@ -109,7 +109,7 @@ struct processor
                     *connected_receivers[2],
                     *connected_receivers[3]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 5:
@@ -120,7 +120,7 @@ struct processor
                     *connected_receivers[3],
                     *connected_receivers[4]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 6:
@@ -132,7 +132,7 @@ struct processor
                     *connected_receivers[4],
                     *connected_receivers[5]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 7:
@@ -145,7 +145,7 @@ struct processor
                     *connected_receivers[5],
                     *connected_receivers[6]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 8:
@@ -159,7 +159,7 @@ struct processor
                     *connected_receivers[6],
                     *connected_receivers[7]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 9:
@@ -174,7 +174,7 @@ struct processor
                     *connected_receivers[7],
                     *connected_receivers[8]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             case 10:
@@ -190,12 +190,22 @@ struct processor
                     *connected_receivers[8],
                     *connected_receivers[9]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        go(connected_inputs);
+                        process(connected_inputs);
                     };
                 return;
             default:
                 throw std::runtime_error("too many connected receivers");
         }
+    }
+
+    template <typename Tuple>
+    inline auto process(Tuple connected_inputs) -> void
+    {
+        std::apply([this](auto && ... args) {
+                auto it = _set_receivers.cbegin();
+                ((_inputs[*it++] = std::forward<decltype(args)>(args)), ...);
+            }, connected_inputs);
+        go();
     }
 
     inline auto get_set() -> void
@@ -206,13 +216,8 @@ struct processor
         }
     }
 
-    template <typename Tuple>
-    inline auto go(Tuple connected_inputs) -> void
+    inline auto go() const -> void
     {
-        std::apply([this](auto && ... args) {
-                auto it = _set_receivers.cbegin();
-                ((_inputs[*it++] = std::forward<decltype(args)>(args)), ...);
-            }, connected_inputs);
         send(_function(_inputs));
     }
 
@@ -378,9 +383,9 @@ int main()
         proc1.get_set();
         proc2.get_set();
         proc3.get_set();
-        proc0.go(std::tuple<>{});
-        proc0.go(std::tuple<>{});
-        proc0.go(std::tuple<>{});
+        proc0.go();
+        proc0.go();
+        proc0.go();
         std::cout << "sleep\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
