@@ -45,6 +45,16 @@ struct processor
 
     inline auto from(processor & other, std::size_t in, std::size_t out) -> void
     {
+        if (_subprocessors.size() > 1)
+        {
+            _subprocessors[1].from(other, in, out);
+            return;
+        }
+        if (other._subprocessors.size() > 0)
+        {
+            from(other._subprocessors[0], in, out);
+            return;
+        }
         std::tie(other._senders[out], _receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
         if (!other._set_senders.insert(out).second)
         {
@@ -58,6 +68,16 @@ struct processor
 
     inline auto to(processor & other, std::size_t in, std::size_t out) -> void
     {
+        if (_subprocessors.size() > 0)
+        {
+            _subprocessors[0].to(other, in, out);
+            return;
+        }
+        if (other._subprocessors.size() > 1)
+        {
+            to(other._subprocessors[1], in, out);
+            return;
+        }
         std::tie(_senders[out], other._receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
         if (!_set_senders.insert(out).second)
         {
@@ -71,6 +91,10 @@ struct processor
 
     inline auto on_your_marks() -> void
     {
+        for (auto & subprocessor : _subprocessors)
+        {
+            subprocessor.on_your_marks();
+        }
         std::vector<stlab::receiver<Signal> *> connected_receivers;
         connected_receivers.reserve(_set_receivers.size());
         for (auto in : _set_receivers)
@@ -199,18 +223,12 @@ struct processor
         }
     }
 
-    template <typename Tuple>
-    inline auto process(Tuple connected_inputs) -> void
-    {
-        std::apply([this](auto && ... args) {
-                auto it = _set_receivers.cbegin();
-                ((_inputs[*it++] = std::forward<decltype(args)>(args)), ...);
-            }, connected_inputs);
-        go();
-    }
-
     inline auto get_set() -> void
     {
+        for (auto & subprocessor : _subprocessors)
+        {
+            subprocessor.get_set();
+        }
         for (auto in : _set_receivers)
         {
             _receivers[in].set_ready();
@@ -219,7 +237,28 @@ struct processor
 
     inline auto go() const -> void
     {
-        send(_function(_inputs));
+        switch (_subprocessors.size())
+        {
+            case 0:
+                send(_function(_inputs));
+                break;
+            case 1:
+                _subprocessors[0].go();
+                break;
+            default:
+                _subprocessors[1].go();
+        }
+    }
+
+private:
+    template <typename Tuple>
+    inline auto process(Tuple connected_inputs) -> void
+    {
+        std::apply([this](auto && ... args) {
+                auto it = _set_receivers.cbegin();
+                ((_inputs[*it++] = std::forward<decltype(args)>(args)), ...);
+            }, connected_inputs);
+        go();
     }
 
     inline auto send(std::vector<Signal> outputs) const -> void
@@ -231,7 +270,6 @@ struct processor
         }
     }
 
-private:
     std::vector<stlab::receiver<Signal>> _receivers;
     std::vector<stlab::sender<Signal>> _senders;
     std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
@@ -239,6 +277,7 @@ private:
     std::set<std::size_t> _set_senders;
     std::vector<Signal> _inputs;
     std::any _zip;
+    std::vector<processor> _subprocessors;
 };
 
 template <typename Signal>
@@ -249,12 +288,14 @@ struct graph
         std::size_t outs)
         :_inputs(ins)
     {
-        _processors.emplace_back(0, ins, [this](std::vector<Signal> inputs) {
-            return _inputs;
-        });
+        // output processor [0]:
         _processors.emplace_back(outs, 0, [this](std::vector<Signal> inputs) {
             _promise.set_value(inputs);
             return std::vector<Signal>{};
+        });
+        // input processor [1]:
+        _processors.emplace_back(0, ins, [this](std::vector<Signal> inputs) {
+            return _inputs;
         });
     }
 
@@ -262,7 +303,7 @@ struct graph
     {
         for (std::size_t in = 0; in < _inputs.size(); ++in)
         {
-            _processors[0].to(_processors[1], in, in);
+            _processors[1].to(_processors[0], in, in);
         }
     }
 
@@ -288,7 +329,7 @@ struct graph
         _inputs = inputs;
         _promise = std::promise<std::vector<Signal>>{};
         auto future = _promise.get_future();
-        _processors[0].go();
+        _processors[1].go();
         return future.get();
     }
 
