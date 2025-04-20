@@ -35,12 +35,32 @@ struct processor
     inline processor(
         std::size_t ins,
         std::size_t outs,
-        std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun)
+        std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
         :_receivers(ins)
         ,_senders(outs)
         ,_function(fun)
         ,_inputs(ins)
     {
+    }
+
+    inline processor(std::vector<processor> && subprocs)
+        :_subprocessors(std::move(subprocs))
+    {
+        // output
+        if (_subprocessors.size() > 0)
+        {
+            _subprocessors[0]._function = [this](std::vector<Signal> inputs) {
+                _outputs.set_value(inputs);
+                return std::vector<Signal>{};
+            };
+        }
+        // input
+        if (_subprocessors.size() > 1)
+        {
+            _subprocessors[1]._function = [this](std::vector<Signal> inputs) {
+                return _inputs;
+            };
+        }
     }
 
     inline auto from(processor & other, std::size_t in, std::size_t out) -> void
@@ -55,7 +75,7 @@ struct processor
             from(other._subprocessors[0], in, out);
             return;
         }
-        std::tie(other._senders[out], _receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
+        std::tie(other._senders[out], _receivers[in]) = stlab::channel<Signal>(stlab::high_executor);
         if (!other._set_senders.insert(out).second)
         {
             throw std::runtime_error("other sender already connected");
@@ -66,19 +86,19 @@ struct processor
         }
     }
 
-    inline auto to(processor & other, std::size_t in, std::size_t out) -> void
+    inline auto to(processor & other, std::size_t out, std::size_t in) -> void
     {
         if (_subprocessors.size() > 0)
         {
-            _subprocessors[0].to(other, in, out);
+            _subprocessors[0].to(other, out, in);
             return;
         }
         if (other._subprocessors.size() > 1)
         {
-            to(other._subprocessors[1], in, out);
+            to(other._subprocessors[1], out, in);
             return;
         }
-        std::tie(_senders[out], other._receivers[in]) = stlab::channel<Signal>(stlab::default_executor);
+        std::tie(_senders[out], other._receivers[in]) = stlab::channel<Signal>(stlab::high_executor);
         if (!_set_senders.insert(out).second)
         {
             throw std::runtime_error("sender already connected");
@@ -95,131 +115,126 @@ struct processor
         {
             subprocessor.on_your_marks();
         }
-        std::vector<stlab::receiver<Signal> *> connected_receivers;
-        connected_receivers.reserve(_set_receivers.size());
-        for (auto in : _set_receivers)
-        {
-            connected_receivers.push_back(&_receivers[in]);
-        }
-        switch (connected_receivers.size())
+        std::vector<std::size_t> connected_ins{_set_receivers.cbegin(), _set_receivers.cend()};
+        switch (connected_ins.size())
         {
             case 0:
-                return;
+                break;
             case 1:
-                _zip = (*connected_receivers[0]) | [this](Signal connected_input) {
+                _zip = _receivers[connected_ins[0]] | [this](Signal connected_input) {
                         process(std::tuple<Signal>{connected_input});
                     };
-                return;
+                break;
             case 2:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]]) |
                     [this](std::tuple<Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 3:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]]) |
                     [this](std::tuple<Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 4:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2],
-                    *connected_receivers[3]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]],
+                    _receivers[connected_ins[3]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 5:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2],
-                    *connected_receivers[3],
-                    *connected_receivers[4]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]],
+                    _receivers[connected_ins[3]],
+                    _receivers[connected_ins[4]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 6:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2],
-                    *connected_receivers[3],
-                    *connected_receivers[4],
-                    *connected_receivers[5]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]],
+                    _receivers[connected_ins[3]],
+                    _receivers[connected_ins[4]],
+                    _receivers[connected_ins[5]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 7:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2],
-                    *connected_receivers[3],
-                    *connected_receivers[4],
-                    *connected_receivers[5],
-                    *connected_receivers[6]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]],
+                    _receivers[connected_ins[3]],
+                    _receivers[connected_ins[4]],
+                    _receivers[connected_ins[5]],
+                    _receivers[connected_ins[6]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 8:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2],
-                    *connected_receivers[3],
-                    *connected_receivers[4],
-                    *connected_receivers[5],
-                    *connected_receivers[6],
-                    *connected_receivers[7]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]],
+                    _receivers[connected_ins[3]],
+                    _receivers[connected_ins[4]],
+                    _receivers[connected_ins[5]],
+                    _receivers[connected_ins[6]],
+                    _receivers[connected_ins[7]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 9:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2],
-                    *connected_receivers[3],
-                    *connected_receivers[4],
-                    *connected_receivers[5],
-                    *connected_receivers[6],
-                    *connected_receivers[7],
-                    *connected_receivers[8]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]],
+                    _receivers[connected_ins[3]],
+                    _receivers[connected_ins[4]],
+                    _receivers[connected_ins[5]],
+                    _receivers[connected_ins[6]],
+                    _receivers[connected_ins[7]],
+                    _receivers[connected_ins[8]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             case 10:
-                _zip = stlab::zip(stlab::default_executor,
-                    *connected_receivers[0],
-                    *connected_receivers[1],
-                    *connected_receivers[2],
-                    *connected_receivers[3],
-                    *connected_receivers[4],
-                    *connected_receivers[5],
-                    *connected_receivers[6],
-                    *connected_receivers[7],
-                    *connected_receivers[8],
-                    *connected_receivers[9]) |
+                _zip = stlab::zip(stlab::high_executor,
+                    _receivers[connected_ins[0]],
+                    _receivers[connected_ins[1]],
+                    _receivers[connected_ins[2]],
+                    _receivers[connected_ins[3]],
+                    _receivers[connected_ins[4]],
+                    _receivers[connected_ins[5]],
+                    _receivers[connected_ins[6]],
+                    _receivers[connected_ins[7]],
+                    _receivers[connected_ins[8]],
+                    _receivers[connected_ins[9]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
                         process(connected_inputs);
                     };
-                return;
+                break;
             default:
-                throw std::runtime_error("too many connected receivers");
+                throw std::runtime_error("too many connected ins");
         }
     }
 
@@ -250,6 +265,16 @@ struct processor
         }
     }
 
+    inline auto operator()(std::vector<Signal> inputs) -> std::vector<Signal>
+    {
+        std::cout << "graph operator()\n";
+        _inputs = inputs;
+        _outputs = std::promise<std::vector<Signal>>{};
+        auto future = _outputs.get_future();
+        go();
+        return future.get();
+    }
+
 private:
     template <typename Tuple>
     inline auto process(Tuple connected_inputs) -> void
@@ -278,65 +303,7 @@ private:
     std::vector<Signal> _inputs;
     std::any _zip;
     std::vector<processor> _subprocessors;
-};
-
-template <typename Signal>
-struct graph
-{
-    inline graph(
-        std::size_t ins,
-        std::size_t outs)
-        :_inputs(ins)
-    {
-        // output processor [0]:
-        _processors.emplace_back(outs, 0, [this](std::vector<Signal> inputs) {
-            _promise.set_value(inputs);
-            return std::vector<Signal>{};
-        });
-        // input processor [1]:
-        _processors.emplace_back(0, ins, [this](std::vector<Signal> inputs) {
-            return _inputs;
-        });
-    }
-
-    inline auto interconnect() -> void
-    {
-        for (std::size_t in = 0; in < _inputs.size(); ++in)
-        {
-            _processors[1].to(_processors[0], in, in);
-        }
-    }
-
-    inline auto on_your_marks() -> void
-    {
-        for (auto & proc : _processors)
-        {
-            proc.on_your_marks();
-        }
-    }
-
-    inline auto get_set() -> void
-    {
-        for (auto & proc : _processors)
-        {
-            proc.get_set();
-        }
-    }
-
-    inline auto operator()(std::vector<Signal> inputs) -> std::vector<Signal>
-    {
-        std::cout << "graph operator()\n";
-        _inputs = inputs;
-        _promise = std::promise<std::vector<Signal>>{};
-        auto future = _promise.get_future();
-        _processors[1].go();
-        return future.get();
-    }
-
-private:
-    std::vector<processor<Signal>> _processors;
-    std::vector<Signal> _inputs;
-    std::promise<std::vector<Signal>> _promise;
+    std::promise<std::vector<Signal>> _outputs;
 };
 
 int main()
@@ -345,7 +312,7 @@ int main()
     {   // single channel
         stlab::sender<int> send;
         stlab::receiver<int> receive;
-        std::tie(send, receive) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send, receive) = stlab::channel<int>(stlab::high_executor);
         auto discard = receive | [](int x) {
             std::cout << "received: " << x << "\n";
         };
@@ -359,7 +326,7 @@ int main()
     {   // non-std coroutine
         stlab::sender<int> send;
         stlab::receiver<int> receive;
-        std::tie(send, receive) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send, receive) = stlab::channel<int>(stlab::high_executor);
         auto hold = receive
             | sum()
             | [](int x){ std::cout << x << '\n'; };
@@ -374,7 +341,7 @@ int main()
     {   // split
         stlab::sender<int> send1;
         stlab::receiver<int> receive1;
-        std::tie(send1, receive1) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send1, receive1) = stlab::channel<int>(stlab::high_executor);
         auto hold1a = receive1
             | [](int x){ std::cout << "receive1a:" << x << '\n'; };
         auto hold1b = receive1
@@ -390,18 +357,18 @@ int main()
     {   // split & join
         stlab::sender<int> send1;
         stlab::receiver<int> receive1;
-        std::tie(send1, receive1) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send1, receive1) = stlab::channel<int>(stlab::high_executor);
         stlab::sender<int> send2;
         stlab::receiver<int> receive2;
-        std::tie(send2, receive2) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send2, receive2) = stlab::channel<int>(stlab::high_executor);
         stlab::sender<int> send3;
         stlab::receiver<int> receive3;
-        std::tie(send3, receive3) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send3, receive3) = stlab::channel<int>(stlab::high_executor);
         auto hold1a = receive1
             | [&send2](int x){ send2(x*10+2); };
         auto hold1b = receive1
             | [&send3](int x){ send3(x*10+3); };
-        auto zipped = stlab::zip(stlab::default_executor,
+        auto zipped = stlab::zip(stlab::high_executor,
                 receive2,
                 receive3)
             | [](std::tuple<int, int> v) {
@@ -421,23 +388,23 @@ int main()
     {   // three-way split & join
         stlab::sender<int> send1;
         stlab::receiver<int> receive1;
-        std::tie(send1, receive1) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send1, receive1) = stlab::channel<int>(stlab::high_executor);
         stlab::sender<int> send2;
         stlab::receiver<int> receive2;
-        std::tie(send2, receive2) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send2, receive2) = stlab::channel<int>(stlab::high_executor);
         stlab::sender<int> send3;
         stlab::receiver<int> receive3;
-        std::tie(send3, receive3) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send3, receive3) = stlab::channel<int>(stlab::high_executor);
         stlab::sender<int> send4;
         stlab::receiver<int> receive4;
-        std::tie(send4, receive4) = stlab::channel<int>(stlab::default_executor);
+        std::tie(send4, receive4) = stlab::channel<int>(stlab::high_executor);
         auto hold1a = receive1
             | [&send2](int x){ send2(x*10+2); };
         auto hold1b = receive1
             | [&send3](int x){ send3(x*10+3); };
         auto hold1c = receive1
             | [&send4](int x){ send4(x*10+4); };
-        auto zipped = stlab::zip(stlab::default_executor,
+        auto zipped = stlab::zip(stlab::high_executor,
                 receive2,
                 receive3,
                 receive4)
@@ -489,14 +456,21 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     {   // graph
-        graph<std::string> g(3, 3);
-        g.interconnect();
-        g.on_your_marks();
-        g.get_set();
+        std::vector<processor<std::string>> subprocs;
+        // output [0]
+        subprocs.emplace_back(3, 0);
+        // input [1]
+        subprocs.emplace_back(0, 3);
+        subprocs[1].to(subprocs[0], 0, 0);
+        subprocs[0].from(subprocs[1], 1, 1);
+        subprocs[1].to(subprocs[0], 2, 2);
+        processor<std::string> proc{std::move(subprocs)};
+        proc.on_your_marks();
+        proc.get_set();
         std::vector<std::string> inputs {"hello", "world", "!"};
         for (auto input : inputs)
         {
-            auto outputs = g(inputs);
+            auto outputs = proc(inputs);
             std::cout << "graph outputs: ";
             for (auto output : outputs)
             {
