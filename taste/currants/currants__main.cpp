@@ -47,7 +47,7 @@ struct processor
         :_subprocessors(std::move(subprocs))
     {
         // output
-        if (_subprocessors.size() > 0)
+        if (_subprocessors.size() > 0 && !_subprocessors[0]._function)
         {
             _subprocessors[0]._function = [this](std::vector<Signal> inputs) {
                 _outputs.set_value(inputs);
@@ -55,7 +55,7 @@ struct processor
             };
         }
         // input
-        if (_subprocessors.size() > 1)
+        if (_subprocessors.size() > 1 && !_subprocessors[1]._function)
         {
             _subprocessors[1]._function = [this](std::vector<Signal> inputs) {
                 return _inputs;
@@ -252,22 +252,18 @@ struct processor
 
     inline auto go() const -> void
     {
-        switch (_subprocessors.size())
+        for (auto & subprocessor : _subprocessors)
         {
-            case 0:
-                send(_function(_inputs));
-                break;
-            case 1:
-                _subprocessors[0].go();
-                break;
-            default:
-                _subprocessors[1].go();
+            subprocessor.go();
+        }
+        if (_function && _set_receivers.empty())
+        {
+            send();
         }
     }
 
     inline auto operator()(std::vector<Signal> inputs) -> std::vector<Signal>
     {
-        std::cout << "graph operator()\n";
         _inputs = inputs;
         _outputs = std::promise<std::vector<Signal>>{};
         auto future = _outputs.get_future();
@@ -283,15 +279,15 @@ private:
                 auto it = _set_receivers.cbegin();
                 ((_inputs[*it++] = std::forward<decltype(args)>(args)), ...);
             }, connected_inputs);
-        go();
+        send();
     }
 
-    inline auto send(std::vector<Signal> outputs) const -> void
+    inline auto send() const -> void
     {
+        auto outputs = _function(_inputs);
         for (auto out : _set_senders)
         {
             _senders[out](outputs[out]);
-            std::cout << "sent\n";
         }
     }
 
@@ -456,14 +452,20 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     {   // graph
+        std::vector<processor<std::string>> subsubprocs;
+        subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // output [0] "A"
+        subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // input [1] "B"
+        subsubprocs[1].to(subsubprocs[0], 0, 0); // B0 -> A0
         std::vector<processor<std::string>> subprocs;
-        // output [0]
-        subprocs.emplace_back(3, 0);
-        // input [1]
-        subprocs.emplace_back(0, 3);
-        subprocs[1].to(subprocs[0], 0, 0);
-        subprocs[0].from(subprocs[1], 1, 1);
-        subprocs[1].to(subprocs[0], 2, 2);
+        subprocs.emplace_back(3, 0); // output [0] "C"
+        subprocs.emplace_back(0, 3); // input [1] "D"
+        subprocs.emplace_back(std::move(subsubprocs)); // [2] "E"
+        subprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // [3] "F"
+        subprocs[1].to(subprocs[2], 0, 0); // D0 -> E0
+        subprocs[0].from(subprocs[2], 0, 0); // C0 <- E0
+        subprocs[1].to(subprocs[3], 1, 0); // D1 -> F0
+        subprocs[0].from(subprocs[3], 1, 0); // C1 <- F0
+        subprocs[1].to(subprocs[0], 2, 2); // D2 -> C2
         processor<std::string> proc{std::move(subprocs)};
         proc.on_your_marks();
         proc.get_set();
@@ -480,6 +482,7 @@ int main()
             std::swap(inputs[0], inputs[1]);
             std::swap(inputs[1], inputs[2]);
         }
+        // no sleep
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
