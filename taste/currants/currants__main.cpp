@@ -35,7 +35,7 @@ struct graph // : strange::any
     auto ins() -> std::size_t &;
     auto outs() const -> std::size_t const &;
     auto outs() -> std::size_t &;
-    auto add_processor(std::size_t ins, std::size_t outs, processor<Signal> proc) -> std::size_t;
+    auto add_processor(processor<Signal> proc) -> std::size_t;
     auto remove_processor(std::size_t id) -> bool;
     auto add_connection(std::size_t from_id, std::size_t from_out,
         std::size_t to_id, std::size_t to_in) -> std::size_t;
