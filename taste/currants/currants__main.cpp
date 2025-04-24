@@ -23,9 +23,6 @@ struct processor // : strange::any
     auto outs(Signal type) const -> std::size_t const &;
     auto outs(Signal type) -> std::size_t &;
     auto closure(Signal type) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
-
-private:
-    auto operator()(std::vector<Signal> inputs) -> std::vector<Signal>;
 };
 
 template <typename Signal>
