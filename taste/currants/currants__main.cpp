@@ -12,6 +12,41 @@
 #include <set>
 #include <future>
 
+namespace abstract
+{
+
+template <typename Signal>
+struct processor // : strange::any
+{
+    auto ins(Signal type) const -> std::size_t const &;
+    auto ins(Signal type) -> std::size_t &;
+    auto outs(Signal type) const -> std::size_t const &;
+    auto outs(Signal type) -> std::size_t &;
+    auto closure(Signal type) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+
+private:
+    auto operator()(std::vector<Signal> inputs) -> std::vector<Signal>;
+};
+
+template <typename Signal>
+struct graph // : strange::any
+{
+    auto ins() const -> std::size_t const &;
+    auto ins() -> std::size_t &;
+    auto outs() const -> std::size_t const &;
+    auto outs() -> std::size_t &;
+    auto add_processor(std::size_t ins, std::size_t outs, processor<Signal> proc) -> std::size_t;
+    auto remove_processor(std::size_t id) -> bool;
+    auto add_connection(std::size_t from_id, std::size_t from_out,
+        std::size_t to_id, std::size_t to_in) -> std::size_t;
+    auto remove_connection(std::size_t id) -> bool;
+    auto add_subgraph(graph<Signal> subgraph) -> std::size_t;
+    auto remove_subgraph(std::size_t id) -> bool;
+    auto convert_to_processor() const -> processor<Signal>;
+};
+
+} // namespace abstract
+
 struct sum
 {
     stlab::process_state _state = stlab::process_state::await;
@@ -28,6 +63,9 @@ auto get_fun() -> std::function<auto (std::tuple<int, int, int> v) -> void>
         std::cout << "receive zip:" << std::get<0>(v) << "," << std::get<1>(v) << "," << std::get<2>(v) << '\n';
     };
 }
+
+namespace imp
+{
 
 template <typename Signal>
 struct processor
@@ -302,6 +340,8 @@ private:
     std::promise<std::vector<Signal>> _outputs;
 };
 
+} // namespace imp
+
 int main()
 {
     std::cout << "currants\n";
@@ -428,10 +468,10 @@ int main()
             std::cout << "process " << concat << "\n";
             return std::vector<std::string>(3, concat);
         };
-        processor<std::string> proc0{0, 1, fun};
-        processor<std::string> proc1{1, 3, fun};
-        processor<std::string> proc2{3, 1, fun};
-        processor<std::string> proc3{1, 0, fun};
+        imp::processor<std::string> proc0{0, 1, fun};
+        imp::processor<std::string> proc1{1, 3, fun};
+        imp::processor<std::string> proc2{3, 1, fun};
+        imp::processor<std::string> proc3{1, 0, fun};
         proc0.to(proc1, 0, 0);
         //proc1.to(proc2, 0, 0);
         proc2.from(proc1, 1, 1);
@@ -452,11 +492,11 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     {   // graph
-        std::vector<processor<std::string>> subsubprocs;
+        std::vector<imp::processor<std::string>> subsubprocs;
         subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // output [0] "A"
         subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // input [1] "B"
         subsubprocs[1].to(subsubprocs[0], 0, 0); // B0 -> A0
-        std::vector<processor<std::string>> subprocs;
+        std::vector<imp::processor<std::string>> subprocs;
         subprocs.emplace_back(3, 0); // output [0] "C"
         subprocs.emplace_back(0, 3); // input [1] "D"
         subprocs.emplace_back(std::move(subsubprocs)); // [2] "E"
@@ -466,7 +506,7 @@ int main()
         subprocs[1].to(subprocs[3], 1, 0); // D1 -> F0
         subprocs[0].from(subprocs[3], 1, 0); // C1 <- F0
         subprocs[1].to(subprocs[0], 2, 2); // D2 -> C2
-        processor<std::string> proc{std::move(subprocs)};
+        imp::processor<std::string> proc{std::move(subprocs)};
         proc.on_your_marks();
         proc.get_set();
         std::vector<std::string> inputs {"hello", "world", "!"};
