@@ -18,11 +18,11 @@ namespace abstract
 template <typename Signal>
 struct processor // : strange::any
 {
-    auto ins(Signal type) const -> std::size_t const &;
-    auto ins(Signal type) -> std::size_t &;
-    auto outs(Signal type) const -> std::size_t const &;
-    auto outs(Signal type) -> std::size_t &;
-    auto closure(Signal type) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+    auto ins(std::unique_ptr<Signal> type) const -> std::size_t const &;
+    auto ins(std::unique_ptr<Signal> type) -> std::size_t &;
+    auto outs(std::unique_ptr<Signal> type) const -> std::size_t const &;
+    auto outs(std::unique_ptr<Signal> type) -> std::size_t &;
+    auto closure(std::unique_ptr<Signal> type) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 };
 
 template <typename Signal>
