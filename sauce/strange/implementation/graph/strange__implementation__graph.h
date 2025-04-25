@@ -291,25 +291,64 @@ private:
 };
 
 template<typename Signal>
-struct processor
+struct example_processor
 {
-    auto pack(strange::bag & dest) const -> void;
-    auto unpack(strange::bag const & src) -> void;
+    inline example_processor()
+    :_ins(0)
+    ,_outs(0)
+    {}
 
-    auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
-    auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+    inline auto pack(strange::bag & dest) const -> void
+    {}
 
-    auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
-    auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+    inline auto unpack(strange::bag const & src) -> void
+    {}
 
-    auto closure(std::unique_ptr<Signal> overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+    inline auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &
+    {
+        return _ins;
+    }
+
+    inline auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &
+    {
+        return _ins;
+    }
+
+    inline auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &
+    {
+        return _outs;
+    }
+
+    inline auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &
+    {
+        return _outs;
+    }
+
+    inline auto closure(std::unique_ptr<Signal> overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    {
+        return [this](std::vector<Signal> inputs) {
+            return std::vector<Signal>{};
+        };
+    }
+
+private:
+    std::size_t _ins;
+    std::size_t _outs;
 };
 
 template<typename Signal>
 struct graph
 {
-    auto pack(strange::bag & dest) const -> void;
-    auto unpack(strange::bag const & src) -> void;
+    inline graph()
+    :_ins(0)
+    ,_outs(0)
+    {}
+
+    inline auto pack(strange::bag & dest) const -> void
+    {}
+
+    inline auto unpack(strange::bag const & src) -> void
+    {}
 
     auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
     auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
@@ -328,6 +367,10 @@ struct graph
     auto remove_subgraph(std::size_t id) -> bool;
 
     auto convert_to_processor(std::unique_ptr<Signal> overload = nullptr) const -> strange::processor<Signal>;
+
+private:
+    std::size_t _ins;
+    std::size_t _outs;
 };
 }
 }

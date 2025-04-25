@@ -22,9 +22,6 @@ namespace implementation
 struct baggage;
 
 template <typename Signal>
-struct processor;
-
-template <typename Signal>
 struct graph;
 }
 }

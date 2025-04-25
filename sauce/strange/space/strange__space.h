@@ -13,9 +13,6 @@ namespace implementation
 struct baggage;
 
 template <typename Signal>
-struct processor;
-
-template <typename Signal>
 struct graph;
 }
 }
@@ -55,7 +52,7 @@ struct baggage_;
 template<typename Signal>
 struct processor;
 
-template<typename Signal, typename _Thing = strange::implementation::processor<Signal>, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename Signal, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct processor_;
 
 template<typename Signal>
@@ -3499,7 +3496,7 @@ public:
         return processor{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing = strange::implementation::processor<Signal>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> processor
     {
         return processor{processor::_derived::_static_shared_to_base(std::make_shared<typename processor_<Signal, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};

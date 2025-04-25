@@ -155,8 +155,7 @@ namespace strange
     };
 
     template<typename Signal>
-    struct [[strange::thing("strange::implementation::processor<Signal>")]]
-    processor : stuff
+    struct processor : stuff
     {
         auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
         auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
