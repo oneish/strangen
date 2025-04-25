@@ -51,6 +51,28 @@ struct process
         }
     }
 
+    inline auto ins() const -> uint64_t
+    {
+        if (_subprocs.size() > 1)
+        {
+            return _subprocs[1].ins(); // TODO: check if this is correct
+        }
+        if (_subprocs.size() > 0)
+        {
+            return 0;
+        }
+        return _receivers.size();
+    }
+
+    inline auto outs() const -> uint64_t
+    {
+        if (_subprocs.size() > 0)
+        {
+            return _subprocs[0].outs(); // TODO: check if this is correct
+        }
+        return _senders.size();
+    }
+
     inline auto from(process & other, uint64_t in, uint64_t out) -> void
     {
         if (_subprocs.size() > 1)
@@ -291,12 +313,62 @@ private:
 };
 
 template<typename Signal>
+struct processor
+{
+    inline processor(strange::implementation::process<Signal> && process)
+    :_process(std::move(process))
+    ,_ins(_process.ins())
+    ,_outs(_process.outs())
+    {
+    }
+
+    inline auto pack(strange::bag & dest) const -> void
+    {}
+
+    inline auto unpack(strange::bag const & src) -> void
+    {}
+
+    inline auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
+    {
+        return _ins;
+    }
+
+    inline auto ins(std::unique_ptr<Signal> && overload) -> uint64_t &
+    {
+        return _ins;
+    }
+
+    inline auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
+    {
+        return _outs;
+    }
+
+    inline auto outs(std::unique_ptr<Signal> && overload) -> uint64_t &
+    {
+        return _outs;
+    }
+
+    inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    {
+        return [this](std::vector<Signal> inputs) {
+            return _process(inputs);
+        };
+    }
+
+private:
+    strange::implementation::process<Signal> _process;
+    uint64_t _ins;
+    uint64_t _outs;
+};
+
+template<typename Signal>
 struct example_processor
 {
     inline example_processor()
     :_ins(0)
     ,_outs(0)
-    {}
+    {
+    }
 
     inline auto pack(strange::bag & dest) const -> void
     {}
@@ -398,13 +470,13 @@ struct graph
     {
         if (id < _connections.size() && _connections[id]._something())
         {
-            _connections[id] = strange::processor<Signal>{};
+            _connections[id] = strange::connection{};
             return true;
         }
         return false;
     }
 
-    inline auto add_subgraph(graph<Signal> subgraph) -> uint64_t
+    inline auto add_subgraph(strange::graph<Signal> subgraph) -> uint64_t
     {
         auto id = _subgraphs.size();
         _subgraphs.push_back(subgraph);
@@ -415,13 +487,20 @@ struct graph
     {
         if (id < _subgraphs.size() && _subgraphs[id]._something())
         {
-            _subgraphs[id] = strange::connection{};
+            _subgraphs[id] = strange::graph<Signal>{};
             return true;
         }
         return false;
     }
 
-    auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal>;
+    auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal>
+    {
+        // TODO: implement this
+        return strange::processor<Signal>::template _make<strange::implementation::processor<Signal>>(strange::implementation::process<Signal>{_ins, _outs,
+            [this](std::vector<Signal> inputs) {
+                return std::vector<Signal>(_outs);
+            }});
+    }
 
 private:
     uint64_t _ins;
