@@ -350,11 +350,25 @@ struct graph
     inline auto unpack(strange::bag const & src) -> void
     {}
 
-    auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
-    auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+    auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &
+    {
+        return _ins;
+    }
 
-    auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
-    auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+    auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &
+    {
+        return _ins;
+    }
+
+    auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &
+    {
+        return _outs;
+    }
+
+    auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &
+    {
+        return _outs;
+    }
 
     auto add_processor(strange::processor<Signal> proc) -> std::size_t;
     auto remove_processor(std::size_t id) -> bool;
@@ -371,6 +385,8 @@ struct graph
 private:
     std::size_t _ins;
     std::size_t _outs;
+    std::vector<strange::processor<Signal>> _processors;
+    std::vector<strange::graph<Signal>> _subgraphs;
 };
 }
 }

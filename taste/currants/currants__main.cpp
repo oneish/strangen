@@ -204,6 +204,7 @@ int main()
     }
     {
         auto proc = strange::processor<std::string>::_make<strange::implementation::example_processor<std::string>>();
+        proc.closure()(std::vector<std::string>{"hello", "world", "!"});
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
