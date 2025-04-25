@@ -46,6 +46,18 @@ struct baggage;
 template<typename _Thing = strange::implementation::baggage, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct baggage_;
 
+template<typename Signal>
+struct processor;
+
+template<typename Signal, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct processor_;
+
+template<typename Signal>
+struct graph;
+
+template<typename Signal, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct graph_;
+
 struct parameter;
 
 }
@@ -270,6 +282,42 @@ struct reflection<strange::baggage_<_Thing, _Copy>>
     static inline auto name() -> std::string
     {
         return "strange::baggage_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<typename Signal>
+struct reflection<strange::processor<Signal>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::processor<" + reflection<Signal>::name() + ">";
+    }
+};
+
+template<typename Signal, typename _Thing, bool _Copy>
+struct reflection<strange::processor_<Signal, _Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::processor_<" + reflection<Signal>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<typename Signal>
+struct reflection<strange::graph<Signal>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::graph<" + reflection<Signal>::name() + ">";
+    }
+};
+
+template<typename Signal, typename _Thing, bool _Copy>
+struct reflection<strange::graph_<Signal, _Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::graph_<" + reflection<Signal>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
     }
 };
 
@@ -3339,6 +3387,732 @@ public:
             strange::_common::_factory_.emplace(name, []()
             {
                 return baggage_::_derived::_static_shared_to_base(std::make_shared<baggage_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
+template<typename Signal>
+struct processor : any
+{
+    inline processor() = default;
+
+    inline processor(processor const & other)
+    :strange::_common{other}
+    ,any{}
+    {
+    }
+
+    inline processor(processor && other)
+    :strange::_common{std::move(other)}
+    ,any{}
+    {
+    }
+
+    inline auto operator=(processor const & other) -> processor &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(processor && other) -> processor &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline processor(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any{}
+    {
+    }
+
+    explicit inline processor(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any{}
+    {
+    }
+
+protected:
+    struct _derived : any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename processor::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+
+        virtual auto ins(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+
+        virtual auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+
+        virtual auto outs(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+
+        virtual auto closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename processor::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> processor
+    {
+        try
+        {
+            return processor{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return processor{};
+        }
+    }
+
+    inline auto _reproduce() const -> processor
+    {
+        try
+        {
+            return processor{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return processor{};
+        }
+    }
+
+    inline auto _weak() const -> processor
+    {
+        return processor{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> processor
+    {
+        return processor{strange::_common::_shared->_strong()};
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> processor
+    {
+        return processor{processor::_derived::_static_shared_to_base(std::make_shared<typename processor_<Signal, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _manufacture(std::string const & name) -> processor
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return processor{};
+        }
+        return processor{it->second()};
+    }
+
+    using _Abstraction_ = processor;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+
+    inline auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    inline auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+
+    inline auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    inline auto closure(std::unique_ptr<Signal> overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+};
+
+template<typename Signal, typename _Thing, bool _Copy>
+struct processor_ : processor<Signal>
+{
+    inline processor_() = default;
+
+    inline processor_(processor_ const & other)
+    :strange::_common{other}
+    ,processor<Signal>{}
+    {
+    }
+
+    inline processor_(processor_ && other)
+    :strange::_common{std::move(other)}
+    ,processor<Signal>{}
+    {
+    }
+
+    inline auto operator=(processor_ const & other) -> processor_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(processor_ && other) -> processor_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline processor_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,processor<Signal>{}
+    {
+    }
+
+    explicit inline processor_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,processor<Signal>{}
+    {
+    }
+
+private:
+    friend struct processor<Signal>;
+
+    struct _instance final : processor<Signal>::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :processor_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return processor_::_derived::_static_shared_to_base(std::make_shared<processor_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_common::_no_copy{};
+            }
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return processor_::_derived::_static_shared_to_base(std::make_shared<processor_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return processor<Signal>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return processor<Signal>::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return processor_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return processor_::_name_;
+        }
+
+        inline auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+
+        inline auto ins(std::unique_ptr<Signal> overload) -> std::size_t & final;
+
+        inline auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+
+        inline auto outs(std::unique_ptr<Signal> overload) -> std::size_t & final;
+
+        inline auto closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> processor_
+    {
+        return processor_{processor_::_derived::_static_shared_to_base(std::make_shared<processor_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _manufacture_(std::string const & name) -> processor_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return processor_{};
+        }
+        return processor_{it->second()};
+    }
+
+    inline auto _valid_() const -> bool
+    {
+        return std::dynamic_pointer_cast<processor_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> processor_
+    {
+        try
+        {
+            return processor_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return processor_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> processor_
+    {
+        try
+        {
+            return processor_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return processor_{};
+        }
+    }
+
+    inline auto _weak_() const -> processor_
+    {
+        return processor_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> processor_
+    {
+        return processor_{strange::_common::_shared->_strong()};
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<processor_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<processor_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = processor_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return processor_::_derived::_static_shared_to_base(std::make_shared<processor_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
+template<typename Signal>
+struct graph : any
+{
+    inline graph() = default;
+
+    inline graph(graph const & other)
+    :strange::_common{other}
+    ,any{}
+    {
+    }
+
+    inline graph(graph && other)
+    :strange::_common{std::move(other)}
+    ,any{}
+    {
+    }
+
+    inline auto operator=(graph const & other) -> graph &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(graph && other) -> graph &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline graph(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any{}
+    {
+    }
+
+    explicit inline graph(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any{}
+    {
+    }
+
+protected:
+    struct _derived : any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename graph::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+
+        virtual auto ins(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+
+        virtual auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+
+        virtual auto outs(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+
+        virtual auto add_processor(strange::processor<Signal> proc) -> std::size_t = 0;
+
+        virtual auto remove_processor(std::size_t id) -> bool = 0;
+
+        virtual auto add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t = 0;
+
+        virtual auto remove_connection(std::size_t id) -> bool = 0;
+
+        virtual auto add_subgraph(graph<Signal> subgraph) -> std::size_t = 0;
+
+        virtual auto remove_subgraph(std::size_t id) -> bool = 0;
+
+        virtual auto convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal> = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename graph::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> graph
+    {
+        try
+        {
+            return graph{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return graph{};
+        }
+    }
+
+    inline auto _reproduce() const -> graph
+    {
+        try
+        {
+            return graph{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return graph{};
+        }
+    }
+
+    inline auto _weak() const -> graph
+    {
+        return graph{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> graph
+    {
+        return graph{strange::_common::_shared->_strong()};
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> graph
+    {
+        return graph{graph::_derived::_static_shared_to_base(std::make_shared<typename graph_<Signal, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _manufacture(std::string const & name) -> graph
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return graph{};
+        }
+        return graph{it->second()};
+    }
+
+    using _Abstraction_ = graph;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+
+    inline auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    inline auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+
+    inline auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    inline auto add_processor(strange::processor<Signal> proc) -> std::size_t;
+
+    inline auto remove_processor(std::size_t id) -> bool;
+
+    inline auto add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t;
+
+    inline auto remove_connection(std::size_t id) -> bool;
+
+    inline auto add_subgraph(graph<Signal> subgraph) -> std::size_t;
+
+    inline auto remove_subgraph(std::size_t id) -> bool;
+
+    inline auto convert_to_processor(std::unique_ptr<Signal> overload = nullptr) const -> strange::processor<Signal>;
+};
+
+template<typename Signal, typename _Thing, bool _Copy>
+struct graph_ : graph<Signal>
+{
+    inline graph_() = default;
+
+    inline graph_(graph_ const & other)
+    :strange::_common{other}
+    ,graph<Signal>{}
+    {
+    }
+
+    inline graph_(graph_ && other)
+    :strange::_common{std::move(other)}
+    ,graph<Signal>{}
+    {
+    }
+
+    inline auto operator=(graph_ const & other) -> graph_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(graph_ && other) -> graph_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline graph_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,graph<Signal>{}
+    {
+    }
+
+    explicit inline graph_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,graph<Signal>{}
+    {
+    }
+
+private:
+    friend struct graph<Signal>;
+
+    struct _instance final : graph<Signal>::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :graph_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return graph_::_derived::_static_shared_to_base(std::make_shared<graph_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_common::_no_copy{};
+            }
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return graph_::_derived::_static_shared_to_base(std::make_shared<graph_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return graph<Signal>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return graph<Signal>::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return graph_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return graph_::_name_;
+        }
+
+        inline auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+
+        inline auto ins(std::unique_ptr<Signal> overload) -> std::size_t & final;
+
+        inline auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+
+        inline auto outs(std::unique_ptr<Signal> overload) -> std::size_t & final;
+
+        inline auto add_processor(strange::processor<Signal> proc) -> std::size_t final;
+
+        inline auto remove_processor(std::size_t id) -> bool final;
+
+        inline auto add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t final;
+
+        inline auto remove_connection(std::size_t id) -> bool final;
+
+        inline auto add_subgraph(graph<Signal> subgraph) -> std::size_t final;
+
+        inline auto remove_subgraph(std::size_t id) -> bool final;
+
+        inline auto convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal> final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> graph_
+    {
+        return graph_{graph_::_derived::_static_shared_to_base(std::make_shared<graph_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _manufacture_(std::string const & name) -> graph_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return graph_{};
+        }
+        return graph_{it->second()};
+    }
+
+    inline auto _valid_() const -> bool
+    {
+        return std::dynamic_pointer_cast<graph_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> graph_
+    {
+        try
+        {
+            return graph_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return graph_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> graph_
+    {
+        try
+        {
+            return graph_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return graph_{};
+        }
+    }
+
+    inline auto _weak_() const -> graph_
+    {
+        return graph_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> graph_
+    {
+        return graph_{strange::_common::_shared->_strong()};
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<graph_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<graph_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = graph_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return graph_::_derived::_static_shared_to_base(std::make_shared<graph_::_instance>());
             });
         }
         return name;
@@ -11680,6 +12454,209 @@ template<typename _Thing, bool _Copy>
 inline auto baggage_<_Thing, _Copy>::_instance::make_json(std::string const & json) const -> package
 {
     return _thing.make_json(json);
+}
+
+template<typename Signal>
+inline auto processor<Signal>::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->ins(overload);
+}
+
+template<typename Signal>
+inline auto processor<Signal>::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->ins(overload);
+}
+
+template<typename Signal>
+inline auto processor<Signal>::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->outs(overload);
+}
+
+template<typename Signal>
+inline auto processor<Signal>::outs(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->outs(overload);
+}
+
+template<typename Signal>
+inline auto processor<Signal>::closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->closure(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return _thing.ins(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    return _thing.ins(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return _thing.outs(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    return _thing.outs(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+{
+    return _thing.closure(overload);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->ins(overload);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->ins(overload);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->outs(overload);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::outs(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->outs(overload);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::add_processor(strange::processor<Signal> proc) -> std::size_t
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->add_processor(proc);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::remove_processor(std::size_t id) -> bool
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_processor(id);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->add_connection(from_id, from_out, to_id, to_in);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::remove_connection(std::size_t id) -> bool
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_connection(id);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::add_subgraph(graph<Signal> subgraph) -> std::size_t
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->add_subgraph(subgraph);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::remove_subgraph(std::size_t id) -> bool
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_subgraph(id);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal>
+{
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->convert_to_processor(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return _thing.ins(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    return _thing.ins(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+{
+    return _thing.outs(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) -> std::size_t &
+{
+    return _thing.outs(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::add_processor(strange::processor<Signal> proc) -> std::size_t
+{
+    return _thing.add_processor(proc);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_processor(std::size_t id) -> bool
+{
+    return _thing.remove_processor(id);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t
+{
+    return _thing.add_connection(from_id, from_out, to_id, to_in);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_connection(std::size_t id) -> bool
+{
+    return _thing.remove_connection(id);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::add_subgraph(graph<Signal> subgraph) -> std::size_t
+{
+    return _thing.add_subgraph(subgraph);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_subgraph(std::size_t id) -> bool
+{
+    return _thing.remove_subgraph(id);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal>
+{
+    return _thing.convert_to_processor(overload);
 }
 
 inline auto parameter::pack(strange::bag & dest) const -> void
