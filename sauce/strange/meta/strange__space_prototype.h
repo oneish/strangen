@@ -154,7 +154,7 @@ namespace strange
     {
     };
 
-    template <typename Signal>
+    template<typename Signal>
     struct [[strange::thing("strange::implementation::processor<Signal>")]]
     processor : stuff
     {
@@ -167,7 +167,7 @@ namespace strange
         auto closure(std::unique_ptr<Signal> overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
     };
 
-    template <typename Signal>
+    template<typename Signal>
     struct [[strange::thing("strange::implementation::graph<Signal>")]]
     graph : stuff
     {

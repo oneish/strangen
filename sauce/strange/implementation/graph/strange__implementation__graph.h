@@ -17,7 +17,7 @@ namespace strange
 {
 namespace implementation
 {
-template <typename Signal>
+template<typename Signal>
 struct process
 {
     inline process(
@@ -260,7 +260,7 @@ struct process
     }
 
 private:
-    template <typename Tuple>
+    template<typename Tuple>
     inline auto proc(Tuple connected_inputs) -> void
     {
         std::apply([this](auto && ... args) {
@@ -288,6 +288,46 @@ private:
     std::any _zip;
     std::vector<process> _subprocs;
     std::promise<std::vector<Signal>> _outputs;
+};
+
+template<typename Signal>
+struct processor
+{
+    auto pack(strange::bag & dest) const -> void;
+    auto unpack(strange::bag const & src) -> void;
+
+    auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    auto closure(std::unique_ptr<Signal> overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+};
+
+template<typename Signal>
+struct graph
+{
+    auto pack(strange::bag & dest) const -> void;
+    auto unpack(strange::bag const & src) -> void;
+
+    auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+
+    auto add_processor(strange::processor<Signal> proc) -> std::size_t;
+    auto remove_processor(std::size_t id) -> bool;
+
+    auto add_connection(std::size_t from_id, std::size_t from_out,
+        std::size_t to_id, std::size_t to_in) -> std::size_t;
+    auto remove_connection(std::size_t id) -> bool;
+
+    auto add_subgraph(graph<Signal> subgraph) -> std::size_t;
+    auto remove_subgraph(std::size_t id) -> bool;
+
+    auto convert_to_processor(std::unique_ptr<Signal> overload = nullptr) const -> strange::processor<Signal>;
 };
 }
 }
