@@ -11,6 +11,12 @@ enum class cls;
 namespace implementation
 {
 struct baggage;
+
+template <typename Signal>
+struct processor;
+
+template <typename Signal>
+struct graph;
 }
 }
 #include <memory>
@@ -49,13 +55,13 @@ struct baggage_;
 template<typename Signal>
 struct processor;
 
-template<typename Signal, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename Signal, typename _Thing = strange::implementation::processor<Signal>, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct processor_;
 
 template<typename Signal>
 struct graph;
 
-template<typename Signal, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename Signal, typename _Thing = strange::implementation::graph<Signal>, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct graph_;
 
 struct parameter;
@@ -3394,19 +3400,19 @@ public:
 };
 
 template<typename Signal>
-struct processor : any
+struct processor : stuff
 {
     inline processor() = default;
 
     inline processor(processor const & other)
     :strange::_common{other}
-    ,any{}
+    ,stuff{}
     {
     }
 
     inline processor(processor && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,stuff{}
     {
     }
 
@@ -3424,22 +3430,22 @@ struct processor : any
 
     explicit inline processor(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,stuff{}
     {
     }
 
     explicit inline processor(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,stuff{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename processor::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return stuff::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
@@ -3493,7 +3499,7 @@ public:
         return processor{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::processor<Signal>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> processor
     {
         return processor{processor::_derived::_static_shared_to_base(std::make_shared<typename processor_<Signal, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -3516,10 +3522,14 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
+
+    inline auto pack(strange::bag & dest) const -> void;
+
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
 
@@ -3639,6 +3649,10 @@ private:
             return processor_::_name_;
         }
 
+        inline auto pack(strange::bag & dest) const -> void final;
+
+        inline auto unpack(strange::bag const & src) -> void final;
+
         inline auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
 
         inline auto ins(std::unique_ptr<Signal> overload) -> std::size_t & final;
@@ -3739,19 +3753,19 @@ public:
 };
 
 template<typename Signal>
-struct graph : any
+struct graph : stuff
 {
     inline graph() = default;
 
     inline graph(graph const & other)
     :strange::_common{other}
-    ,any{}
+    ,stuff{}
     {
     }
 
     inline graph(graph && other)
     :strange::_common{std::move(other)}
-    ,any{}
+    ,stuff{}
     {
     }
 
@@ -3769,22 +3783,22 @@ struct graph : any
 
     explicit inline graph(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,any{}
+    ,stuff{}
     {
     }
 
     explicit inline graph(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,any{}
+    ,stuff{}
     {
     }
 
 protected:
-    struct _derived : any::_derived
+    struct _derived : stuff::_derived
     {
         static inline auto _static_shared_to_base(std::shared_ptr<typename graph::_derived> derived) -> std::shared_ptr<strange::_common::_base>
         {
-            return any::_derived::_static_shared_to_base(derived);
+            return stuff::_derived::_static_shared_to_base(derived);
         }
 
         virtual auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
@@ -3850,7 +3864,7 @@ public:
         return graph{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    template<typename _Thing = strange::implementation::graph<Signal>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> graph
     {
         return graph{graph::_derived::_static_shared_to_base(std::make_shared<typename graph_<Signal, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
@@ -3873,10 +3887,14 @@ public:
     static inline std::unordered_set<std::string> const _cats_ = []()
     {
         std::unordered_set<std::string> cats;
-        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
         cats.insert(_cat_);
         return cats;
     }();
+
+    inline auto pack(strange::bag & dest) const -> void;
+
+    inline auto unpack(strange::bag const & src) -> void;
 
     inline auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
 
@@ -4007,6 +4025,10 @@ private:
         {
             return graph_::_name_;
         }
+
+        inline auto pack(strange::bag & dest) const -> void final;
+
+        inline auto unpack(strange::bag const & src) -> void final;
 
         inline auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
 
@@ -12457,6 +12479,19 @@ inline auto baggage_<_Thing, _Copy>::_instance::make_json(std::string const & js
 }
 
 template<typename Signal>
+inline auto processor<Signal>::pack(strange::bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+template<typename Signal>
+inline auto processor<Signal>::unpack(strange::bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
+template<typename Signal>
 inline auto processor<Signal>::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
 {
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->ins(overload);
@@ -12490,6 +12525,18 @@ inline auto processor<Signal>::closure(std::unique_ptr<Signal> overload) -> std:
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
+{
+    _thing.unpack(src);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
 inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
 {
     return _thing.ins(overload);
@@ -12517,6 +12564,19 @@ template<typename Signal, typename _Thing, bool _Copy>
 inline auto processor_<Signal, _Thing, _Copy>::_instance::closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return _thing.closure(overload);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::pack(strange::bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+template<typename Signal>
+inline auto graph<Signal>::unpack(strange::bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
 }
 
 template<typename Signal>
@@ -12591,6 +12651,18 @@ template<typename Signal>
 inline auto graph<Signal>::convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal>
 {
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->convert_to_processor(overload);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
+{
+    _thing.unpack(src);
 }
 
 template<typename Signal, typename _Thing, bool _Copy>

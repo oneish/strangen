@@ -18,9 +18,9 @@ namespace strange
 namespace implementation
 {
 template <typename Signal>
-struct processor
+struct process
 {
-    inline processor(
+    inline process(
         std::size_t ins,
         std::size_t outs,
         std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
@@ -31,36 +31,36 @@ struct processor
     {
     }
 
-    inline processor(std::vector<processor> && subprocs)
-        :_subprocessors(std::move(subprocs))
+    inline process(std::vector<process> && subprocs)
+        :_subprocs(std::move(subprocs))
     {
         // output
-        if (_subprocessors.size() > 0 && !_subprocessors[0]._function)
+        if (_subprocs.size() > 0 && !_subprocs[0]._function)
         {
-            _subprocessors[0]._function = [this](std::vector<Signal> inputs) {
+            _subprocs[0]._function = [this](std::vector<Signal> inputs) {
                 _outputs.set_value(inputs);
                 return std::vector<Signal>{};
             };
         }
         // input
-        if (_subprocessors.size() > 1 && !_subprocessors[1]._function)
+        if (_subprocs.size() > 1 && !_subprocs[1]._function)
         {
-            _subprocessors[1]._function = [this](std::vector<Signal> inputs) {
+            _subprocs[1]._function = [this](std::vector<Signal> inputs) {
                 return _inputs;
             };
         }
     }
 
-    inline auto from(processor & other, std::size_t in, std::size_t out) -> void
+    inline auto from(process & other, std::size_t in, std::size_t out) -> void
     {
-        if (_subprocessors.size() > 1)
+        if (_subprocs.size() > 1)
         {
-            _subprocessors[1].from(other, in, out);
+            _subprocs[1].from(other, in, out);
             return;
         }
-        if (other._subprocessors.size() > 0)
+        if (other._subprocs.size() > 0)
         {
-            from(other._subprocessors[0], in, out);
+            from(other._subprocs[0], in, out);
             return;
         }
         std::tie(other._senders[out], _receivers[in]) = stlab::channel<Signal>(stlab::high_executor);
@@ -74,16 +74,16 @@ struct processor
         }
     }
 
-    inline auto to(processor & other, std::size_t out, std::size_t in) -> void
+    inline auto to(process & other, std::size_t out, std::size_t in) -> void
     {
-        if (_subprocessors.size() > 0)
+        if (_subprocs.size() > 0)
         {
-            _subprocessors[0].to(other, out, in);
+            _subprocs[0].to(other, out, in);
             return;
         }
-        if (other._subprocessors.size() > 1)
+        if (other._subprocs.size() > 1)
         {
-            to(other._subprocessors[1], out, in);
+            to(other._subprocs[1], out, in);
             return;
         }
         std::tie(_senders[out], other._receivers[in]) = stlab::channel<Signal>(stlab::high_executor);
@@ -99,9 +99,9 @@ struct processor
 
     inline auto on_your_marks() -> void
     {
-        for (auto & subprocessor : _subprocessors)
+        for (auto & subproc : _subprocs)
         {
-            subprocessor.on_your_marks();
+            subproc.on_your_marks();
         }
         std::vector<std::size_t> connected_ins{_set_receivers.cbegin(), _set_receivers.cend()};
         switch (connected_ins.size())
@@ -110,7 +110,7 @@ struct processor
                 break;
             case 1:
                 _zip = _receivers[connected_ins[0]] | [this](Signal connected_input) {
-                        process(std::tuple<Signal>{connected_input});
+                        proc(std::tuple<Signal>{connected_input});
                     };
                 break;
             case 2:
@@ -118,7 +118,7 @@ struct processor
                     _receivers[connected_ins[0]],
                     _receivers[connected_ins[1]]) |
                     [this](std::tuple<Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 3:
@@ -127,7 +127,7 @@ struct processor
                     _receivers[connected_ins[1]],
                     _receivers[connected_ins[2]]) |
                     [this](std::tuple<Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 4:
@@ -137,7 +137,7 @@ struct processor
                     _receivers[connected_ins[2]],
                     _receivers[connected_ins[3]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 5:
@@ -148,7 +148,7 @@ struct processor
                     _receivers[connected_ins[3]],
                     _receivers[connected_ins[4]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 6:
@@ -160,7 +160,7 @@ struct processor
                     _receivers[connected_ins[4]],
                     _receivers[connected_ins[5]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 7:
@@ -173,7 +173,7 @@ struct processor
                     _receivers[connected_ins[5]],
                     _receivers[connected_ins[6]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 8:
@@ -187,7 +187,7 @@ struct processor
                     _receivers[connected_ins[6]],
                     _receivers[connected_ins[7]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 9:
@@ -202,7 +202,7 @@ struct processor
                     _receivers[connected_ins[7]],
                     _receivers[connected_ins[8]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             case 10:
@@ -218,7 +218,7 @@ struct processor
                     _receivers[connected_ins[8]],
                     _receivers[connected_ins[9]]) |
                     [this](std::tuple<Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal> connected_inputs) {
-                        process(connected_inputs);
+                        proc(connected_inputs);
                     };
                 break;
             default:
@@ -228,9 +228,9 @@ struct processor
 
     inline auto get_set() -> void
     {
-        for (auto & subprocessor : _subprocessors)
+        for (auto & subproc : _subprocs)
         {
-            subprocessor.get_set();
+            subproc.get_set();
         }
         for (auto in : _set_receivers)
         {
@@ -240,9 +240,9 @@ struct processor
 
     inline auto go() const -> void
     {
-        for (auto & subprocessor : _subprocessors)
+        for (auto & subproc : _subprocs)
         {
-            subprocessor.go();
+            subproc.go();
         }
         if (_function && _set_receivers.empty())
         {
@@ -261,7 +261,7 @@ struct processor
 
 private:
     template <typename Tuple>
-    inline auto process(Tuple connected_inputs) -> void
+    inline auto proc(Tuple connected_inputs) -> void
     {
         std::apply([this](auto && ... args) {
                 auto it = _set_receivers.cbegin();
@@ -286,7 +286,7 @@ private:
     std::set<std::size_t> _set_senders;
     std::vector<Signal> _inputs;
     std::any _zip;
-    std::vector<processor> _subprocessors;
+    std::vector<process> _subprocs;
     std::promise<std::vector<Signal>> _outputs;
 };
 }
