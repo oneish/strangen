@@ -1,3 +1,4 @@
+#include "../../sauce/strange/strange.h"
 #include "../../sauce/strange/implementation/graph/strange__implementation__graph.h"
 #include <iostream>
 #include <chrono>
