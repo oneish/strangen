@@ -203,7 +203,7 @@ int main()
         // no sleep
     }
     {
-        // auto proc = strange::processor<std::string>::_make<strange::implementation::example_processor<std::string>>();
+        auto proc = strange::processor<std::string>::_make<strange::implementation::example_processor<std::string>>();
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();

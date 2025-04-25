@@ -3445,15 +3445,15 @@ protected:
             return stuff::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
 
-        virtual auto ins(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
 
-        virtual auto closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
+        virtual auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
     };
 
 public:
@@ -3528,15 +3528,15 @@ public:
 
     inline auto unpack(strange::bag const & src) -> void;
 
-    inline auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
 
-    inline auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
 
-    inline auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
 
-    inline auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
 
-    inline auto closure(std::unique_ptr<Signal> overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+    inline auto closure(std::unique_ptr<Signal> && overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 };
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -3650,15 +3650,15 @@ private:
 
         inline auto unpack(strange::bag const & src) -> void final;
 
-        inline auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
 
-        inline auto ins(std::unique_ptr<Signal> overload) -> std::size_t & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & final;
 
-        inline auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
 
-        inline auto outs(std::unique_ptr<Signal> overload) -> std::size_t & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & final;
 
-        inline auto closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
+        inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
         _Thing _thing;
     };
@@ -3798,13 +3798,13 @@ protected:
             return stuff::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
 
-        virtual auto ins(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> overload) -> std::size_t & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
 
         virtual auto add_processor(strange::processor<Signal> proc) -> std::size_t = 0;
 
@@ -3818,7 +3818,7 @@ protected:
 
         virtual auto remove_subgraph(std::size_t id) -> bool = 0;
 
-        virtual auto convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal> = 0;
+        virtual auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal> = 0;
     };
 
 public:
@@ -3893,13 +3893,13 @@ public:
 
     inline auto unpack(strange::bag const & src) -> void;
 
-    inline auto ins(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
 
-    inline auto ins(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
 
-    inline auto outs(std::unique_ptr<Signal> overload = nullptr) const -> std::size_t const &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
 
-    inline auto outs(std::unique_ptr<Signal> overload = nullptr) -> std::size_t &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
 
     inline auto add_processor(strange::processor<Signal> proc) -> std::size_t;
 
@@ -3913,7 +3913,7 @@ public:
 
     inline auto remove_subgraph(std::size_t id) -> bool;
 
-    inline auto convert_to_processor(std::unique_ptr<Signal> overload = nullptr) const -> strange::processor<Signal>;
+    inline auto convert_to_processor(std::unique_ptr<Signal> && overload = nullptr) const -> strange::processor<Signal>;
 };
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -4027,13 +4027,13 @@ private:
 
         inline auto unpack(strange::bag const & src) -> void final;
 
-        inline auto ins(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
 
-        inline auto ins(std::unique_ptr<Signal> overload) -> std::size_t & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & final;
 
-        inline auto outs(std::unique_ptr<Signal> overload) const -> std::size_t const & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
 
-        inline auto outs(std::unique_ptr<Signal> overload) -> std::size_t & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & final;
 
         inline auto add_processor(strange::processor<Signal> proc) -> std::size_t final;
 
@@ -4047,7 +4047,7 @@ private:
 
         inline auto remove_subgraph(std::size_t id) -> bool final;
 
-        inline auto convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal> final;
+        inline auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal> final;
 
         _Thing _thing;
     };
@@ -12489,36 +12489,36 @@ inline auto processor<Signal>::unpack(strange::bag const & src) -> void
 }
 
 template<typename Signal>
-inline auto processor<Signal>::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto processor<Signal>::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->ins(overload);
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto processor<Signal>::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+inline auto processor<Signal>::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->ins(overload);
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto processor<Signal>::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto processor<Signal>::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->outs(overload);
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->outs(std::move(overload));
 }
 
 template<typename Signal>
-inline auto processor<Signal>::outs(std::unique_ptr<Signal> overload) -> std::size_t &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->outs(overload);
-}
-
-template<typename Signal>
-inline auto processor<Signal>::closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+inline auto processor<Signal>::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->closure(overload);
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->outs(std::move(overload));
+}
+
+template<typename Signal>
+inline auto processor<Signal>::closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->closure(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -12534,33 +12534,33 @@ inline auto processor_<Signal, _Thing, _Copy>::_instance::unpack(strange::bag co
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return _thing.ins(overload);
+    return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
-    return _thing.ins(overload);
+    return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return _thing.outs(overload);
+    return _thing.outs(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) -> std::size_t &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
-    return _thing.outs(overload);
+    return _thing.outs(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::closure(std::unique_ptr<Signal> overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+inline auto processor_<Signal, _Thing, _Copy>::_instance::closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
-    return _thing.closure(overload);
+    return _thing.closure(std::move(overload));
 }
 
 template<typename Signal>
@@ -12577,29 +12577,29 @@ inline auto graph<Signal>::unpack(strange::bag const & src) -> void
 }
 
 template<typename Signal>
-inline auto graph<Signal>::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto graph<Signal>::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->ins(overload);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+inline auto graph<Signal>::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->ins(overload);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto graph<Signal>::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->outs(overload);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->outs(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::outs(std::unique_ptr<Signal> overload) -> std::size_t &
+inline auto graph<Signal>::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->outs(overload);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->outs(std::move(overload));
 }
 
 template<typename Signal>
@@ -12645,9 +12645,9 @@ inline auto graph<Signal>::remove_subgraph(std::size_t id) -> bool
 }
 
 template<typename Signal>
-inline auto graph<Signal>::convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal>
+inline auto graph<Signal>::convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal>
 {
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->convert_to_processor(overload);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->convert_to_processor(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -12663,27 +12663,27 @@ inline auto graph_<Signal, _Thing, _Copy>::_instance::unpack(strange::bag const 
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return _thing.ins(overload);
+    return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> overload) -> std::size_t &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
-    return _thing.ins(overload);
+    return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) const -> std::size_t const &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
 {
-    return _thing.outs(overload);
+    return _thing.outs(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> overload) -> std::size_t &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
 {
-    return _thing.outs(overload);
+    return _thing.outs(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -12723,9 +12723,9 @@ inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_subgraph(std::size_
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::convert_to_processor(std::unique_ptr<Signal> overload) const -> strange::processor<Signal>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal>
 {
-    return _thing.convert_to_processor(overload);
+    return _thing.convert_to_processor(std::move(overload));
 }
 
 inline auto parameter::pack(strange::bag & dest) const -> void
