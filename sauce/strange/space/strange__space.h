@@ -55,6 +55,24 @@ struct processor;
 template<typename Signal, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct processor_;
 
+struct connection;
+
+}
+
+namespace strange
+{
+namespace implementation
+{
+struct connection;
+}
+}
+
+namespace strange
+{
+
+template<typename _Thing = strange::implementation::connection, bool _Copy = std::is_copy_constructible_v<_Thing>>
+struct connection_;
+
 template<typename Signal>
 struct graph;
 
@@ -303,6 +321,33 @@ struct reflection<strange::processor_<Signal, _Thing, _Copy>>
     static inline auto name() -> std::string
     {
         return "strange::processor_<" + reflection<Signal>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::connection>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::connection";
+    }
+};
+
+template<typename _Thing, bool _Copy>
+struct reflection<strange::connection_<_Thing, _Copy>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::connection_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+    }
+};
+
+template<>
+struct reflection<strange::implementation::connection>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::implementation::connection";
     }
 };
 
@@ -3445,13 +3490,13 @@ protected:
             return stuff::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const & = 0;
 
-        virtual auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) -> uint64_t & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) -> uint64_t & = 0;
 
         virtual auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
     };
@@ -3528,13 +3573,13 @@ public:
 
     inline auto unpack(strange::bag const & src) -> void;
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
     inline auto closure(std::unique_ptr<Signal> && overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 };
@@ -3650,13 +3695,13 @@ private:
 
         inline auto unpack(strange::bag const & src) -> void final;
 
-        inline auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const & final;
 
-        inline auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) -> uint64_t & final;
 
-        inline auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const & final;
 
-        inline auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) -> uint64_t & final;
 
         inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
@@ -3749,6 +3794,420 @@ public:
     }();
 };
 
+struct connection : stuff
+{
+    inline connection() = default;
+
+    inline connection(connection const & other)
+    :strange::_common{other}
+    ,stuff{}
+    {
+    }
+
+    inline connection(connection && other)
+    :strange::_common{std::move(other)}
+    ,stuff{}
+    {
+    }
+
+    inline auto operator=(connection const & other) -> connection &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(connection && other) -> connection &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline connection(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,stuff{}
+    {
+    }
+
+    explicit inline connection(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,stuff{}
+    {
+    }
+
+protected:
+    struct _derived : stuff::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename connection::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return stuff::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto from_id() const -> uint64_t const & = 0;
+
+        virtual auto from_id() -> uint64_t & = 0;
+
+        virtual auto from_out() const -> uint64_t const & = 0;
+
+        virtual auto from_out() -> uint64_t & = 0;
+
+        virtual auto to_id() const -> uint64_t const & = 0;
+
+        virtual auto to_id() -> uint64_t & = 0;
+
+        virtual auto to_in() const -> uint64_t const & = 0;
+
+        virtual auto to_in() -> uint64_t & = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> connection
+    {
+        try
+        {
+            return connection{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return connection{};
+        }
+    }
+
+    inline auto _reproduce() const -> connection
+    {
+        try
+        {
+            return connection{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return connection{};
+        }
+    }
+
+    inline auto _weak() const -> connection
+    {
+        return connection{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> connection
+    {
+        return connection{strange::_common::_shared->_strong()};
+    }
+
+    template<typename _Thing = strange::implementation::connection, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
+    static inline auto _make(_Args && ... _args) -> connection
+    {
+        return connection{connection::_derived::_static_shared_to_base(std::make_shared<typename connection_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _manufacture(std::string const & name) -> connection
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return connection{};
+        }
+        return connection{it->second()};
+    }
+
+    using _Abstraction_ = connection;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(stuff::_cats_.cbegin(), stuff::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto pack(strange::bag & dest) const -> void;
+
+    inline auto unpack(strange::bag const & src) -> void;
+
+    inline auto from_id() const -> uint64_t const &;
+
+    inline auto from_id() -> uint64_t &;
+
+    inline auto from_out() const -> uint64_t const &;
+
+    inline auto from_out() -> uint64_t &;
+
+    inline auto to_id() const -> uint64_t const &;
+
+    inline auto to_id() -> uint64_t &;
+
+    inline auto to_in() const -> uint64_t const &;
+
+    inline auto to_in() -> uint64_t &;
+};
+
+template<typename _Thing, bool _Copy>
+struct connection_ : connection
+{
+    inline connection_() = default;
+
+    inline connection_(connection_ const & other)
+    :strange::_common{other}
+    ,connection{}
+    {
+    }
+
+    inline connection_(connection_ && other)
+    :strange::_common{std::move(other)}
+    ,connection{}
+    {
+    }
+
+    inline auto operator=(connection_ const & other) -> connection_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(connection_ && other) -> connection_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline connection_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,connection{}
+    {
+    }
+
+    explicit inline connection_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,connection{}
+    {
+    }
+
+private:
+    friend struct connection;
+
+    struct _instance final : connection::_derived
+    {
+        template<typename ... _Args>
+        inline _instance(_Args && ... _args)
+        :connection_::_derived{}
+        ,_thing{std::forward<_Args>(_args) ...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return connection_::_derived::_static_shared_to_base(std::make_shared<connection_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_common::_no_copy{};
+            }
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return connection_::_derived::_static_shared_to_base(std::make_shared<connection_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return connection::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return connection::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return connection_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return connection_::_name_;
+        }
+
+        inline auto pack(strange::bag & dest) const -> void final;
+
+        inline auto unpack(strange::bag const & src) -> void final;
+
+        inline auto from_id() const -> uint64_t const & final;
+
+        inline auto from_id() -> uint64_t & final;
+
+        inline auto from_out() const -> uint64_t const & final;
+
+        inline auto from_out() -> uint64_t & final;
+
+        inline auto to_id() const -> uint64_t const & final;
+
+        inline auto to_id() -> uint64_t & final;
+
+        inline auto to_in() const -> uint64_t const & final;
+
+        inline auto to_in() -> uint64_t & final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename ... _Args>
+    static inline auto _make_(_Args && ... _args) -> connection_
+    {
+        return connection_{connection_::_derived::_static_shared_to_base(std::make_shared<connection_::_instance>(std::forward<_Args>(_args) ...))};
+    }
+
+    static inline auto _manufacture_(std::string const & name) -> connection_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return connection_{};
+        }
+        return connection_{it->second()};
+    }
+
+    inline auto _valid_() const -> bool
+    {
+        return std::dynamic_pointer_cast<connection_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> connection_
+    {
+        try
+        {
+            return connection_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return connection_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> connection_
+    {
+        try
+        {
+            return connection_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return connection_{};
+        }
+    }
+
+    inline auto _weak_() const -> connection_
+    {
+        return connection_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> connection_
+    {
+        return connection_{strange::_common::_shared->_strong()};
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<connection_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<connection_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = connection_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return connection_::_derived::_static_shared_to_base(std::make_shared<connection_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
+}
+
+namespace strange
+{
+namespace implementation
+{
+struct connection
+{
+    uint64_t from_id_ {};
+    inline auto from_id() const -> uint64_t const & { return from_id_; };
+    inline auto from_id() -> uint64_t & { return from_id_; };
+    uint64_t from_out_ {};
+    inline auto from_out() const -> uint64_t const & { return from_out_; };
+    inline auto from_out() -> uint64_t & { return from_out_; };
+    uint64_t to_id_ {};
+    inline auto to_id() const -> uint64_t const & { return to_id_; };
+    inline auto to_id() -> uint64_t & { return to_id_; };
+    uint64_t to_in_ {};
+    inline auto to_in() const -> uint64_t const & { return to_in_; };
+    inline auto to_in() -> uint64_t & { return to_in_; };
+
+    inline auto pack(strange::bag & dest) const -> void
+    {
+        dest.from_object();
+        dest.insert_object("from_id", dest.make_uint64(from_id()));
+        dest.insert_object("from_out", dest.make_uint64(from_out()));
+        dest.insert_object("to_id", dest.make_uint64(to_id()));
+        dest.insert_object("to_in", dest.make_uint64(to_in()));
+    }
+
+    inline auto unpack(strange::bag const & src) -> void
+    {
+        src.get_object("from_id").as_uint64(from_id());
+        src.get_object("from_out").as_uint64(from_out());
+        src.get_object("to_id").as_uint64(to_id());
+        src.get_object("to_in").as_uint64(to_in());
+    }
+};
+}
+}
+
+namespace strange
+{
+
 template<typename Signal>
 struct graph : stuff
 {
@@ -3798,25 +4257,25 @@ protected:
             return stuff::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const & = 0;
 
-        virtual auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
+        virtual auto ins(std::unique_ptr<Signal> && overload) -> uint64_t & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const & = 0;
 
-        virtual auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & = 0;
+        virtual auto outs(std::unique_ptr<Signal> && overload) -> uint64_t & = 0;
 
-        virtual auto add_processor(strange::processor<Signal> proc) -> std::size_t = 0;
+        virtual auto add_processor(strange::processor<Signal> proc) -> uint64_t = 0;
 
-        virtual auto remove_processor(std::size_t id) -> bool = 0;
+        virtual auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload) -> bool = 0;
 
-        virtual auto add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t = 0;
+        virtual auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t = 0;
 
-        virtual auto remove_connection(std::size_t id) -> bool = 0;
+        virtual auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool = 0;
 
-        virtual auto add_subgraph(graph<Signal> subgraph) -> std::size_t = 0;
+        virtual auto add_subgraph(graph<Signal> subgraph) -> uint64_t = 0;
 
-        virtual auto remove_subgraph(std::size_t id) -> bool = 0;
+        virtual auto remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload) -> bool = 0;
 
         virtual auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal> = 0;
     };
@@ -3893,25 +4352,25 @@ public:
 
     inline auto unpack(strange::bag const & src) -> void;
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
-    inline auto add_processor(strange::processor<Signal> proc) -> std::size_t;
+    inline auto add_processor(strange::processor<Signal> proc) -> uint64_t;
 
-    inline auto remove_processor(std::size_t id) -> bool;
+    inline auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
-    inline auto add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t;
+    inline auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload = nullptr) -> uint64_t;
 
-    inline auto remove_connection(std::size_t id) -> bool;
+    inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
-    inline auto add_subgraph(graph<Signal> subgraph) -> std::size_t;
+    inline auto add_subgraph(graph<Signal> subgraph) -> uint64_t;
 
-    inline auto remove_subgraph(std::size_t id) -> bool;
+    inline auto remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
     inline auto convert_to_processor(std::unique_ptr<Signal> && overload = nullptr) const -> strange::processor<Signal>;
 };
@@ -4027,25 +4486,25 @@ private:
 
         inline auto unpack(strange::bag const & src) -> void final;
 
-        inline auto ins(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const & final;
 
-        inline auto ins(std::unique_ptr<Signal> && overload) -> std::size_t & final;
+        inline auto ins(std::unique_ptr<Signal> && overload) -> uint64_t & final;
 
-        inline auto outs(std::unique_ptr<Signal> && overload) const -> std::size_t const & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const & final;
 
-        inline auto outs(std::unique_ptr<Signal> && overload) -> std::size_t & final;
+        inline auto outs(std::unique_ptr<Signal> && overload) -> uint64_t & final;
 
-        inline auto add_processor(strange::processor<Signal> proc) -> std::size_t final;
+        inline auto add_processor(strange::processor<Signal> proc) -> uint64_t final;
 
-        inline auto remove_processor(std::size_t id) -> bool final;
+        inline auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload) -> bool final;
 
-        inline auto add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t final;
+        inline auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t final;
 
-        inline auto remove_connection(std::size_t id) -> bool final;
+        inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool final;
 
-        inline auto add_subgraph(graph<Signal> subgraph) -> std::size_t final;
+        inline auto add_subgraph(graph<Signal> subgraph) -> uint64_t final;
 
-        inline auto remove_subgraph(std::size_t id) -> bool final;
+        inline auto remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload) -> bool final;
 
         inline auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal> final;
 
@@ -12489,26 +12948,26 @@ inline auto processor<Signal>::unpack(strange::bag const & src) -> void
 }
 
 template<typename Signal>
-inline auto processor<Signal>::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto processor<Signal>::ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto processor<Signal>::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto processor<Signal>::ins(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto processor<Signal>::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto processor<Signal>::outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->outs(std::move(overload));
 }
 
 template<typename Signal>
-inline auto processor<Signal>::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto processor<Signal>::outs(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->outs(std::move(overload));
@@ -12534,25 +12993,25 @@ inline auto processor_<Signal, _Thing, _Copy>::_instance::unpack(strange::bag co
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return _thing.outs(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto processor_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     return _thing.outs(std::move(overload));
 }
@@ -12561,6 +13020,121 @@ template<typename Signal, typename _Thing, bool _Copy>
 inline auto processor_<Signal, _Thing, _Copy>::_instance::closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return _thing.closure(std::move(overload));
+}
+
+inline auto connection::pack(strange::bag & dest) const -> void
+{
+    std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
+}
+
+inline auto connection::unpack(strange::bag const & src) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
+}
+
+inline auto connection::from_id() const -> uint64_t const &
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->from_id();
+}
+
+inline auto connection::from_id() -> uint64_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename connection::_derived>(strange::_common::_shared)->from_id();
+}
+
+inline auto connection::from_out() const -> uint64_t const &
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->from_out();
+}
+
+inline auto connection::from_out() -> uint64_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename connection::_derived>(strange::_common::_shared)->from_out();
+}
+
+inline auto connection::to_id() const -> uint64_t const &
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->to_id();
+}
+
+inline auto connection::to_id() -> uint64_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename connection::_derived>(strange::_common::_shared)->to_id();
+}
+
+inline auto connection::to_in() const -> uint64_t const &
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->to_in();
+}
+
+inline auto connection::to_in() -> uint64_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename connection::_derived>(strange::_common::_shared)->to_in();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
+{
+    _thing.pack(dest);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -> void
+{
+    _thing.unpack(src);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::from_id() const -> uint64_t const &
+{
+    return _thing.from_id();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::from_id() -> uint64_t &
+{
+    return _thing.from_id();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::from_out() const -> uint64_t const &
+{
+    return _thing.from_out();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::from_out() -> uint64_t &
+{
+    return _thing.from_out();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::to_id() const -> uint64_t const &
+{
+    return _thing.to_id();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::to_id() -> uint64_t &
+{
+    return _thing.to_id();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::to_in() const -> uint64_t const &
+{
+    return _thing.to_in();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::to_in() -> uint64_t &
+{
+    return _thing.to_in();
 }
 
 template<typename Signal>
@@ -12577,71 +13151,71 @@ inline auto graph<Signal>::unpack(strange::bag const & src) -> void
 }
 
 template<typename Signal>
-inline auto graph<Signal>::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto graph<Signal>::ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto graph<Signal>::ins(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->ins(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto graph<Signal>::outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->outs(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto graph<Signal>::outs(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->outs(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::add_processor(strange::processor<Signal> proc) -> std::size_t
+inline auto graph<Signal>::add_processor(strange::processor<Signal> proc) -> uint64_t
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->add_processor(proc);
 }
 
 template<typename Signal>
-inline auto graph<Signal>::remove_processor(std::size_t id) -> bool
+inline auto graph<Signal>::remove_processor(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_processor(id);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_processor(id, std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t
+inline auto graph<Signal>::add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->add_connection(from_id, from_out, to_id, to_in);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->add_connection(conn, std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::remove_connection(std::size_t id) -> bool
+inline auto graph<Signal>::remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_connection(id);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_connection(id, std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::add_subgraph(graph<Signal> subgraph) -> std::size_t
+inline auto graph<Signal>::add_subgraph(graph<Signal> subgraph) -> uint64_t
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->add_subgraph(subgraph);
 }
 
 template<typename Signal>
-inline auto graph<Signal>::remove_subgraph(std::size_t id) -> bool
+inline auto graph<Signal>::remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_subgraph(id);
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->remove_subgraph(id, std::move(overload));
 }
 
 template<typename Signal>
@@ -12663,63 +13237,63 @@ inline auto graph_<Signal, _Thing, _Copy>::_instance::unpack(strange::bag const 
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::ins(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     return _thing.ins(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) const -> std::size_t const &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
 {
     return _thing.outs(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) -> std::size_t &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::outs(std::unique_ptr<Signal> && overload) -> uint64_t &
 {
     return _thing.outs(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::add_processor(strange::processor<Signal> proc) -> std::size_t
+inline auto graph_<Signal, _Thing, _Copy>::_instance::add_processor(strange::processor<Signal> proc) -> uint64_t
 {
     return _thing.add_processor(proc);
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_processor(std::size_t id) -> bool
+inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_processor(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
 {
-    return _thing.remove_processor(id);
+    return _thing.remove_processor(id, std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::add_connection(std::size_t from_id, std::size_t from_out, std::size_t to_id, std::size_t to_in) -> std::size_t
+inline auto graph_<Signal, _Thing, _Copy>::_instance::add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t
 {
-    return _thing.add_connection(from_id, from_out, to_id, to_in);
+    return _thing.add_connection(conn, std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_connection(std::size_t id) -> bool
+inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
 {
-    return _thing.remove_connection(id);
+    return _thing.remove_connection(id, std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::add_subgraph(graph<Signal> subgraph) -> std::size_t
+inline auto graph_<Signal, _Thing, _Copy>::_instance::add_subgraph(graph<Signal> subgraph) -> uint64_t
 {
     return _thing.add_subgraph(subgraph);
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_subgraph(std::size_t id) -> bool
+inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
 {
-    return _thing.remove_subgraph(id);
+    return _thing.remove_subgraph(id, std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>

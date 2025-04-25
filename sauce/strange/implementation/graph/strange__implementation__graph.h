@@ -21,8 +21,8 @@ template<typename Signal>
 struct process
 {
     inline process(
-        std::size_t ins,
-        std::size_t outs,
+        uint64_t ins,
+        uint64_t outs,
         std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
         :_receivers(ins)
         ,_senders(outs)
@@ -51,7 +51,7 @@ struct process
         }
     }
 
-    inline auto from(process & other, std::size_t in, std::size_t out) -> void
+    inline auto from(process & other, uint64_t in, uint64_t out) -> void
     {
         if (_subprocs.size() > 1)
         {
@@ -74,7 +74,7 @@ struct process
         }
     }
 
-    inline auto to(process & other, std::size_t out, std::size_t in) -> void
+    inline auto to(process & other, uint64_t out, uint64_t in) -> void
     {
         if (_subprocs.size() > 0)
         {
@@ -103,7 +103,7 @@ struct process
         {
             subproc.on_your_marks();
         }
-        std::vector<std::size_t> connected_ins{_set_receivers.cbegin(), _set_receivers.cend()};
+        std::vector<uint64_t> connected_ins{_set_receivers.cbegin(), _set_receivers.cend()};
         switch (connected_ins.size())
         {
             case 0:
@@ -282,8 +282,8 @@ private:
     std::vector<stlab::receiver<Signal>> _receivers;
     std::vector<stlab::sender<Signal>> _senders;
     std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
-    std::set<std::size_t> _set_receivers;
-    std::set<std::size_t> _set_senders;
+    std::set<uint64_t> _set_receivers;
+    std::set<uint64_t> _set_senders;
     std::vector<Signal> _inputs;
     std::any _zip;
     std::vector<process> _subprocs;
@@ -304,27 +304,27 @@ struct example_processor
     inline auto unpack(strange::bag const & src) -> void
     {}
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &
+    inline auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
     {
         return _ins;
     }
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &
+    inline auto ins(std::unique_ptr<Signal> && overload) -> uint64_t &
     {
         return _ins;
     }
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &
+    inline auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
     {
         return _outs;
     }
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &
+    inline auto outs(std::unique_ptr<Signal> && overload) -> uint64_t &
     {
         return _outs;
     }
 
-    inline auto closure(std::unique_ptr<Signal> && overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         return [this](std::vector<Signal> inputs) {
             return std::vector<Signal>(_outs);
@@ -332,8 +332,8 @@ struct example_processor
     }
 
 private:
-    std::size_t _ins;
-    std::size_t _outs;
+    uint64_t _ins;
+    uint64_t _outs;
 };
 
 template<typename Signal>
@@ -350,42 +350,84 @@ struct graph
     inline auto unpack(strange::bag const & src) -> void
     {}
 
-    auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &
+    inline auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
     {
         return _ins;
     }
 
-    auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &
+    inline auto ins(std::unique_ptr<Signal> && overload) -> uint64_t &
     {
         return _ins;
     }
 
-    auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &
+    inline auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
     {
         return _outs;
     }
 
-    auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &
+    inline auto outs(std::unique_ptr<Signal> && overload) -> uint64_t &
     {
         return _outs;
     }
 
-    auto add_processor(strange::processor<Signal> proc) -> std::size_t;
-    auto remove_processor(std::size_t id) -> bool;
+    inline auto add_processor(strange::processor<Signal> proc) -> uint64_t
+    {
+        auto id = _processors.size();
+        _processors.push_back(proc);
+        return id;
+    }
 
-    auto add_connection(std::size_t from_id, std::size_t from_out,
-        std::size_t to_id, std::size_t to_in) -> std::size_t;
-    auto remove_connection(std::size_t id) -> bool;
+    inline auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
+    {
+        if (id < _processors.size() && _processors[id]._something())
+        {
+            _processors[id] = strange::processor<Signal>{};
+            return true;
+        }
+        return false;
+    }
 
-    auto add_subgraph(graph<Signal> subgraph) -> std::size_t;
-    auto remove_subgraph(std::size_t id) -> bool;
+    inline auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t
+    {
+        auto id = _connections.size();
+        _connections.push_back(conn);
+        return id;
+    }
 
-    auto convert_to_processor(std::unique_ptr<Signal> && overload = nullptr) const -> strange::processor<Signal>;
+    inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
+    {
+        if (id < _connections.size() && _connections[id]._something())
+        {
+            _connections[id] = strange::processor<Signal>{};
+            return true;
+        }
+        return false;
+    }
+
+    inline auto add_subgraph(graph<Signal> subgraph) -> uint64_t
+    {
+        auto id = _subgraphs.size();
+        _subgraphs.push_back(subgraph);
+        return id;
+    }
+
+    inline auto remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
+    {
+        if (id < _subgraphs.size() && _subgraphs[id]._something())
+        {
+            _subgraphs[id] = strange::connection{};
+            return true;
+        }
+        return false;
+    }
+
+    auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal>;
 
 private:
-    std::size_t _ins;
-    std::size_t _outs;
+    uint64_t _ins;
+    uint64_t _outs;
     std::vector<strange::processor<Signal>> _processors;
+    std::vector<strange::connection> _connections;
     std::vector<strange::graph<Signal>> _subgraphs;
 };
 }

@@ -157,34 +157,42 @@ namespace strange
     template<typename Signal>
     struct processor : stuff
     {
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+        auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
+        auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+        auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
+        auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
         auto closure(std::unique_ptr<Signal> && overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+    };
+
+    struct [[strange::thing("strange::implementation::connection")]]
+    connection : stuff
+    {
+        uint64_t from_id {};
+        uint64_t from_out {};
+        uint64_t to_id {};
+        uint64_t to_in {};
     };
 
     template<typename Signal>
     struct [[strange::thing("strange::implementation::graph<Signal>")]]
     graph : stuff
     {
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+        auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
+        auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> std::size_t const &;
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) -> std::size_t &;
+        auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
+        auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
 
-        auto add_processor(strange::processor<Signal> proc) -> std::size_t;
-        auto remove_processor(std::size_t id) -> bool;
+        auto add_processor(strange::processor<Signal> proc) -> uint64_t;
+        auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
-        auto add_connection(std::size_t from_id, std::size_t from_out,
-            std::size_t to_id, std::size_t to_in) -> std::size_t;
-        auto remove_connection(std::size_t id) -> bool;
+        auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload = nullptr) -> uint64_t;
+        auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
-        auto add_subgraph(graph<Signal> subgraph) -> std::size_t;
-        auto remove_subgraph(std::size_t id) -> bool;
+        auto add_subgraph(graph<Signal> subgraph) -> uint64_t;
+        auto remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
         auto convert_to_processor(std::unique_ptr<Signal> && overload = nullptr) const -> strange::processor<Signal>;
     };
