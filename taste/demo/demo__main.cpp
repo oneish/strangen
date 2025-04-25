@@ -7,7 +7,7 @@
 
 struct banana
 {
-    auto eat() -> void
+    auto eat(int xxx) -> void
     {
         std::cout << "banana.eat()\n";
     }
@@ -62,7 +62,7 @@ struct no_banana
 
     no_banana(no_banana const &) = delete;
 
-    auto eat() -> void
+    auto eat(int xxx) -> void
     {
         std::cout << "banana.eat()\n";
     }
@@ -111,7 +111,7 @@ private:
 
 struct bunch_of_bananas : std::vector<demo::fruit>
 {
-    auto eat() -> void
+    auto eat(int xxx) -> void
     {
         std::cout << "bunch_of_bananas.eat()\n";
     }
@@ -205,7 +205,7 @@ int main()
     fruit_1.peeled();
     fruit_1.eat();
     auto closure_1 = fruit_1.eat_closure_();
-    closure_1();
+    closure_1(0);
     auto closure_2 = fruit_2.ripe_closure_();
     closure_2();
 

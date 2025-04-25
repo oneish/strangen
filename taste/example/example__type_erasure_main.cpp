@@ -174,11 +174,11 @@ int main()
     auto w1 = example::widget::_make<implement>();
     w1.inc();
     auto w2 = ++w1;
-    w1.display();
-    w2.display();
+    w1.display(example::button());
+    w2.display(example::button());
     w2.inc();
-    w1.display();
-    w2.display();
+    w1.display(example::button());
+    w2.display(example::button());
 
     auto b1 = example::button::_make<implement>()--;
     if (b1._something())
@@ -229,18 +229,18 @@ int main()
 
     auto wn1 = example::widget_number::_make<implement>();
     wn1.inc();
-    wn1.display();
+    wn1.display(example::button());
 
     example::number wn2 = wn1;
     wn2.inc();
 
     example::widget wn3 = wn1;
     wn3.inc();
-    wn3.display();
+    wn3.display(example::button());
 
-    wn1.display();
+    wn1.display(example::button());
     increment(wn1);
-    wn1.display();
+    wn1.display(example::button());
 
     increment(wn2);
 

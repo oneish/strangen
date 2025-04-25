@@ -6,7 +6,7 @@ namespace demo
     struct food : strange::any
     {
         [[strange::closure("eat_closure_")]]
-        auto eat() -> void;
+        auto eat(int xxx = 0) -> void;
     };
 
     // inheritance

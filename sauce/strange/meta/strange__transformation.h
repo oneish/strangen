@@ -1013,7 +1013,7 @@ namespace )#" << _space.name() << R"#(
                 if (!definition)
                 {
                     _out << R"#(    inline auto )#" << operation.name();
-                    _operation_parameters(operation, true, false);
+                    _operation_parameters(operation, true, true);
                     if (operation.constness())
                     {
                         _out << R"#( const -> )#";
@@ -1055,7 +1055,7 @@ namespace )#" << _space.name() << R"#(
                     }
                     _abstraction_parameters(derived, true, false, inner, false);
                     _out << R"#(inline auto )#" << last << R"#(::)#" << operation.name();
-                    _operation_parameters(operation, true, true);
+                    _operation_parameters(operation, true, false);
                     if (operation.constness())
                     {
                         _out << R"#( const -> )#";
@@ -1128,7 +1128,7 @@ namespace )#" << _space.name() << R"#(
                 }
                 else
                 {
-                    _operation_parameters(operation, true, definition && !inner);
+                    _operation_parameters(operation, true, (!definition) && (!pure) && !inner);
                 }
                 if (operation.constness())
                 {
@@ -1144,7 +1144,7 @@ namespace )#" << _space.name() << R"#(
                 if (fun)
                 {
                     _out << R"#(std::function<auto )#";
-                    _operation_parameters(operation, true, definition && !inner);
+                    _operation_parameters(operation, true, false);
                     _out << R"#( -> )#";
                 }
                 if (this_or_that)
@@ -1198,7 +1198,7 @@ namespace )#" << _space.name() << R"#(
                         if (fun)
                         {
                             _out << R"#(return [this])#";
-                            _operation_parameters(operation, true, definition && !inner);
+                            _operation_parameters(operation, true, false);
                             _out << R"#( -> )#";
                             if (this_or_that)
                             {

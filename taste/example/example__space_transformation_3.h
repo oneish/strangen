@@ -1805,7 +1805,7 @@ public:
     }();
 };
 
-inline auto widget::display(button b = button()) const -> void
+inline auto widget::display(button b) const -> void
 {
     std::dynamic_pointer_cast<typename widget::_derived const>(strange::_common::_shared)->display(b);
 }
@@ -1855,7 +1855,7 @@ inline auto widget_<_Thing, _Copy>::_instance::operator--(int i) -> void
     _thing.operator--(i);
 }
 
-inline auto button::display(button b = button()) const -> void
+inline auto button::display(button b) const -> void
 {
     std::dynamic_pointer_cast<typename widget::_derived const>(strange::_common::_shared)->display(b);
 }
@@ -1941,7 +1941,7 @@ inline auto number_<_Thing, _Copy>::_instance::dec() -> void
     _thing.dec();
 }
 
-inline auto widget_number::display(button b = button()) const -> void
+inline auto widget_number::display(button b) const -> void
 {
     std::dynamic_pointer_cast<typename widget::_derived const>(strange::_common::_shared)->display(b);
 }

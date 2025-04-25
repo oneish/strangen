@@ -5,7 +5,7 @@ namespace example
 {
 struct widget
 {
-    virtual auto display(button b = button()) const -> void = 0;
+    virtual auto display(button b) const -> void = 0;
     virtual auto inc() -> void = 0;
     virtual auto operator++() -> widget & = 0;
     virtual auto operator--(int) -> widget = 0;
@@ -101,7 +101,6 @@ auto definition() -> strange::space
                             ({
                                 .type_ = "button",
                                 .name_ = "b",
-                                .argument_ = "button()",
                             }),
                         }),
                         .constness_ = true,

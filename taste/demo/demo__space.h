@@ -183,9 +183,9 @@ protected:
             return strange::any::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto eat() -> void = 0;
+        virtual auto eat(int xxx) -> void = 0;
 
-        virtual auto eat_closure_() -> std::function<auto () -> void> = 0;
+        virtual auto eat_closure_() -> std::function<auto (int xxx) -> void> = 0;
     };
 
 public:
@@ -256,9 +256,9 @@ public:
         return cats;
     }();
 
-    inline auto eat() -> void;
+    inline auto eat(int xxx = 0) -> void;
 
-    inline auto eat_closure_() -> std::function<auto () -> void>;
+    inline auto eat_closure_() -> std::function<auto (int xxx) -> void>;
 };
 
 template<typename _Thing, bool _Copy>
@@ -368,9 +368,9 @@ private:
             return food_::_name_;
         }
 
-        inline auto eat() -> void final;
+        inline auto eat(int xxx) -> void final;
 
-        inline auto eat_closure_() -> std::function<auto () -> void> final;
+        inline auto eat_closure_() -> std::function<auto (int xxx) -> void> final;
 
         _Thing _thing;
     };
@@ -593,9 +593,9 @@ public:
         return cats;
     }();
 
-    inline auto eat() -> void;
+    inline auto eat(int xxx = 0) -> void;
 
-    inline auto eat_closure_() -> std::function<auto () -> void>;
+    inline auto eat_closure_() -> std::function<auto (int xxx) -> void>;
 
     inline auto pack(strange::bag & dest) const -> void;
 
@@ -719,9 +719,9 @@ private:
             return fruit_::_name_;
         }
 
-        inline auto eat() -> void final;
+        inline auto eat(int xxx) -> void final;
 
-        inline auto eat_closure_() -> std::function<auto () -> void> final;
+        inline auto eat_closure_() -> std::function<auto (int xxx) -> void> final;
 
         inline auto pack(strange::bag & dest) const -> void final;
 
@@ -1316,9 +1316,9 @@ public:
         return cats;
     }();
 
-    inline auto eat() -> void;
+    inline auto eat(int xxx = 0) -> void;
 
-    inline auto eat_closure_() -> std::function<auto () -> void>;
+    inline auto eat_closure_() -> std::function<auto (int xxx) -> void>;
 
     inline auto push_back(Item const & item) -> void;
 
@@ -1450,9 +1450,9 @@ private:
             return bunch_of_fruit_::_name_;
         }
 
-        inline auto eat() -> void final;
+        inline auto eat(int xxx) -> void final;
 
-        inline auto eat_closure_() -> std::function<auto () -> void> final;
+        inline auto eat_closure_() -> std::function<auto (int xxx) -> void> final;
 
         inline auto push_back(Item const & item) -> void final;
 
@@ -1880,40 +1880,40 @@ public:
     }();
 };
 
-inline auto food::eat() -> void
+inline auto food::eat(int xxx) -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
+    std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat(xxx);
 }
 
-inline auto food::eat_closure_() -> std::function<auto () -> void>
+inline auto food::eat_closure_() -> std::function<auto (int xxx) -> void>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat_closure_();
 }
 
 template<typename _Thing, bool _Copy>
-inline auto food_<_Thing, _Copy>::_instance::eat() -> void
+inline auto food_<_Thing, _Copy>::_instance::eat(int xxx) -> void
 {
-    _thing.eat();
+    _thing.eat(xxx);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto food_<_Thing, _Copy>::_instance::eat_closure_() -> std::function<auto () -> void>
+inline auto food_<_Thing, _Copy>::_instance::eat_closure_() -> std::function<auto (int xxx) -> void>
 {
-    return [this]() -> void
+    return [this](int xxx) -> void
     {
-        _thing.eat();
+        _thing.eat(xxx);
     };
 }
 
-inline auto fruit::eat() -> void
+inline auto fruit::eat(int xxx) -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
+    std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat(xxx);
 }
 
-inline auto fruit::eat_closure_() -> std::function<auto () -> void>
+inline auto fruit::eat_closure_() -> std::function<auto (int xxx) -> void>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat_closure_();
@@ -1958,17 +1958,17 @@ inline auto fruit::peeled() const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto fruit_<_Thing, _Copy>::_instance::eat() -> void
+inline auto fruit_<_Thing, _Copy>::_instance::eat(int xxx) -> void
 {
-    _thing.eat();
+    _thing.eat(xxx);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto fruit_<_Thing, _Copy>::_instance::eat_closure_() -> std::function<auto () -> void>
+inline auto fruit_<_Thing, _Copy>::_instance::eat_closure_() -> std::function<auto (int xxx) -> void>
 {
-    return [this]() -> void
+    return [this](int xxx) -> void
     {
-        _thing.eat();
+        _thing.eat(xxx);
     };
 }
 
@@ -2111,13 +2111,13 @@ inline auto bunch_<Item, _Thing, _Copy>::_instance::operator[](std::size_t pos) 
     return _thing.operator[](pos);
 }
 
-inline auto bunch_of_fruit::eat() -> void
+inline auto bunch_of_fruit::eat(int xxx) -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat();
+    std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat(xxx);
 }
 
-inline auto bunch_of_fruit::eat_closure_() -> std::function<auto () -> void>
+inline auto bunch_of_fruit::eat_closure_() -> std::function<auto (int xxx) -> void>
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename food::_derived>(strange::_common::_shared)->eat_closure_();
@@ -2185,17 +2185,17 @@ inline auto bunch_of_fruit::picked() const -> bool
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::eat() -> void
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::eat(int xxx) -> void
 {
-    _thing.eat();
+    _thing.eat(xxx);
 }
 
 template<typename _Thing, bool _Copy>
-inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::eat_closure_() -> std::function<auto () -> void>
+inline auto bunch_of_fruit_<_Thing, _Copy>::_instance::eat_closure_() -> std::function<auto (int xxx) -> void>
 {
-    return [this]() -> void
+    return [this](int xxx) -> void
     {
-        _thing.eat();
+        _thing.eat(xxx);
     };
 }
 
