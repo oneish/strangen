@@ -476,30 +476,11 @@ struct graph
         return false;
     }
 
-    inline auto add_subgraph(strange::graph<Signal> subgraph) -> uint64_t
+    inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
-        auto id = _subgraphs.size();
-        _subgraphs.push_back(subgraph);
-        return id;
-    }
-
-    inline auto remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload) -> bool
-    {
-        if (id < _subgraphs.size() && _subgraphs[id]._something())
-        {
-            _subgraphs[id] = strange::graph<Signal>{};
-            return true;
-        }
-        return false;
-    }
-
-    auto convert_to_processor(std::unique_ptr<Signal> && overload) const -> strange::processor<Signal>
-    {
-        // TODO: implement this
-        return strange::processor<Signal>::template _make<strange::implementation::processor<Signal>>(strange::implementation::process<Signal>{_ins, _outs,
-            [this](std::vector<Signal> inputs) {
-                return std::vector<Signal>(_outs);
-            }});
+        return [this](std::vector<Signal> inputs) {
+            return std::vector<Signal>(_outs);
+        };
     }
 
 private:
@@ -507,7 +488,6 @@ private:
     uint64_t _outs;
     std::vector<strange::processor<Signal>> _processors;
     std::vector<strange::connection> _connections;
-    std::vector<strange::graph<Signal>> _subgraphs;
 };
 }
 }

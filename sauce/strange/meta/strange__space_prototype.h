@@ -177,24 +177,13 @@ namespace strange
 
     template<typename Signal>
     struct [[strange::thing("strange::implementation::graph<Signal>")]]
-    graph : stuff
+    graph : processor<Signal>
     {
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
-
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
-
         auto add_processor(strange::processor<Signal> proc) -> uint64_t;
         auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
         auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload = nullptr) -> uint64_t;
         auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
-
-        auto add_subgraph(graph<Signal> subgraph) -> uint64_t;
-        auto remove_subgraph(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
-
-        auto convert_to_processor(std::unique_ptr<Signal> && overload = nullptr) const -> strange::processor<Signal>;
     };
 
     struct [[strange::thing("strange::implementation::parameter")]]

@@ -203,11 +203,10 @@ int main()
         // no sleep
     }
     {   // strange graph
-        auto proc1 = strange::processor<std::string>::_make<strange::implementation::example_processor<std::string>>();
-        proc1.closure()(std::vector<std::string>{"hello", "world", "!"});
+        auto proc = strange::processor<std::string>::_make<strange::implementation::example_processor<std::string>>();
+        proc.closure()(std::vector<std::string>{"hello", "world", "!"});
         auto graph = strange::graph<std::string>::_make();
-        auto proc2 = graph.convert_to_processor();
-        proc2.closure(); // TODO call proc2.closure() with inputs
+        graph.closure()(std::vector<std::string>{"hello", "world", "!"});
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
