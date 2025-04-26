@@ -108,7 +108,10 @@ struct processor
     {
         for (auto & subproc : _subprocs)
         {
-            subproc->on_your_marks();
+            if (subproc)
+            {
+                subproc->on_your_marks();
+            }
         }
         std::vector<uint64_t> connected_ins{_set_receivers.cbegin(), _set_receivers.cend()};
         switch (connected_ins.size())
@@ -237,7 +240,10 @@ struct processor
     {
         for (auto & subproc : _subprocs)
         {
-            subproc->get_set();
+            if (subproc)
+            {
+                subproc->get_set();
+            }
         }
         for (auto in : _set_receivers)
         {
@@ -249,7 +255,10 @@ struct processor
     {
         for (auto & subproc : _subprocs)
         {
-            subproc->go();
+            if (subproc)
+            {
+                subproc->go();
+            }
         }
         if (_function && _set_receivers.empty())
         {
@@ -380,6 +389,20 @@ struct graph
         return _outs;
     }
 
+    inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    {
+        std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins)); // [1] input
+        iterate(_processors, subprocs);
+        auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
+        proc->on_your_marks();
+        proc->get_set();
+        return [proc](std::vector<Signal> inputs) {
+            return (*proc)(inputs);
+        };
+    }
+
     inline auto add_processor(strange::processor<Signal> proc) -> uint64_t
     {
         auto id = _processors.size();
@@ -414,22 +437,51 @@ struct graph
         return false;
     }
 
-    inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto processors() -> std::vector<strange::processor<Signal>> &
     {
-        std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins)); // [1] input
-
-        auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
-
-        proc->on_your_marks();
-        proc->get_set();
-        return [proc](std::vector<Signal> inputs) {
-            return (*proc)(inputs);
-        };
+        return _processors;
     }
 
 private:
+    static inline auto iterate(std::vector<strange::processor<Signal>> & processors,
+        std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> & subprocs) -> void
+    {
+        std::size_t skip = 2;
+        for (auto & proc : processors)
+        {
+            if (skip)
+            {
+                --skip;
+                continue;
+            }
+            if (proc._something())
+            {
+                auto subgraph = proc.template _dynamic<strange::graph<Signal>>();
+                if (subgraph._something())
+                {
+                    subprocs.push_back(recurse(subgraph));
+                }
+                else
+                {
+                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), proc.closure()));
+                }
+            }
+            else
+            {
+                subprocs.emplace_back();
+            }
+        }
+    }
+
+    static inline auto recurse(strange::graph<Signal> & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
+    {
+        std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), [](std::vector<std::string> outputs){ return outputs; })); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), [](std::vector<std::string> inputs){ return inputs; })); // [1] input
+        iterate(subgraph.processors(), subprocs);
+        return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
+    }
+
     uint64_t _ins;
     uint64_t _outs;
     std::vector<strange::processor<Signal>> _processors;
