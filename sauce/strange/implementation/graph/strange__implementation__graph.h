@@ -20,6 +20,13 @@ namespace implementation
 template<typename Signal>
 struct processor
 {
+    processor() = delete;
+    processor(processor const &) = delete;
+    processor(processor &&) = delete;
+    processor & operator=(processor const &) = delete;
+    processor & operator=(processor &&) = delete;
+    ~processor() = default;
+
     inline processor(
         uint64_t ins,
         uint64_t outs,
@@ -31,21 +38,21 @@ struct processor
     {
     }
 
-    inline processor(std::vector<processor> && subprocs)
+    inline processor(std::vector<std::unique_ptr<processor>> && subprocs)
         :_subprocs(std::move(subprocs))
     {
         // output
-        if (_subprocs.size() > 0 && !_subprocs[0]._function)
+        if (_subprocs.size() > 0 && !_subprocs[0]->_function)
         {
-            _subprocs[0]._function = [this](std::vector<Signal> inputs) {
+            _subprocs[0]->_function = [this](std::vector<Signal> inputs) {
                 _outputs.set_value(inputs);
                 return std::vector<Signal>{};
             };
         }
         // input
-        if (_subprocs.size() > 1 && !_subprocs[1]._function)
+        if (_subprocs.size() > 1 && !_subprocs[1]->_function)
         {
-            _subprocs[1]._function = [this](std::vector<Signal> inputs) {
+            _subprocs[1]->_function = [this](std::vector<Signal> inputs) {
                 return _inputs;
             };
         }
@@ -55,12 +62,12 @@ struct processor
     {
         if (_subprocs.size() > 1)
         {
-            _subprocs[1].from(other, in, out);
+            _subprocs[1]->from(other, in, out);
             return;
         }
         if (other._subprocs.size() > 0)
         {
-            from(other._subprocs[0], in, out);
+            from(*other._subprocs[0], in, out);
             return;
         }
         std::tie(other._senders[out], _receivers[in]) = stlab::channel<Signal>(stlab::high_executor);
@@ -78,12 +85,12 @@ struct processor
     {
         if (_subprocs.size() > 0)
         {
-            _subprocs[0].to(other, out, in);
+            _subprocs[0]->to(other, out, in);
             return;
         }
         if (other._subprocs.size() > 1)
         {
-            to(other._subprocs[1], out, in);
+            to(*other._subprocs[1], out, in);
             return;
         }
         std::tie(_senders[out], other._receivers[in]) = stlab::channel<Signal>(stlab::high_executor);
@@ -101,7 +108,7 @@ struct processor
     {
         for (auto & subproc : _subprocs)
         {
-            subproc.on_your_marks();
+            subproc->on_your_marks();
         }
         std::vector<uint64_t> connected_ins{_set_receivers.cbegin(), _set_receivers.cend()};
         switch (connected_ins.size())
@@ -230,7 +237,7 @@ struct processor
     {
         for (auto & subproc : _subprocs)
         {
-            subproc.get_set();
+            subproc->get_set();
         }
         for (auto in : _set_receivers)
         {
@@ -242,7 +249,7 @@ struct processor
     {
         for (auto & subproc : _subprocs)
         {
-            subproc.go();
+            subproc->go();
         }
         if (_function && _set_receivers.empty())
         {
@@ -286,7 +293,7 @@ private:
     std::set<uint64_t> _set_senders;
     std::vector<Signal> _inputs;
     std::any _zip;
-    std::vector<processor> _subprocs;
+    std::vector<std::unique_ptr<processor>> _subprocs;
     std::promise<std::vector<Signal>> _outputs;
 };
 
@@ -343,7 +350,9 @@ struct graph
     inline graph()
     :_ins(0)
     ,_outs(0)
-    {}
+    ,_processors(2)
+    {
+    }
 
     inline auto pack(strange::bag & dest) const -> void
     {}
@@ -407,15 +416,16 @@ struct graph
 
     inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
-        std::vector<strange::implementation::processor<Signal>> subprocs;
+        std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins)); // [1] input
 
-        strange::implementation::processor<Signal> proc(std::move(subprocs));
+        auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
 
-        proc.on_your_marks();
-        proc.get_set();
-        auto shared = std::make_shared<strange::implementation::processor<Signal>>(std::move(proc));
-        return [shared](std::vector<Signal> inputs) {
-            return shared->operator()(inputs);
+        proc->on_your_marks();
+        proc->get_set();
+        return [proc](std::vector<Signal> inputs) {
+            return (*proc)(inputs);
         };
     }
 

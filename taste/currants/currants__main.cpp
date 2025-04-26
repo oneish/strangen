@@ -170,20 +170,20 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     {   // graph
-        std::vector<strange::implementation::processor<std::string>> subsubprocs;
-        subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // output [0] "A"
-        subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // input [1] "B"
-        subsubprocs[1].to(subsubprocs[0], 0, 0); // B0 -> A0
-        std::vector<strange::implementation::processor<std::string>> subprocs;
-        subprocs.emplace_back(3, 0); // output [0] "C"
-        subprocs.emplace_back(0, 3); // input [1] "D"
-        subprocs.emplace_back(std::move(subsubprocs)); // [2] "E"
-        subprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // [3] "F"
-        subprocs[1].to(subprocs[2], 0, 0); // D0 -> E0
-        subprocs[0].from(subprocs[2], 0, 0); // C0 <- E0
-        subprocs[1].to(subprocs[3], 1, 0); // D1 -> F0
-        subprocs[0].from(subprocs[3], 1, 0); // C1 <- F0
-        subprocs[1].to(subprocs[0], 2, 2); // D2 -> C2
+        std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subsubprocs;
+        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // output [0] "A"
+        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // input [1] "B"
+        subsubprocs[1]->to(*subsubprocs[0], 0, 0); // B0 -> A0
+        std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subprocs;
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(3, 0)); // output [0] "C"
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(0, 3)); // input [1] "D"
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(std::move(subsubprocs))); // [2] "E"
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // [3] "F"
+        subprocs[1]->to(*subprocs[2], 0, 0); // D0 -> E0
+        subprocs[0]->from(*subprocs[2], 0, 0); // C0 <- E0
+        subprocs[1]->to(*subprocs[3], 1, 0); // D1 -> F0
+        subprocs[0]->from(*subprocs[3], 1, 0); // C1 <- F0
+        subprocs[1]->to(*subprocs[0], 2, 2); // D2 -> C2
         strange::implementation::processor<std::string> proc{std::move(subprocs)};
         proc.on_your_marks();
         proc.get_set();
@@ -204,9 +204,11 @@ int main()
     }
     {   // strange graph
         auto proc = strange::processor<std::string>::_make<strange::implementation::example_processor<std::string>>();
-        proc.closure()(std::vector<std::string>{"hello", "world", "!"});
+        auto proc_closure = proc.closure();
+        proc_closure(std::vector<std::string>{"hello", "world", "!"});
         auto graph = strange::graph<std::string>::_make();
-        graph.closure()(std::vector<std::string>{"hello", "world", "!"});
+        auto graph_closure = graph.closure();
+        graph_closure(std::vector<std::string>{"hello", "world", "!"});
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
