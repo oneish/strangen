@@ -307,9 +307,9 @@ private:
 };
 
 template<typename Signal>
-struct example_processor
+struct thru_processor
 {
-    inline example_processor()
+    inline thru_processor()
     :_ins(0)
     ,_outs(0)
     {
@@ -343,8 +343,9 @@ struct example_processor
 
     inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
-        return [this](std::vector<Signal> inputs) {
-            return std::vector<Signal>(_outs);
+        return [*this](std::vector<Signal> inputs) {
+            inputs.resize(_outs);
+            return inputs;
         };
     }
 
@@ -420,6 +421,16 @@ struct graph
         return false;
     }
 
+    inline auto processors() const -> std::vector<strange::processor<Signal>> const &
+    {
+        return _processors;
+    }
+
+    inline auto processors() -> std::vector<strange::processor<Signal>> &
+    {
+        return _processors;
+    }
+
     inline auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t
     {
         auto id = _connections.size();
@@ -437,12 +448,12 @@ struct graph
         return false;
     }
 
-    inline auto processors() -> std::vector<strange::processor<Signal>> &
+    inline auto connections() const -> std::vector<strange::connection> const &
     {
-        return _processors;
+        return _connections;
     }
 
-    inline auto connections() const -> std::vector<strange::connection> const &
+    inline auto connections() -> std::vector<strange::connection> &
     {
         return _connections;
     }

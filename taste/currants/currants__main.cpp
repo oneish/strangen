@@ -202,13 +202,81 @@ int main()
         }
         // no sleep
     }
-    {   // strange graph
-        auto proc = strange::processor<std::string>::_make<strange::implementation::example_processor<std::string>>();
+    {   // strange processor
+        auto proc = strange::processor<std::string>::_make<strange::implementation::thru_processor<std::string>>();
         auto proc_closure = proc.closure();
         proc_closure(std::vector<std::string>{"hello", "world", "!"});
-        auto graph = strange::graph<std::string>::_make();
+    }
+    {   // strange graph
+        auto subgraph = strange::graph<std::string>::_make(); // "A"
+        subgraph.ins() = 1; // "B"
+        subgraph.outs() = 1; // "C"
+        auto proc = subgraph.add_processor(strange::processor<std::string>::_make<strange::implementation::thru_processor<std::string>>()); // "D"
+        subgraph.processors()[proc].ins() = 1;
+        subgraph.processors()[proc].outs() = 1;
+
+        auto conn = subgraph.add_connection(); // B0 -> D0
+        subgraph.connections()[conn].from_id() = 1;
+        subgraph.connections()[conn].from_out() = 0;
+        subgraph.connections()[conn].to_id() = proc;
+        subgraph.connections()[conn].to_in() = 0;
+        conn = subgraph.add_connection(); // D0 -> C0
+        subgraph.connections()[conn].from_id() = proc;
+        subgraph.connections()[conn].from_out() = 0;
+        subgraph.connections()[conn].to_id() = 0;
+        subgraph.connections()[conn].to_in() = 0;
+
+        auto graph = strange::graph<std::string>::_make(); // "E"
+        graph.ins() = 3; // "F"
+        graph.outs() = 3; // "G"
+        auto sub = graph.add_processor(subgraph); // "A"
+        proc = graph.add_processor(strange::processor<std::string>::_make<strange::implementation::thru_processor<std::string>>()); // "H"
+        graph.processors()[proc].ins() = 1;
+        graph.processors()[proc].outs() = 1;
+
+        conn = graph.add_connection(); // F0 -> A0
+        graph.connections()[conn].from_id() = 1;
+        graph.connections()[conn].from_out() = 0;
+        graph.connections()[conn].to_id() = sub;
+        graph.connections()[conn].to_in() = 0;
+        conn = graph.add_connection(); // A0 -> G0
+        graph.connections()[conn].from_id() = sub;
+        graph.connections()[conn].from_out() = 0;
+        graph.connections()[conn].to_id() = 0;
+        graph.connections()[conn].to_in() = 0;
+
+        conn = graph.add_connection(); // F1 -> H0
+        graph.connections()[conn].from_id() = 1;
+        graph.connections()[conn].from_out() = 1;
+        graph.connections()[conn].to_id() = proc;
+        graph.connections()[conn].to_in() = 0;
+        conn = graph.add_connection(); // H0 -> G1
+        graph.connections()[conn].from_id() = proc;
+        graph.connections()[conn].from_out() = 0;
+        graph.connections()[conn].to_id() = 0;
+        graph.connections()[conn].to_in() = 1;
+
+        conn = graph.add_connection(); // F2 -> G2
+        graph.connections()[conn].from_id() = 1;
+        graph.connections()[conn].from_out() = 2;
+        graph.connections()[conn].to_id() = 0;
+        graph.connections()[conn].to_in() = 2;
+
         auto graph_closure = graph.closure();
-        graph_closure(std::vector<std::string>{"hello", "world", "!"});
+        std::vector<std::string> inputs {"hello", "world", "!"};
+        for (auto input : inputs)
+        {
+            auto outputs = graph_closure(inputs);
+            std::cout << "strange graph outputs: ";
+            for (auto output : outputs)
+            {
+                std::cout << output << " ";
+            }
+            std::cout << "\n";
+            std::swap(inputs[0], inputs[1]);
+            std::swap(inputs[1], inputs[2]);
+        }
+        // no sleep
     }
     std::cout << "before pre_exit()\n";
     stlab::pre_exit();
