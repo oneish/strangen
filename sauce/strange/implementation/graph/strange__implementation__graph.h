@@ -18,9 +18,9 @@ namespace strange
 namespace implementation
 {
 template<typename Signal>
-struct process
+struct processor
 {
-    inline process(
+    inline processor(
         uint64_t ins,
         uint64_t outs,
         std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
@@ -31,7 +31,7 @@ struct process
     {
     }
 
-    inline process(std::vector<process> && subprocs)
+    inline processor(std::vector<processor> && subprocs)
         :_subprocs(std::move(subprocs))
     {
         // output
@@ -51,29 +51,7 @@ struct process
         }
     }
 
-    inline auto ins() const -> uint64_t
-    {
-        if (_subprocs.size() > 1)
-        {
-            return _subprocs[1].ins(); // TODO: check if this is correct
-        }
-        if (_subprocs.size() > 0)
-        {
-            return 0;
-        }
-        return _receivers.size();
-    }
-
-    inline auto outs() const -> uint64_t
-    {
-        if (_subprocs.size() > 0)
-        {
-            return _subprocs[0].outs(); // TODO: check if this is correct
-        }
-        return _senders.size();
-    }
-
-    inline auto from(process & other, uint64_t in, uint64_t out) -> void
+    inline auto from(processor & other, uint64_t in, uint64_t out) -> void
     {
         if (_subprocs.size() > 1)
         {
@@ -96,7 +74,7 @@ struct process
         }
     }
 
-    inline auto to(process & other, uint64_t out, uint64_t in) -> void
+    inline auto to(processor & other, uint64_t out, uint64_t in) -> void
     {
         if (_subprocs.size() > 0)
         {
@@ -308,57 +286,8 @@ private:
     std::set<uint64_t> _set_senders;
     std::vector<Signal> _inputs;
     std::any _zip;
-    std::vector<process> _subprocs;
+    std::vector<processor> _subprocs;
     std::promise<std::vector<Signal>> _outputs;
-};
-
-template<typename Signal>
-struct processor
-{
-    inline processor(strange::implementation::process<Signal> && process)
-    :_process(std::move(process))
-    ,_ins(_process.ins())
-    ,_outs(_process.outs())
-    {
-    }
-
-    inline auto pack(strange::bag & dest) const -> void
-    {}
-
-    inline auto unpack(strange::bag const & src) -> void
-    {}
-
-    inline auto ins(std::unique_ptr<Signal> && overload) const -> uint64_t const &
-    {
-        return _ins;
-    }
-
-    inline auto ins(std::unique_ptr<Signal> && overload) -> uint64_t &
-    {
-        return _ins;
-    }
-
-    inline auto outs(std::unique_ptr<Signal> && overload) const -> uint64_t const &
-    {
-        return _outs;
-    }
-
-    inline auto outs(std::unique_ptr<Signal> && overload) -> uint64_t &
-    {
-        return _outs;
-    }
-
-    inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
-    {
-        return [this](std::vector<Signal> inputs) {
-            return _process(inputs);
-        };
-    }
-
-private:
-    strange::implementation::process<Signal> _process;
-    uint64_t _ins;
-    uint64_t _outs;
 };
 
 template<typename Signal>
@@ -478,8 +407,15 @@ struct graph
 
     inline auto closure(std::unique_ptr<Signal> && overload) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
-        return [this](std::vector<Signal> inputs) {
-            return std::vector<Signal>(_outs);
+        std::vector<strange::implementation::processor<Signal>> subprocs;
+
+        strange::implementation::processor<Signal> proc(std::move(subprocs));
+
+        proc.on_your_marks();
+        proc.get_set();
+        auto shared = std::make_shared<strange::implementation::processor<Signal>>(std::move(proc));
+        return [shared](std::vector<Signal> inputs) {
+            return shared->operator()(inputs);
         };
     }
 

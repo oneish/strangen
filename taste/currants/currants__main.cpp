@@ -146,10 +146,10 @@ int main()
             std::cout << "process " << concat << "\n";
             return std::vector<std::string>(3, concat);
         };
-        strange::implementation::process<std::string> proc0{0, 1, fun};
-        strange::implementation::process<std::string> proc1{1, 3, fun};
-        strange::implementation::process<std::string> proc2{3, 1, fun};
-        strange::implementation::process<std::string> proc3{1, 0, fun};
+        strange::implementation::processor<std::string> proc0{0, 1, fun};
+        strange::implementation::processor<std::string> proc1{1, 3, fun};
+        strange::implementation::processor<std::string> proc2{3, 1, fun};
+        strange::implementation::processor<std::string> proc3{1, 0, fun};
         proc0.to(proc1, 0, 0);
         //proc1.to(proc2, 0, 0);
         proc2.from(proc1, 1, 1);
@@ -170,11 +170,11 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     {   // graph
-        std::vector<strange::implementation::process<std::string>> subsubprocs;
+        std::vector<strange::implementation::processor<std::string>> subsubprocs;
         subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // output [0] "A"
         subsubprocs.emplace_back(1, 1, [](std::vector<std::string> inputs){ return inputs; }); // input [1] "B"
         subsubprocs[1].to(subsubprocs[0], 0, 0); // B0 -> A0
-        std::vector<strange::implementation::process<std::string>> subprocs;
+        std::vector<strange::implementation::processor<std::string>> subprocs;
         subprocs.emplace_back(3, 0); // output [0] "C"
         subprocs.emplace_back(0, 3); // input [1] "D"
         subprocs.emplace_back(std::move(subsubprocs)); // [2] "E"
@@ -184,7 +184,7 @@ int main()
         subprocs[1].to(subprocs[3], 1, 0); // D1 -> F0
         subprocs[0].from(subprocs[3], 1, 0); // C1 <- F0
         subprocs[1].to(subprocs[0], 2, 2); // D2 -> C2
-        strange::implementation::process<std::string> proc{std::move(subprocs)};
+        strange::implementation::processor<std::string> proc{std::move(subprocs)};
         proc.on_your_marks();
         proc.get_set();
         std::vector<std::string> inputs {"hello", "world", "!"};
