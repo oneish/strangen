@@ -4266,6 +4266,8 @@ protected:
         virtual auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool = 0;
 
         virtual auto processors() -> std::vector<strange::processor<Signal>> & = 0;
+
+        virtual auto connections() const -> std::vector<strange::connection> const & = 0;
     };
 
 public:
@@ -4359,6 +4361,8 @@ public:
     inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
     inline auto processors() -> std::vector<strange::processor<Signal>> &;
+
+    inline auto connections() const -> std::vector<strange::connection> const &;
 };
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -4491,6 +4495,8 @@ private:
         inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool final;
 
         inline auto processors() -> std::vector<strange::processor<Signal>> & final;
+
+        inline auto connections() const -> std::vector<strange::connection> const & final;
 
         _Thing _thing;
     };
@@ -13202,6 +13208,12 @@ inline auto graph<Signal>::processors() -> std::vector<strange::processor<Signal
     return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->processors();
 }
 
+template<typename Signal>
+inline auto graph<Signal>::connections() const -> std::vector<strange::connection> const &
+{
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->connections();
+}
+
 template<typename Signal, typename _Thing, bool _Copy>
 inline auto graph_<Signal, _Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
@@ -13272,6 +13284,12 @@ template<typename Signal, typename _Thing, bool _Copy>
 inline auto graph_<Signal, _Thing, _Copy>::_instance::processors() -> std::vector<strange::processor<Signal>> &
 {
     return _thing.processors();
+}
+
+template<typename Signal, typename _Thing, bool _Copy>
+inline auto graph_<Signal, _Thing, _Copy>::_instance::connections() const -> std::vector<strange::connection> const &
+{
+    return _thing.connections();
 }
 
 inline auto parameter::pack(strange::bag & dest) const -> void

@@ -186,6 +186,7 @@ namespace strange
         auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
         auto processors() -> std::vector<strange::processor<Signal>> &;
+        auto connections() const -> std::vector<strange::connection> const &;
     };
 
     struct [[strange::thing("strange::implementation::parameter")]]
