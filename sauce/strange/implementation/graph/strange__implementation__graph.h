@@ -108,6 +108,13 @@ struct processor
                 _connected_ins.emplace_back(i, j);
             }
         }
+        for (uint64_t i = 0; i < _senders.size(); ++i)
+        {
+            for (uint64_t j = 0; j < _senders[i].size(); ++j)
+            {
+                _connected_outs.emplace_back(i, j);
+            }
+        }
         switch (_connected_ins.size())
         {
             case 0:
@@ -239,9 +246,9 @@ struct processor
                 subproc->get_set();
             }
         }
-        for (auto const & conn : _connected_ins)
+        for (auto const & connected_in : _connected_ins)
         {
-            _receivers[conn.first][conn.second].set_ready();
+            _receivers[connected_in.first][connected_in.second].set_ready();
         }
     }
 
@@ -280,27 +287,24 @@ private:
         send();
     }
 
-    inline auto helper(std::pair<uint64_t, uint64_t> pair, Signal signal) -> void
+    inline auto helper(std::pair<uint64_t, uint64_t> const & connected_in, Signal signal) -> void
     {
-        if (pair.second)
+        if (!connected_in.second)
         {
-            _inputs[pair.first] += signal;
+            _inputs[connected_in.first] = signal;
         }
         else
         {
-            _inputs[pair.first] = signal;
+            _inputs[connected_in.first] += signal;
         }
     }
 
     inline auto send() const -> void
     {
         auto outputs = _function(_inputs);
-        for (uint64_t i = 0; i < _senders.size(); ++i)
+        for (auto const & connected_out : _connected_outs)
         {
-            for (uint64_t j = 0; j < _senders[i].size(); ++j)
-            {
-                _senders[i][j](outputs[i]);
-            }
+            _senders[connected_out.first][connected_out.second](outputs[connected_out.first]);
         }
     }
 
@@ -308,10 +312,11 @@ private:
     std::vector<std::vector<stlab::sender<Signal>>> _senders;
     std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
     std::vector<std::pair<uint64_t, uint64_t>> _connected_ins;
-    std::vector<Signal> _inputs;
+    std::vector<std::pair<uint64_t, uint64_t>> _connected_outs;
     std::any _zip;
-    std::vector<std::unique_ptr<processor>> _subprocs;
+    std::vector<Signal> _inputs;
     std::promise<std::vector<Signal>> _outputs;
+    std::vector<std::unique_ptr<processor>> _subprocs;
 };
 
 template<typename Signal>
