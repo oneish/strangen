@@ -4261,17 +4261,17 @@ protected:
 
         virtual auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload) -> bool = 0;
 
-        virtual auto processors() const -> std::vector<strange::processor<Signal>> const & = 0;
+        virtual auto processors(std::unique_ptr<Signal> && overload) const -> std::vector<strange::processor<Signal>> const & = 0;
 
-        virtual auto processors() -> std::vector<strange::processor<Signal>> & = 0;
+        virtual auto processors(std::unique_ptr<Signal> && overload) -> std::vector<strange::processor<Signal>> & = 0;
 
         virtual auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t = 0;
 
         virtual auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool = 0;
 
-        virtual auto connections() const -> std::vector<strange::connection> const & = 0;
+        virtual auto connections(std::unique_ptr<Signal> && overload) const -> std::vector<strange::connection> const & = 0;
 
-        virtual auto connections() -> std::vector<strange::connection> & = 0;
+        virtual auto connections(std::unique_ptr<Signal> && overload) -> std::vector<strange::connection> & = 0;
     };
 
 public:
@@ -4360,17 +4360,17 @@ public:
 
     inline auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
-    inline auto processors() const -> std::vector<strange::processor<Signal>> const &;
+    inline auto processors(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::processor<Signal>> const &;
 
-    inline auto processors() -> std::vector<strange::processor<Signal>> &;
+    inline auto processors(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::processor<Signal>> &;
 
     inline auto add_connection(strange::connection conn = strange::connection::_make(), std::unique_ptr<Signal> && overload = nullptr) -> uint64_t;
 
     inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
 
-    inline auto connections() const -> std::vector<strange::connection> const &;
+    inline auto connections(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::connection> const &;
 
-    inline auto connections() -> std::vector<strange::connection> &;
+    inline auto connections(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::connection> &;
 };
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -4498,17 +4498,17 @@ private:
 
         inline auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload) -> bool final;
 
-        inline auto processors() const -> std::vector<strange::processor<Signal>> const & final;
+        inline auto processors(std::unique_ptr<Signal> && overload) const -> std::vector<strange::processor<Signal>> const & final;
 
-        inline auto processors() -> std::vector<strange::processor<Signal>> & final;
+        inline auto processors(std::unique_ptr<Signal> && overload) -> std::vector<strange::processor<Signal>> & final;
 
         inline auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload) -> uint64_t final;
 
         inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload) -> bool final;
 
-        inline auto connections() const -> std::vector<strange::connection> const & final;
+        inline auto connections(std::unique_ptr<Signal> && overload) const -> std::vector<strange::connection> const & final;
 
-        inline auto connections() -> std::vector<strange::connection> & final;
+        inline auto connections(std::unique_ptr<Signal> && overload) -> std::vector<strange::connection> & final;
 
         _Thing _thing;
     };
@@ -13200,16 +13200,16 @@ inline auto graph<Signal>::remove_processor(uint64_t id, std::unique_ptr<Signal>
 }
 
 template<typename Signal>
-inline auto graph<Signal>::processors() const -> std::vector<strange::processor<Signal>> const &
+inline auto graph<Signal>::processors(std::unique_ptr<Signal> && overload) const -> std::vector<strange::processor<Signal>> const &
 {
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->processors();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->processors(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::processors() -> std::vector<strange::processor<Signal>> &
+inline auto graph<Signal>::processors(std::unique_ptr<Signal> && overload) -> std::vector<strange::processor<Signal>> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->processors();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->processors(std::move(overload));
 }
 
 template<typename Signal>
@@ -13227,16 +13227,16 @@ inline auto graph<Signal>::remove_connection(uint64_t id, std::unique_ptr<Signal
 }
 
 template<typename Signal>
-inline auto graph<Signal>::connections() const -> std::vector<strange::connection> const &
+inline auto graph<Signal>::connections(std::unique_ptr<Signal> && overload) const -> std::vector<strange::connection> const &
 {
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->connections();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived const>(strange::_common::_shared)->connections(std::move(overload));
 }
 
 template<typename Signal>
-inline auto graph<Signal>::connections() -> std::vector<strange::connection> &
+inline auto graph<Signal>::connections(std::unique_ptr<Signal> && overload) -> std::vector<strange::connection> &
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->connections();
+    return std::dynamic_pointer_cast<typename graph<Signal>::_derived>(strange::_common::_shared)->connections(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -13294,15 +13294,15 @@ inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_processor(uint64_t 
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::processors() const -> std::vector<strange::processor<Signal>> const &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::processors(std::unique_ptr<Signal> && overload) const -> std::vector<strange::processor<Signal>> const &
 {
-    return _thing.processors();
+    return _thing.processors(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::processors() -> std::vector<strange::processor<Signal>> &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::processors(std::unique_ptr<Signal> && overload) -> std::vector<strange::processor<Signal>> &
 {
-    return _thing.processors();
+    return _thing.processors(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
@@ -13318,15 +13318,15 @@ inline auto graph_<Signal, _Thing, _Copy>::_instance::remove_connection(uint64_t
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::connections() const -> std::vector<strange::connection> const &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::connections(std::unique_ptr<Signal> && overload) const -> std::vector<strange::connection> const &
 {
-    return _thing.connections();
+    return _thing.connections(std::move(overload));
 }
 
 template<typename Signal, typename _Thing, bool _Copy>
-inline auto graph_<Signal, _Thing, _Copy>::_instance::connections() -> std::vector<strange::connection> &
+inline auto graph_<Signal, _Thing, _Copy>::_instance::connections(std::unique_ptr<Signal> && overload) -> std::vector<strange::connection> &
 {
-    return _thing.connections();
+    return _thing.connections(std::move(overload));
 }
 
 inline auto parameter::pack(strange::bag & dest) const -> void

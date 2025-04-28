@@ -181,13 +181,13 @@ namespace strange
     {
         auto add_processor(strange::processor<Signal> proc) -> uint64_t;
         auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
-        auto processors() const -> std::vector<strange::processor<Signal>> const &;
-        auto processors() -> std::vector<strange::processor<Signal>> &;
+        auto processors(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::processor<Signal>> const &;
+        auto processors(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::processor<Signal>> &;
 
         auto add_connection(strange::connection conn = strange::connection::_make(), std::unique_ptr<Signal> && overload = nullptr) -> uint64_t;
         auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
-        auto connections() const -> std::vector<strange::connection> const &;
-        auto connections() -> std::vector<strange::connection> &;
+        auto connections(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::connection> const &;
+        auto connections(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::connection> &;
     };
 
     struct [[strange::thing("strange::implementation::parameter")]]
