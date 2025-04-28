@@ -127,7 +127,7 @@ struct processor
             case 2:
                 _zip = stlab::zip(stlab::high_executor,
                     _receivers[_connected_ins[0].first][_connected_ins[0].second],
-                    _receivers[_connected_ins[0].first][_connected_ins[0].second]) |
+                    _receivers[_connected_ins[1].first][_connected_ins[1].second]) |
                     [this](std::tuple<Signal, Signal> connected_inputs) {
                         proc(connected_inputs);
                     };
