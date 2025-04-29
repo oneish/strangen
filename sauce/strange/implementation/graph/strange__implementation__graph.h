@@ -233,7 +233,7 @@ struct processor
                     };
                 break;
             case 11:
-                _zip = combine_receivers(std::make_index_sequence<11>{});
+                combine_receivers<11>();
             default:
                 throw std::runtime_error("too many connected ins");
         }
@@ -282,13 +282,23 @@ private:
     template<std::size_t>
     using SignalType = Signal;
 
-    template<std::size_t ... Index>
-    inline auto combine_receivers(std::index_sequence<Index ...>)
+    template<std::size_t Size>
+    inline auto combine_receivers() -> void
     {
-        return stlab::zip(stlab::high_executor,
+        combine_recs(std::make_index_sequence<Size>{});
+    }
+
+    template<std::size_t ... Index>
+    inline auto combine_recs(std::index_sequence<Index ...>) -> void
+    {
+        _zip = stlab::zip(stlab::high_executor,
             _receivers[_connected_ins[Index].first][_connected_ins[Index].second]...) |
             [this](std::tuple<SignalType<Index> ...> connected_inputs) {
-                proc(connected_inputs);
+                std::apply([this](auto && ... args) {
+                    auto it = _connected_ins.cbegin();
+                    ((assign_input(*it++, std::forward<decltype(args)>(args))), ...);
+                }, connected_inputs);
+                send();
             };
     }
 
