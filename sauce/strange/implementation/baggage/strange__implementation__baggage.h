@@ -876,7 +876,7 @@ struct baggage
     inline auto from_any(any const & src) -> void
     {
         bool is_weak = src._is_weak();
-        any const strong = is_weak ? src._strong() : any{src};
+        any const strong = is_weak ? src._strong() : src;
         if (!strong._something())
         {
             packet = dart::packet::make_null();
