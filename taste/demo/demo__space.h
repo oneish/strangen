@@ -22,7 +22,7 @@ struct fruit_;
 template<typename Item>
 struct bunch;
 
-template<typename Item, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename _Thing, bool _Copy, typename Item>
 struct bunch_;
 
 struct bunch_of_fruit;
@@ -85,12 +85,12 @@ struct reflection<demo::bunch<Item>>
     }
 };
 
-template<typename Item, typename _Thing, bool _Copy>
-struct reflection<demo::bunch_<Item, _Thing, _Copy>>
+template<typename _Thing, bool _Copy, typename Item>
+struct reflection<demo::bunch_<_Thing, _Copy, Item>>
 {
     static inline auto name() -> std::string
     {
-        return "demo::bunch_<" + reflection<Item>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+        return "demo::bunch_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<Item>::name() + ">";
     }
 };
 
@@ -933,7 +933,7 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> bunch
     {
-        return bunch{bunch::_derived::_static_shared_to_base(std::make_shared<typename bunch_<Item, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return bunch{bunch::_derived::_static_shared_to_base(std::make_shared<typename bunch_<_Thing, _Copy, Item>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> bunch
@@ -973,7 +973,7 @@ public:
     inline auto operator[](std::size_t pos) -> Item &;
 };
 
-template<typename Item, typename _Thing, bool _Copy>
+template<typename _Thing, bool _Copy, typename Item>
 struct bunch_ : bunch<Item>
 {
     inline bunch_() = default;
@@ -2063,14 +2063,14 @@ inline auto bunch<Item>::operator[](std::size_t pos) -> Item &
     return std::dynamic_pointer_cast<typename bunch<Item>::_derived>(strange::_common::_shared)->operator[](pos);
 }
 
-template<typename Item, typename _Thing, bool _Copy>
-inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back(Item const & item) -> void
+template<typename _Thing, bool _Copy, typename Item>
+inline auto bunch_<_Thing, _Copy, Item>::_instance::push_back(Item const & item) -> void
 {
     _thing.push_back(item);
 }
 
-template<typename Item, typename _Thing, bool _Copy>
-inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back_closure_() -> std::function<auto (Item const & item) -> void>
+template<typename _Thing, bool _Copy, typename Item>
+inline auto bunch_<_Thing, _Copy, Item>::_instance::push_back_closure_() -> std::function<auto (Item const & item) -> void>
 {
     return [this](Item const & item) -> void
     {
@@ -2078,26 +2078,26 @@ inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back_closure_() -> std:
     };
 }
 
-template<typename Item, typename _Thing, bool _Copy>
-inline auto bunch_<Item, _Thing, _Copy>::_instance::push_back(Item && item) -> void
+template<typename _Thing, bool _Copy, typename Item>
+inline auto bunch_<_Thing, _Copy, Item>::_instance::push_back(Item && item) -> void
 {
     _thing.push_back(std::move(item));
 }
 
-template<typename Item, typename _Thing, bool _Copy>
-inline auto bunch_<Item, _Thing, _Copy>::_instance::size() const -> std::size_t
+template<typename _Thing, bool _Copy, typename Item>
+inline auto bunch_<_Thing, _Copy, Item>::_instance::size() const -> std::size_t
 {
     return _thing.size();
 }
 
-template<typename Item, typename _Thing, bool _Copy>
-inline auto bunch_<Item, _Thing, _Copy>::_instance::operator[](std::size_t pos) const -> Item const &
+template<typename _Thing, bool _Copy, typename Item>
+inline auto bunch_<_Thing, _Copy, Item>::_instance::operator[](std::size_t pos) const -> Item const &
 {
     return _thing.operator[](pos);
 }
 
-template<typename Item, typename _Thing, bool _Copy>
-inline auto bunch_<Item, _Thing, _Copy>::_instance::operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>
+template<typename _Thing, bool _Copy, typename Item>
+inline auto bunch_<_Thing, _Copy, Item>::_instance::operator_array_closure_() const -> std::function<auto (std::size_t pos) -> Item const &>
 {
     return [this](std::size_t pos) -> Item const &
     {
@@ -2105,8 +2105,8 @@ inline auto bunch_<Item, _Thing, _Copy>::_instance::operator_array_closure_() co
     };
 }
 
-template<typename Item, typename _Thing, bool _Copy>
-inline auto bunch_<Item, _Thing, _Copy>::_instance::operator[](std::size_t pos) -> Item &
+template<typename _Thing, bool _Copy, typename Item>
+inline auto bunch_<_Thing, _Copy, Item>::_instance::operator[](std::size_t pos) -> Item &
 {
     return _thing.operator[](pos);
 }

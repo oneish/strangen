@@ -32,7 +32,7 @@ struct widget_number_;
 template<typename Data = int>
 struct numeric;
 
-template<typename Data, typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename _Thing, bool _Copy, typename Data>
 struct numeric_;
 
 }
@@ -121,12 +121,12 @@ struct reflection<example::numeric<Data>>
     }
 };
 
-template<typename Data, typename _Thing, bool _Copy>
-struct reflection<example::numeric_<Data, _Thing, _Copy>>
+template<typename _Thing, bool _Copy, typename Data>
+struct reflection<example::numeric_<_Thing, _Copy, Data>>
 {
     static inline auto name() -> std::string
     {
-        return "example::numeric_<" + reflection<Data>::name() + ", " + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+        return "example::numeric_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<Data>::name() + ">";
     }
 };
 
@@ -1563,7 +1563,7 @@ public:
     template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
     static inline auto _make(_Args && ... _args) -> numeric
     {
-        return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<Data, _Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<_Thing, _Copy, Data>::_instance>(std::forward<_Args>(_args) ...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> numeric
@@ -1599,7 +1599,7 @@ public:
     inline auto x() -> Data &;
 };
 
-template<typename Data, typename _Thing, bool _Copy>
+template<typename _Thing, bool _Copy, typename Data>
 struct numeric_ : numeric<Data>
 {
     inline numeric_() = default;
@@ -2036,32 +2036,32 @@ inline auto numeric<Data>::x() -> Data &
     return std::dynamic_pointer_cast<typename numeric<Data>::_derived>(strange::_common::_shared)->x();
 }
 
-template<typename Data, typename _Thing, bool _Copy>
-inline auto numeric_<Data, _Thing, _Copy>::_instance::inc() -> void
+template<typename _Thing, bool _Copy, typename Data>
+inline auto numeric_<_Thing, _Copy, Data>::_instance::inc() -> void
 {
     _thing.inc();
 }
 
-template<typename Data, typename _Thing, bool _Copy>
-inline auto numeric_<Data, _Thing, _Copy>::_instance::dec() -> void
+template<typename _Thing, bool _Copy, typename Data>
+inline auto numeric_<_Thing, _Copy, Data>::_instance::dec() -> void
 {
     _thing.dec();
 }
 
-template<typename Data, typename _Thing, bool _Copy>
-inline auto numeric_<Data, _Thing, _Copy>::_instance::get() const -> Data
+template<typename _Thing, bool _Copy, typename Data>
+inline auto numeric_<_Thing, _Copy, Data>::_instance::get() const -> Data
 {
     return _thing.get();
 }
 
-template<typename Data, typename _Thing, bool _Copy>
-inline auto numeric_<Data, _Thing, _Copy>::_instance::x() const -> Data const &
+template<typename _Thing, bool _Copy, typename Data>
+inline auto numeric_<_Thing, _Copy, Data>::_instance::x() const -> Data const &
 {
     return _thing.x();
 }
 
-template<typename Data, typename _Thing, bool _Copy>
-inline auto numeric_<Data, _Thing, _Copy>::_instance::x() -> Data &
+template<typename _Thing, bool _Copy, typename Data>
+inline auto numeric_<_Thing, _Copy, Data>::_instance::x() -> Data &
 {
     return _thing.x();
 }

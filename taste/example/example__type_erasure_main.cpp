@@ -153,13 +153,13 @@ int main()
         std::cout << op << std::endl;
     }
     std::cout << strange::reflection<std::vector<int>>::name() << std::endl;
-    std::cout << strange::reflection<strange::vector_<int>>::name() << std::endl;
-    std::cout << strange::vector_<int>::_name_ << std::endl;
-    std::cout << strange::vector_<int>::_cat_ << std::endl;
+    std::cout << strange::reflection<strange::vector_<std::vector<int>, true, int>>::name() << std::endl;
+    std::cout << strange::vector_<std::vector<int>, true, int>::_name_ << std::endl;
+    std::cout << strange::vector_<std::vector<int>, true, int>::_cat_ << std::endl;
 
-    auto v1 = strange::vector_<int>::_make_();
+    auto v1 = strange::vector_<std::vector<int>, true, int>::_make_();
     auto v2 = strange::vector<int>::_make(1,2,3);
-    auto v3 = strange::vector_<double>::_make_(1.0,2.0,3.0);
+    auto v3 = strange::vector_<std::vector<double>, true, double>::_make_(1.0,2.0,3.0);
     v1._thing().push_back(123);
     v2.push_back(123);
     v3._thing().push_back(123.0);

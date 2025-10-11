@@ -570,6 +570,35 @@ public:
                 _out << R"#(<)#";
             }
             bool first = true;
+            if (thing)
+            {
+                first = false;
+                if (arguments)
+                {
+                    _out << R"#(typename _Thing)#";
+                    if (abstraction.parameters().empty() && !abstraction.thing().empty())
+                    {
+                        _out << R"#( = )#" << abstraction.thing();
+                    }
+                    _out << R"#(, bool _Copy)#";
+                    if (abstraction.parameters().empty())
+                    {
+                        _out << R"#( = std::is_copy_constructible_v<_Thing>)#";
+                    }
+                }
+                else if (types)
+                {
+                    _out << R"#(typename _Thing, bool _Copy)#";
+                }
+                else if (reflection)
+                {
+                    _out << R"#(" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ")#";
+                }
+                else
+                {
+                    _out << R"#(_Thing, _Copy)#";
+                }
+            }
             for (auto const & parameter : abstraction.parameters())
             {
                 if (first)
@@ -596,34 +625,6 @@ public:
                 else if (arguments && ((!thing) || !abstraction.thing().empty()) && !parameter.argument().empty())
                 {
                     _out << R"#( = )#" << parameter.argument();
-                }
-            }
-            if (thing)
-            {
-                if (!first)
-                {
-                    _out << R"#(, )#";
-                }
-                if (arguments)
-                {
-                    _out << R"#(typename _Thing)#";
-                    if (!abstraction.thing().empty())
-                    {
-                        _out << R"#( = )#" << abstraction.thing();
-                    }
-                    _out << R"#(, bool _Copy = std::is_copy_constructible_v<_Thing>)#";
-                }
-                else if (types)
-                {
-                    _out << R"#(typename _Thing, bool _Copy)#";
-                }
-                else if (reflection)
-                {
-                    _out << R"#(" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ")#";
-                }
-                else
-                {
-                    _out << R"#(_Thing, _Copy)#";
                 }
             }
             if (types)
