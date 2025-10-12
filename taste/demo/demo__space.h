@@ -228,10 +228,10 @@ public:
         return food{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> food
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> food
     {
-        return food{food::_derived::_static_shared_to_base(std::make_shared<typename food_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return food{food::_derived::_static_shared_to_base(std::make_shared<typename food_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> food
@@ -307,10 +307,10 @@ private:
 
     struct _instance final : food::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :food_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -376,10 +376,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> food_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> food_
     {
-        return food_{food_::_derived::_static_shared_to_base(std::make_shared<food_::_instance>(std::forward<_Args>(_args) ...))};
+        return food_{food_::_derived::_static_shared_to_base(std::make_shared<food_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> food_
@@ -564,10 +564,10 @@ public:
         return fruit{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> fruit
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> fruit
     {
-        return fruit{fruit::_derived::_static_shared_to_base(std::make_shared<typename fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return fruit{fruit::_derived::_static_shared_to_base(std::make_shared<typename fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> fruit
@@ -658,10 +658,10 @@ private:
 
     struct _instance final : fruit::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :fruit_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -741,10 +741,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> fruit_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> fruit_
     {
-        return fruit_{fruit_::_derived::_static_shared_to_base(std::make_shared<fruit_::_instance>(std::forward<_Args>(_args) ...))};
+        return fruit_{fruit_::_derived::_static_shared_to_base(std::make_shared<fruit_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> fruit_
@@ -930,10 +930,10 @@ public:
         return bunch{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> bunch
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> bunch
     {
-        return bunch{bunch::_derived::_static_shared_to_base(std::make_shared<typename bunch_<_Thing, _Copy, Item, Args...>::_instance>(std::forward<_Args>(_args) ...))};
+        return bunch{bunch::_derived::_static_shared_to_base(std::make_shared<typename bunch_<_Thing, _Copy, Item, Args...>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> bunch
@@ -1019,10 +1019,10 @@ private:
 
     struct _instance final : bunch<Item, Args...>::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :bunch_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -1098,10 +1098,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> bunch_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> bunch_
     {
-        return bunch_{bunch_::_derived::_static_shared_to_base(std::make_shared<bunch_::_instance>(std::forward<_Args>(_args) ...))};
+        return bunch_{bunch_::_derived::_static_shared_to_base(std::make_shared<bunch_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> bunch_
@@ -1286,10 +1286,10 @@ public:
         return bunch_of_fruit{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> bunch_of_fruit
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> bunch_of_fruit
     {
-        return bunch_of_fruit{bunch_of_fruit::_derived::_static_shared_to_base(std::make_shared<typename bunch_of_fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return bunch_of_fruit{bunch_of_fruit::_derived::_static_shared_to_base(std::make_shared<typename bunch_of_fruit_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> bunch_of_fruit
@@ -1389,10 +1389,10 @@ private:
 
     struct _instance final : bunch_of_fruit::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :bunch_of_fruit_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -1480,10 +1480,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> bunch_of_fruit_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> bunch_of_fruit_
     {
-        return bunch_of_fruit_{bunch_of_fruit_::_derived::_static_shared_to_base(std::make_shared<bunch_of_fruit_::_instance>(std::forward<_Args>(_args) ...))};
+        return bunch_of_fruit_{bunch_of_fruit_::_derived::_static_shared_to_base(std::make_shared<bunch_of_fruit_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> bunch_of_fruit_
@@ -1652,10 +1652,10 @@ public:
         return function{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> function
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> function
     {
-        return function{function::_derived::_static_shared_to_base(std::make_shared<typename function_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return function{function::_derived::_static_shared_to_base(std::make_shared<typename function_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> function
@@ -1728,10 +1728,10 @@ private:
 
     struct _instance final : function::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :function_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -1795,10 +1795,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> function_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> function_
     {
-        return function_{function_::_derived::_static_shared_to_base(std::make_shared<function_::_instance>(std::forward<_Args>(_args) ...))};
+        return function_{function_::_derived::_static_shared_to_base(std::make_shared<function_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> function_

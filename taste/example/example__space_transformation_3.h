@@ -228,10 +228,10 @@ public:
         return widget{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> widget
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> widget
     {
-        return widget{widget::_derived::_static_shared_to_base(std::make_shared<typename widget_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return widget{widget::_derived::_static_shared_to_base(std::make_shared<typename widget_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> widget
@@ -310,10 +310,10 @@ private:
 
     struct _instance final : widget::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :widget_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -383,10 +383,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> widget_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> widget_
     {
-        return widget_{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args) ...))};
+        return widget_{widget_::_derived::_static_shared_to_base(std::make_shared<widget_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> widget_
@@ -559,10 +559,10 @@ public:
         return button{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> button
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> button
     {
-        return button{button::_derived::_static_shared_to_base(std::make_shared<typename button_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return button{button::_derived::_static_shared_to_base(std::make_shared<typename button_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> button
@@ -644,10 +644,10 @@ private:
 
     struct _instance final : button::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :button_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -719,10 +719,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> button_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> button_
     {
-        return button_{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args) ...))};
+        return button_{button_::_derived::_static_shared_to_base(std::make_shared<button_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> button_
@@ -893,10 +893,10 @@ public:
         return number{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> number
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> number
     {
-        return number{number::_derived::_static_shared_to_base(std::make_shared<typename number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return number{number::_derived::_static_shared_to_base(std::make_shared<typename number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> number
@@ -971,10 +971,10 @@ private:
 
     struct _instance final : number::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :number_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -1040,10 +1040,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> number_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> number_
     {
-        return number_{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args) ...))};
+        return number_{number_::_derived::_static_shared_to_base(std::make_shared<number_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> number_
@@ -1218,10 +1218,10 @@ public:
         return widget_number{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> widget_number
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> widget_number
     {
-        return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<typename widget_number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args) ...))};
+        return widget_number{widget_number::_derived::_static_shared_to_base(std::make_shared<typename widget_number_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> widget_number
@@ -1304,10 +1304,10 @@ private:
 
     struct _instance final : widget_number::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :widget_number_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -1379,10 +1379,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> widget_number_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> widget_number_
     {
-        return widget_number_{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args) ...))};
+        return widget_number_{widget_number_::_derived::_static_shared_to_base(std::make_shared<widget_number_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> widget_number_
@@ -1560,10 +1560,10 @@ public:
         return numeric{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> numeric
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> numeric
     {
-        return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<_Thing, _Copy, Data>::_instance>(std::forward<_Args>(_args) ...))};
+        return numeric{numeric::_derived::_static_shared_to_base(std::make_shared<typename numeric_<_Thing, _Copy, Data>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> numeric
@@ -1645,10 +1645,10 @@ private:
 
     struct _instance final : numeric<Data>::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :numeric_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -1720,10 +1720,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> numeric_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> numeric_
     {
-        return numeric_{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args) ...))};
+        return numeric_{numeric_::_derived::_static_shared_to_base(std::make_shared<numeric_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> numeric_

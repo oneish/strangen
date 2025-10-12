@@ -208,13 +208,13 @@ private:
         combine_recs(std::make_index_sequence<Size>{});
     }
 
-    template<std::size_t ... Index>
-    inline auto combine_recs(std::index_sequence<Index ...>) -> void
+    template<std::size_t... Index>
+    inline auto combine_recs(std::index_sequence<Index...>) -> void
     {
         _zip = stlab::zip(stlab::high_executor,
             _receivers[_connected_ins[Index].first][_connected_ins[Index].second]...) |
-            [this](std::tuple<SignalTypeFromSizeType<Index> ...> connected_inputs) {
-                std::apply([this](auto && ... args) {
+            [this](std::tuple<SignalTypeFromSizeType<Index>...> connected_inputs) {
+                std::apply([this](auto && ...args) {
                     auto it = _connected_ins.cbegin();
                     ((assign_input(*it++, std::forward<decltype(args)>(args))), ...);
                 }, connected_inputs);

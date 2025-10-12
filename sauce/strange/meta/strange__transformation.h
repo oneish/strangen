@@ -256,13 +256,13 @@ public:
     {
         _out << R"#( = )#" << abstraction.thing();
     }
-    _out << R"#(, bool _Copy = std::is_copy_constructible_v<_Thing>, typename ... _Args>
-    static inline auto _make(_Args && ... _args) -> )#" << abstraction.name() << R"#(
+    _out << R"#(, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> )#" << abstraction.name() << R"#(
     {
         return )#" << abstraction.name() << R"#({)#" << abstraction.name() << R"#(::_derived::_static_shared_to_base(std::make_shared<typename )#"
             << abstraction.name() << R"#(_)#";
             _abstraction_parameters(abstraction, false, false, true, false);
-            _out << R"#(::_instance>(std::forward<_Args>(_args) ...))};
+            _out << R"#(::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> )#" << abstraction.name() << R"#(
@@ -360,10 +360,10 @@ private:
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(::_derived
     {
-        template<typename ... _Args>
-        inline _instance(_Args && ... _args)
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
         :)#" << abstraction.name() << R"#(_::_derived{}
-        ,_thing{std::forward<_Args>(_args) ...}
+        ,_thing{std::forward<_Args>(_args)...}
         {
         }
 
@@ -438,10 +438,10 @@ private:
     };
 
 public:
-    template<typename ... _Args>
-    static inline auto _make_(_Args && ... _args) -> )#" << abstraction.name() << R"#(_
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> )#" << abstraction.name() << R"#(_
     {
-        return )#" << abstraction.name() << R"#(_{)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args) ...))};
+        return )#" << abstraction.name() << R"#(_{)#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#" << abstraction.name() << R"#(_::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture_(std::string const & name) -> )#" << abstraction.name() << R"#(_
