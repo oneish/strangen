@@ -20,7 +20,7 @@ namespace demo
     };
 
     // template
-    template<typename Item = int, typename ... Args>
+    template<typename Item = int, typename... Args>
     struct bunch : strange::any
     {
         [[strange::closure("push_back_closure_")]]
@@ -30,6 +30,13 @@ namespace demo
         [[strange::closure("operator_array_closure_")]]
         auto operator[](std::size_t pos) const -> Item const &;
         auto operator[](std::size_t pos) -> Item &;
+    };
+
+    template<typename... Args>
+    struct variadic : strange::any
+    {
+        auto size() const -> std::size_t;
+        //TODO auto emplace_back(Args && ...args) -> void;
     };
 
     // multiple inheritance

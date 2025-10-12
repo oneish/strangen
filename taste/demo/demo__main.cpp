@@ -209,7 +209,21 @@ int main()
     auto closure_2 = fruit_2.ripe_closure_();
     closure_2();
 
-    auto bunch_1 = demo::bunch<demo::fruit>::_make<std::vector<demo::fruit>>();
+    auto bunch_1 = demo::bunch<demo::fruit, int64_t>::_make<std::vector<demo::fruit>>();
+    std::cout << "bunch_1._cat(): " << bunch_1._cat() << "\n";
+    std::cout << "bunch_1._name(): " << bunch_1._name() << "\n";
+    auto var0 = demo::variadic<>::_make<std::vector<demo::fruit>>();
+    auto var1 = demo::variadic<bool>::_make<std::vector<demo::fruit>>();
+    auto var2 = demo::variadic<bool, int32_t>::_make<std::vector<demo::fruit>>();
+    auto var3 = demo::variadic<bool, int32_t, int64_t>::_make<std::vector<demo::fruit>>();
+    std::cout << "var0._cat(): " << var0._cat() << "\n";
+    std::cout << "var0._name(): " << var0._name() << "\n";
+    std::cout << "var1._cat(): " << var1._cat() << "\n";
+    std::cout << "var1._name(): " << var1._name() << "\n";
+    std::cout << "var2._cat(): " << var2._cat() << "\n";
+    std::cout << "var2._name(): " << var2._name() << "\n";
+    std::cout << "var3._cat(): " << var3._cat() << "\n";
+    std::cout << "var3._name(): " << var3._name() << "\n";
     bunch_1.push_back(fruit_1);
     std::cout << "bunch_1.size(): " << bunch_1.size() << "\n";
     auto closure_3 = bunch_1.push_back_closure_();

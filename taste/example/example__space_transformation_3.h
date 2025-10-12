@@ -117,7 +117,7 @@ struct reflection<example::numeric<Data>>
 {
     static inline auto name() -> std::string
     {
-        return "example::numeric<" + reflection<Data>::name() + ">";
+        return "example::numeric<" + concatename<false, Data>() + ">";
     }
 };
 
@@ -126,7 +126,7 @@ struct reflection<example::numeric_<_Thing, _Copy, Data>>
 {
     static inline auto name() -> std::string
     {
-        return "example::numeric_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<Data>::name() + ">";
+        return "example::numeric_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Data>() + ">";
     }
 };
 

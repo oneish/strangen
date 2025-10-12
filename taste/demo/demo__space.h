@@ -25,6 +25,12 @@ struct bunch;
 template<typename _Thing, bool _Copy, typename Item = int, typename... Args>
 struct bunch_;
 
+template<typename... Args>
+struct variadic;
+
+template<typename _Thing, bool _Copy, typename... Args>
+struct variadic_;
+
 struct bunch_of_fruit;
 
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
@@ -81,7 +87,7 @@ struct reflection<demo::bunch<Item, Args...>>
 {
     static inline auto name() -> std::string
     {
-        return "demo::bunch<" + reflection<Item>::name() + ", " + (reflection<Args>::name() + ... + ", ") + ">";
+        return "demo::bunch<" + concatename<false, Item, Args...>() + ">";
     }
 };
 
@@ -90,7 +96,25 @@ struct reflection<demo::bunch_<_Thing, _Copy, Item, Args...>>
 {
     static inline auto name() -> std::string
     {
-        return "demo::bunch_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<Item>::name() + ", " + (reflection<Args>::name() + ... + ", ") + ">";
+        return "demo::bunch_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Item, Args...>() + ">";
+    }
+};
+
+template<typename... Args>
+struct reflection<demo::variadic<Args...>>
+{
+    static inline auto name() -> std::string
+    {
+        return "demo::variadic<" + concatename<false, Args...>() + ">";
+    }
+};
+
+template<typename _Thing, bool _Copy, typename... Args>
+struct reflection<demo::variadic_<_Thing, _Copy, Args...>>
+{
+    static inline auto name() -> std::string
+    {
+        return "demo::variadic_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Args...>() + ">";
     }
 };
 
@@ -1183,6 +1207,327 @@ public:
     }();
 };
 
+template<typename... Args>
+struct variadic : strange::any
+{
+    inline variadic() = default;
+
+    inline variadic(variadic const & other)
+    :strange::_common{other}
+    ,strange::any{}
+    {
+    }
+
+    inline variadic(variadic && other)
+    :strange::_common{std::move(other)}
+    ,strange::any{}
+    {
+    }
+
+    inline auto operator=(variadic const & other) -> variadic &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(variadic && other) -> variadic &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline variadic(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,strange::any{}
+    {
+    }
+
+    explicit inline variadic(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,strange::any{}
+    {
+    }
+
+protected:
+    struct _derived : strange::any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename variadic::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return strange::any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto size() const -> std::size_t = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename variadic::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> variadic
+    {
+        try
+        {
+            return variadic{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return variadic{};
+        }
+    }
+
+    inline auto _reproduce() const -> variadic
+    {
+        try
+        {
+            return variadic{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return variadic{};
+        }
+    }
+
+    inline auto _weak() const -> variadic
+    {
+        return variadic{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> variadic
+    {
+        return variadic{strange::_common::_shared->_strong()};
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> variadic
+    {
+        return variadic{variadic::_derived::_static_shared_to_base(std::make_shared<typename variadic_<_Thing, _Copy, Args...>::_instance>(std::forward<_Args>(_args)...))};
+    }
+
+    static inline auto _manufacture(std::string const & name) -> variadic
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return variadic{};
+        }
+        return variadic{it->second()};
+    }
+
+    using _Abstraction_ = variadic;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::any::_cats_.cbegin(), strange::any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto size() const -> std::size_t;
+};
+
+template<typename _Thing, bool _Copy, typename... Args>
+struct variadic_ : variadic<Args...>
+{
+    inline variadic_() = default;
+
+    inline variadic_(variadic_ const & other)
+    :strange::_common{other}
+    ,variadic<Args...>{}
+    {
+    }
+
+    inline variadic_(variadic_ && other)
+    :strange::_common{std::move(other)}
+    ,variadic<Args...>{}
+    {
+    }
+
+    inline auto operator=(variadic_ const & other) -> variadic_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(variadic_ && other) -> variadic_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline variadic_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,variadic<Args...>{}
+    {
+    }
+
+    explicit inline variadic_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,variadic<Args...>{}
+    {
+    }
+
+private:
+    friend struct variadic<Args...>;
+
+    struct _instance final : variadic<Args...>::_derived
+    {
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
+        :variadic_::_derived{}
+        ,_thing{std::forward<_Args>(_args)...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return variadic_::_derived::_static_shared_to_base(std::make_shared<variadic_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_common::_no_copy{};
+            }
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return variadic_::_derived::_static_shared_to_base(std::make_shared<variadic_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return variadic<Args...>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return variadic<Args...>::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return variadic_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return variadic_::_name_;
+        }
+
+        inline auto size() const -> std::size_t final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> variadic_
+    {
+        return variadic_{variadic_::_derived::_static_shared_to_base(std::make_shared<variadic_::_instance>(std::forward<_Args>(_args)...))};
+    }
+
+    static inline auto _manufacture_(std::string const & name) -> variadic_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return variadic_{};
+        }
+        return variadic_{it->second()};
+    }
+
+    inline auto _valid_() const -> bool
+    {
+        return std::dynamic_pointer_cast<variadic_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> variadic_
+    {
+        try
+        {
+            return variadic_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return variadic_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> variadic_
+    {
+        try
+        {
+            return variadic_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return variadic_{};
+        }
+    }
+
+    inline auto _weak_() const -> variadic_
+    {
+        return variadic_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> variadic_
+    {
+        return variadic_{strange::_common::_shared->_strong()};
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<variadic_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<variadic_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = variadic_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return variadic_::_derived::_static_shared_to_base(std::make_shared<variadic_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
 struct bunch_of_fruit : food, bunch<fruit>, strange::stuff
 {
     inline bunch_of_fruit() = default;
@@ -2109,6 +2454,18 @@ template<typename _Thing, bool _Copy, typename Item, typename... Args>
 inline auto bunch_<_Thing, _Copy, Item, Args...>::_instance::operator[](std::size_t pos) -> Item &
 {
     return _thing.operator[](pos);
+}
+
+template<typename... Args>
+inline auto variadic<Args...>::size() const -> std::size_t
+{
+    return std::dynamic_pointer_cast<typename variadic<Args...>::_derived const>(strange::_common::_shared)->size();
+}
+
+template<typename _Thing, bool _Copy, typename... Args>
+inline auto variadic_<_Thing, _Copy, Args...>::_instance::size() const -> std::size_t
+{
+    return _thing.size();
 }
 
 inline auto bunch_of_fruit::eat(int xxx) -> void

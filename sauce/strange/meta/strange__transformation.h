@@ -601,12 +601,25 @@ public:
                 }
                 else if (reflection)
                 {
-                    _out << R"#(" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ")#";
+                    _out << R"#(" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + )#";
+                    if (abstraction.parameters().empty())
+                    {
+                        _out << R"#(")#";
+                    }
                 }
                 else
                 {
                     _out << R"#(_Thing, _Copy)#";
                 }
+            }
+            if (reflection && (!types) && !abstraction.parameters().empty())
+            {
+                if (!thing)
+                {
+                    _out << R"#(" + )#";
+                }
+                _out << R"#(concatename<)#" << (thing ? R"#(true, )#" : R"#(false, )#");
+                first = true;
             }
             for (auto const & parameter : abstraction.parameters())
             {
@@ -627,30 +640,8 @@ public:
                     }
                     _out << R"#( )#";
                 }
-                else if (reflection)
-                {
-                    if (parameter.variadic())
-                    {
-                        _out << R"#(" + (reflection<)#";
-                    }
-                    else
-                    {
-                        _out << R"#(" + reflection<)#";
-                    }
-                }
                 _out << parameter.name();
-                if (reflection && !types)
-                {
-                    if (parameter.variadic())
-                    {
-                        _out << R"#(>::name() + ... + ", ") + ")#";
-                    }
-                    else
-                    {
-                        _out << R"#(>::name() + ")#";
-                    }
-                }
-                else if (parameter.variadic() && !types)
+                if (parameter.variadic() && !types)
                 {
                     _out << R"#(...)#";
                 }
@@ -663,6 +654,10 @@ public:
             {
                 _out << R"#(>
 )#";
+            }
+            else if (reflection && !abstraction.parameters().empty())
+            {
+                _out << R"#(>() + ">)#";
             }
             else
             {

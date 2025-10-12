@@ -15,6 +15,25 @@ struct reflection
     }
 };
 
+template<bool _Comma>
+auto concatename() -> std::string
+{
+    return std::string {};
+}
+
+template<bool _Comma, typename _First, typename... _Rest>
+auto concatename() -> std::string
+{
+    std::string result;
+    if constexpr (_Comma)
+    {
+        result = ", ";
+    }
+    result += reflection<_First>::name();
+    ((result += ", " + reflection<_Rest>::name()), ...);
+    return result;
+}
+
 template<>
 struct reflection<bool>
 {

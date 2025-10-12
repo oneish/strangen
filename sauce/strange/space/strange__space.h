@@ -311,7 +311,7 @@ struct reflection<strange::processor<Signal>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::processor<" + reflection<Signal>::name() + ">";
+        return "strange::processor<" + concatename<false, Signal>() + ">";
     }
 };
 
@@ -320,7 +320,7 @@ struct reflection<strange::processor_<_Thing, _Copy, Signal>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::processor_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<Signal>::name() + ">";
+        return "strange::processor_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Signal>() + ">";
     }
 };
 
@@ -356,7 +356,7 @@ struct reflection<strange::graph<Signal>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::graph<" + reflection<Signal>::name() + ">";
+        return "strange::graph<" + concatename<false, Signal>() + ">";
     }
 };
 
@@ -365,7 +365,7 @@ struct reflection<strange::graph_<_Thing, _Copy, Signal>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::graph_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<Signal>::name() + ">";
+        return "strange::graph_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Signal>() + ">";
     }
 };
 
@@ -509,7 +509,7 @@ struct reflection<strange::forward_const_iterator<T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::forward_const_iterator<" + reflection<T>::name() + ">";
+        return "strange::forward_const_iterator<" + concatename<false, T>() + ">";
     }
 };
 
@@ -518,7 +518,7 @@ struct reflection<strange::forward_const_iterator_<_Thing, _Copy, T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::forward_const_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<T>::name() + ">";
+        return "strange::forward_const_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, T>() + ">";
     }
 };
 
@@ -527,7 +527,7 @@ struct reflection<strange::forward_iterator<T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::forward_iterator<" + reflection<T>::name() + ">";
+        return "strange::forward_iterator<" + concatename<false, T>() + ">";
     }
 };
 
@@ -536,7 +536,7 @@ struct reflection<strange::forward_iterator_<_Thing, _Copy, T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::forward_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<T>::name() + ">";
+        return "strange::forward_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, T>() + ">";
     }
 };
 
@@ -545,7 +545,7 @@ struct reflection<strange::bidirectional_const_iterator<T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::bidirectional_const_iterator<" + reflection<T>::name() + ">";
+        return "strange::bidirectional_const_iterator<" + concatename<false, T>() + ">";
     }
 };
 
@@ -554,7 +554,7 @@ struct reflection<strange::bidirectional_const_iterator_<_Thing, _Copy, T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::bidirectional_const_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<T>::name() + ">";
+        return "strange::bidirectional_const_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, T>() + ">";
     }
 };
 
@@ -563,7 +563,7 @@ struct reflection<strange::bidirectional_iterator<T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::bidirectional_iterator<" + reflection<T>::name() + ">";
+        return "strange::bidirectional_iterator<" + concatename<false, T>() + ">";
     }
 };
 
@@ -572,7 +572,7 @@ struct reflection<strange::bidirectional_iterator_<_Thing, _Copy, T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::bidirectional_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<T>::name() + ">";
+        return "strange::bidirectional_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, T>() + ">";
     }
 };
 
@@ -581,7 +581,7 @@ struct reflection<strange::random_access_const_iterator<T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::random_access_const_iterator<" + reflection<T>::name() + ">";
+        return "strange::random_access_const_iterator<" + concatename<false, T>() + ">";
     }
 };
 
@@ -590,7 +590,7 @@ struct reflection<strange::random_access_const_iterator_<_Thing, _Copy, T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::random_access_const_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<T>::name() + ">";
+        return "strange::random_access_const_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, T>() + ">";
     }
 };
 
@@ -599,7 +599,7 @@ struct reflection<strange::random_access_iterator<T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::random_access_iterator<" + reflection<T>::name() + ">";
+        return "strange::random_access_iterator<" + concatename<false, T>() + ">";
     }
 };
 
@@ -608,7 +608,7 @@ struct reflection<strange::random_access_iterator_<_Thing, _Copy, T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::random_access_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<T>::name() + ">";
+        return "strange::random_access_iterator_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, T>() + ">";
     }
 };
 
@@ -617,7 +617,7 @@ struct reflection<strange::vector<T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::vector<" + reflection<T>::name() + ">";
+        return "strange::vector<" + concatename<false, T>() + ">";
     }
 };
 
@@ -626,7 +626,7 @@ struct reflection<strange::vector_<_Thing, _Copy, T>>
 {
     static inline auto name() -> std::string
     {
-        return "strange::vector_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ", " + reflection<T>::name() + ">";
+        return "strange::vector_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, T>() + ">";
     }
 };
 
