@@ -32,7 +32,7 @@ struct widget_number_;
 template<typename Data = int>
 struct numeric;
 
-template<typename _Thing, bool _Copy, typename Data>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename Data = int>
 struct numeric_;
 
 }

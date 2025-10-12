@@ -575,13 +575,22 @@ public:
                 first = false;
                 if (arguments)
                 {
+                    bool can_default = true;
+                    for (auto const & parameter : abstraction.parameters())
+                    {
+                        if (parameter.argument().empty())
+                        {
+                            can_default = false;
+                            break;
+                        }
+                    }
                     _out << R"#(typename _Thing)#";
-                    if (abstraction.parameters().empty() && !abstraction.thing().empty())
+                    if (can_default && !abstraction.thing().empty())
                     {
                         _out << R"#( = )#" << abstraction.thing();
                     }
                     _out << R"#(, bool _Copy)#";
-                    if (abstraction.parameters().empty())
+                    if (can_default)
                     {
                         _out << R"#( = std::is_copy_constructible_v<_Thing>)#";
                     }
@@ -622,7 +631,7 @@ public:
                 {
                     _out << R"#(>::name() + ")#";
                 }
-                else if (arguments && ((!thing) || !abstraction.thing().empty()) && !parameter.argument().empty())
+                else if (arguments && !parameter.argument().empty())
                 {
                     _out << R"#( = )#" << parameter.argument();
                 }

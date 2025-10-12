@@ -1,3 +1,4 @@
 .vscode
-build/strangen
+bake/strangen
+build
 a.out

@@ -19,10 +19,10 @@ struct fruit;
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct fruit_;
 
-template<typename Item>
+template<typename Item = int>
 struct bunch;
 
-template<typename _Thing, bool _Copy, typename Item>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename Item = int>
 struct bunch_;
 
 struct bunch_of_fruit;
