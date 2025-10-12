@@ -317,6 +317,11 @@ struct parser
                 param.variadic() = true;
                 parse_name();
             }
+            else if (tok.classification() != cls::name)
+            {
+                err = "parse_abstraction_template() expected name or '...', but got punctuation";
+                return;
+            }
             param.name() = tok.text();
             parse_punctuation();
             if (!err.empty())
