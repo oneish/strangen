@@ -306,11 +306,16 @@ struct parser
             }
             auto param = strange::parameter::_make();
             param.type() = tok.text();
-            parse_name();
+            parse_name_or_punctuation();
             if (!err.empty())
             {
                 err = "parse_abstraction_template() " + err;
                 return;
+            }
+            if (tok.text() == "...")
+            {
+                param.variadic() = true;
+                parse_name();
             }
             param.name() = tok.text();
             parse_punctuation();

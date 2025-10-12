@@ -196,6 +196,7 @@ namespace strange
         std::string type {};
         std::string name {};
         std::string argument {};
+        bool variadic {false};
 
         [[strange::customisation("return type() == other.type()"
         "    && name() == other.name()"

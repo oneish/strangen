@@ -20,7 +20,7 @@ namespace demo
     };
 
     // template
-    template<typename Item = int>
+    template<typename Item = int, typename ... Args>
     struct bunch : strange::any
     {
         [[strange::closure("push_back_closure_")]]

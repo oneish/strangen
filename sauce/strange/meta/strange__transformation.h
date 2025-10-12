@@ -620,16 +620,39 @@ public:
                 }
                 if (types)
                 {
-                    _out << parameter.type() << R"#( )#";
+                    _out << parameter.type();
+                    if (parameter.variadic())
+                    {
+                        _out << R"#(...)#";
+                    }
+                    _out << R"#( )#";
                 }
                 else if (reflection)
                 {
-                    _out << R"#(" + reflection<)#";
+                    if (parameter.variadic())
+                    {
+                        _out << R"#(" + (reflection<)#";
+                    }
+                    else
+                    {
+                        _out << R"#(" + reflection<)#";
+                    }
                 }
                 _out << parameter.name();
                 if (reflection && !types)
                 {
-                    _out << R"#(>::name() + ")#";
+                    if (parameter.variadic())
+                    {
+                        _out << R"#(>::name() + ... + ", ") + ")#";
+                    }
+                    else
+                    {
+                        _out << R"#(>::name() + ")#";
+                    }
+                }
+                else if (parameter.variadic() && !types)
+                {
+                    _out << R"#(...)#";
                 }
                 else if (arguments && !parameter.argument().empty())
                 {

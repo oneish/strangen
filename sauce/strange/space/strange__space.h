@@ -4659,6 +4659,10 @@ protected:
 
         virtual auto argument() -> std::string & = 0;
 
+        virtual auto variadic() const -> bool const & = 0;
+
+        virtual auto variadic() -> bool & = 0;
+
         virtual auto operator==(parameter const & other) const -> bool = 0;
 
         virtual auto operator!=(parameter const & other) const -> bool = 0;
@@ -4755,6 +4759,10 @@ public:
     inline auto argument() const -> std::string const &;
 
     inline auto argument() -> std::string &;
+
+    inline auto variadic() const -> bool const &;
+
+    inline auto variadic() -> bool &;
 
     inline auto operator==(parameter const & other) const -> bool;
 
@@ -4892,6 +4900,10 @@ private:
 
         inline auto argument() -> std::string & final;
 
+        inline auto variadic() const -> bool const & final;
+
+        inline auto variadic() -> bool & final;
+
         inline auto operator==(parameter const & other) const -> bool final;
 
         inline auto operator!=(parameter const & other) const -> bool final;
@@ -5010,6 +5022,9 @@ struct parameter
     std::string argument_ {};
     inline auto argument() const -> std::string const & { return argument_; };
     inline auto argument() -> std::string & { return argument_; };
+    bool variadic_ {false};
+    inline auto variadic() const -> bool const & { return variadic_; };
+    inline auto variadic() -> bool & { return variadic_; };
 
     inline auto pack(strange::bag & dest) const -> void
     {
@@ -5017,6 +5032,7 @@ struct parameter
         dest.insert_object("type", dest.make_string(type()));
         dest.insert_object("name", dest.make_string(name()));
         dest.insert_object("argument", dest.make_string(argument()));
+        dest.insert_object("variadic", dest.make_bool(variadic()));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -5024,6 +5040,7 @@ struct parameter
         src.get_object("type").as_string(type());
         src.get_object("name").as_string(name());
         src.get_object("argument").as_string(argument());
+        src.get_object("variadic").as_bool(variadic());
     }
 };
 }
@@ -13373,6 +13390,17 @@ inline auto parameter::argument() -> std::string &
     return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->argument();
 }
 
+inline auto parameter::variadic() const -> bool const &
+{
+    return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->variadic();
+}
+
+inline auto parameter::variadic() -> bool &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename parameter::_derived>(strange::_common::_shared)->variadic();
+}
+
 inline auto parameter::operator==(parameter const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename parameter::_derived const>(strange::_common::_shared)->operator==(other);
@@ -13449,6 +13477,18 @@ template<typename _Thing, bool _Copy>
 inline auto parameter_<_Thing, _Copy>::_instance::argument() -> std::string &
 {
     return _thing.argument();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::variadic() const -> bool const &
+{
+    return _thing.variadic();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto parameter_<_Thing, _Copy>::_instance::variadic() -> bool &
+{
+    return _thing.variadic();
 }
 
 template<typename _Thing, bool _Copy>

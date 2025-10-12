@@ -189,6 +189,11 @@ struct toker
             }
             else if (second)
             {
+                if (char1 == '.' && char1 == char2 && text.length() == 1)
+                {
+                    text += char1;
+                    continue;
+                }
                 return make_token(cls::punctuation, text + char1);
             }
             else if (singlequote && char1 == '\'')
@@ -342,6 +347,7 @@ struct toker
                     }
 					return make_token(cls::punctuation, text);
 				case ':':
+                case '.':
                 case '&':
                 case '|':
                 case '=':
