@@ -776,6 +776,11 @@ struct parser
                         return;
                     }
                 }
+                else if (angle == 0 && tok.text() == "...")
+                {
+                    param.variadic() = true;
+                    continue;
+                }
                 else if (angle == 0 && (tok.text() == "=" || tok.text() == "," || tok.text() == ")"))
                 {
                     rtrim(param.type());

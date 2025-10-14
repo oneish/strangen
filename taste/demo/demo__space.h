@@ -1257,6 +1257,8 @@ protected:
         }
 
         virtual auto size() const -> std::size_t = 0;
+
+        virtual auto emplace_back(Args && ...args) -> void = 0;
     };
 
 public:
@@ -1328,6 +1330,8 @@ public:
     }();
 
     inline auto size() const -> std::size_t;
+
+    inline auto emplace_back(Args && ...args) -> void;
 };
 
 template<typename _Thing, bool _Copy, typename... Args>
@@ -1438,6 +1442,8 @@ private:
         }
 
         inline auto size() const -> std::size_t final;
+
+        inline auto emplace_back(Args && ...args) -> void final;
 
         _Thing _thing;
     };
@@ -2462,10 +2468,23 @@ inline auto variadic<Args...>::size() const -> std::size_t
     return std::dynamic_pointer_cast<typename variadic<Args...>::_derived const>(strange::_common::_shared)->size();
 }
 
+template<typename... Args>
+inline auto variadic<Args...>::emplace_back(Args && ...args) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename variadic<Args...>::_derived>(strange::_common::_shared)->emplace_back(std::forward<Args>(args)...);
+}
+
 template<typename _Thing, bool _Copy, typename... Args>
 inline auto variadic_<_Thing, _Copy, Args...>::_instance::size() const -> std::size_t
 {
     return _thing.size();
+}
+
+template<typename _Thing, bool _Copy, typename... Args>
+inline auto variadic_<_Thing, _Copy, Args...>::_instance::emplace_back(Args && ...args) -> void
+{
+    _thing.emplace_back(std::forward<Args>(args)...);
 }
 
 inline auto bunch_of_fruit::eat(int xxx) -> void

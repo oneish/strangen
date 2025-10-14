@@ -1,5 +1,6 @@
 #pragma once
 #include "../strange.h"
+#include "../comprehension/strange__comprehension__parser.h"
 #include <sstream>
 #include <ostream>
 #include <iostream>
@@ -1360,7 +1361,12 @@ namespace )#" << _space.name() << R"#(
             }
             if (types)
             {
-                _out << parameter.type() << R"#( )#" << parameter.name();
+                _out << parameter.type() << R"#( )#";
+                if (parameter.variadic())
+                {
+                    _out << R"#(...)#";
+                }
+                _out << parameter.name();
                 if (arguments && !parameter.argument().empty())
                 {
                     _out << R"#( = )#" << parameter.argument();
@@ -1368,7 +1374,20 @@ namespace )#" << _space.name() << R"#(
             }
             else if ((parameter.type().length() >= 2) && (parameter.type().substr(parameter.type().length() - 2) == "&&"))
             {
-                _out << R"#(std::move()#" << parameter.name() << R"#())#";
+                if (parameter.variadic())
+                {
+                    auto param = parameter.type().substr(0, parameter.type().length() - 2);
+                    strange::comprehension::parser::rtrim(param);
+                    _out << R"#(std::forward<)#" << param << R"#(>()#" << parameter.name() << R"#()...)#";
+                }
+                else
+                {
+                    _out << R"#(std::move()#" << parameter.name() << R"#())#";
+                }
+            }
+            else if (parameter.variadic())
+            {
+                _out << parameter.name() << R"#(...)#";
             }
             else
             {

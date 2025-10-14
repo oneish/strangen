@@ -36,7 +36,7 @@ namespace demo
     struct variadic : strange::any
     {
         auto size() const -> std::size_t;
-        //TODO auto emplace_back(Args && ...args) -> void;
+        auto emplace_back(Args && ...args) -> void;
     };
 
     // multiple inheritance
