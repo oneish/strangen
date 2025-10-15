@@ -31,6 +31,12 @@ struct variadic;
 template<typename _Thing, bool _Copy, typename... Args>
 struct variadic_;
 
+template<typename Result = void, typename... Args>
+struct functor;
+
+template<typename _Thing, bool _Copy, typename Result = void, typename... Args>
+struct functor_;
+
 struct bunch_of_fruit;
 
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
@@ -115,6 +121,24 @@ struct reflection<demo::variadic_<_Thing, _Copy, Args...>>
     static inline auto name() -> std::string
     {
         return "demo::variadic_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Args...>() + ">";
+    }
+};
+
+template<typename Result, typename... Args>
+struct reflection<demo::functor<Result, Args...>>
+{
+    static inline auto name() -> std::string
+    {
+        return "demo::functor<" + concatename<false, Result, Args...>() + ">";
+    }
+};
+
+template<typename _Thing, bool _Copy, typename Result, typename... Args>
+struct reflection<demo::functor_<_Thing, _Copy, Result, Args...>>
+{
+    static inline auto name() -> std::string
+    {
+        return "demo::functor_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Result, Args...>() + ">";
     }
 };
 
@@ -1534,6 +1558,327 @@ public:
     }();
 };
 
+template<typename Result, typename... Args>
+struct functor : strange::any
+{
+    inline functor() = default;
+
+    inline functor(functor const & other)
+    :strange::_common{other}
+    ,strange::any{}
+    {
+    }
+
+    inline functor(functor && other)
+    :strange::_common{std::move(other)}
+    ,strange::any{}
+    {
+    }
+
+    inline auto operator=(functor const & other) -> functor &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(functor && other) -> functor &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline functor(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,strange::any{}
+    {
+    }
+
+    explicit inline functor(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,strange::any{}
+    {
+    }
+
+protected:
+    struct _derived : strange::any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename functor::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return strange::any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto operator()(Args && ...args) -> Result = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename functor::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> functor
+    {
+        try
+        {
+            return functor{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return functor{};
+        }
+    }
+
+    inline auto _reproduce() const -> functor
+    {
+        try
+        {
+            return functor{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return functor{};
+        }
+    }
+
+    inline auto _weak() const -> functor
+    {
+        return functor{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> functor
+    {
+        return functor{strange::_common::_shared->_strong()};
+    }
+
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> functor
+    {
+        return functor{functor::_derived::_static_shared_to_base(std::make_shared<typename functor_<_Thing, _Copy, Result, Args...>::_instance>(std::forward<_Args>(_args)...))};
+    }
+
+    static inline auto _manufacture(std::string const & name) -> functor
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return functor{};
+        }
+        return functor{it->second()};
+    }
+
+    using _Abstraction_ = functor;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(strange::any::_cats_.cbegin(), strange::any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto operator()(Args && ...args) -> Result;
+};
+
+template<typename _Thing, bool _Copy, typename Result, typename... Args>
+struct functor_ : functor<Result, Args...>
+{
+    inline functor_() = default;
+
+    inline functor_(functor_ const & other)
+    :strange::_common{other}
+    ,functor<Result, Args...>{}
+    {
+    }
+
+    inline functor_(functor_ && other)
+    :strange::_common{std::move(other)}
+    ,functor<Result, Args...>{}
+    {
+    }
+
+    inline auto operator=(functor_ const & other) -> functor_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(functor_ && other) -> functor_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline functor_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,functor<Result, Args...>{}
+    {
+    }
+
+    explicit inline functor_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,functor<Result, Args...>{}
+    {
+    }
+
+private:
+    friend struct functor<Result, Args...>;
+
+    struct _instance final : functor<Result, Args...>::_derived
+    {
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
+        :functor_::_derived{}
+        ,_thing{std::forward<_Args>(_args)...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return functor_::_derived::_static_shared_to_base(std::make_shared<functor_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_common::_no_copy{};
+            }
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return functor_::_derived::_static_shared_to_base(std::make_shared<functor_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return functor<Result, Args...>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return functor<Result, Args...>::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return functor_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return functor_::_name_;
+        }
+
+        inline auto operator()(Args && ...args) -> Result final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> functor_
+    {
+        return functor_{functor_::_derived::_static_shared_to_base(std::make_shared<functor_::_instance>(std::forward<_Args>(_args)...))};
+    }
+
+    static inline auto _manufacture_(std::string const & name) -> functor_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return functor_{};
+        }
+        return functor_{it->second()};
+    }
+
+    inline auto _valid_() const -> bool
+    {
+        return std::dynamic_pointer_cast<functor_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> functor_
+    {
+        try
+        {
+            return functor_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return functor_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> functor_
+    {
+        try
+        {
+            return functor_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return functor_{};
+        }
+    }
+
+    inline auto _weak_() const -> functor_
+    {
+        return functor_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> functor_
+    {
+        return functor_{strange::_common::_shared->_strong()};
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<functor_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<functor_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = functor_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return functor_::_derived::_static_shared_to_base(std::make_shared<functor_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
 struct bunch_of_fruit : food, bunch<fruit>, strange::stuff
 {
     inline bunch_of_fruit() = default;
@@ -2485,6 +2830,19 @@ template<typename _Thing, bool _Copy, typename... Args>
 inline auto variadic_<_Thing, _Copy, Args...>::_instance::emplace_back(Args && ...args) -> void
 {
     _thing.emplace_back(std::forward<Args>(args)...);
+}
+
+template<typename Result, typename... Args>
+inline auto functor<Result, Args...>::operator()(Args && ...args) -> Result
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename functor<Result, Args...>::_derived>(strange::_common::_shared)->operator()(std::forward<Args>(args)...);
+}
+
+template<typename _Thing, bool _Copy, typename Result, typename... Args>
+inline auto functor_<_Thing, _Copy, Result, Args...>::_instance::operator()(Args && ...args) -> Result
+{
+    return _thing.operator()(std::forward<Args>(args)...);
 }
 
 inline auto bunch_of_fruit::eat(int xxx) -> void

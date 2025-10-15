@@ -243,5 +243,10 @@ int main()
     auto no_banana_1 = demo::fruit::_make<no_banana>(std::string{});
     std::cout << "no_banana_1._name(): " << no_banana_1._name() << "\n";
 
+    auto fun_1 = demo::functor<int32_t, int64_t>::_make<std::function<int32_t(int64_t)>>();
+    std::cout << "fun_1._cat(): " << fun_1._cat() << "\n";
+    auto fun_2 = demo::functor<>::_make<std::function<void()>>();
+    std::cout << "fun_2._name(): " << fun_2._name() << "\n";
+
     return 0;
 }

@@ -39,6 +39,12 @@ namespace demo
         auto emplace_back(Args && ...args) -> void;
     };
 
+    template<typename Result = void, typename... Args>
+    struct functor : strange::any
+    {
+        auto operator()(Args && ...args) -> Result;
+    };
+
     // multiple inheritance
     struct bunch_of_fruit : food, bunch<fruit>, strange::stuff
     {
