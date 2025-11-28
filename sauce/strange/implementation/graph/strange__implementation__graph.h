@@ -154,6 +154,7 @@ struct processor
                 break;
             case 11:
                 combine_receivers<11>();
+                break;
             default:
                 throw std::runtime_error("too many connected ins");
         }
