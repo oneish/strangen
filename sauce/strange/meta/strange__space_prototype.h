@@ -157,13 +157,13 @@ namespace strange
     template<typename Signal>
     struct processor : stuff
     {
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
-        auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
+        auto ins() const -> uint64_t const &;
+        auto ins() -> uint64_t &;
 
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &;
-        auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &;
+        auto outs() const -> uint64_t const &;
+        auto outs() -> uint64_t &;
 
-        auto closure(std::unique_ptr<Signal> && overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+        auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
     };
 
     struct [[strange::thing("strange::implementation::connection")]]
@@ -180,14 +180,14 @@ namespace strange
     graph : processor<Signal>
     {
         auto add_processor(strange::processor<Signal> proc) -> uint64_t;
-        auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
-        auto processors(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::processor<Signal>> const &;
-        auto processors(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::processor<Signal>> &;
+        auto remove_processor(uint64_t id) -> bool;
+        auto processors() const -> std::vector<strange::processor<Signal>> const &;
+        auto processors() -> std::vector<strange::processor<Signal>> &;
 
-        auto add_connection(strange::connection conn = strange::connection::_make(), std::unique_ptr<Signal> && overload = nullptr) -> uint64_t;
-        auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool;
-        auto connections(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::connection> const &;
-        auto connections(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::connection> &;
+        auto add_connection(strange::connection conn = strange::connection::_make()) -> uint64_t;
+        auto remove_connection(uint64_t id) -> bool;
+        auto connections() const -> std::vector<strange::connection> const &;
+        auto connections() -> std::vector<strange::connection> &;
     };
 
     struct [[strange::thing("strange::implementation::parameter")]]

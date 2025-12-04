@@ -277,27 +277,27 @@ struct thru_processor
         src.get_object("outs").as_uint64(outs());
     }
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &
+    inline auto ins() const -> uint64_t const &
     {
         return _ins;
     }
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &
+    inline auto ins() -> uint64_t &
     {
         return _ins;
     }
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &
+    inline auto outs() const -> uint64_t const &
     {
         return _outs;
     }
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &
+    inline auto outs() -> uint64_t &
     {
         return _outs;
     }
 
-    inline auto closure(std::unique_ptr<Signal> && overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         return [*this](std::vector<Signal> inputs) {
             inputs.resize(_outs);
@@ -369,27 +369,27 @@ struct graph
         }
     }
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &
+    inline auto ins() const -> uint64_t const &
     {
         return _ins;
     }
 
-    inline auto ins(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &
+    inline auto ins() -> uint64_t &
     {
         return _ins;
     }
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) const -> uint64_t const &
+    inline auto outs() const -> uint64_t const &
     {
         return _outs;
     }
 
-    inline auto outs(std::unique_ptr<Signal> && overload = nullptr) -> uint64_t &
+    inline auto outs() -> uint64_t &
     {
         return _outs;
     }
 
-    inline auto closure(std::unique_ptr<Signal> && overload = nullptr) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
@@ -410,7 +410,7 @@ struct graph
         return id;
     }
 
-    inline auto remove_processor(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool
+    inline auto remove_processor(uint64_t id) -> bool
     {
         if (id < _processors.size() && _processors[id]._something())
         {
@@ -420,24 +420,24 @@ struct graph
         return false;
     }
 
-    inline auto processors(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::processor<Signal>> const &
+    inline auto processors() const -> std::vector<strange::processor<Signal>> const &
     {
         return _processors;
     }
 
-    inline auto processors(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::processor<Signal>> &
+    inline auto processors() -> std::vector<strange::processor<Signal>> &
     {
         return _processors;
     }
 
-    inline auto add_connection(strange::connection conn, std::unique_ptr<Signal> && overload = nullptr) -> uint64_t
+    inline auto add_connection(strange::connection conn) -> uint64_t
     {
         auto id = _connections.size();
         _connections.push_back(conn);
         return id;
     }
 
-    inline auto remove_connection(uint64_t id, std::unique_ptr<Signal> && overload = nullptr) -> bool
+    inline auto remove_connection(uint64_t id) -> bool
     {
         if (id < _connections.size() && _connections[id]._something())
         {
@@ -447,12 +447,12 @@ struct graph
         return false;
     }
 
-    inline auto connections(std::unique_ptr<Signal> && overload = nullptr) const -> std::vector<strange::connection> const &
+    inline auto connections() const -> std::vector<strange::connection> const &
     {
         return _connections;
     }
 
-    inline auto connections(std::unique_ptr<Signal> && overload = nullptr) -> std::vector<strange::connection> &
+    inline auto connections() -> std::vector<strange::connection> &
     {
         return _connections;
     }
