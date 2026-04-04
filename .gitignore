@@ -6,3 +6,5 @@ tastes/test_gcc
 tastes/test_clang
 tastes/baggage/test_baggage
 tastes/baggage/test_baggage_clang
+tastes/currants/test_currants
+tastes/currants/test_currants_clang
