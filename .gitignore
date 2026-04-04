@@ -4,3 +4,5 @@ build
 a.out
 tastes/test_gcc
 tastes/test_clang
+tastes/baggage/test_baggage
+tastes/baggage/test_baggage_clang
