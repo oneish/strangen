@@ -57,7 +57,7 @@ operation.result().substr(0, operation.result().length() - 7)
 
 If the result string is shorter than 7 characters, unsigned underflow causes undefined behavior.
 
-### 7. Possible logic error with `||` vs `&&` (line 1293)
+### 7. ~~Possible logic error with `||` vs `&&` (line 1293)~~ NOT A BUG
 
 ```cpp
 if ((operation.modification().empty() && !inner) || operation.customisation().empty())
@@ -67,17 +67,17 @@ The `||` causes this condition to fire whenever `customisation` is empty, regard
 
 ## Code Generator Tool (`sauce/generation/strange__generation.cpp`)
 
-### 8. Asterisk flag not reset on consecutive `*`
+### 8. ~~Asterisk flag not reset on consecutive `*`~~ NOT A BUG
 
 When processing `/*~ ... */` content, if a `*` is encountered the `asterisk` flag is set. If the next character is also `*`, the flag remains set and a single `*` is output. Sequences like `**` within tilde blocks could cause the `*/` terminator to be missed or misinterpreted.
 
-### 9. Missing `slash` flag reset on false-positive delimiters
+### 9. ~~Missing `slash` flag reset on false-positive delimiters~~ NOT A BUG
 
 When the state machine detects `/*` or `//` but the next character is not `~`, it transitions back to normal mode without explicitly resetting the `slash` flag, leaving the state machine in a potentially inconsistent state.
 
 ## Common (`sauce/strange/common/strange__common.h`)
 
-### 10. Race condition in `_mutate()` (line 191)
+### 10. ~~Race condition in `_mutate()` (line 191)~~ NOT A BUG
 
 ```cpp
 if (_shared.use_count() > 1)
@@ -88,16 +88,16 @@ if (_shared.use_count() > 1)
 
 The check-then-act pattern is not thread-safe. Between checking `use_count()` and calling `_clone()`, another thread could change the reference count.
 
-### 11. `_error()` silently destroys object state (line 267)
+### 11. ~~`_error()` silently destroys object state (line 267)~~ NOT A BUG
 
 Calling `_error("msg")` unconditionally replaces `_shared` with a `_message` object, permanently losing the wrapped concrete object.
 
 ## Concurrency (`sauce/strange/implementation/graph/strange__implementation__graph.h`)
 
-### 12. Race condition on `_outputs` promise (lines 193-200)
+### 12. ~~Race condition on `_outputs` promise (lines 193-200)~~ NOT A BUG
 
 `operator()` creates a new promise on `_outputs` while another thread could still be waiting on the previous future via `future.get()`.
 
-### 13. Uninitialized `_ins` and `_outs` in `thru_processor` (line 309)
+### 13. ~~Uninitialized `_ins` and `_outs` in `thru_processor` (line 309)~~ NOT A BUG
 
 Member variables are declared but never initialized in the constructor. If `closure()` uses them before they are set via the mutable getters, behavior is undefined.
