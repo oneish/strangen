@@ -2,7 +2,7 @@
 
 ## Parser (`sauce/strange/comprehension/strange__comprehension__parser.h`)
 
-### 1. Buffer underflow in `substr` (lines 618, 787)
+### 1. ~~Buffer underflow in `substr` (lines 618, 787)~~ FIXED
 
 ```cpp
 oper.result() = oper.result().substr(0, oper.result().length() - oper.name().length());

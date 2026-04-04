@@ -615,7 +615,10 @@ struct parser
                 if (tok.text() == "{" || tok.text() == ";")
                 {
                     rtrim(oper.result());
-                    oper.result() = oper.result().substr(0, oper.result().length() - oper.name().length());
+                    if (oper.result().length() >= oper.name().length())
+                    {
+                        oper.result() = oper.result().substr(0, oper.result().length() - oper.name().length());
+                    }
                     rtrim(oper.result());
                     break;
                 }
@@ -784,7 +787,10 @@ struct parser
                 else if (angle == 0 && (tok.text() == "=" || tok.text() == "," || tok.text() == ")"))
                 {
                     rtrim(param.type());
-                    param.type() = param.type().substr(0, param.type().length() - param.name().length());
+                    if (param.type().length() >= param.name().length())
+                    {
+                        param.type() = param.type().substr(0, param.type().length() - param.name().length());
+                    }
                     rtrim(param.type());
                     break;
                 }
