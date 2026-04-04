@@ -2,3 +2,5 @@
 bake/strangen
 build
 a.out
+tastes/test_gcc
+tastes/test_clang
