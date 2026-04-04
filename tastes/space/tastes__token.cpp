@@ -51,3 +51,28 @@ TEST_CASE("token: classification enum round-trip")
     CHECK(check_cls(strange::comprehension::cls::whitespace));
     CHECK(check_cls(strange::comprehension::cls::mistake));
 }
+
+TEST_CASE("token: equality and ordering")
+{
+    auto t1 = strange::token::_make();
+    t1.text() = "alpha";
+    t1.line() = 1;
+
+    auto t2 = strange::token::_make();
+    t2.text() = "beta";
+    t2.line() = 2;
+
+    CHECK(t1 != t2);
+    CHECK(t1 < t2);
+    CHECK(t1 <= t2);
+    CHECK_FALSE(t1 > t2);
+    CHECK_FALSE(t1 >= t2);
+
+    auto t3 = strange::token::_make();
+    t3.text() = "alpha";
+    t3.line() = 1;
+
+    CHECK(t1 == t3);
+    CHECK(t1 <= t3);
+    CHECK(t1 >= t3);
+}

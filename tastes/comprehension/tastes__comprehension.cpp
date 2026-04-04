@@ -129,6 +129,90 @@ TEST_CASE("toker: string escape sequences")
     CHECK(tok.text() == "hello\nworld");
 }
 
+TEST_CASE("toker: negative number")
+{
+    std::istringstream input("-123");
+    std::istreambuf_iterator<char> it(input);
+    strange::comprehension::toker t(it);
+
+    auto tok = t.increment();
+    CHECK(tok.classification() == strange::comprehension::cls::number);
+    CHECK(tok.text() == "-123");
+}
+
+TEST_CASE("toker: float with leading dot")
+{
+    std::istringstream input(".5");
+    std::istreambuf_iterator<char> it(input);
+    strange::comprehension::toker t(it);
+
+    auto tok = t.increment();
+    // .5 starts with punctuation dot, then number
+    CHECK(tok.classification() == strange::comprehension::cls::punctuation);
+}
+
+TEST_CASE("toker: float with trailing dot")
+{
+    std::istringstream input("5.x");
+    std::istreambuf_iterator<char> it(input);
+    strange::comprehension::toker t(it);
+
+    auto tok = t.increment();
+    CHECK(tok.classification() == strange::comprehension::cls::number);
+    CHECK(tok.text() == "5");
+}
+
+TEST_CASE("toker: scientific notation")
+{
+    std::istringstream input("1e10");
+    std::istreambuf_iterator<char> it(input);
+    strange::comprehension::toker t(it);
+
+    auto tok = t.increment();
+    CHECK(tok.classification() == strange::comprehension::cls::number);
+    CHECK(tok.text() == "1e10");
+}
+
+TEST_CASE("toker: all escape sequences")
+{
+    std::istringstream input("\"\\a\\b\\f\\r\\t\\v\\\\\"");
+    std::istreambuf_iterator<char> it(input);
+    strange::comprehension::toker t(it);
+
+    auto tok = t.increment();
+    CHECK(tok.classification() == strange::comprehension::cls::string);
+    CHECK(tok.text() == "\a\b\f\r\t\v\\");
+}
+
+TEST_CASE("toker: double-char operators")
+{
+    auto check_op = [](std::string const & op)
+    {
+        std::istringstream input(op);
+        std::istreambuf_iterator<char> it(input);
+        strange::comprehension::toker t(it);
+        auto tok = t.increment();
+        return tok.text();
+    };
+    CHECK(check_op("==") == "==");
+    CHECK(check_op("!=") == "!=");
+    CHECK(check_op("<=") == "<=");
+    CHECK(check_op(">=") == ">=");
+    CHECK(check_op("++") == "++");
+    CHECK(check_op("--") == "--");
+}
+
+TEST_CASE("toker: ellipsis")
+{
+    std::istringstream input("...");
+    std::istreambuf_iterator<char> it(input);
+    strange::comprehension::toker t(it);
+
+    auto tok = t.increment();
+    CHECK(tok.classification() == strange::comprehension::cls::punctuation);
+    CHECK(tok.text() == "...");
+}
+
 // ---- PARSER TESTS ----
 
 TEST_CASE("parser: parse minimal space")
@@ -273,4 +357,207 @@ TEST_CASE("parser: invalid input produces error")
 
     auto spc = parser.parse();
     CHECK(spc._error() != "");
+}
+
+TEST_CASE("parser: closure annotation")
+{
+    std::string input = R"(
+namespace test
+{
+    struct food : strange::any
+    {
+        [[strange::closure("eat_closure_")]]
+        auto eat(int x) -> void;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+    REQUIRE(spc.abstractions()[0].operations().size() >= 1);
+
+    auto const & op = spc.abstractions()[0].operations()[0];
+    CHECK(op.name() == "eat");
+    CHECK(op.closure() == "eat_closure_");
+}
+
+TEST_CASE("parser: default arguments")
+{
+    std::string input = R"(
+namespace test
+{
+    struct widget : strange::any
+    {
+        auto process(int x = 0) -> void;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+    REQUIRE(spc.abstractions()[0].operations().size() >= 1);
+
+    auto const & op = spc.abstractions()[0].operations()[0];
+    CHECK(op.name() == "process");
+    REQUIRE(op.parameters().size() == 1);
+    CHECK(op.parameters()[0].name() == "x");
+    CHECK(op.parameters()[0].argument() == "0");
+}
+
+TEST_CASE("parser: multiple inheritance")
+{
+    std::string input = R"(
+namespace test
+{
+    struct base1 : strange::any
+    {
+        auto foo() -> void;
+    };
+    struct base2 : strange::any
+    {
+        auto bar() -> void;
+    };
+    struct derived : base1, base2
+    {
+        auto baz() -> void;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 3);
+
+    auto const & derived = spc.abstractions()[2];
+    CHECK(derived.name() == "derived");
+    REQUIRE(derived.parents().size() == 2);
+    CHECK(derived.parents()[0] == "base1");
+    CHECK(derived.parents()[1] == "base2");
+}
+
+TEST_CASE("parser: data member")
+{
+    std::string input = R"(
+namespace test
+{
+    struct item : strange::any
+    {
+        std::string name;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+
+    auto const & ops = spc.abstractions()[0].operations();
+    REQUIRE(ops.size() == 2);
+    CHECK(ops[0].data() == true);
+    CHECK(ops[0].name() == "name");
+    CHECK(ops[0].constness() == true);
+    CHECK(ops[1].data() == true);
+    CHECK(ops[1].name() == "name");
+    CHECK(ops[1].constness() == false);
+}
+
+TEST_CASE("parser: variadic template")
+{
+    std::string input = R"(
+namespace test
+{
+    template<typename... Args>
+    struct variadic : strange::any
+    {
+        auto size() const -> std::size_t;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+
+    auto const & abs = spc.abstractions()[0];
+    CHECK(abs.name() == "variadic");
+    REQUIRE(abs.parameters().size() == 1);
+    CHECK(abs.parameters()[0].type() == "typename");
+    CHECK(abs.parameters()[0].name() == "Args");
+    CHECK(abs.parameters()[0].variadic() == true);
+}
+
+TEST_CASE("parser: template with default argument")
+{
+    std::string input = R"(
+namespace test
+{
+    template<typename T = int>
+    struct container : strange::any
+    {
+        auto size() const -> std::size_t;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+
+    auto const & abs = spc.abstractions()[0];
+    REQUIRE(abs.parameters().size() == 1);
+    CHECK(abs.parameters()[0].name() == "T");
+    CHECK(abs.parameters()[0].argument() == "int");
+}
+
+TEST_CASE("parser: using declaration")
+{
+    std::string input = R"(
+namespace test
+{
+    struct bunch : strange::any
+    {
+        using Item = int;
+        auto size() const -> std::size_t;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+
+    auto const & abs = spc.abstractions()[0];
+    REQUIRE(abs.types().size() == 1);
+    CHECK(abs.types()[0].name() == "Item");
+    CHECK(abs.types()[0].argument() == "int");
 }

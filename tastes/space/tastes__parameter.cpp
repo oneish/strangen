@@ -74,3 +74,26 @@ TEST_CASE("parameter: _clone produces independent copy")
     CHECK(p1.name() == "original");
     CHECK(p2.name() == "cloned");
 }
+
+TEST_CASE("parameter: ordering operators")
+{
+    auto p1 = strange::parameter::_make();
+    p1.type() = "int";
+    p1.name() = "a";
+
+    auto p2 = strange::parameter::_make();
+    p2.type() = "int";
+    p2.name() = "b";
+
+    CHECK(p1 < p2);
+    CHECK(p1 <= p2);
+    CHECK_FALSE(p1 > p2);
+    CHECK_FALSE(p1 >= p2);
+
+    auto p3 = strange::parameter::_make();
+    p3.type() = "int";
+    p3.name() = "a";
+
+    CHECK(p1 <= p3);
+    CHECK(p1 >= p3);
+}

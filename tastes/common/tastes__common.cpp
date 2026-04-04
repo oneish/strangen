@@ -92,3 +92,58 @@ TEST_CASE("_common: _weak reference expires when original is destroyed")
     auto s = w._strong();
     CHECK_FALSE(s._something());
 }
+
+TEST_CASE("_common: _address and _sizeof for valid objects")
+{
+    auto p1 = strange::parameter::_make();
+    auto p2 = strange::parameter::_make();
+
+    CHECK(p1._address() != nullptr);
+    CHECK(p2._address() != nullptr);
+    CHECK(p1._address() != p2._address());
+    CHECK(p1._sizeof() > 0);
+}
+
+TEST_CASE("_common: _name returns reflection name for concrete type")
+{
+    auto p = strange::parameter::_make();
+    CHECK(p._name().find("parameter") != std::string::npos);
+}
+
+TEST_CASE("_common: _copy returns true for copyable types")
+{
+    auto p = strange::parameter::_make();
+    CHECK(p._copy() == true);
+}
+
+struct non_copyable_thing
+{
+    non_copyable_thing() = default;
+    non_copyable_thing(non_copyable_thing const &) = delete;
+    non_copyable_thing(non_copyable_thing &&) = default;
+};
+
+TEST_CASE("_common: _make with non-copyable type")
+{
+    auto a = strange::any::_make<non_copyable_thing, false>();
+    CHECK(a._something());
+    CHECK(a._valid());
+    CHECK(a._copy() == false);
+
+    auto cloned = a._clone();
+    CHECK_FALSE(cloned._something());
+}
+
+TEST_CASE("_common: _manufacture for registered types")
+{
+    auto p = strange::parameter::_manufacture(
+        "strange::parameter_<strange::implementation::parameter, true>");
+    CHECK(p._something());
+    CHECK(p._valid());
+}
+
+TEST_CASE("_common: _manufacture for unknown type returns empty")
+{
+    auto p = strange::parameter::_manufacture("nonexistent::type");
+    CHECK_FALSE(p._something());
+}

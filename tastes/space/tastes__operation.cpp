@@ -79,3 +79,23 @@ TEST_CASE("operation: equality")
     op2.name() = "bar";
     CHECK(op1 != op2);
 }
+
+TEST_CASE("operation: ordering operators")
+{
+    auto op1 = strange::operation::_make();
+    op1.name() = "alpha";
+
+    auto op2 = strange::operation::_make();
+    op2.name() = "beta";
+
+    CHECK(op1 < op2);
+    CHECK(op1 <= op2);
+    CHECK_FALSE(op1 > op2);
+    CHECK_FALSE(op1 >= op2);
+
+    auto op3 = strange::operation::_make();
+    op3.name() = "alpha";
+
+    CHECK(op1 <= op3);
+    CHECK(op1 >= op3);
+}
