@@ -49,7 +49,7 @@ while (--depth)
 
 Pre-decrement means the loop runs `depth - 1` times. If 3 namespaces were opened, only 2 closing braces are emitted, producing malformed C++ output.
 
-### 6. Unsafe `substr` without length check (line 1037)
+### 6. ~~Unsafe `substr` without length check (line 1037)~~ FIXED
 
 ```cpp
 operation.result().substr(0, operation.result().length() - 7)

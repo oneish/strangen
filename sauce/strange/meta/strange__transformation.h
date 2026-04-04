@@ -1039,7 +1039,7 @@ namespace )#" << _space.name() << R"#(
                 {
                     if (operation.constness() && !definition)
                     {
-                        _out << R"#(    )#" << operation.result().substr(0, operation.result().length() - 7)
+                        _out << R"#(    )#" << (operation.result().length() >= 7 ? operation.result().substr(0, operation.result().length() - 7) : operation.result())
                             << operation.name() << R"#(_ )#" << operation.implementation() << R"#(;
 )#";
                     }
