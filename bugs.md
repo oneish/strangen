@@ -32,13 +32,13 @@ No check that `text.size() >= 2` before accessing `text[text.size() - 2]`.
 
 ## Tokenizer (`sauce/strange/comprehension/strange__comprehension__toker.h`)
 
-### 4. Missing `continue` after escape detection (line 213)
+### 4. ~~Missing `continue` after escape detection (line 213)~~ NOT A BUG
 
 When a backslash is encountered inside a quoted string, `escape` is set to `true` but execution falls through to subsequent conditions instead of continuing to the next iteration. This can cause the backslash or the following character to be misclassified.
 
 ## Transformation (`sauce/strange/meta/strange__transformation.h`)
 
-### 5. Off-by-one in namespace closing (line 955)
+### 5. ~~Off-by-one in namespace closing (line 955)~~ FIXED
 
 ```cpp
 while (--depth)

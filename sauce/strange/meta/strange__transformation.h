@@ -952,12 +952,17 @@ public:
         }
         _out << R"#(;
 )#";
-        while (--depth)
+        while (depth > 1)
         {
+            --depth;
             _out << R"#(}
 )#";
         }
-        _out << R"#(}
+        if (depth > 0)
+        {
+            _out << R"#(})#";
+        }
+        _out << R"#(
 
 namespace )#" << _space.name() << R"#(
 {
