@@ -264,7 +264,7 @@ struct toker
                                 use = char1;
                                 if (point)
                                 {
-                                    if (text[text.size() - 2] == '.')
+                                    if (text.size() >= 2 && text[text.size() - 2] == '.')
                                     {
                                         // int
                                         dot = true;

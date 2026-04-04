@@ -10,7 +10,7 @@ oper.result() = oper.result().substr(0, oper.result().length() - oper.name().len
 
 If `oper.name().length()` exceeds `oper.result().length()`, subtracting unsigned `size_t` values wraps around, producing a massive length and causing undefined behavior. The same pattern appears at line 787 with `param.type()`.
 
-### 2. Contradictory error-checking logic (lines 1069-1084)
+### 2. ~~Contradictory error-checking logic (lines 1069-1084)~~ NOT A BUG
 
 ```cpp
 if (angle < 0 || curly < 0 || round < 0 || square < 0)
@@ -22,7 +22,7 @@ if (angle < 0 || curly < 0 || round < 0 || square < 0)
 
 The outer condition requires `angle < 0` (or another counter < 0), but the inner condition checks `angle > 0`. These are mutually exclusive, so the error message for mismatched `<` is unreachable.
 
-### 3. Out-of-bounds access (line 268)
+### 3. ~~Out-of-bounds access (line 268)~~ FIXED
 
 ```cpp
 if (text[text.size() - 2] == '.')
