@@ -1,3 +1,9 @@
+// A recursive descent parser for the strange prototype DSL. Reads tokens from
+// a toker and produces a strange::space containing abstractions with their
+// operations, parameters, template parameters, parent types, using declarations,
+// and attributes. Supports #include directives for composing spaces from
+// multiple files.
+
 #pragma once
 #include "../strange.h"
 #include "strange__comprehension__toker.h"
@@ -5,6 +11,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+#include <filesystem>
 
 namespace strange
 {
@@ -12,21 +19,6 @@ namespace comprehension
 {
 struct parser
 {
-    static inline auto rtrim(std::string & s) -> void
-    {
-        s.erase(std::find_if(s.rbegin(), s.rend(),
-            [](unsigned char ch)
-            {
-                return !std::isspace(ch);
-            }).base(), s.end());
-    }
-
-    toker toke;
-
-    strange::token tok;
-
-    std::string err;
-
     parser(toker tokenizer)
     :toke{tokenizer}
     ,tok{}
@@ -66,10 +58,12 @@ struct parser
                     }
                     else
                     {
-                        std::ifstream ifs{prototype, std::ios::binary};
+                        std::filesystem::path dir = std::filesystem::path(toke.filename).parent_path();
+                        std::filesystem::path resolved = dir / prototype;
+                        std::ifstream ifs{resolved, std::ios::binary};
                         std::istreambuf_iterator<char> it{ifs};
                         auto previous = toke;
-                        toke = toker{it, prototype};
+                        toke = toker{it, resolved.string()};
                         auto deep = parse();
                         toke = previous;
                         for (auto abstraction : deep.inclusions())
@@ -105,6 +99,22 @@ struct parser
         }
         return spc;
     }
+
+    static inline auto rtrim(std::string & s) -> void
+    {
+        s.erase(std::find_if(s.rbegin(), s.rend(),
+            [](unsigned char ch)
+            {
+                return !std::isspace(ch);
+            }).base(), s.end());
+    }
+
+private:
+    toker toke;
+
+    strange::token tok;
+
+    std::string err;
 
     auto parse_space(space & spc) -> void
     {
