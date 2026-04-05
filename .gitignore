@@ -6,5 +6,5 @@ tastes/strange/test_gcc
 tastes/strange/test_clang
 tastes/strange/implementation/baggage/test_baggage
 tastes/strange/implementation/baggage/test_baggage_clang
-tastes/strange/implementation/graph/test_currants
-tastes/strange/implementation/graph/test_currants_clang
+tastes/strange/implementation/graph/test_graph
+tastes/strange/implementation/graph/test_graph_clang

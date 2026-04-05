@@ -3,7 +3,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-echo "=== Building currants tests with clang++-15 ==="
+echo "=== Building graph tests with clang++-15 ==="
 clang++-15 -std=c++17 -Wall \
     -I../../../../../doctest/doctest \
     -I../../../../../libdart/include \
@@ -12,13 +12,13 @@ clang++-15 -std=c++17 -Wall \
     -I../../../../../sajson/include \
     -I../../../../../stlab-libraries/include \
     -I../../../../../BUILD/include \
-    -o test_currants_clang \
-    taste__currants_main.cpp \
+    -o test_graph_clang \
+    taste__graph_main.cpp \
     -L../../../../../BUILD \
     -lstlab
 
-echo "=== Running currants tests ==="
-./test_currants_clang --duration=true
+echo "=== Running graph tests ==="
+./test_graph_clang --duration=true
 
 echo ""
-echo "=== All currants tests passed ==="
+echo "=== All graph tests passed ==="
