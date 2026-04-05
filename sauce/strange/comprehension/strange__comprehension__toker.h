@@ -28,37 +28,37 @@ enum class cls
 
 struct toker
 {
-    inline auto filename() const -> std::string const & { return filename_; }
-    inline auto end() const -> bool { return end_; }
+    inline auto filename() const -> std::string const & { return _filename; }
+    inline auto end() const -> bool { return _end; }
 
     toker(std::istreambuf_iterator<char> sit, std::string const & fname = std::string{})
-    :filename_{fname}
-    ,end_{sit == std::istreambuf_iterator<char>{}}
-    ,it{sit}
-    ,start_line{1}
-    ,start_position{0}
-    ,line{1}
-    ,position{0}
-    ,dot{false}
-    ,use{'\0'}
+    :_filename{fname}
+    ,_end{sit == std::istreambuf_iterator<char>{}}
+    ,_it{sit}
+    ,_start_line{1}
+    ,_start_position{0}
+    ,_line{1}
+    ,_position{0}
+    ,_dot{false}
+    ,_use{'\0'}
     {
     }
 
     inline auto increment() -> strange::token
     {
-        if (!end_)
+        if (!_end)
         {
-            if ((!dot) && (!use) && (it == std::istreambuf_iterator<char>{}))
+            if ((!_dot) && (!_use) && (_it == std::istreambuf_iterator<char>{}))
             {
-                end_ = true;
+                _end = true;
                 return make_token(cls::comment, "");
             }
             else
             {
                 auto token = next();
-                if ((!dot) && (!use) && (it == std::istreambuf_iterator<char>{}))
+                if ((!_dot) && (!_use) && (_it == std::istreambuf_iterator<char>{}))
                 {
-                    end_ = true;
+                    _end = true;
                 }
                 return token;
             }
@@ -67,15 +67,15 @@ struct toker
     }
 
 private:
-    std::string filename_;
-    bool end_;
-    std::istreambuf_iterator<char> it;
-    int64_t start_line;
-    int64_t start_position;
-    int64_t line;
-    int64_t position;
-    bool dot;
-    char use;
+    std::string _filename;
+    bool _end;
+    std::istreambuf_iterator<char> _it;
+    int64_t _start_line;
+    int64_t _start_position;
+    int64_t _line;
+    int64_t _position;
+    bool _dot;
+    char _use;
 
     static inline auto alpha_char(char c) -> bool
     {
@@ -89,16 +89,16 @@ private:
 
     inline auto make_token(cls classification, std::string text) const -> strange::token
     {
-        return strange::token::_make(strange::implementation::token{.filename_ = filename_, .line_ = start_line, .position_ = start_position, .classification_ = classification, .text_ = text});
+        return strange::token::_make(strange::implementation::token{.filename_ = _filename, .line_ = _start_line, .position_ = _start_position, .classification_ = classification, .text_ = text});
     }
 
     inline auto next() -> strange::token
     {
-        start_line = line;
-        start_position = position;
-        if ((!dot) && !use)
+        _start_line = _line;
+        _start_position = _position;
+        if ((!_dot) && !_use)
         {
-            ++start_position;
+            ++_start_position;
         }
         bool alphanumeric = false;
         bool numeric = false;
@@ -116,37 +116,37 @@ private:
         {
             char char1;
             char char2;
-            if (dot)
+            if (_dot)
             {
                 char1 = '.';
-                dot = false;
+                _dot = false;
             }
-            else if (use)
+            else if (_use)
             {
-                char1 = use;
-                use = '\0';
+                char1 = _use;
+                _use = '\0';
             }
-            else if (it == std::istreambuf_iterator<char>{})
+            else if (_it == std::istreambuf_iterator<char>{})
             {
                 break;
             }
             else
             {
-                char1 = *it;
-                ++it;
-                ++position;
+                char1 = *_it;
+                ++_it;
+                ++_position;
             }
-            char2 = (it != std::istreambuf_iterator<char>{}) ? (*it) : '\0';
+            char2 = (_it != std::istreambuf_iterator<char>{}) ? (*_it) : '\0';
 
             if (char1 == '\n')
             {
-                position = 0;
-                ++line;
+                _position = 0;
+                ++_line;
             }
             else if (char1 == '\t')
             {
                 // round to next 4-space tab stop
-                position = ((position + 3) / 4) * 4;
+                _position = ((_position + 3) / 4) * 4;
             }
 
             if (commentblock)
@@ -267,18 +267,18 @@ private:
                         {
                             if (pnt1)
                             {
-                                dot = true;
+                                _dot = true;
                                 return make_token(cls::number, text.substr(0, text.size() - 1));
                             }
                             if (exp1)
                             {
-                                use = char1;
+                                _use = char1;
                                 if (point)
                                 {
                                     if (text.size() >= 2 && text[text.size() - 2] == '.')
                                     {
                                         // int
-                                        dot = true;
+                                        _dot = true;
                                         return make_token(cls::number, text.substr(0, text.size() - 2));
                                     }
                                     // float

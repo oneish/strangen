@@ -20,52 +20,52 @@ namespace comprehension
 struct parser
 {
     parser(toker tokenizer)
-    :toke{tokenizer}
-    ,tok{}
-    ,err{}
+    :_toke{tokenizer}
+    ,_tok{}
+    ,_err{}
     {
     }
 
     auto parse() -> space
     {
         auto spc = space::_make();
-        err.clear();
-        while (err.empty())
+        _err.clear();
+        while (_err.empty())
         {
             parse_name_or_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse() " + err;
+                _err = "parse() " + _err;
             }
-            else if (tok.text() == "#")
+            else if (_tok.text() == "#")
             {
                 parse_name();
-                if (!err.empty())
+                if (!_err.empty())
                 {
-                    err = "parse() " + err;
+                    _err = "parse() " + _err;
                 }
-                else if (tok.text() != "include")
+                else if (_tok.text() != "include")
                 {
-                    err = "parse() expected 'include', but got name";
+                    _err = "parse() expected 'include', but got name";
                 }
                 else
                 {
                     std::string prototype;
                     parse_string(prototype, true);
-                    if (!err.empty())
+                    if (!_err.empty())
                     {
-                        err = "parse() " + err;
+                        _err = "parse() " + _err;
                     }
                     else
                     {
-                        std::filesystem::path dir = std::filesystem::path(toke.filename()).parent_path();
+                        std::filesystem::path dir = std::filesystem::path(_toke.filename()).parent_path();
                         std::filesystem::path resolved = dir / prototype;
                         std::ifstream ifs{resolved, std::ios::binary};
                         std::istreambuf_iterator<char> it{ifs};
-                        auto previous = toke;
-                        toke = toker{it, resolved.string()};
+                        auto previous = _toke;
+                        _toke = toker{it, resolved.string()};
                         auto deep = parse();
-                        toke = previous;
+                        _toke = previous;
                         for (auto abstraction : deep.inclusions())
                         {
                             spc.inclusions().push_back(abstraction);
@@ -78,23 +78,23 @@ struct parser
                     }
                 }
             }
-            else if (tok.text() != "namespace")
+            else if (_tok.text() != "namespace")
             {
-                err = "parse() expected '#' or 'namespace', but got text";
+                _err = "parse() expected '#' or 'namespace', but got text";
             }
             else
             {
                 break;
             }
         }
-        if (err.empty())
+        if (_err.empty())
         {
             parse_space(spc);
         }
-        if (!err.empty())
+        if (!_err.empty())
         {
             std::stringstream str;
-            str << "strange::comprehension::parser::" << err << " - " << tok;
+            str << "strange::comprehension::parser::" << _err << " - " << _tok;
             spc._error(str.str());
         }
         return spc;
@@ -110,52 +110,52 @@ struct parser
     }
 
 private:
-    toker toke;
+    toker _toke;
 
-    strange::token tok;
+    strange::token _tok;
 
-    std::string err;
+    std::string _err;
 
     auto parse_space(space & spc) -> void
     {
         parse_name();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_space() " + err;
+            _err = "parse_space() " + _err;
             return;
         }
-        spc.name() = tok.text();
+        spc.name() = _tok.text();
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_space() " + err;
+            _err = "parse_space() " + _err;
             return;
         }
-        if (tok.text() != "{")
+        if (_tok.text() != "{")
         {
-            err = "parse_space() expected '{', but got punctuation";
+            _err = "parse_space() expected '{', but got punctuation";
             return;
         }
         for (;;)
         {
             parse_name_or_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_space() " + err;
+                _err = "parse_space() " + _err;
                 return;
             }
-            if (tok.classification() == cls::punctuation)
+            if (_tok.classification() == cls::punctuation)
             {
-                if (tok.text() != "}")
+                if (_tok.text() != "}")
                 {
-                    err = "parse_space() expected name or '}', but got punctuation";
+                    _err = "parse_space() expected name or '}', but got punctuation";
                     return;
                 }
                 break;
             }
             auto abs = abstraction::_make();
             parse_abstraction(abs);
-            if (!err.empty())
+            if (!_err.empty())
             {
                 return;
             }
@@ -165,86 +165,86 @@ private:
 
     void parse_abstraction(abstraction & abs)
     {
-        if (tok.text() == "template")
+        if (_tok.text() == "template")
         {
             parse_abstraction_template(abs);
-            if (!err.empty())
+            if (!_err.empty())
             {
                 return;
             }
             parse_name();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction() " + err;
+                _err = "parse_abstraction() " + _err;
                 return;
             }
         }
-        if (tok.text() != "struct")
+        if (_tok.text() != "struct")
         {
-            err = "parse_abstraction() expected 'struct', but got name";
+            _err = "parse_abstraction() expected 'struct', but got name";
             return;
         }
         parse_name_or_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction() " + err;
+            _err = "parse_abstraction() " + _err;
             return;
         }
-        while (tok.classification() == cls::punctuation)
+        while (_tok.classification() == cls::punctuation)
         {
-            if (tok.text() != "[[")
+            if (_tok.text() != "[[")
             {
                 break;
             }
             parse_abstraction_attribute(abs);
-            if (!err.empty())
+            if (!_err.empty())
             {
                 return;
             }
             parse_name_or_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction() " + err;
+                _err = "parse_abstraction() " + _err;
                 return;
             }
         }
-        abs.name() = tok.text();
+        abs.name() = _tok.text();
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction() " + err;
+            _err = "parse_abstraction() " + _err;
             return;
         }
-        if (tok.text() == ":")
+        if (_tok.text() == ":")
         {
             parse_abstraction_parents(abs);
-            if (!err.empty())
+            if (!_err.empty())
             {
                 return;
             }
         }
-        if (tok.text() != "{")
+        if (_tok.text() != "{")
         {
-            err = "parse_abstraction() expected '{', but got punctuation";
+            _err = "parse_abstraction() expected '{', but got punctuation";
             return;
         }
         for (;;)
         {
             parse_name_or_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction() " + err;
+                _err = "parse_abstraction() " + _err;
                 return;
             }
-            if (tok.text() == "}")
+            if (_tok.text() == "}")
             {
                 break;
             }
-            if (tok.text() == "using")
+            if (_tok.text() == "using")
             {
                 auto type = parameter::_make();
                 parse_abstraction_type(type);
-                if (!err.empty())
+                if (!_err.empty())
                 {
                     return;
                 }
@@ -253,7 +253,7 @@ private:
             }
             auto oper = operation::_make();
             parse_operation(oper);
-            if (!err.empty())
+            if (!_err.empty())
             {
                 return;
             }
@@ -277,97 +277,97 @@ private:
             }
         }
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction() " + err;
+            _err = "parse_abstraction() " + _err;
             return;
         }
-        if (tok.text() != ";")
+        if (_tok.text() != ";")
         {
-            err = "parse_abstraction() expected ';', but got punctuation";
+            _err = "parse_abstraction() expected ';', but got punctuation";
         }
     }
 
     void parse_abstraction_template(abstraction & abs)
     {
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_template() " + err;
+            _err = "parse_abstraction_template() " + _err;
             return;
         }
-        if (tok.text() != "<")
+        if (_tok.text() != "<")
         {
-            err = "parse_abstraction_template() expected '<', but got punctuation";
+            _err = "parse_abstraction_template() expected '<', but got punctuation";
             return;
         }
         for (;;)
         {
             parse_name();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction_template() " + err;
+                _err = "parse_abstraction_template() " + _err;
                 return;
             }
-            if (tok.text() != "typename")
+            if (_tok.text() != "typename")
             {
-                err = "parse_abstraction_template() expected 'typename', but got name";
+                _err = "parse_abstraction_template() expected 'typename', but got name";
                 return;
             }
             auto param = strange::parameter::_make();
-            param.type() = tok.text();
+            param.type() = _tok.text();
             parse_name_or_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction_template() " + err;
+                _err = "parse_abstraction_template() " + _err;
                 return;
             }
-            if (tok.text() == "...")
+            if (_tok.text() == "...")
             {
                 param.variadic() = true;
                 parse_name();
             }
-            else if (tok.classification() != cls::name)
+            else if (_tok.classification() != cls::name)
             {
-                err = "parse_abstraction_template() expected name or '...', but got punctuation";
+                _err = "parse_abstraction_template() expected name or '...', but got punctuation";
                 return;
             }
-            param.name() = tok.text();
+            param.name() = _tok.text();
             parse_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction_template() " + err;
+                _err = "parse_abstraction_template() " + _err;
                 return;
             }
-            if (tok.text() == ">")
+            if (_tok.text() == ">")
             {
                 abs.parameters().push_back(param);
                 return;
             }
-            if (tok.text() == ",")
+            if (_tok.text() == ",")
             {
                 abs.parameters().push_back(param);
                 continue;
             }
-            if (tok.text() != "=")
+            if (_tok.text() != "=")
             {
-                err = "parse_abstraction_template() expected '=', ',' or '>', but got punctuation";
+                _err = "parse_abstraction_template() expected '=', ',' or '>', but got punctuation";
                 return;
             }
             parse_argument(param.argument());
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction_template() " + err;
+                _err = "parse_abstraction_template() " + _err;
                 return;
             }
             abs.parameters().push_back(param);
-            if (tok.text() == ">")
+            if (_tok.text() == ">")
             {
                 return;
             }
-            if (tok.text() != ",")
+            if (_tok.text() != ",")
             {
-                err = "parse_abstraction_template() expected ',' or '>', but got punctuation";
+                _err = "parse_abstraction_template() expected ',' or '>', but got punctuation";
                 return;
             }
         }
@@ -379,19 +379,19 @@ private:
         {
             std::string parent;
             parse_argument(parent, true);
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_abstraction_parents() " + err;
+                _err = "parse_abstraction_parents() " + _err;
                 return;
             }
             abs.parents().push_back(parent);
-            if (tok.text() == "{")
+            if (_tok.text() == "{")
             {
                 break;
             }
-            if (tok.text() != ",")
+            if (_tok.text() != ",")
             {
-                err = "parse_abstraction_parents() expected ',' or '{', but got punctuation";
+                _err = "parse_abstraction_parents() expected ',' or '{', but got punctuation";
                 return;
             }
         }
@@ -400,49 +400,49 @@ private:
     void parse_abstraction_attribute(abstraction & abs)
     {
         parse_name();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_attribute() " + err;
+            _err = "parse_abstraction_attribute() " + _err;
             return;
         }
-        if (tok.text() != "strange")
+        if (_tok.text() != "strange")
         {
-            err = "parse_abstraction_attribute() expected 'strange', but got name";
+            _err = "parse_abstraction_attribute() expected 'strange', but got name";
             return;
         }
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_attribute() " + err;
+            _err = "parse_abstraction_attribute() " + _err;
             return;
         }
-        if (tok.text() != "::")
+        if (_tok.text() != "::")
         {
-            err = "parse_abstraction_attribute() expected '::', but got punctuation";
+            _err = "parse_abstraction_attribute() expected '::', but got punctuation";
             return;
         }
         parse_name();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_attribute() " + err;
+            _err = "parse_abstraction_attribute() " + _err;
             return;
         }
-        bool thing = (tok.text() == "thing");
-        bool implementation = (tok.text() == "implementation");
+        bool thing = (_tok.text() == "thing");
+        bool implementation = (_tok.text() == "implementation");
         if (!thing && !implementation)
         {
-            err = "parse_abstraction_attribute() expected 'thing' or 'implementation', but got name";
+            _err = "parse_abstraction_attribute() expected 'thing' or 'implementation', but got name";
             return;
         }
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_attribute() " + err;
+            _err = "parse_abstraction_attribute() " + _err;
             return;
         }
-        if (tok.text() != "(")
+        if (_tok.text() != "(")
         {
-            err = "parse_abstraction_attribute() expected '(', but got punctuation";
+            _err = "parse_abstraction_attribute() expected '(', but got punctuation";
             return;
         }
         if (thing)
@@ -453,25 +453,25 @@ private:
         {
             parse_string(abs.implementation());
         }
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_attribute() " + err;
+            _err = "parse_abstraction_attribute() " + _err;
             return;
         }
-        if (tok.text() != ")")
+        if (_tok.text() != ")")
         {
-            err = "parse_abstraction_attribute() expected ')', but got punctuation";
+            _err = "parse_abstraction_attribute() expected ')', but got punctuation";
             return;
         }
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_attribute() " + err;
+            _err = "parse_abstraction_attribute() " + _err;
             return;
         }
-        if (tok.text() != "]]")
+        if (_tok.text() != "]]")
         {
-            err = "parse_abstraction_attribute() expected ']]', but got punctuation";
+            _err = "parse_abstraction_attribute() expected ']]', but got punctuation";
             return;
         }
     }
@@ -480,67 +480,67 @@ private:
     {
         type.type() = "using";
         parse_name();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_type() " + err;
+            _err = "parse_abstraction_type() " + _err;
             return;
         }
-        type.name() = tok.text();
+        type.name() = _tok.text();
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_type() " + err;
+            _err = "parse_abstraction_type() " + _err;
             return;
         }
-        if (tok.text() != "=")
+        if (_tok.text() != "=")
         {
-            err = "parse_abstraction_type() expected '=', but got punctuation";
+            _err = "parse_abstraction_type() expected '=', but got punctuation";
             return;
         }
         parse_argument(type.argument());
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_abstraction_type() " + err;
+            _err = "parse_abstraction_type() " + _err;
             return;
         }
-        if (tok.text() != ";")
+        if (_tok.text() != ";")
         {
-            err = "parse_abstraction_type() expected ';', but got punctuation";
+            _err = "parse_abstraction_type() expected ';', but got punctuation";
             return;
         }
     }
 
     void parse_operation(operation & oper)
     {
-        while (tok.classification() == cls::punctuation)
+        while (_tok.classification() == cls::punctuation)
         {
-            if (tok.text() != "[[")
+            if (_tok.text() != "[[")
             {
                 break;
             }
             parse_operation_attribute(oper);
-            if (!err.empty())
+            if (!_err.empty())
             {
                 return;
             }
             parse_name_or_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_operation() " + err;
+                _err = "parse_operation() " + _err;
                 return;
             }
         }
-        if (tok.text() == "auto")
+        if (_tok.text() == "auto")
         {
             for (;;)
             {
                 parse_name_or_punctuation(true);
-                if (!err.empty())
+                if (!_err.empty())
                 {
-                    err = "parse_operation() " + err;
+                    _err = "parse_operation() " + _err;
                     return;
                 }
-                if (tok.classification() == cls::whitespace)
+                if (_tok.classification() == cls::whitespace)
                 {
                     if (!oper.name().empty())
                     {
@@ -548,49 +548,49 @@ private:
                     }
                     continue;
                 }
-                if (tok.text() == "(" && oper.name() != "operator")
+                if (_tok.text() == "(" && oper.name() != "operator")
                 {
                     rtrim(oper.name());
                     break;
                 }
-                oper.name() += tok.text();
+                oper.name() += _tok.text();
             }
             parse_operation_parameters(oper);
-            if (!err.empty())
+            if (!_err.empty())
             {
                 return;
             }
             parse_name_or_punctuation();
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_operation() " + err;
+                _err = "parse_operation() " + _err;
                 return;
             }
-            if (tok.text() == "const")
+            if (_tok.text() == "const")
             {
                 oper.constness() = true;
                 parse_name_or_punctuation();
-                if (!err.empty())
+                if (!_err.empty())
                 {
-                    err = "parse_operation() " + err;
+                    _err = "parse_operation() " + _err;
                     return;
                 }
             }
-            if (tok.text() != "->")
+            if (_tok.text() != "->")
             {
-                err = "parse_operation() expected 'const' or '->', but got text";
+                _err = "parse_operation() expected 'const' or '->', but got text";
                 return;
             }
             bool ignore = !oper.result().empty();
             for (;;)
             {
                 parse_name_or_punctuation(true);
-                if (!err.empty())
+                if (!_err.empty())
                 {
-                    err = "parse_operation() " + err;
+                    _err = "parse_operation() " + _err;
                     return;
                 }
-                if (tok.text() == "{" || tok.text() == ";")
+                if (_tok.text() == "{" || _tok.text() == ";")
                 {
                     rtrim(oper.result());
                     break;
@@ -599,7 +599,7 @@ private:
                 {
                     continue;
                 }
-                if (tok.classification() == cls::whitespace)
+                if (_tok.classification() == cls::whitespace)
                 {
                     if (!oper.result().empty())
                     {
@@ -607,22 +607,22 @@ private:
                     }
                     continue;
                 }
-                oper.result() += tok.text();
+                oper.result() += _tok.text();
             }
         }
         else
         {
             oper.data() = true;
-            oper.result() = tok.text();
+            oper.result() = _tok.text();
             for (;;)
             {
                 parse_name_or_punctuation(true);
-                if (!err.empty())
+                if (!_err.empty())
                 {
-                    err = "parse_operation() " + err;
+                    _err = "parse_operation() " + _err;
                     return;
                 }
-                if (tok.text() == "{" || tok.text() == ";")
+                if (_tok.text() == "{" || _tok.text() == ";")
                 {
                     rtrim(oper.result());
                     if (oper.result().length() >= oper.name().length())
@@ -632,10 +632,10 @@ private:
                     rtrim(oper.result());
                     break;
                 }
-                oper.result() += tok.text();
-                if (tok.classification() == cls::name)
+                oper.result() += _tok.text();
+                if (_tok.classification() == cls::name)
                 {
-                    oper.name() = tok.text();
+                    oper.name() = _tok.text();
                 }
             }
             if (oper.result().length() > 5 && oper.result().substr(oper.result().length() - 5) == "const")
@@ -643,18 +643,18 @@ private:
                 oper.constness() = true;
             }
         }
-        if (tok.text() != ";")
+        if (_tok.text() != ";")
         {
-            oper.implementation() = tok.text();
+            oper.implementation() = _tok.text();
             parse_argument(oper.implementation());
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_operation() " + err;
+                _err = "parse_operation() " + _err;
                 return;
             }
-            if (tok.text() != ";")
+            if (_tok.text() != ";")
             {
-                err = "parse_operation() expected ';', but got punctuation";
+                _err = "parse_operation() expected ';', but got punctuation";
                 return;
             }
         }
@@ -663,74 +663,74 @@ private:
     void parse_operation_attribute(operation & oper)
     {
         parse_name();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_operation_attribute() " + err;
+            _err = "parse_operation_attribute() " + _err;
             return;
         }
-        if (tok.text() != "strange")
+        if (_tok.text() != "strange")
         {
-            err = "parse_operation_attribute() expected 'strange', but got name";
+            _err = "parse_operation_attribute() expected 'strange', but got name";
             return;
         }
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_operation_attribute() " + err;
+            _err = "parse_operation_attribute() " + _err;
             return;
         }
-        if (tok.text() != "::")
+        if (_tok.text() != "::")
         {
-            err = "parse_operation_attribute() expected '::', but got punctuation";
+            _err = "parse_operation_attribute() expected '::', but got punctuation";
             return;
         }
         parse_name();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_operation_attribute() " + err;
+            _err = "parse_operation_attribute() " + _err;
             return;
         }
         bool result = false;
         bool closure = false;
         bool modification = false;
-        if (tok.text() == "result")
+        if (_tok.text() == "result")
         {
             result = true;
         }
-        else if (tok.text() == "closure")
+        else if (_tok.text() == "closure")
         {
             closure = true;
         }
-        else if (tok.text() == "modification")
+        else if (_tok.text() == "modification")
         {
             modification = true;
         }
-        else if (tok.text() != "customisation")
+        else if (_tok.text() != "customisation")
         {
-            err = "parse_operation_attribute() expected 'result', 'closure', 'modification' or 'customisation', but got name";
+            _err = "parse_operation_attribute() expected 'result', 'closure', 'modification' or 'customisation', but got name";
             return;
         }
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_operation_attribute() " + err;
+            _err = "parse_operation_attribute() " + _err;
             return;
         }
-        if (tok.text() != "(")
+        if (_tok.text() != "(")
         {
-            err = "parse_operation_attribute() expected '(', but got punctuation";
+            _err = "parse_operation_attribute() expected '(', but got punctuation";
             return;
         }
         std::string text;
         parse_string(text);
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_operation_attribute() " + err;
+            _err = "parse_operation_attribute() " + _err;
             return;
         }
-        if (tok.text() != ")")
+        if (_tok.text() != ")")
         {
-            err = "parse_operation_attribute() expected ')', but got punctuation";
+            _err = "parse_operation_attribute() expected ')', but got punctuation";
             return;
         }
         if (result)
@@ -750,14 +750,14 @@ private:
             oper.customisation() = text;
         }
         parse_punctuation();
-        if (!err.empty())
+        if (!_err.empty())
         {
-            err = "parse_operation_attribute() " + err;
+            _err = "parse_operation_attribute() " + _err;
             return;
         }
-        if (tok.text() != "]]")
+        if (_tok.text() != "]]")
         {
-            err = "parse_operation_attribute() expected ']]', but got punctuation";
+            _err = "parse_operation_attribute() expected ']]', but got punctuation";
             return;
         }
     }
@@ -771,30 +771,30 @@ private:
             for (;;)
             {
                 parse_name_or_punctuation(true);
-                if (!err.empty())
+                if (!_err.empty())
                 {
-                    err = "parse_operation_parameters() " + err;
+                    _err = "parse_operation_parameters() " + _err;
                     return;
                 }
-                if (tok.text() == "<")
+                if (_tok.text() == "<")
                 {
                     ++angle;
                 }
-                else if (tok.text() == ">")
+                else if (_tok.text() == ">")
                 {
                     --angle;
                     if (angle < 0)
                     {
-                        err = "parse_operation_parameters() mismatched '>'";
+                        _err = "parse_operation_parameters() mismatched '>'";
                         return;
                     }
                 }
-                else if (angle == 0 && tok.text() == "...")
+                else if (angle == 0 && _tok.text() == "...")
                 {
                     param.variadic() = true;
                     continue;
                 }
-                else if (angle == 0 && (tok.text() == "=" || tok.text() == "," || tok.text() == ")"))
+                else if (angle == 0 && (_tok.text() == "=" || _tok.text() == "," || _tok.text() == ")"))
                 {
                     rtrim(param.type());
                     if (param.type().length() >= param.name().length())
@@ -806,55 +806,55 @@ private:
                 }
                 if (param.type().empty())
                 {
-                    param.type() = tok.text();
+                    param.type() = _tok.text();
                     rtrim(param.type());
                 }
                 else
                 {
-                    param.type() += tok.text();
+                    param.type() += _tok.text();
                 }
-                if (tok.classification() == cls::name)
+                if (_tok.classification() == cls::name)
                 {
-                    param.name() = tok.text();
+                    param.name() = _tok.text();
                 }
             }
             if (param.name().empty())
             {
-                if (tok.text() != ")")
+                if (_tok.text() != ")")
                 {
-                    err = "parse_operation_parameters() expected ')', but got punctuation";
+                    _err = "parse_operation_parameters() expected ')', but got punctuation";
                 }
                 return;
             }
-            if (tok.text() == ")")
+            if (_tok.text() == ")")
             {
                 oper.parameters().push_back(param);
                 return;
             }
-            if (tok.text() == ",")
+            if (_tok.text() == ",")
             {
                 oper.parameters().push_back(param);
                 continue;
             }
-            if (tok.text() != "=")
+            if (_tok.text() != "=")
             {
-                err = "parse_operation_parameters() expected '=', ',' or ')', but got punctuation";
+                _err = "parse_operation_parameters() expected '=', ',' or ')', but got punctuation";
                 return;
             }
             parse_argument(param.argument());
-            if (!err.empty())
+            if (!_err.empty())
             {
-                err = "parse_operation_parameters() " + err;
+                _err = "parse_operation_parameters() " + _err;
                 return;
             }
             oper.parameters().push_back(param);
-            if (tok.text() == ")")
+            if (_tok.text() == ")")
             {
                 return;
             }
-            if (tok.text() != ",")
+            if (_tok.text() != ",")
             {
-                err = "parse_operation_parameters() expected ',' or ')', but got punctuation";
+                _err = "parse_operation_parameters() expected ',' or ')', but got punctuation";
                 return;
             }
         }
@@ -862,96 +862,96 @@ private:
 
     void parse_name()
     {
-        while (!toke.end())
+        while (!_toke.end())
         {
-            tok = toke.increment();
-            switch (tok.classification())
+            _tok = _toke.increment();
+            switch (_tok.classification())
             {
                 case cls::character:
-                    err = "parse_name() got character";
+                    _err = "parse_name() got character";
                     return;
                 case cls::comment:
                     break;
                 case cls::mistake:
-                    err = "parse_name() got mistake";
+                    _err = "parse_name() got mistake";
                     return;
                 case cls::name:
                     return;
                 case cls::number:
-                    err = "parse_name() got number";
+                    _err = "parse_name() got number";
                     return;
                 case cls::punctuation:
-                    err = "parse_name() got punctuation";
+                    _err = "parse_name() got punctuation";
                     return;
                 case cls::string:
-                    err = "parse_name() got string";
+                    _err = "parse_name() got string";
                     return;
                 case cls::whitespace:
                     break;
                 default:
-                    err = "parse_name() unexpected classification";
+                    _err = "parse_name() unexpected classification";
                     return;
             }
         }
-        err = "parse_name() reached end of tokens";
+        _err = "parse_name() reached end of tokens";
     }
 
     void parse_punctuation()
     {
-        while (!toke.end())
+        while (!_toke.end())
         {
-            tok = toke.increment();
-            switch (tok.classification())
+            _tok = _toke.increment();
+            switch (_tok.classification())
             {
                 case cls::character:
-                    err = "parse_punctuation() got character";
+                    _err = "parse_punctuation() got character";
                     return;
                 case cls::comment:
                     break;
                 case cls::mistake:
-                    err = "parse_punctuation() got mistake";
+                    _err = "parse_punctuation() got mistake";
                     return;
                 case cls::name:
-                    err = "parse_punctuation() got name";
+                    _err = "parse_punctuation() got name";
                     return;
                 case cls::number:
-                    err = "parse_punctuation() got number";
+                    _err = "parse_punctuation() got number";
                     return;
                 case cls::punctuation:
                     return;
                 case cls::string:
-                    err = "parse_punctuation() got string";
+                    _err = "parse_punctuation() got string";
                     return;
                 case cls::whitespace:
                     break;
                 default:
-                    err = "parse_punctuation() unexpected classification";
+                    _err = "parse_punctuation() unexpected classification";
                     return;
             }
         }
-        err = "parse_punctuation() reached end of tokens";
+        _err = "parse_punctuation() reached end of tokens";
     }
 
     void parse_string(std::string & text, bool single = false)
     {
-        while (!toke.end())
+        while (!_toke.end())
         {
-            tok = toke.increment();
-            switch (tok.classification())
+            _tok = _toke.increment();
+            switch (_tok.classification())
             {
                 case cls::character:
-                    err = "parse_string() got character";
+                    _err = "parse_string() got character";
                     return;
                 case cls::comment:
                     break;
                 case cls::mistake:
-                    err = "parse_string() got mistake";
+                    _err = "parse_string() got mistake";
                     return;
                 case cls::name:
-                    err = "parse_string() got name";
+                    _err = "parse_string() got name";
                     return;
                 case cls::number:
-                    err = "parse_string() got number";
+                    _err = "parse_string() got number";
                     return;
                 case cls::punctuation:
                     // expected
@@ -962,7 +962,7 @@ private:
                         text += R"#(
 )#";
                     }
-                    text += tok.text();
+                    text += _tok.text();
                     if (single)
                     {
                         return;
@@ -971,37 +971,37 @@ private:
                 case cls::whitespace:
                     break;
                 default:
-                    err = "parse_string() unexpected classification";
+                    _err = "parse_string() unexpected classification";
                     return;
             }
         }
-        err = "parse_string() reached end of tokens";
+        _err = "parse_string() reached end of tokens";
     }
 
     void parse_name_or_punctuation(bool whitespace = false)
     {
-        while (!toke.end())
+        while (!_toke.end())
         {
-            tok = toke.increment();
-            switch (tok.classification())
+            _tok = _toke.increment();
+            switch (_tok.classification())
             {
                 case cls::character:
-                    err = "parse_name_or_punctuation() got character";
+                    _err = "parse_name_or_punctuation() got character";
                     return;
                 case cls::comment:
                     break;
                 case cls::mistake:
-                    err = "parse_name_or_punctuation() got mistake";
+                    _err = "parse_name_or_punctuation() got mistake";
                     return;
                 case cls::name:
                     return;
                 case cls::number:
-                    err = "parse_name_or_punctuation() got number";
+                    _err = "parse_name_or_punctuation() got number";
                     return;
                 case cls::punctuation:
                     return;
                 case cls::string:
-                    err = "parse_name_or_punctuation() got string";
+                    _err = "parse_name_or_punctuation() got string";
                     return;
                 case cls::whitespace:
                     if (whitespace)
@@ -1010,11 +1010,11 @@ private:
                     }
                     break;
                 default:
-                    err = "parse_name_or_punctuation() unexpected classification";
+                    _err = "parse_name_or_punctuation() unexpected classification";
                     return;
             }
         }
-        err = "parse_name_or_punctuation() reached end of tokens";
+        _err = "parse_name_or_punctuation() reached end of tokens";
     }
 
     void parse_argument(std::string & arg, bool parent = false)
@@ -1023,35 +1023,35 @@ private:
         int64_t curly = arg == "{" ? 1 : 0;
         int64_t round = arg == "(" ? 1 : 0;
         int64_t square = arg == "[" ? 1 : 0;
-        while (!toke.end())
+        while (!_toke.end())
         {
-            tok = toke.increment();
-            switch (tok.classification())
+            _tok = _toke.increment();
+            switch (_tok.classification())
             {
                 case cls::character:
-                    arg += "'" + tok.text() + "'";
+                    arg += "'" + _tok.text() + "'";
                     break;
                 case cls::comment:
                     break;
                 case cls::mistake:
-                    err = "parse_argument() got mistake";
+                    _err = "parse_argument() got mistake";
                     return;
                 case cls::name:
-                    arg += tok.text();
+                    arg += _tok.text();
                     break;
                 case cls::number:
-                    arg += tok.text();
+                    arg += _tok.text();
                     break;
                 case cls::punctuation:
-                    if (tok.text() == "<")
+                    if (_tok.text() == "<")
                     {
                         ++angle;
                     }
-                    else if (tok.text() == ">")
+                    else if (_tok.text() == ">")
                     {
                         --angle;
                     }
-                    else if (tok.text() == "{")
+                    else if (_tok.text() == "{")
                     {
                         if (parent && angle == 0 && curly == 0 && round == 0 && square == 0)
                         {
@@ -1060,23 +1060,23 @@ private:
                         }
                         ++curly;
                     }
-                    else if (tok.text() == "}")
+                    else if (_tok.text() == "}")
                     {
                         --curly;
                     }
-                    else if (tok.text() == "(")
+                    else if (_tok.text() == "(")
                     {
                         ++round;
                     }
-                    else if (tok.text() == ")")
+                    else if (_tok.text() == ")")
                     {
                         --round;
                     }
-                    else if (tok.text() == "[")
+                    else if (_tok.text() == "[")
                     {
                         ++square;
                     }
-                    else if (tok.text() == "]")
+                    else if (_tok.text() == "]")
                     {
                         --square;
                     }
@@ -1084,19 +1084,19 @@ private:
                     {
                         if (angle > 0)
                         {
-                            err = "parse_argument() mismatched '<'";
+                            _err = "parse_argument() mismatched '<'";
                         }
                         else if (curly > 0)
                         {
-                            err = "parse_argument() mismatched '{'";
+                            _err = "parse_argument() mismatched '{'";
                         }
                         else if (round > 0)
                         {
-                            err = "parse_argument() mismatched '('";
+                            _err = "parse_argument() mismatched '('";
                         }
                         else if (square > 0)
                         {
-                            err = "parse_argument() mismatched '['";
+                            _err = "parse_argument() mismatched '['";
                         }
                         else
                         {
@@ -1105,15 +1105,15 @@ private:
                         return;
                     }
                     if (angle == 0 && curly == 0 && round == 0 && square == 0 &&
-                        (tok.text() == "," || tok.text() == ";"))
+                        (_tok.text() == "," || _tok.text() == ";"))
                     {
                         rtrim(arg);
                         return;
                     }
-                    arg += tok.text();
+                    arg += _tok.text();
                     break;
                 case cls::string:
-                    arg += "\"" + tok.text() + "\"";
+                    arg += "\"" + _tok.text() + "\"";
                     break;
                 case cls::whitespace:
                     if (!arg.empty())
@@ -1122,11 +1122,11 @@ private:
                     }
                     break;
                 default:
-                    err = "parse_argument() unexpected classification";
+                    _err = "parse_argument() unexpected classification";
                     return;
             }
         }
-        err = "parse_argument() reached end of tokens";
+        _err = "parse_argument() reached end of tokens";
     }
 };
 }
