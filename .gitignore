@@ -2,9 +2,9 @@
 bake/strangen
 build
 a.out
-tastes/test_gcc
-tastes/test_clang
-tastes/baggage/test_baggage
-tastes/baggage/test_baggage_clang
-tastes/currants/test_currants
-tastes/currants/test_currants_clang
+tastes/strange/test_gcc
+tastes/strange/test_clang
+tastes/strange/implementation/baggage/test_baggage
+tastes/strange/implementation/baggage/test_baggage_clang
+tastes/strange/implementation/graph/test_currants
+tastes/strange/implementation/graph/test_currants_clang

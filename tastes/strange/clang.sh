@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 
 echo "=== Building tests with clang++-15 ==="
 clang++-15 -std=c++17 -Wall \
-    -I../../doctest/doctest \
+    -I../../../doctest/doctest \
     -o test_clang \
     tastes__main.cpp
 
