@@ -1,8 +1,19 @@
 TEST_CASE("reflection: built-in types")
 {
+    CHECK(strange::reflection<void>::name() == "void");
     CHECK(strange::reflection<bool>::name() == "bool");
+    CHECK(strange::reflection<char>::name() == "char");
+    CHECK(strange::reflection<int8_t>::name() == "int8_t");
+    CHECK(strange::reflection<int16_t>::name() == "int16_t");
     CHECK(strange::reflection<int32_t>::name() == "int32_t");
     CHECK(strange::reflection<int64_t>::name() == "int64_t");
+    CHECK(strange::reflection<uint8_t>::name() == "uint8_t");
+    CHECK(strange::reflection<uint16_t>::name() == "uint16_t");
+    CHECK(strange::reflection<uint32_t>::name() == "uint32_t");
+    CHECK(strange::reflection<uint64_t>::name() == "uint64_t");
+    CHECK(strange::reflection<float>::name() == "float");
+    CHECK(strange::reflection<double>::name() == "double");
+    CHECK(strange::reflection<std::string>::name() == "std::string");
 }
 
 TEST_CASE("reflection: unknown type returns ???")

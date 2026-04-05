@@ -1,3 +1,9 @@
+// Compile-time type name registry using template specialization. The primary
+// template returns "???" for unknown types. Explicit specializations provide
+// names for built-in types, std::string, std::vector<T>, and strange types
+// (generated in strange__space.h). The concatename helper builds comma-separated
+// lists of type names for template parameter packs.
+
 #pragma once
 #include <string>
 #include <cstdint>
@@ -16,13 +22,13 @@ struct reflection
 };
 
 template<bool _Comma>
-auto concatename() -> std::string
+inline auto concatename() -> std::string
 {
     return std::string {};
 }
 
 template<bool _Comma, typename _First, typename... _Rest>
-auto concatename() -> std::string
+inline auto concatename() -> std::string
 {
     std::string result;
     if constexpr (_Comma)
@@ -35,11 +41,47 @@ auto concatename() -> std::string
 }
 
 template<>
+struct reflection<void>
+{
+    static inline auto name() -> std::string
+    {
+        return "void";
+    }
+};
+
+template<>
 struct reflection<bool>
 {
     static inline auto name() -> std::string
     {
         return "bool";
+    }
+};
+
+template<>
+struct reflection<char>
+{
+    static inline auto name() -> std::string
+    {
+        return "char";
+    }
+};
+
+template<>
+struct reflection<int8_t>
+{
+    static inline auto name() -> std::string
+    {
+        return "int8_t";
+    }
+};
+
+template<>
+struct reflection<int16_t>
+{
+    static inline auto name() -> std::string
+    {
+        return "int16_t";
     }
 };
 
@@ -58,6 +100,69 @@ struct reflection<int64_t>
     static inline auto name() -> std::string
     {
         return "int64_t";
+    }
+};
+
+template<>
+struct reflection<uint8_t>
+{
+    static inline auto name() -> std::string
+    {
+        return "uint8_t";
+    }
+};
+
+template<>
+struct reflection<uint16_t>
+{
+    static inline auto name() -> std::string
+    {
+        return "uint16_t";
+    }
+};
+
+template<>
+struct reflection<uint32_t>
+{
+    static inline auto name() -> std::string
+    {
+        return "uint32_t";
+    }
+};
+
+template<>
+struct reflection<uint64_t>
+{
+    static inline auto name() -> std::string
+    {
+        return "uint64_t";
+    }
+};
+
+template<>
+struct reflection<float>
+{
+    static inline auto name() -> std::string
+    {
+        return "float";
+    }
+};
+
+template<>
+struct reflection<double>
+{
+    static inline auto name() -> std::string
+    {
+        return "double";
+    }
+};
+
+template<>
+struct reflection<std::string>
+{
+    static inline auto name() -> std::string
+    {
+        return "std::string";
     }
 };
 
