@@ -28,20 +28,13 @@ enum class cls
 
 struct toker
 {
-    std::istreambuf_iterator<char> it;
-    bool end;
-    std::string filename;
-    int64_t start_line;
-    int64_t start_position;
-    int64_t line;
-    int64_t position;
-    bool dot;
-    char use;
+    inline auto filename() const -> std::string const & { return filename_; }
+    inline auto end() const -> bool { return end_; }
 
     toker(std::istreambuf_iterator<char> sit, std::string const & fname = std::string{})
-    :it{sit}
-    ,end{it == std::istreambuf_iterator<char>{}}
-    ,filename{fname}
+    :filename_{fname}
+    ,end_{sit == std::istreambuf_iterator<char>{}}
+    ,it{sit}
     ,start_line{1}
     ,start_position{0}
     ,line{1}
@@ -50,6 +43,39 @@ struct toker
     ,use{'\0'}
     {
     }
+
+    inline auto increment() -> strange::token
+    {
+        if (!end_)
+        {
+            if ((!dot) && (!use) && (it == std::istreambuf_iterator<char>{}))
+            {
+                end_ = true;
+                return make_token(cls::comment, "");
+            }
+            else
+            {
+                auto token = next();
+                if ((!dot) && (!use) && (it == std::istreambuf_iterator<char>{}))
+                {
+                    end_ = true;
+                }
+                return token;
+            }
+        }
+        return make_token(cls::mistake, "beyond end of stream");
+    }
+
+private:
+    std::string filename_;
+    bool end_;
+    std::istreambuf_iterator<char> it;
+    int64_t start_line;
+    int64_t start_position;
+    int64_t line;
+    int64_t position;
+    bool dot;
+    char use;
 
     static inline auto alpha_char(char c) -> bool
     {
@@ -63,32 +89,9 @@ struct toker
 
     inline auto make_token(cls classification, std::string text) const -> strange::token
     {
-        return strange::token::_make(strange::implementation::token{.filename_ = filename, .line_ = start_line, .position_ = start_position, .classification_ = classification, .text_ = text});
+        return strange::token::_make(strange::implementation::token{.filename_ = filename_, .line_ = start_line, .position_ = start_position, .classification_ = classification, .text_ = text});
     }
 
-    inline auto increment() -> strange::token
-    {
-        if (!end)
-        {
-            if ((!dot) && (!use) && (it == std::istreambuf_iterator<char>{}))
-            {
-                end = true;
-                return make_token(cls::comment, "");
-            }
-            else
-            {
-                auto token = next();
-                if ((!dot) && (!use) && (it == std::istreambuf_iterator<char>{}))
-                {
-                    end = true;
-                }
-                return token;
-            }
-        }
-        return make_token(cls::mistake, "beyond end of stream");
-    }
-
-private:
     inline auto next() -> strange::token
     {
         start_line = line;

@@ -58,7 +58,7 @@ struct parser
                     }
                     else
                     {
-                        std::filesystem::path dir = std::filesystem::path(toke.filename).parent_path();
+                        std::filesystem::path dir = std::filesystem::path(toke.filename()).parent_path();
                         std::filesystem::path resolved = dir / prototype;
                         std::ifstream ifs{resolved, std::ios::binary};
                         std::istreambuf_iterator<char> it{ifs};
@@ -862,7 +862,7 @@ private:
 
     void parse_name()
     {
-        while (!toke.end)
+        while (!toke.end())
         {
             tok = toke.increment();
             switch (tok.classification())
@@ -898,7 +898,7 @@ private:
 
     void parse_punctuation()
     {
-        while (!toke.end)
+        while (!toke.end())
         {
             tok = toke.increment();
             switch (tok.classification())
@@ -934,7 +934,7 @@ private:
 
     void parse_string(std::string & text, bool single = false)
     {
-        while (!toke.end)
+        while (!toke.end())
         {
             tok = toke.increment();
             switch (tok.classification())
@@ -980,7 +980,7 @@ private:
 
     void parse_name_or_punctuation(bool whitespace = false)
     {
-        while (!toke.end)
+        while (!toke.end())
         {
             tok = toke.increment();
             switch (tok.classification())
@@ -1023,7 +1023,7 @@ private:
         int64_t curly = arg == "{" ? 1 : 0;
         int64_t round = arg == "(" ? 1 : 0;
         int64_t square = arg == "[" ? 1 : 0;
-        while (!toke.end)
+        while (!toke.end())
         {
             tok = toke.increment();
             switch (tok.classification())
