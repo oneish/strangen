@@ -234,27 +234,26 @@ cmake -S stlab-libraries -B BUILD \
 cmake --build BUILD
 ```
 
-## Building the strangen Tool
+## Building
 
-The `strangen` tool is a preprocessor that converts meta headers into compilable C++ source files. Build it once, then use it in the code generation pipeline.
+The project uses CMake. For full build documentation, see [dogs/BUILD.md](dogs/BUILD.md).
 
-**Using g++ directly:**
-
-```bash
-cd sauce/generation
-g++-12 -std=c++17 -Wall strange__generation.cpp -o ../../bake/strangen
-```
-
-**Using CMake:**
+**Quick start:**
 
 ```bash
-cd sauce/generation
-cmake -B build .
+# Build and test with GCC
+bash gcc.sh
+
+# Build and test with Clang
+bash clang.sh
+
+# Or use CMake directly
+cmake -B build -DCMAKE_CXX_COMPILER=g++-12
 cmake --build build
-cp build/strangen ../../bake/
+cd build && ctest --output-on-failure
 ```
 
-The resulting binary at `bake/strangen` is used in all code generation pipelines.
+This builds everything: the `strangen` code generator tool, examples, tests, and runs the self-hosting bootstrap verification.
 
 ## Code Generation Pipeline
 

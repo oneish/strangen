@@ -1,10 +1,6 @@
 .vscode
 bake/strangen
-build
+build/
+build-gcc/
+build-clang/
 a.out
-tastes/strange/test_gcc
-tastes/strange/test_clang
-tastes/strange/implementation/baggage/test_baggage
-tastes/strange/implementation/baggage/test_baggage_clang
-tastes/strange/implementation/graph/test_graph
-tastes/strange/implementation/graph/test_graph_clang
