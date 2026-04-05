@@ -13,7 +13,7 @@ clang++-15 -std=c++17 -Wall \
     -I../../../../../stlab-libraries/include \
     -I../../../../../BUILD/include \
     -o test_currants_clang \
-    tastes__currants_main.cpp \
+    taste__currants_main.cpp \
     -L../../../../../BUILD \
     -lstlab
 

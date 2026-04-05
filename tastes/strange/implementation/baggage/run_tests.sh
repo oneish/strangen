@@ -11,7 +11,7 @@ g++-12 -std=c++17 -Wall \
     -I../../../../../rapidjson/include \
     -I../../../../../sajson/include \
     -o test_baggage \
-    tastes__baggage_main.cpp
+    taste__baggage_main.cpp
 
 echo "=== Running baggage tests ==="
 ./test_baggage --duration=true
