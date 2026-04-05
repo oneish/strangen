@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")"
 
 echo "=== Configuring with clang++-15 ==="
-cmake -B build-clang -DCMAKE_CXX_COMPILER=clang++-15
+cmake -B build-clang -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
 
 echo "=== Building ==="
 cmake --build build-clang

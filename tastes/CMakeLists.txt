@@ -10,8 +10,10 @@ add_executable(test_baggage
 target_link_libraries(test_baggage PRIVATE strange doctest dart gsl rapidjson sajson)
 add_test(NAME baggage COMMAND test_baggage)
 
-# --- Graph tests (concurrency) ---
-add_executable(test_graph
-    ${CMAKE_CURRENT_SOURCE_DIR}/strange/implementation/graph/taste__graph_main.cpp)
-target_link_libraries(test_graph PRIVATE strange doctest dart gsl rapidjson sajson stlab_lib)
-add_test(NAME graph COMMAND test_graph)
+# --- Graph tests (concurrency, requires stlab) ---
+if(STRANGEN_HAS_STLAB)
+    add_executable(test_graph
+        ${CMAKE_CURRENT_SOURCE_DIR}/strange/implementation/graph/taste__graph_main.cpp)
+    target_link_libraries(test_graph PRIVATE strange doctest dart gsl rapidjson sajson stlab_lib)
+    add_test(NAME graph COMMAND test_graph)
+endif()

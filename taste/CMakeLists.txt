@@ -50,7 +50,9 @@ add_executable(baggage_example ${CMAKE_CURRENT_SOURCE_DIR}/baggage/baggage__main
 target_link_libraries(baggage_example PRIVATE strange dart gsl rapidjson sajson)
 target_include_directories(baggage_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/baggage)
 
-# --- Currants example ---
-add_executable(currants_example ${CMAKE_CURRENT_SOURCE_DIR}/currants/currants__main.cpp)
-target_link_libraries(currants_example PRIVATE strange dart gsl rapidjson sajson stlab_lib)
-target_include_directories(currants_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/currants)
+# --- Currants example (requires stlab) ---
+if(STRANGEN_HAS_STLAB)
+    add_executable(currants_example ${CMAKE_CURRENT_SOURCE_DIR}/currants/currants__main.cpp)
+    target_link_libraries(currants_example PRIVATE strange dart gsl rapidjson sajson stlab_lib)
+    target_include_directories(currants_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/currants)
+endif()

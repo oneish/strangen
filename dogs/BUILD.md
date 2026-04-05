@@ -44,6 +44,12 @@ cmake -S ../stlab-libraries -B ../stlab-build \
 cmake --build ../stlab-build
 ```
 
+stlab is not building with clang for some reason. To build without stlab (skipping graph/concurrency targets):
+
+```bash
+cmake -B build -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
+```
+
 ## Direct CMake Usage
 
 ```bash

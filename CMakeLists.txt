@@ -52,29 +52,35 @@ endif()
 add_library(sajson INTERFACE)
 target_include_directories(sajson INTERFACE ${SAJSON_INCLUDE_DIR})
 
-# stlab (library + headers, needed for graph)
-# stlab must be pre-built. Build with:
-#   cmake -S ../stlab-libraries -B ../stlab-build -DCMAKE_BUILD_TYPE=Release \
-#     -DCMAKE_CXX_STANDARD=17 -DBUILD_TESTING=OFF
-#   cmake --build ../stlab-build
-find_path(STLAB_INCLUDE_DIR stlab/concurrency/concurrency.hpp
-    HINTS ${CMAKE_SOURCE_DIR}/../stlab-libraries/include)
-find_path(STLAB_CONFIG_DIR stlab/config.hpp
-    HINTS ${CMAKE_SOURCE_DIR}/../stlab-build/include
-          ${CMAKE_SOURCE_DIR}/../BUILD/include)
-find_library(STLAB_LIBRARY stlab
-    HINTS ${CMAKE_SOURCE_DIR}/../stlab-build
-          ${CMAKE_SOURCE_DIR}/../BUILD)
-if(NOT STLAB_INCLUDE_DIR OR NOT STLAB_LIBRARY)
-    message(FATAL_ERROR "stlab not found. Build it first (see dogs/BUILD.md)")
+# stlab (library + headers, needed for graph/concurrency targets)
+# Known incompatibility with clang — use -DSTRANGEN_ENABLE_STLAB=OFF to skip
+option(STRANGEN_ENABLE_STLAB "Enable stlab-dependent targets (graph/concurrency)" ON)
+set(STRANGEN_HAS_STLAB OFF)
+if(STRANGEN_ENABLE_STLAB)
+    find_path(STLAB_INCLUDE_DIR stlab/concurrency/concurrency.hpp
+        HINTS ${CMAKE_SOURCE_DIR}/../stlab-libraries/include)
+    find_path(STLAB_CONFIG_DIR stlab/config.hpp
+        HINTS ${CMAKE_SOURCE_DIR}/../stlab-build/include
+              ${CMAKE_SOURCE_DIR}/../BUILD/include)
+    find_library(STLAB_LIBRARY stlab
+        HINTS ${CMAKE_SOURCE_DIR}/../stlab-build
+              ${CMAKE_SOURCE_DIR}/../BUILD)
+    if(STLAB_INCLUDE_DIR AND STLAB_LIBRARY)
+        find_package(Threads REQUIRED)
+        add_library(stlab_lib INTERFACE)
+        target_include_directories(stlab_lib INTERFACE ${STLAB_INCLUDE_DIR})
+        if(STLAB_CONFIG_DIR)
+            target_include_directories(stlab_lib INTERFACE ${STLAB_CONFIG_DIR})
+        endif()
+        target_link_libraries(stlab_lib INTERFACE ${STLAB_LIBRARY} Threads::Threads)
+        set(STRANGEN_HAS_STLAB ON)
+        message(STATUS "stlab found — graph/concurrency targets enabled")
+    else()
+        message(WARNING "stlab not found — graph/concurrency targets disabled. Build stlab first (see dogs/BUILD.md)")
+    endif()
+else()
+    message(STATUS "stlab disabled — graph/concurrency targets skipped")
 endif()
-add_library(stlab_lib INTERFACE)
-target_include_directories(stlab_lib INTERFACE ${STLAB_INCLUDE_DIR})
-if(STLAB_CONFIG_DIR)
-    target_include_directories(stlab_lib INTERFACE ${STLAB_CONFIG_DIR})
-endif()
-target_link_libraries(stlab_lib INTERFACE ${STLAB_LIBRARY} Threads::Threads)
-find_package(Threads REQUIRED)
 
 # --- Subdirectories ---
 
