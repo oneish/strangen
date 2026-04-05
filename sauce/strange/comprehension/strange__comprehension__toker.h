@@ -1,3 +1,9 @@
+// A character-level tokenizer for the strange prototype DSL. Reads characters
+// from an istreambuf_iterator and produces strange::token objects classified as:
+// name, number, character, string, comment, punctuation, whitespace, or mistake.
+// Handles escape sequences in strings, multi-character operators (::, ->, ==,
+// <=, ++, ...), block/line comments, and scientific notation in numbers.
+
 #pragma once
 #include <string>
 #include <cstdint>
@@ -48,7 +54,7 @@ struct toker
     static inline auto alpha_char(char c) -> bool
     {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_';
-	}
+    }
 
     static inline auto numeric_char(char c) -> bool
     {
@@ -82,6 +88,7 @@ struct toker
         return make_token(cls::mistake, "beyond end of stream");
     }
 
+private:
     inline auto next() -> strange::token
     {
         start_line = line;
@@ -135,6 +142,7 @@ struct toker
             }
             else if (char1 == '\t')
             {
+                // round to next 4-space tab stop
                 position = ((position + 3) / 4) * 4;
             }
 
@@ -308,28 +316,28 @@ struct toker
                 case '\'':
                     singlequote = true;
                     break;
-				case '\"':
-					doublequote = true;
-					break;
-				case '+':
-				case '-':
-					text = char1;
-					if ((char1 == char2) || (char2 == '=') || (char1 == '-' && char2 == '>'))
-					{
-						second = true;
-						break;
-					}
-					return make_token(cls::punctuation, text);
-				case '*':
-				case '%':
-				case '!':
-					text = char1;
-					if (char2 == '=')
-					{
-						second = true;
-						break;
-					}
-					return make_token(cls::punctuation, text);
+                case '\"':
+                    doublequote = true;
+                    break;
+                case '+':
+                case '-':
+                    text = char1;
+                    if ((char1 == char2) || (char2 == '=') || (char1 == '-' && char2 == '>'))
+                    {
+                        second = true;
+                        break;
+                    }
+                    return make_token(cls::punctuation, text);
+                case '*':
+                case '%':
+                case '!':
+                    text = char1;
+                    if (char2 == '=')
+                    {
+                        second = true;
+                        break;
+                    }
+                    return make_token(cls::punctuation, text);
                 case '<':
                     text = char1;
                     if (char2 == '=')
@@ -337,7 +345,7 @@ struct toker
                         second = true;
                         break;
                     }
-					return make_token(cls::punctuation, text);
+                    return make_token(cls::punctuation, text);
                 case '>':
                     text = char1;
                     if (char2 == '=')
@@ -345,8 +353,8 @@ struct toker
                         second = true;
                         break;
                     }
-					return make_token(cls::punctuation, text);
-				case ':':
+                    return make_token(cls::punctuation, text);
+                case ':':
                 case '.':
                 case '&':
                 case '|':
@@ -359,7 +367,7 @@ struct toker
                         second = true;
                         break;
                     }
-					return make_token(cls::punctuation, text);
+                    return make_token(cls::punctuation, text);
                 case '/':
                     text = char1;
                     if (char2 == '=')
@@ -377,7 +385,7 @@ struct toker
                         commentline = true;
                         break;
                     }
-					return make_token(cls::punctuation, text);
+                    return make_token(cls::punctuation, text);
                 default:
                     // single character punctuation
                     return make_token(cls::punctuation, std::string(&char1, 1));
@@ -396,7 +404,7 @@ struct toker
     }
 };
 
-auto operator<<(std::ostream & str, cls classification) -> std::ostream &
+inline auto operator<<(std::ostream & str, cls classification) -> std::ostream &
 {
     switch (classification)
     {
@@ -424,11 +432,14 @@ auto operator<<(std::ostream & str, cls classification) -> std::ostream &
         case strange::comprehension::cls::mistake:
             str << "mistake";
             break;
-    };
+        default:
+            str << "unknown";
+            break;
+    }
     return str;
 }
 
-auto operator<<(std::ostream & str, token const & tok) -> std::ostream &
+inline auto operator<<(std::ostream & str, token const & tok) -> std::ostream &
 {
     str << "file: " << tok.filename()
         << " line: " << tok.line()
