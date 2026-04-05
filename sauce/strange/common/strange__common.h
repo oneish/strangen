@@ -26,10 +26,10 @@ protected:
         virtual auto _sizeof() const -> size_t = 0;
         virtual auto _clone() const -> std::shared_ptr<_common::_base> = 0;
         virtual auto _reproduce() const -> std::shared_ptr<_common::_base> = 0;
-        virtual inline auto _cat() const -> std::string = 0;
-        virtual inline auto _cats() const -> std::unordered_set<std::string> = 0;
-        virtual inline auto _copy() const -> bool = 0;
-        virtual inline auto _name() const -> std::string = 0;
+        virtual auto _cat() const -> std::string = 0;
+        virtual auto _cats() const -> std::unordered_set<std::string> = 0;
+        virtual auto _copy() const -> bool = 0;
+        virtual auto _name() const -> std::string = 0;
 
         virtual inline auto _error() const -> std::string
         {
@@ -39,6 +39,11 @@ protected:
         virtual inline auto _strong() const -> std::shared_ptr<_common::_base>
         {
             return std::shared_ptr<_common::_base>{};
+        }
+
+        virtual inline auto _is_weak() const -> bool
+        {
+            return false;
         }
     };
 
@@ -75,7 +80,7 @@ private:
     struct _message final : _common::_base
     {
         template<typename Message>
-        inline _message(Message && msg)
+        explicit inline _message(Message && msg)
         :message{std::forward<Message>(msg)}
         {
         }
@@ -100,22 +105,22 @@ private:
             throw _no_default{};
         }
 
-        virtual inline auto _cat() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
             return std::string{};
         }
 
-        virtual inline auto _cats() const -> std::unordered_set<std::string> final
+        inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return std::unordered_set<std::string>{};
         }
 
-        virtual inline auto _copy() const -> bool final
+        inline auto _copy() const -> bool final
         {
             return false;
         }
 
-        virtual inline auto _name() const -> std::string final
+        inline auto _name() const -> std::string final
         {
             return std::string{};
         }
@@ -156,29 +161,34 @@ private:
             throw _no_default{};
         }
 
-        virtual inline auto _cat() const -> std::string final
+        inline auto _cat() const -> std::string final
         {
             return std::string{};
         }
 
-        virtual inline auto _cats() const -> std::unordered_set<std::string> final
+        inline auto _cats() const -> std::unordered_set<std::string> final
         {
             return std::unordered_set<std::string>{};
         }
 
-        virtual inline auto _copy() const -> bool final
+        inline auto _copy() const -> bool final
         {
             return false;
         }
 
-        virtual inline auto _name() const -> std::string final
+        inline auto _name() const -> std::string final
         {
             return std::string{};
         }
 
-        virtual inline auto _strong() const -> std::shared_ptr<_common::_base> final
+        inline auto _strong() const -> std::shared_ptr<_common::_base> final
         {
             return weak.lock();
+        }
+
+        inline auto _is_weak() const -> bool final
+        {
+            return true;
         }
 
     private:
@@ -307,7 +317,7 @@ public:
 
     inline auto _is_weak() const -> bool
     {
-        return std::dynamic_pointer_cast<_weak_ptr>(_shared).operator bool();
+        return _shared && _shared->_is_weak();
     }
 };
 }
