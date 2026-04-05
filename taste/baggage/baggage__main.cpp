@@ -24,7 +24,7 @@ obj.add_field("truth", true);
 obj.add_field("lies", false);
 obj.add_field("fib", dart::packet::make_array(1, 1, 2, 3, 5, 8, 13));
 std::cout << obj.to_json() << std::endl;
-auto buffer = obj.finalize().get_bytes();
+auto buffer = obj.finalize().get_bytes();std::cout << sizeof(buffer) << std::endl;
 dart::object typed_obj {"rick", "sanchez", "morty", "smith"};
 dart::packet untyped_obj = typed_obj;
 dart::object retyped_obj {untyped_obj};
@@ -39,7 +39,7 @@ assert(!data.is_finalized());
 data.finalize(); // <-- could also use data.lower();
 assert(data.is_finalized());
 // data.add_field("can't", "do it"); // <-- BOOM
-gsl::span<std::byte const> bytes = data.get_bytes();
+gsl::span<std::byte const> bytes = data.get_bytes();std::cout << sizeof(bytes) << std::endl;
 // file.write(bytes.data(), bytes.size());
 assert(data.is_finalized());
 data.definalize(); // <-- could also use data.lift();
