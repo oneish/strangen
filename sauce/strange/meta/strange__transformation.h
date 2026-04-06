@@ -144,50 +144,10 @@ namespace )#" << _space.name() << R"#(
             _out << R"#(struct )#" << abstraction.name() << R"#( : )#";
             _abstraction_parents(abstraction, false);
             _out << R"#(
-{
-    inline )#" << abstraction.name() << R"#(() = default;
-
-    inline )#" << abstraction.name() << R"#(()#" << abstraction.name() << R"#( const & other)
-    :strange::_common{other}
-)#";
-            _abstraction_default_construct_bases(abstraction);
-            _out << R"#(    {
-    }
-
-    inline )#" << abstraction.name() << R"#(()#" << abstraction.name() << R"#( && other)
-    :strange::_common{std::move(other)}
-)#";
-            _abstraction_default_construct_bases(abstraction);
-            _out << R"#(    {
-    }
-
-    inline auto operator=()#" << abstraction.name() << R"#( const & other) -> )#" << abstraction.name() << R"#( &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=()#" << abstraction.name() << R"#( && other) -> )#" << abstraction.name() << R"#( &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline )#" << abstraction.name() << R"#((std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-)#";
-            _abstraction_default_construct_bases(abstraction);
-            _out << R"#(    {
-    }
-
-    explicit inline )#" << abstraction.name() << R"#((std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-)#";
-            _abstraction_default_construct_bases(abstraction);
-            _out << R"#(    {
-    }
-
-)#";
+{)#";
+            _generate_constructors(abstraction.name(), [&]() {
+                _abstraction_default_construct_bases(abstraction);
+            });
             _abstraction_types(abstraction);
             _out << R"#(protected:
     struct _derived : )#";
@@ -310,54 +270,14 @@ public:
             _out << R"#(struct )#" << abstraction.name() << R"#(_ : )#";
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(
-{
-    inline )#" << abstraction.name() << R"#(_() = default;
-
-    inline )#" << abstraction.name() << R"#(_()#" << abstraction.name() << R"#(_ const & other)
-    :strange::_common{other}
-    ,)#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({}
-    {
-    }
-
-    inline )#" << abstraction.name() << R"#(_()#" << abstraction.name() << R"#(_ && other)
-    :strange::_common{std::move(other)}
-    ,)#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({}
-    {
-    }
-
-    inline auto operator=()#" << abstraction.name() << R"#(_ const & other) -> )#" << abstraction.name() << R"#(_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=()#" << abstraction.name() << R"#(_ && other) -> )#" << abstraction.name() << R"#(_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline )#" << abstraction.name() << R"#(_(std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-    ,)#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({}
-    {
-    }
-
-    explicit inline )#" << abstraction.name() << R"#(_(std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-    ,)#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#({}
-    {
-    }
-
-private:
+{)#";
+            _generate_constructors(abstraction.name() + "_", [&]() {
+                _out << R"#(    ,)#";
+                _abstraction_name_and_parameters(abstraction);
+                _out << R"#({}
+)#";
+            });
+            _out << R"#(private:
     friend struct )#";
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(;
@@ -705,6 +625,54 @@ public:
                 }
             }
         }
+    }
+
+    auto _generate_constructors(std::string const & name, std::function<void()> const & base_init) -> void
+    {
+        _out << R"#(
+    inline )#" << name << R"#(() = default;
+
+    inline )#" << name << R"#(()#" << name << R"#( const & other)
+    :strange::_common{other}
+)#";
+        base_init();
+        _out << R"#(    {
+    }
+
+    inline )#" << name << R"#(()#" << name << R"#( && other)
+    :strange::_common{std::move(other)}
+)#";
+        base_init();
+        _out << R"#(    {
+    }
+
+    inline auto operator=()#" << name << R"#( const & other) -> )#" << name << R"#( &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=()#" << name << R"#( && other) -> )#" << name << R"#( &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline )#" << name << R"#((std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+)#";
+        base_init();
+        _out << R"#(    {
+    }
+
+    explicit inline )#" << name << R"#((std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+)#";
+        base_init();
+        _out << R"#(    {
+    }
+
+)#";
     }
 
     auto _abstraction_default_construct_bases(strange::abstraction const & abstraction) -> void
