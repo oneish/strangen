@@ -262,6 +262,7 @@ int main()
         std::cout << "param: " << param.name() << std::endl;
     }
 
+    // coredumps when file not found:
     std::ifstream ifs{"example__parser_input.h", std::ios::binary};
     std::istreambuf_iterator<char> it{ifs};
     strange::comprehension::toker toker(it);
