@@ -1002,6 +1002,8 @@ namespace )#" << _space.name() << R"#(
         }
         if (!space.empty())
         {
+            // Mutate name to include namespace prefix; the match lambda
+            // captures name by reference and will use this new value.
             name = space + name;
             it = std::find_if(_space.inclusions().cbegin(), _space.inclusions().cend(), match);
             if (it != _space.inclusions().cend())
