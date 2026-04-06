@@ -1,12 +1,13 @@
+// Concrete implementation backing strange::baggage. Wraps dart::packet to
+// provide type-erased serialization between strange types and JSON/binary
+// representations. Handles object graphs with shared/weak reference tracking
+// via pack_unique/unpack_unique.
+
 #pragma once
 
 #define DART_HAS_RAPIDJSON 1
 #define DART_USE_SAJSON 1
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #include <dart.h>
-#pragma GCC diagnostic pop
 
 namespace strange
 {
@@ -14,8 +15,11 @@ namespace implementation
 {
 struct baggage
 {
+    // Internal state — treat as private. Public for aggregate initialization.
     dart::packet packet = dart::packet::make_null();
+    // Shared reference tracking for deserialization (resolves integer indices to objects)
     mutable std::shared_ptr<std::vector<stuff>> unpack_unique;
+    // Shared reference tracking for serialization (maps object addresses to indices)
     mutable std::shared_ptr<std::unordered_map<void const *, std::size_t>> pack_unique;
 
     inline auto pack(bag & dest) const -> void
@@ -791,6 +795,11 @@ struct baggage
         return packet.has_key(key);
     }
 
+    // Detects the serialized "any" format used by from_any():
+    // - null: empty/invalid object
+    // - integer: reference index into unpack_unique (negative = weak)
+    // - string: type name for _manufacture()
+    // - array[integer, string, ...]: [index, type_name, packed_data]
     inline auto is_any() const -> bool
     {
         return packet.is_null() || packet.is_integer() || packet.is_str() || (packet.is_array() && packet.size() >= 2 && packet.at(0).is_integer() && packet.at(1).is_str());
