@@ -37,11 +37,11 @@ git clone https://github.com/stlab/libraries.git stlab-libraries
 stlab must be pre-built:
 
 ```bash
-cmake -S ../stlab-libraries -B ../stlab-build \
+cmake -S ../stlab-libraries -B ../BUILD \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CXX_STANDARD=17 \
     -DBUILD_TESTING=OFF
-cmake --build ../stlab-build
+cmake --build ../BUILD
 ```
 
 stlab is not building with clang for some reason. To build without stlab (skipping graph/concurrency targets):
@@ -95,14 +95,17 @@ This runs automatically as part of every build to surface any changes in the gen
 
 ```
 build-gcc/                   # or build-clang/, build/
-  strangen                   # code generator tool (sauce/generation/)
-  demo                       # demo example
-  example                    # type erasure example
-  baggage_example            # serialization example
-  currants_example           # concurrency example
-  test_strange               # core tests
-  test_baggage               # serialization tests
-  test_graph                 # concurrency tests
+  sauce/
+    strangen                 # code generator tool
+  taste/
+    demo                     # demo example
+    example                  # type erasure example
+    baggage_example          # serialization example
+    currants_example         # concurrency example
+  tastes/
+    test_strange             # core tests
+    test_baggage             # serialization tests
+    test_graph               # concurrency tests
   meta/                      # bootstrap intermediates
     pass1_strange__space.h
     pass2_strange__space.h
