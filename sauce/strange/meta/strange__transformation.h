@@ -1335,7 +1335,11 @@ namespace )#" << _space.name() << R"#(
             }
             _operation_parameters(operation, false, false);
             _out << R"#(;
-    };)#";
+    };
+}
+
+)#";
+            return;
         }
         else if (operation.modification().empty())
         {

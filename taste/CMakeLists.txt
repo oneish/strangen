@@ -13,6 +13,9 @@ add_custom_command(
         -o ${CMAKE_BINARY_DIR}/demo/demo_gen
     COMMAND ${CMAKE_BINARY_DIR}/demo/demo_gen > ${DEMO_SPACE_HEADER}
     DEPENDS strangen ${DEMO_DIR}/demo__space_meta.h ${DEMO_DIR}/demo__space_prototype.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/meta/strange__transformation.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/comprehension/strange__comprehension__parser.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/comprehension/strange__comprehension__toker.h
     WORKING_DIRECTORY ${DEMO_DIR}
     COMMENT "Generating demo__space.h"
 )
@@ -37,6 +40,9 @@ add_custom_command(
         -o ${CMAKE_BINARY_DIR}/example/example_gen
     COMMAND ${CMAKE_BINARY_DIR}/example/example_gen > ${EXAMPLE_SPACE_HEADER}
     DEPENDS strangen ${EXAMPLE_DIR}/example__space_transformation_1.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/meta/strange__transformation.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/comprehension/strange__comprehension__parser.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/comprehension/strange__comprehension__toker.h
     WORKING_DIRECTORY ${EXAMPLE_DIR}
     COMMENT "Generating example__space_transformation_3.h"
 )
