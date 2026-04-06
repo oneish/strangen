@@ -1019,245 +1019,343 @@ namespace )#" << _space.name() << R"#(
                 }
                 continue;
             }
-            for (int64_t fun = 0; fun < 2; ++fun)
+            _generate_operation_method(operation, abstraction, derived, inner, pure, definition, name);
+            if (!operation.closure().empty())
             {
-                if (!definition)
-                {
-                    if (pure)
-                    {
-                        _out << R"#(
-        virtual )#";
-                    }
-                    else if (inner)
-                    {
-                        _out << R"#(
-        inline )#";
-                    }
-                    else
-                    {
-                        _out << R"#(
-    inline )#";
-                    }
-                }
-                else
-                {
-                    _abstraction_parameters(derived, true, false, inner, false);
-                    _out << R"#(inline )#";
-                }
-                if (!definition)
-                {
-                    _out << R"#(auto )#" << (fun ? operation.closure() : operation.name());
-                }
-                else
-                {
-                    _out << R"#(auto )#" << derived.name();
-                    if (inner)
-                    {
-                        _out << R"#(_)#";
-                    }
-                    _abstraction_parameters(derived, false, false, inner, false);
-                    if (inner)
-                    {
-                        _out << R"#(::_instance::)#";
-                    }
-                    else
-                    {
-                        _out << R"#(::)#";
-                    }
-                    _out << (fun ? operation.closure() : operation.name());
-                }
-                if (fun)
-                {
-                    _out << R"#(())#";
-                }
-                else
-                {
-                    _operation_parameters(operation, true, (!definition) && (!pure) && !inner);
-                }
-                if (operation.constness())
-                {
-                    _out << R"#( const -> )#";
-                }
-                else
-                {
-                    _out << R"#( -> )#";
-                }
-                bool const that = (operation.result() == "*that");
-                bool const this_or_that = (that || (operation.result() == "*this"));
-                bool const this_or_that_or_void = (this_or_that || (operation.result() == "void"));
-                if (fun)
-                {
-                    _out << R"#(std::function<auto )#";
-                    _operation_parameters(operation, true, false);
-                    _out << R"#( -> )#";
-                }
-                if (this_or_that)
-                {
-                    if (inner || pure)
-                    {
-                        _out << "void";
-                    }
-                    else
-                    {
-                        _out << derived.name();
-                        if (!that)
-                        {
-                            _out << R"#( &)#";
-                        }
-                    }
-                }
-                else
-                {
-                    _out << operation.result();
-                }
-                if (fun)
-                {
-                    _out << R"#(>)#";
-                }
-                if (!definition)
-                {
-                    if (pure)
-                    {
-                        _out << R"#( = 0;
-)#";
-                    }
-                    else if (inner)
-                    {
-                        _out << R"#( final;
-)#";
-                    }
-                    else
-                    {
-                        _out << R"#(;
-)#";
-                    }
-                }
-                else
-                {
-                    _out << R"#(
-{
-    )#";
-                    if (inner)
-                    {
-                        if (fun)
-                        {
-                            _out << R"#(return [this])#";
-                            _operation_parameters(operation, true, false);
-                            _out << R"#( -> )#";
-                            if (this_or_that)
-                            {
-                                _out << "void";
-                            }
-                            else
-                            {
-                                _out << operation.result();
-                            }
-                            _out << R"#(
+                _generate_closure_method(operation, abstraction, derived, inner, pure, definition, name);
+            }
+        }
+    }
+
+    // Shared prefix: emits leading keywords and class qualification for operation/closure signatures
+    auto _generate_method_prefix(strange::abstraction const & derived, bool const inner, bool const pure, bool const definition) -> void
     {
-        )#";
-                        }
-                        if (!operation.customisation().empty())
-                        {
-                            _out << operation.customisation();
-                        }
-                        else if (this_or_that_or_void)
-                        {
-                            _out << R"#(_thing.)#" << operation.name();
-                        }
-                        else
-                        {
-                            _out << R"#(return _thing.)#" << operation.name();
-                        }
-                    }
-                    else if (operation.modification().empty())
-                    {
-                        if (that && !fun)
-                        {
-                            _out << R"#(auto _result = *this;
-    )#";
-                        }
-                        if (!operation.constness())
-                        {
-                            _out << R"#(strange::_common::_mutate();
-    )#";
-                        }
-                        if (this_or_that_or_void && !fun)
-                        {
-                            _out << R"#(std::dynamic_pointer_cast<typename )#";
-                        }
-                        else
-                        {
-                            _out << R"#(return std::dynamic_pointer_cast<typename )#";
-                        }
-                        if (name.empty())
-                        {
-                            _out << abstraction.name();
-                            _abstraction_parameters(abstraction, false, false, false, false);
-                        }
-                        else
-                        {
-                            _out << name;
-                        }
-                        _out << R"#(::_derived)#";
-                        if (operation.constness())
-                        {
-                            _out << R"#( const)#";
-                        }
-                        _out << R"#(>(strange::_common::_shared)->)#" << (fun ? operation.closure() : operation.name());
-                    }
-                    if ((operation.modification().empty() && !inner) || operation.customisation().empty())
-                    {
-                        if (fun && !inner)
-                        {
-                            _out << R"#(())#";
-                        }
-                        else
-                        {
-                            _operation_parameters(operation, false, false);
-                        }
-                    }
-                    if (fun)
-                    {
-                        _out << R"#(;)#";
-                        if (inner)
-                        {
-                            _out << R"#(
-    };)#";
-                        }
-                    }
-                    else if ((!inner) && !operation.modification().empty())
-                    {
-                        _out << operation.modification();
-                    }
-                    else if (this_or_that && (!inner))
-                    {
-                        if (that)
-                        {
-                            _out << R"#(;
-    return _result;)#";
+        if (!definition)
+        {
+            if (pure)
+            {
+                _out << R"#(
+        virtual )#";
+            }
+            else if (inner)
+            {
+                _out << R"#(
+        inline )#";
+            }
+            else
+            {
+                _out << R"#(
+    inline )#";
+            }
+        }
+        else
+        {
+            _abstraction_parameters(derived, true, false, inner, false);
+            _out << R"#(inline )#";
+        }
+    }
 
-                        }
-                        else
-                        {
-                            _out << R"#(;
-    return *this;)#";
-                        }
-                    }
-                    else
-                    {
-                        _out << R"#(;)#";
-                    }
-                    _out << R"#(
-}
+    // Emits the qualified method name (for definitions) or just the name (for declarations)
+    auto _generate_method_name(std::string const & method_name, strange::abstraction const & derived, bool const inner, bool const definition) -> void
+    {
+        if (!definition)
+        {
+            _out << R"#(auto )#" << method_name;
+        }
+        else
+        {
+            _out << R"#(auto )#" << derived.name();
+            if (inner)
+            {
+                _out << R"#(_)#";
+            }
+            _abstraction_parameters(derived, false, false, inner, false);
+            if (inner)
+            {
+                _out << R"#(::_instance::)#";
+            }
+            else
+            {
+                _out << R"#(::)#";
+            }
+            _out << method_name;
+        }
+    }
 
-)#";
-                }
-                if (operation.closure().empty())
+    struct _result_flags
+    {
+        bool that;
+        bool this_or_that;
+        bool this_or_that_or_void;
+    };
+
+    // Emits the result type, handling *this/*that/void/normal, returns flags for body generation
+    auto _generate_result_type(strange::operation const & operation, strange::abstraction const & derived, bool const inner, bool const pure) -> _result_flags
+    {
+        if (operation.constness())
+        {
+            _out << R"#( const -> )#";
+        }
+        else
+        {
+            _out << R"#( -> )#";
+        }
+        bool const that = (operation.result() == "*that");
+        bool const this_or_that = (that || (operation.result() == "*this"));
+        bool const this_or_that_or_void = (this_or_that || (operation.result() == "void"));
+        if (this_or_that)
+        {
+            if (inner || pure)
+            {
+                _out << "void";
+            }
+            else
+            {
+                _out << derived.name();
+                if (!that)
                 {
-                    break;
+                    _out << R"#( &)#";
                 }
             }
         }
+        else
+        {
+            _out << operation.result();
+        }
+        return {that, this_or_that, this_or_that_or_void};
+    }
+
+    // Emits the declaration terminator (= 0, final, or ;)
+    auto _generate_decl_suffix(bool const inner, bool const pure) -> void
+    {
+        if (pure)
+        {
+            _out << R"#( = 0;
+)#";
+        }
+        else if (inner)
+        {
+            _out << R"#( final;
+)#";
+        }
+        else
+        {
+            _out << R"#(;
+)#";
+        }
+    }
+
+    auto _generate_operation_method(strange::operation const & operation, strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::string const & name) -> void
+    {
+        _generate_method_prefix(derived, inner, pure, definition);
+        _generate_method_name(operation.name(), derived, inner, definition);
+        _operation_parameters(operation, true, (!definition) && (!pure) && !inner);
+        auto [that, this_or_that, this_or_that_or_void] = _generate_result_type(operation, derived, inner, pure);
+        if (!definition)
+        {
+            _generate_decl_suffix(inner, pure);
+            return;
+        }
+        _out << R"#(
+{
+    )#";
+        if (inner)
+        {
+            if (!operation.customisation().empty())
+            {
+                _out << operation.customisation();
+            }
+            else if (this_or_that_or_void)
+            {
+                _out << R"#(_thing.)#" << operation.name();
+            }
+            else
+            {
+                _out << R"#(return _thing.)#" << operation.name();
+            }
+        }
+        else if (operation.modification().empty())
+        {
+            if (that)
+            {
+                _out << R"#(auto _result = *this;
+    )#";
+            }
+            if (!operation.constness())
+            {
+                _out << R"#(strange::_common::_mutate();
+    )#";
+            }
+            if (this_or_that_or_void)
+            {
+                _out << R"#(std::dynamic_pointer_cast<typename )#";
+            }
+            else
+            {
+                _out << R"#(return std::dynamic_pointer_cast<typename )#";
+            }
+            if (name.empty())
+            {
+                _out << abstraction.name();
+                _abstraction_parameters(abstraction, false, false, false, false);
+            }
+            else
+            {
+                _out << name;
+            }
+            _out << R"#(::_derived)#";
+            if (operation.constness())
+            {
+                _out << R"#( const)#";
+            }
+            _out << R"#(>(strange::_common::_shared)->)#" << operation.name();
+        }
+        if ((operation.modification().empty() && !inner) || operation.customisation().empty())
+        {
+            _operation_parameters(operation, false, false);
+        }
+        if ((!inner) && !operation.modification().empty())
+        {
+            _out << operation.modification();
+        }
+        else if (this_or_that && (!inner))
+        {
+            if (that)
+            {
+                _out << R"#(;
+    return _result;)#";
+            }
+            else
+            {
+                _out << R"#(;
+    return *this;)#";
+            }
+        }
+        else
+        {
+            _out << R"#(;)#";
+        }
+        _out << R"#(
+}
+
+)#";
+    }
+
+    auto _generate_closure_method(strange::operation const & operation, strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, std::string const & name) -> void
+    {
+        _generate_method_prefix(derived, inner, pure, definition);
+        _generate_method_name(operation.closure(), derived, inner, definition);
+        _out << R"#(())#";
+        if (operation.constness())
+        {
+            _out << R"#( const -> )#";
+        }
+        else
+        {
+            _out << R"#( -> )#";
+        }
+        bool const that = (operation.result() == "*that");
+        bool const this_or_that = (that || (operation.result() == "*this"));
+        bool const this_or_that_or_void = (this_or_that || (operation.result() == "void"));
+        // return type: std::function<auto (params) -> result>
+        _out << R"#(std::function<auto )#";
+        _operation_parameters(operation, true, false);
+        _out << R"#( -> )#";
+        if (this_or_that)
+        {
+            if (inner || pure)
+            {
+                _out << "void";
+            }
+            else
+            {
+                _out << derived.name();
+                if (!that)
+                {
+                    _out << R"#( &)#";
+                }
+            }
+        }
+        else
+        {
+            _out << operation.result();
+        }
+        _out << R"#(>)#";
+        if (!definition)
+        {
+            _generate_decl_suffix(inner, pure);
+            return;
+        }
+        _out << R"#(
+{
+    )#";
+        if (inner)
+        {
+            _out << R"#(return [this])#";
+            _operation_parameters(operation, true, false);
+            _out << R"#( -> )#";
+            if (this_or_that)
+            {
+                _out << "void";
+            }
+            else
+            {
+                _out << operation.result();
+            }
+            _out << R"#(
+    {
+        )#";
+            if (!operation.customisation().empty())
+            {
+                _out << operation.customisation();
+            }
+            else if (this_or_that_or_void)
+            {
+                _out << R"#(_thing.)#" << operation.name();
+            }
+            else
+            {
+                _out << R"#(return _thing.)#" << operation.name();
+            }
+            _operation_parameters(operation, false, false);
+            _out << R"#(;
+    };)#";
+        }
+        else if (operation.modification().empty())
+        {
+            if (!operation.constness())
+            {
+                _out << R"#(strange::_common::_mutate();
+    )#";
+            }
+            _out << R"#(return std::dynamic_pointer_cast<typename )#";
+            if (name.empty())
+            {
+                _out << abstraction.name();
+                _abstraction_parameters(abstraction, false, false, false, false);
+            }
+            else
+            {
+                _out << name;
+            }
+            _out << R"#(::_derived)#";
+            if (operation.constness())
+            {
+                _out << R"#( const)#";
+            }
+            _out << R"#(>(strange::_common::_shared)->)#" << operation.closure();
+        }
+        if ((operation.modification().empty() && !inner) || operation.customisation().empty())
+        {
+            if (!inner)
+            {
+                _out << R"#(())#";
+            }
+        }
+        _out << R"#(;
+}
+
+)#";
     }
 
     auto _operation_parameters(strange::operation const & operation, bool const types, bool const arguments) -> void
