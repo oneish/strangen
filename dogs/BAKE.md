@@ -47,24 +47,24 @@ cmake --build ../BUILD
 stlab is not building with clang for some reason. To build without stlab (skipping graph/concurrency targets):
 
 ```bash
-cmake -B build -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
+cmake -B bake -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
 ```
 
 ## Direct CMake Usage
 
 ```bash
 # Configure (choose your compiler)
-cmake -B build -DCMAKE_CXX_COMPILER=g++-12
+cmake -B bake -DCMAKE_CXX_COMPILER=g++-12
 
 # Build everything
-cmake --build build
+cmake --build bake
 
 # Run tests
-cd build && ctest --output-on-failure
+cd bake && ctest --output-on-failure
 
 # Build a specific target
-cmake --build build --target test_strange
-cmake --build build --target demo
+cmake --build bake --target test_strange
+cmake --build bake --target demo
 ```
 
 ## Targets
