@@ -1,3 +1,8 @@
+// Dataflow graph implementation using stlab channels. processor<Signal> manages
+// channel-based signal processing pipelines, thru_processor<Signal> is a simple
+// passthrough, graph<Signal> composes processors with connections into executable
+// graphs, and connection holds routing metadata.
+
 #pragma once
 
 #include <stlab/concurrency/concurrency.hpp>
@@ -115,6 +120,8 @@ struct processor
                 _connected_outs.emplace_back(i, j);
             }
         }
+        // stlab::zip requires compile-time arity, so we dispatch via switch.
+        // Maximum supported connected inputs is 16.
         switch (_connected_ins.size())
         {
             case 0:
@@ -155,8 +162,23 @@ struct processor
             case 11:
                 combine_receivers<11>();
                 break;
+            case 12:
+                combine_receivers<12>();
+                break;
+            case 13:
+                combine_receivers<13>();
+                break;
+            case 14:
+                combine_receivers<14>();
+                break;
+            case 15:
+                combine_receivers<15>();
+                break;
+            case 16:
+                combine_receivers<16>();
+                break;
             default:
-                throw std::runtime_error("too many connected ins");
+                throw std::runtime_error("too many connected ins (max 16)");
         }
     }
 
@@ -499,8 +521,8 @@ private:
     static inline auto recurse(strange::graph<Signal> & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), [](std::vector<std::string> outputs){ return outputs; })); // [0] output
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), [](std::vector<std::string> inputs){ return inputs; })); // [1] input
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), [](std::vector<Signal> outputs){ return outputs; })); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), [](std::vector<Signal> inputs){ return inputs; })); // [1] input
         iterate(subgraph.processors(), subgraph.connections(), subprocs);
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
