@@ -233,7 +233,7 @@ namespace )#" << _space.name() << R"#(
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, false, false, false, false, unique);
+                _abstraction_operations(abstraction, abstraction, _gen_mode::type_erased_decl, unique);
             }
             _out << R"#(};
 
@@ -354,11 +354,11 @@ namespace )#" << _space.name() << R"#(
         {
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, false, false, true, false, unique);
+                _abstraction_operations(abstraction, abstraction, _gen_mode::type_erased_def, unique);
             }
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, true, false, true, false, unique);
+                _abstraction_operations(abstraction, abstraction, _gen_mode::inner_def, unique);
             }
         }
         _out << R"#(}
@@ -366,7 +366,7 @@ namespace )#" << _space.name() << R"#(
         for (auto const & abstraction : _space.abstractions())
         {
             std::unordered_set<strange::operation> unique;
-            _abstraction_operations(abstraction, abstraction, false, false, true, true, unique);
+            _abstraction_operations(abstraction, abstraction, _gen_mode::impl_def, unique);
         }
     }
 
@@ -630,7 +630,7 @@ namespace )#" << _space.name() << R"#(
 )#";
         {
             std::unordered_set<strange::operation> unique;
-            _abstraction_operations(abstraction, abstraction, true, true, false, false, unique);
+            _abstraction_operations(abstraction, abstraction, _gen_mode::pure_virtual_decl, unique);
         }
         _out << R"#(    };
 
@@ -714,7 +714,7 @@ namespace )#" << _space.name() << R"#(
 )#";
         {
             std::unordered_set<strange::operation> unique;
-            _abstraction_operations(abstraction, abstraction, true, false, false, false, unique);
+            _abstraction_operations(abstraction, abstraction, _gen_mode::inner_decl, unique);
         }
         _out << R"#(
         _Thing _thing;
@@ -825,7 +825,7 @@ namespace )#" << _space.name() << R"#(
 )#";
             {
                 std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, false, false, false, true, unique);
+                _abstraction_operations(abstraction, abstraction, _gen_mode::impl_decl, unique);
             }
             for (auto const & parent : abstraction.parents())
             {
@@ -926,8 +926,24 @@ namespace )#" << _space.name() << R"#(
         return strange::abstraction{};
     }
 
-    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, bool const inner, bool const pure, bool const definition, bool const implementation, std::unordered_set<strange::operation> & unique, std::string const & name = std::string{}) -> void
+    enum class _gen_mode
     {
+        pure_virtual_decl,
+        inner_decl,
+        type_erased_decl,
+        type_erased_def,
+        inner_def,
+        impl_decl,
+        impl_def,
+    };
+
+    auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, _gen_mode const mode, std::unordered_set<strange::operation> & unique, std::string const & name = std::string{}) -> void
+    {
+        bool const inner = (mode == _gen_mode::pure_virtual_decl || mode == _gen_mode::inner_decl || mode == _gen_mode::inner_def);
+        bool const pure = (mode == _gen_mode::pure_virtual_decl);
+        bool const definition = (mode == _gen_mode::type_erased_def || mode == _gen_mode::inner_def || mode == _gen_mode::impl_def);
+        bool const implementation = (mode == _gen_mode::impl_decl || mode == _gen_mode::impl_def);
+
         if ((!inner) || !pure)
         {
             // override base class operations as well
@@ -943,7 +959,7 @@ namespace )#" << _space.name() << R"#(
                 auto recurse = _find_parent(parent, space);
                 if (recurse._something())
                 {
-                    _abstraction_operations(recurse, derived, inner, pure, definition, implementation, unique, parent);
+                    _abstraction_operations(recurse, derived, mode, unique, parent);
                 }
             }
         }
