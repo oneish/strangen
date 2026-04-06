@@ -34,8 +34,8 @@ Strangen is self-hosting -- the core library's own 495KB `strange__space.h` head
 ### 1. Build the strangen tool
 
 ```bash
-cd sauce/generation
-g++-12 -std=c++17 -Wall strange__generation.cpp -o ../../bake/strangen
+cmake -B build -DCMAKE_CXX_COMPILER=g++-12
+cmake --build build --target strangen
 ```
 
 ### 2. Define a prototype
@@ -97,24 +97,16 @@ The meta header mixes static output with executable meta code delimited by `/*~ 
 
 Content outside `/*~ ... */` markers becomes raw string output in the generated header. Content inside becomes C++ code that runs during generation.
 
-### 4. Run the pipeline
+### 4. Build and run
+
+CMake handles the code generation pipeline automatically:
 
 ```bash
-# Generate compilable .cpp from the meta header
-./bake/strangen demo__space_meta.h demo__space_meta.cpp
-
-# Compile and execute to produce the space header
-g++-12 -std=c++17 -Wall demo__space_meta.cpp
-./a.out > demo__space.h
-
-# Compile your application with the generated header
-g++-12 -std=c++17 -Wall \
-    -I../libdart/include \
-    -I../GSL/include \
-    -I../rapidjson/include \
-    -I../sajson/include \
-    demo__main.cpp
+cmake --build build --target demo
+./build/demo
 ```
+
+Under the hood, CMake runs: `strangen` on the meta header, compiles the generated code, executes it to produce the space header, then compiles the demo.
 
 ### 5. Use the generated types
 
@@ -189,24 +181,25 @@ int main()
 
 A C++17-compatible compiler is required. The project has been tested with:
 
-- **g++-12** (used in `transform.sh` scripts)
-- **clang++-15** (used in `clang.sh` scripts)
+- **g++-12**
+- **clang++-15**
 
 ### CMake
 
-Version 3.0+ (optional, for building the strangen tool via CMake).
+Version 3.14+ (required).
 
 ### External Dependencies
 
 | Library | Purpose | Expected Path | Repository |
 |---|---|---|---|
+| doctest | Unit testing | `../doctest/doctest` | https://github.com/doctest/doctest |
 | libdart | JSON/binary serialization | `../libdart/include` | https://github.com/target/libdart |
 | GSL | Guidelines Support Library | `../GSL/include` | https://github.com/microsoft/GSL |
 | RapidJSON | JSON parsing (libdart backend) | `../rapidjson/include` | https://github.com/Tencent/rapidjson |
 | sajson | JSON parsing (libdart backend) | `../sajson/include` | https://github.com/chadaustin/sajson |
 | stlab | Concurrency (optional) | `../stlab-libraries` | https://github.com/stlab/libraries |
 
-All paths are relative to the strangen repository root. libdart, GSL, RapidJSON, and sajson are needed for serialization (baggage) features. stlab is only needed for concurrency (graph/processor) features.
+All paths are relative to the strangen repository root. doctest is needed for tests. libdart, GSL, RapidJSON, and sajson are needed for serialization (baggage) features. stlab is only needed for concurrency (graph/processor) features.
 
 ### Setup
 
@@ -214,6 +207,7 @@ Clone the dependencies into the parent directory of strangen:
 
 ```bash
 # From the parent directory of strangen:
+git clone https://github.com/doctest/doctest.git
 git clone https://github.com/target/libdart.git
 git clone https://github.com/microsoft/GSL.git
 git clone https://github.com/Tencent/rapidjson.git
@@ -630,11 +624,15 @@ Subgraphs can be nested inside larger graphs, and graphs support split, join, an
 
 ```
 strangen/
+  CMakeLists.txt                                 # Root build config
+  gcc.sh                                         # Build and test with g++-12
+  clang.sh                                       # Build and test with clang++-15
+  build.sh                                       # Build and test with both
+  bugs.md                                        # Known bugs tracker
   sauce/                                         # Core library
+    CMakeLists.txt                               # Tool + library + bootstrap targets
     generation/
       strange__generation.cpp                    # strangen tool source
-      CMakeLists.txt                             # CMake build config
-      build.sh                                   # Direct g++ build script
     strange/
       strange.h                                  # Entry point (includes space, adds hashing)
       common/
@@ -650,18 +648,30 @@ strangen/
         strange__transformation.h                # Code generation engine
         strange__space_prototype.h               # Core library prototype definitions
         strange__space_meta.h                    # Meta header for core library
-        transform.sh                             # Regenerate strange__space.h
       implementation/
         baggage/
           strange__implementation__baggage.h      # Serialization via libdart
         graph/
           strange__implementation__graph.h        # Concurrency via stlab
   taste/                                         # Examples
+    CMakeLists.txt                               # Example build targets
     demo/                                        # Full demo (fruit/banana)
     baggage/                                     # Serialization examples
     currants/                                    # Concurrency/dataflow examples
+  tastes/                                        # Unit tests (doctest)
+    CMakeLists.txt                               # Test targets + CTest
+    strange/                                     # Core tests
+      taste__main.cpp                            # Test entry point
+      common/                                    # _common tests
+      space/                                     # Type tests (any, parameter, etc.)
+      reflection/                                # Reflection tests
+      comprehension/                             # Tokenizer + parser tests
+      implementation/
+        baggage/                                 # Serialization tests
+        graph/                                   # Concurrency tests
   bake/                                          # Compiled strangen binary
-  dogs/                                          # Project inspiration
+  dogs/                                          # Project inspiration + build docs
+    BUILD.md                                     # Build system documentation
 ```
 
 ## Architecture
@@ -716,7 +726,7 @@ The core library's own `strange__space.h` (~495KB) is generated by the same pipe
 
 1. `sauce/strange/meta/strange__space_prototype.h` defines the core abstractions (`any`, `stuff`, `bag`, `space`, `abstraction`, `operation`, `parameter`, `token`, etc.)
 2. `sauce/strange/meta/strange__space_meta.h` is the meta header
-3. Running `sauce/strange/meta/transform.sh` regenerates `sauce/strange/space/strange__space.h`
+3. The CMake `regenerate_space` target runs a two-pass bootstrap: regenerates `strange__space.h`, then regenerates again using the new output, and verifies both passes produce identical results
 
 ## Examples
 
@@ -725,7 +735,7 @@ The core library's own `strange__space.h` (~495KB) is generated by the same pipe
 Full-featured demonstration including type erasure, closures, templates, multiple inheritance, serialization, and runtime manufacturing with a fruit/banana type hierarchy.
 
 ```bash
-cd taste/demo && bash transform.sh
+cmake --build build --target demo && ./build/demo
 ```
 
 ### Baggage (`taste/baggage/`)
@@ -733,17 +743,15 @@ cd taste/demo && bash transform.sh
 Demonstrates JSON and binary serialization using the libdart library and the strange baggage system, including round-trip serialization of parsed space definitions.
 
 ```bash
-cd taste/baggage && bash bake.sh
+cmake --build build --target baggage_example && ./build/baggage_example
 ```
 
 ### Currants (`taste/currants/`)
 
-Demonstrates dataflow programming with stlab channels (split, join, zip), custom process functors, processor graphs, and the strange graph abstraction. Requires stlab to be built first.
+Demonstrates dataflow programming with stlab channels (split, join, zip), custom process functors, processor graphs, and the strange graph abstraction. Requires stlab (built automatically by CMake if available).
 
 ```bash
-cd taste/currants
-bash stlab.sh    # build stlab (one-time)
-bash bake.sh     # compile and run
+cmake --build build --target currants_example && ./build/currants_example
 ```
 
 ## License
