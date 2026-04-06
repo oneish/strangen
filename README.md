@@ -653,12 +653,12 @@ strangen/
           strange__implementation__baggage.h      # Serialization via libdart
         graph/
           strange__implementation__graph.h        # Concurrency via stlab
-  snacks/                                         # Examples
+  snacks/                                        # Examples
     CMakeLists.txt                               # Example build targets
     demo/                                        # Full demo (fruit/banana)
     baggage/                                     # Serialization examples
     currants/                                    # Concurrency/dataflow examples
-  tastes/                                        # Unit tests (doctest)
+  taste/                                         # Unit tests (doctest)
     CMakeLists.txt                               # Test targets + CTest
     strange/                                     # Core tests
       taste__main.cpp                            # Test entry point

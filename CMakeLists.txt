@@ -90,4 +90,4 @@ add_subdirectory(sauce)
 add_subdirectory(snacks)
 
 enable_testing()
-add_subdirectory(tastes)
+add_subdirectory(taste)

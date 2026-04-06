@@ -102,7 +102,7 @@ bake-gcc/                    # or bake-clang/, bake/
     example                  # type erasure example
     baggage_example          # serialization example
     currants_example         # concurrency example
-  tastes/
+  taste/
     test_strange             # core tests
     test_baggage             # serialization tests
     test_graph               # concurrency tests
