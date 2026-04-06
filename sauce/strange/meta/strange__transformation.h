@@ -149,35 +149,8 @@ namespace )#" << _space.name() << R"#(
                 _abstraction_default_construct_bases(abstraction);
             });
             _abstraction_types(abstraction);
-            _out << R"#(protected:
-    struct _derived : )#";
-            _abstraction_parents(abstraction, true);
-            _out << R"#(
-    {
-        static inline auto _static_shared_to_base(std::shared_ptr<typename )#" << abstraction.name()
-                << R"#(::_derived> derived) -> std::shared_ptr<strange::_common::_base>
-        {
-)#";
-            if (abstraction.parents().empty())
-            {
-                _out << R"#(            return derived;
-)#";
-            }
-            else
-            {
-                _out << R"#(            return )#" << abstraction.parents()[0]
-                    << R"#(::_derived::_static_shared_to_base(derived);
-)#";
-            }
-            _out << R"#(        }
-)#";
-            {
-                std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, true, true, false, false, unique);
-            }
-            _out << R"#(    };
-
-public:
+            _generate_derived_struct(abstraction);
+            _out << R"#(public:
     inline auto _valid() const -> bool
     {
         return std::dynamic_pointer_cast<typename )#" << abstraction.name() << R"#(::_derived const>(strange::_common::_shared).operator bool();
@@ -282,88 +255,9 @@ public:
             _abstraction_name_and_parameters(abstraction);
             _out << R"#(;
 
-    struct _instance final : )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#(::_derived
-    {
-        template<typename... _Args>
-        inline _instance(_Args && ..._args)
-        :)#" << abstraction.name() << R"#(_::_derived{}
-        ,_thing{std::forward<_Args>(_args)...}
-        {
-        }
-
-        inline auto _address() const -> void const * final
-        {
-            return &_thing;
-        }
-
-        inline auto _sizeof() const -> size_t final
-        {
-            return sizeof(_thing);
-        }
-
-        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
-        {
-            if constexpr (_Copy)
-            {
 )#";
-            _out << R"#(                return )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#"
-                << abstraction.name() << R"#(_::_instance>(_thing));
-            }
-            else
-            {
-                throw strange::_common::_no_copy{};
-            }
-        }
-
-        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
-        {
-            if constexpr (std::is_default_constructible_v<_Thing>)
-            {
-)#";
-            _out << R"#(                return )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#"
-                << abstraction.name() << R"#(_::_instance>());
-            }
-            else
-            {
-                throw strange::_common::_no_default{};
-            }
-        }
-
-        inline auto _cat() const -> std::string final
-        {
-            return )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#(::_cat_;
-        }
-
-        inline auto _cats() const -> std::unordered_set<std::string> final
-        {
-            return )#";
-            _abstraction_name_and_parameters(abstraction);
-            _out << R"#(::_cats_;
-        }
-
-        inline auto _copy() const -> bool final
-        {
-            return )#" << abstraction.name() << R"#(_::_copy_;
-        }
-
-        inline auto _name() const -> std::string final
-        {
-            return )#" << abstraction.name() << R"#(_::_name_;
-        }
-)#";
-            {
-                std::unordered_set<strange::operation> unique;
-                _abstraction_operations(abstraction, abstraction, true, false, false, false, unique);
-            }
-            _out << R"#(
-        _Thing _thing;
-    };
-
-public:
+            _generate_instance_struct(abstraction);
+            _out << R"#(public:
     template<typename... _Args>
     static inline auto _make_(_Args && ..._args) -> )#" << abstraction.name() << R"#(_
     {
@@ -708,6 +602,125 @@ public:
             last = part;
         }
         return {last, depth};
+    }
+
+    auto _generate_derived_struct(strange::abstraction const & abstraction) -> void
+    {
+        _out << R"#(protected:
+    struct _derived : )#";
+        _abstraction_parents(abstraction, true);
+        _out << R"#(
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename )#" << abstraction.name()
+                << R"#(::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+)#";
+        if (abstraction.parents().empty())
+        {
+            _out << R"#(            return derived;
+)#";
+        }
+        else
+        {
+            _out << R"#(            return )#" << abstraction.parents()[0]
+                << R"#(::_derived::_static_shared_to_base(derived);
+)#";
+        }
+        _out << R"#(        }
+)#";
+        {
+            std::unordered_set<strange::operation> unique;
+            _abstraction_operations(abstraction, abstraction, true, true, false, false, unique);
+        }
+        _out << R"#(    };
+
+)#";
+    }
+
+    auto _generate_instance_struct(strange::abstraction const & abstraction) -> void
+    {
+        _out << R"#(    struct _instance final : )#";
+        _abstraction_name_and_parameters(abstraction);
+        _out << R"#(::_derived
+    {
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
+        :)#" << abstraction.name() << R"#(_::_derived{}
+        ,_thing{std::forward<_Args>(_args)...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+)#";
+        _out << R"#(                return )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#"
+            << abstraction.name() << R"#(_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_common::_no_copy{};
+            }
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+)#";
+        _out << R"#(                return )#" << abstraction.name() << R"#(_::_derived::_static_shared_to_base(std::make_shared<)#"
+            << abstraction.name() << R"#(_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return )#";
+        _abstraction_name_and_parameters(abstraction);
+        _out << R"#(::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return )#";
+        _abstraction_name_and_parameters(abstraction);
+        _out << R"#(::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return )#" << abstraction.name() << R"#(_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return )#" << abstraction.name() << R"#(_::_name_;
+        }
+)#";
+        {
+            std::unordered_set<strange::operation> unique;
+            _abstraction_operations(abstraction, abstraction, true, false, false, false, unique);
+        }
+        _out << R"#(
+        _Thing _thing;
+    };
+
+)#";
     }
 
     auto _abstraction_implementation(strange::abstraction const & abstraction, bool const forward) -> void
