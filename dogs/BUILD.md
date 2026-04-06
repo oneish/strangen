@@ -18,7 +18,7 @@ bash gcc.sh
 bash clang.sh
 
 # Build and test with both
-bash build.sh
+bash bake.sh
 ```
 
 ## Dependencies
@@ -94,7 +94,7 @@ This runs automatically as part of every build to surface any changes in the gen
 ## Build Directory Layout
 
 ```
-build-gcc/                   # or build-clang/, build/
+bake-gcc/                    # or bake-clang/, bake/
   sauce/
     strangen                 # code generator tool
   snacks/

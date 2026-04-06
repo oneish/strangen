@@ -627,7 +627,7 @@ strangen/
   CMakeLists.txt                                 # Root build config
   gcc.sh                                         # Build and test with g++-12
   clang.sh                                       # Build and test with clang++-15
-  build.sh                                       # Build and test with both
+  bake.sh                                        # Build and test with both
   bugs.md                                        # Known bugs tracker
   sauce/                                         # Core library
     CMakeLists.txt                               # Tool + library + bootstrap targets

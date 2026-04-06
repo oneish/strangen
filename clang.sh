@@ -4,13 +4,13 @@ set -e
 cd "$(dirname "$0")"
 
 echo "=== Configuring with clang++-15 ==="
-cmake -B build-clang -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
+cmake -B bake-clang -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
 
 echo "=== Building ==="
-cmake --build build-clang
+cmake --build bake-clang
 
 echo "=== Running tests ==="
-cd build-clang && ctest --output-on-failure
+cd bake-clang && ctest --output-on-failure
 
 echo ""
 echo "=== All tests passed (clang++-15) ==="

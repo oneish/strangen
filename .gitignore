@@ -1,6 +1,5 @@
 .vscode
 bake/strangen
-build/
-build-gcc/
-build-clang/
+bake-gcc/
+bake-clang/
 a.out
