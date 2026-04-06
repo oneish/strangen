@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 echo "=== Configuring with g++-12 ==="
 cmake -B bake-gcc -DCMAKE_CXX_COMPILER=g++-12
 
-echo "=== Building ==="
+echo "=== Baking ==="
 cmake --build bake-gcc
 
 echo "=== Running tests ==="
