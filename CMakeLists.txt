@@ -87,7 +87,7 @@ endif()
 # --- Subdirectories ---
 
 add_subdirectory(sauce)
-add_subdirectory(taste)
+add_subdirectory(snacks)
 
 enable_testing()
 add_subdirectory(tastes)

@@ -97,7 +97,7 @@ This runs automatically as part of every build to surface any changes in the gen
 build-gcc/                   # or build-clang/, build/
   sauce/
     strangen                 # code generator tool
-  taste/
+  snacks/
     demo                     # demo example
     example                  # type erasure example
     baggage_example          # serialization example
