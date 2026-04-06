@@ -716,22 +716,17 @@ public:
         }
     }
 
-    auto _abstraction_implementation(strange::abstraction const & abstraction, bool const forward) -> void
+    // Splits a qualified name (e.g., "strange::implementation::baggage") into
+    // namespace parts, opens namespace braces, and returns the final name and depth.
+    auto _open_namespaces(std::string const & qualified) -> std::pair<std::string, int64_t>
     {
-        if (abstraction.implementation().empty())
-        {
-            return;
-        }
-        _out << R"#(}
-
-)#";
-        std::istringstream imp{abstraction.implementation()};
-        std::string name;
+        std::istringstream imp{qualified};
+        std::string part;
         std::string last;
         int64_t depth = 0;
-        while (std::getline(imp, name, ':'))
+        while (std::getline(imp, part, ':'))
         {
-            if (name.empty())
+            if (part.empty())
             {
                 continue;
             }
@@ -742,8 +737,21 @@ public:
 )#";
                 ++depth;
             }
-            last = name;
+            last = part;
         }
+        return {last, depth};
+    }
+
+    auto _abstraction_implementation(strange::abstraction const & abstraction, bool const forward) -> void
+    {
+        if (abstraction.implementation().empty())
+        {
+            return;
+        }
+        _out << R"#(}
+
+)#";
+        auto [last, depth] = _open_namespaces(abstraction.implementation());
         _abstraction_parameters(abstraction, true, true, false, false);
         _out << R"#(struct )#" << last;
         if (!forward)
@@ -1044,7 +1052,10 @@ namespace )#" << _space.name() << R"#(
                 {
                     if (operation.constness() && !definition)
                     {
-                        _out << R"#(    )#" << (operation.result().length() >= 7 ? operation.result().substr(0, operation.result().length() - 7) : operation.result())
+                        // Strip "const &" suffix (7 chars) from result type, keeping
+                        // the leading space as separator before the member name.
+                        constexpr size_t const_ref_suffix = 7; // length of "const &"
+                        _out << R"#(    )#" << (operation.result().length() >= const_ref_suffix ? operation.result().substr(0, operation.result().length() - const_ref_suffix) : operation.result())
                             << operation.name() << R"#(_ )#" << operation.implementation() << R"#(;
 )#";
                     }
@@ -1073,25 +1084,7 @@ namespace )#" << _space.name() << R"#(
                 {
                     _out << R"#(
 )#";
-                    std::istringstream imp{abstraction.implementation()};
-                    std::string name;
-                    std::string last;
-                    int64_t depth = 0;
-                    while (std::getline(imp, name, ':'))
-                    {
-                        if (name.empty())
-                        {
-                            continue;
-                        }
-                        if (!last.empty())
-                        {
-                            _out << R"#(namespace )#" << last << R"#(
-{
-)#";
-                            ++depth;
-                        }
-                        last = name;
-                    }
+                    auto [last, depth] = _open_namespaces(abstraction.implementation());
                     _abstraction_parameters(derived, true, false, inner, false);
                     _out << R"#(inline auto )#" << last << R"#(::)#" << operation.name();
                     _operation_parameters(operation, true, false);
