@@ -34,7 +34,7 @@ git clone https://github.com/doctest/doctest.git
 git clone https://github.com/stlab/libraries.git stlab-libraries
 ```
 
-stlab must be pre-built:
+stlab must be pre-built, see [stlab.sh](../stlab.sh):
 
 ```bash
 cmake -S ../stlab-libraries -B ../BUILD \

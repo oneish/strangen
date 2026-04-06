@@ -217,7 +217,7 @@ git clone https://github.com/chadaustin/sajson.git
 git clone https://github.com/stlab/libraries.git stlab-libraries
 ```
 
-If using stlab, build it with CMake:
+If using stlab, build it with CMake, see [stlab.sh](stlab.sh):
 
 ```bash
 cmake -S stlab-libraries -B BUILD \
