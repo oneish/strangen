@@ -18,6 +18,13 @@ set(PASS2_OUTPUT ${CMAKE_BINARY_DIR}/meta/pass2_strange__space.h)
 
 add_custom_target(regenerate_space ALL
     DEPENDS strangen
+        ${META_DIR}/strange__space_meta.h
+        ${META_DIR}/strange__space_prototype.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/strange/meta/strange__transformation.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/strange/comprehension/strange__comprehension__parser.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/strange/comprehension/strange__comprehension__toker.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/strange/reflection/strange__reflection.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/strange/common/strange__common.h
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/meta
     # Pass 1: generate using the checked-in header
     COMMAND $<TARGET_FILE:strangen> ${META_DIR}/strange__space_meta.h ${CMAKE_BINARY_DIR}/meta/strange__space_meta.cpp
