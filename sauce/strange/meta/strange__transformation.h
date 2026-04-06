@@ -1,3 +1,8 @@
+// Code generation engine that transforms a parsed strange::space definition into
+// C++ code. Generates forward declarations, reflection specializations, type-erased
+// wrapper structs, implementation templates, pack/unpack serialization, closures,
+// and factory registration.
+
 #pragma once
 #include "../strange.h"
 #include "../comprehension/strange__comprehension__parser.h"
@@ -824,7 +829,7 @@ public:
                                 _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_array_string()#" << operation.name() << R"#(()));
 )#";
                             }
-                            else if (operation.result().substr(0, 12) == "std::vector<")
+                            else if (operation.result().length() >= 12 && operation.result().substr(0, 12) == "std::vector<")
                             {
                                 _out << R"#(        {
             auto _array = dest.make_array();
@@ -917,7 +922,7 @@ public:
                                 _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_string()#" << operation.name() << R"#(());
 )#";
                             }
-                            else if (operation.result().substr(0, 12) == "std::vector<")
+                            else if (operation.result().length() >= 12 && operation.result().substr(0, 12) == "std::vector<")
                             {
                                 _out << R"#(        {
             auto _array = src.get_object(")#" << operation.name() << R"#(").to_array();
@@ -1007,11 +1012,11 @@ namespace )#" << _space.name() << R"#(
         {
             // override base class operations as well
             std::string space;
-            auto name = abstraction.name();
-            auto pos = name.find("::");
+            auto abs_name = abstraction.name();
+            auto pos = abs_name.find("::");
             if (pos != std::string::npos)
             {
-                space = name.substr(0, pos + 2);
+                space = abs_name.substr(0, pos + 2);
             }
             for (auto const & parent : abstraction.parents())
             {
