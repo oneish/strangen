@@ -723,6 +723,89 @@ namespace )#" << _space.name() << R"#(
 )#";
     }
 
+    struct _pack_entry { std::string result_type; std::string pack_method; std::string unpack_method; };
+
+    static inline std::vector<_pack_entry> const & _pack_table()
+    {
+        static std::vector<_pack_entry> const table = {
+            {"bool &",                                  "make_bool",        "as_bool"},
+            {"int64_t &",                               "make_int64",       "as_int64"},
+            {"uint64_t &",                              "make_uint64",      "as_uint64"},
+            {"double &",                                "make_double",      "as_double"},
+            {"std::string &",                           "make_string",      "as_string"},
+            {"std::vector<strange::bag> &",             "make_array",       "as_array"},
+            {"std::vector<bool> &",                     "make_array_bool",  "as_array_bool"},
+            {"std::vector<int64_t> &",                  "make_array_int64", "as_array_int64"},
+            {"std::vector<uint64_t> &",                 "make_array_uint64","as_array_uint64"},
+            {"std::vector<double> &",                   "make_array_double","as_array_double"},
+            {"std::vector<std::string> &",              "make_array_string","as_array_string"},
+            {"std::unordered_map<std::string, bag> &",  "make_object",      "as_object"},
+        };
+        return table;
+    }
+
+    auto _generate_pack_field(strange::operation const & operation) -> void
+    {
+        for (auto const & entry : _pack_table())
+        {
+            if (operation.result() == entry.result_type)
+            {
+                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.)#" << entry.pack_method << R"#(()#" << operation.name() << R"#(()));
+)#";
+                return;
+            }
+        }
+        if (operation.result().length() >= 12 && operation.result().substr(0, 12) == "std::vector<")
+        {
+            _out << R"#(        {
+            auto _array = dest.make_array();
+            for (auto const & _item : )#" << operation.name() << R"#(())
+            {
+                _array.push_back_array(dest.make_any(_item));
+            }
+            dest.insert_object(")#" << operation.name() << R"#(", _array);
+        }
+)#";
+        }
+        else
+        {
+            _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_any()#" << operation.name() << R"#(()));
+)#";
+        }
+    }
+
+    auto _generate_unpack_field(strange::operation const & operation) -> void
+    {
+        for (auto const & entry : _pack_table())
+        {
+            if (operation.result() == entry.result_type)
+            {
+                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").)#" << entry.unpack_method << R"#(()#" << operation.name() << R"#(());
+)#";
+                return;
+            }
+        }
+        if (operation.result().length() >= 12 && operation.result().substr(0, 12) == "std::vector<")
+        {
+            _out << R"#(        {
+            auto _array = src.get_object(")#" << operation.name() << R"#(").to_array();
+            auto _size = _array.size();
+            )#" << operation.name() << R"#(().clear();
+            )#" << operation.name() << R"#(().resize(_size);
+            for (std::size_t _index = 0; _index < _size; ++_index)
+            {
+                _array[_index].as_any()#" << operation.name() << R"#(()[_index]);
+            }
+        }
+)#";
+        }
+        else
+        {
+            _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_any()#" << operation.name() << R"#(());
+)#";
+        }
+    }
+
     auto _abstraction_implementation(strange::abstraction const & abstraction, bool const forward) -> void
     {
         if (abstraction.implementation().empty())
@@ -763,83 +846,7 @@ namespace )#" << _space.name() << R"#(
                                 continue;
                             }
                             unique.insert(operation);
-                            if (operation.result() == "bool &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_bool()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "int64_t &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_int64()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "uint64_t &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_uint64()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "double &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_double()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "std::string &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_string()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "std::vector<strange::bag> &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_array()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "std::vector<bool> &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_array_bool()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "std::vector<int64_t> &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_array_int64()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "std::vector<uint64_t> &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_array_uint64()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "std::vector<double> &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_array_double()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result() == "std::vector<std::string> &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_array_string()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else if (operation.result().length() >= 12 && operation.result().substr(0, 12) == "std::vector<")
-                            {
-                                _out << R"#(        {
-            auto _array = dest.make_array();
-            for (auto const & _item : )#" << operation.name() << R"#(())
-            {
-                _array.push_back_array(dest.make_any(_item));
-            }
-            dest.insert_object(")#" << operation.name() << R"#(", _array);
-        }
-)#";
-                            }
-                            else if (operation.result() == "std::unordered_map<std::string, bag> &")
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_object()#" << operation.name() << R"#(()));
-)#";
-                            }
-                            else
-                            {
-                                _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_any()#" << operation.name() << R"#(()));
-)#";
-                            }
+                            _generate_pack_field(operation);
                         }
                     }
                     _out << R"#(    }
@@ -856,85 +863,7 @@ namespace )#" << _space.name() << R"#(
                                 continue;
                             }
                             unique.insert(operation);
-                            if (operation.result() == "bool &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_bool()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "int64_t &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_int64()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "uint64_t &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_uint64()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "double &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_double()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "std::string &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_string()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "std::vector<strange::bag> &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "std::vector<bool> &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_bool()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "std::vector<int64_t> &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_int64()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "std::vector<uint64_t> &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_uint64()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "std::vector<double> &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_double()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result() == "std::vector<std::string> &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_array_string()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else if (operation.result().length() >= 12 && operation.result().substr(0, 12) == "std::vector<")
-                            {
-                                _out << R"#(        {
-            auto _array = src.get_object(")#" << operation.name() << R"#(").to_array();
-            auto _size = _array.size();
-            )#" << operation.name() << R"#(().clear();
-            )#" << operation.name() << R"#(().resize(_size);
-            for (std::size_t _index = 0; _index < _size; ++_index)
-            {
-                _array[_index].as_any()#" << operation.name() << R"#(()[_index]);
-            }
-        }
-)#";
-                            }
-                            else if (operation.result() == "std::unordered_map<std::string, bag> &")
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_object()#" << operation.name() << R"#(());
-)#";
-                            }
-                            else
-                            {
-                                _out << R"#(        src.get_object(")#" << operation.name() << R"#(").as_any()#" << operation.name() << R"#(());
-)#";
-                            }
+                            _generate_unpack_field(operation);
                         }
                     }
                     _out << R"#(    }
