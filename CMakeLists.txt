@@ -55,7 +55,7 @@ add_library(sajson INTERFACE)
 target_include_directories(sajson SYSTEM INTERFACE ${SAJSON_INCLUDE_DIR})
 
 # stlab (library + headers, needed for graph/concurrency targets)
-# Known incompatibility with clang — use -DSTRANGEN_ENABLE_STLAB=OFF to skip
+# Not working with clang for some reason — use -DSTRANGEN_ENABLE_STLAB=OFF to skip
 option(STRANGEN_ENABLE_STLAB "Enable stlab-dependent targets (graph/concurrency)" ON)
 set(STRANGEN_HAS_STLAB OFF)
 if(STRANGEN_ENABLE_STLAB)
