@@ -39,6 +39,7 @@ stlab must be pre-built, see [stlab.sh](../stlab.sh):
 ```bash
 cmake -S ../stlab-libraries -B ../BUILD \
     -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CXX_COMPILER=/usr/bin/g++-12 \
     -DCMAKE_CXX_STANDARD=17 \
     -DBUILD_TESTING=OFF
 cmake --build ../BUILD
@@ -67,6 +68,8 @@ cmake --build bake --target test_strange
 cmake --build bake --target demo
 ```
 
+**Note:** The convenience scripts (gcc.sh, clang.sh) use compiler-specific build directories (`bake-gcc/`, `bake-clang/`) for clarity. When using CMake directly, you can use any directory name (e.g., `-B bake`).
+
 ## Targets
 
 | Target | Description |
@@ -94,7 +97,7 @@ This runs automatically as part of every build to surface any changes in the gen
 ## Build Directory Layout
 
 ```
-bake-gcc/                    # or bake-clang/, bake/
+bake-gcc/                    # gcc.sh → bake-gcc/, clang.sh → bake-clang/
   sauce/
     strangen                 # code generator tool
   snacks/
