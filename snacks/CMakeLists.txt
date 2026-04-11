@@ -6,15 +6,22 @@ set(DEMO_SPACE_HEADER ${DEMO_BUILD_DIR}/demo__space.h)
 add_custom_command(
     OUTPUT ${DEMO_SPACE_HEADER}
     COMMAND ${CMAKE_COMMAND} -E make_directory ${DEMO_BUILD_DIR}
+    # Hash checked-in header before generation
+    COMMAND ${CMAKE_COMMAND} -E md5sum ${DEMO_DIR}/demo__space.h > ${DEMO_BUILD_DIR}/demo__space.h.old_hash
+    # Generate
     COMMAND $<TARGET_FILE:strangen> ${DEMO_DIR}/demo__space_meta.h ${DEMO_BUILD_DIR}/demo__space_meta.cpp
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEMO_BUILD_DIR}/demo__space_meta.cpp ${DEMO_DIR}/demo__space_meta.cpp
     COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall
         -I${CMAKE_SOURCE_DIR}/sauce/strange
         -I${CMAKE_SOURCE_DIR}/sauce/strange/meta
         ${DEMO_BUILD_DIR}/demo__space_meta.cpp
         -o ${DEMO_BUILD_DIR}/demo_gen
     COMMAND ${DEMO_BUILD_DIR}/demo_gen > ${DEMO_SPACE_HEADER}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEMO_BUILD_DIR}/demo__space_meta.cpp ${DEMO_DIR}/demo__space_meta.cpp
+    # Copy header to source immediately
     COMMAND ${CMAKE_COMMAND} -E copy ${DEMO_SPACE_HEADER} ${DEMO_DIR}/demo__space.h
+    # Hash comparison: fail if header changed from checked-in version
+    COMMAND ${CMAKE_COMMAND} -E md5sum ${DEMO_DIR}/demo__space.h > ${DEMO_BUILD_DIR}/demo__space.h.new_hash
+    COMMAND ${CMAKE_COMMAND} -E compare_files ${DEMO_BUILD_DIR}/demo__space.h.old_hash ${DEMO_BUILD_DIR}/demo__space.h.new_hash
     DEPENDS strangen ${DEMO_DIR}/demo__space_meta.h ${DEMO_DIR}/demo__space_prototype.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/strange.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/meta/strange__transformation.h
@@ -39,7 +46,11 @@ set(EXAMPLE_SPACE_HEADER ${EXAMPLE_BUILD_DIR}/example__space_transformation_3.h)
 add_custom_command(
     OUTPUT ${EXAMPLE_SPACE_HEADER}
     COMMAND ${CMAKE_COMMAND} -E make_directory ${EXAMPLE_BUILD_DIR}
+    # Hash checked-in header before generation
+    COMMAND ${CMAKE_COMMAND} -E md5sum ${EXAMPLE_DIR}/example__space_transformation_3.h > ${EXAMPLE_BUILD_DIR}/example__space_transformation_3.h.old_hash
+    # Generate
     COMMAND $<TARGET_FILE:strangen> ${EXAMPLE_DIR}/example__space_transformation_1.h ${EXAMPLE_BUILD_DIR}/example__space_transformation_2.cpp
+    COMMAND ${CMAKE_COMMAND} -E copy ${EXAMPLE_BUILD_DIR}/example__space_transformation_2.cpp ${EXAMPLE_DIR}/example__space_transformation_2.cpp
     COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall
         -I${CMAKE_SOURCE_DIR}/sauce/strange
         -I${CMAKE_SOURCE_DIR}/sauce/strange/meta
@@ -47,8 +58,11 @@ add_custom_command(
         ${EXAMPLE_BUILD_DIR}/example__space_transformation_2.cpp
         -o ${EXAMPLE_BUILD_DIR}/example_gen
     COMMAND ${EXAMPLE_BUILD_DIR}/example_gen > ${EXAMPLE_SPACE_HEADER}
-    COMMAND ${CMAKE_COMMAND} -E copy ${EXAMPLE_BUILD_DIR}/example__space_transformation_2.cpp ${EXAMPLE_DIR}/example__space_transformation_2.cpp
+    # Copy header to source immediately
     COMMAND ${CMAKE_COMMAND} -E copy ${EXAMPLE_SPACE_HEADER} ${EXAMPLE_DIR}/example__space_transformation_3.h
+    # Hash comparison: fail if header changed from checked-in version
+    COMMAND ${CMAKE_COMMAND} -E md5sum ${EXAMPLE_DIR}/example__space_transformation_3.h > ${EXAMPLE_BUILD_DIR}/example__space_transformation_3.h.new_hash
+    COMMAND ${CMAKE_COMMAND} -E compare_files ${EXAMPLE_BUILD_DIR}/example__space_transformation_3.h.old_hash ${EXAMPLE_BUILD_DIR}/example__space_transformation_3.h.new_hash
     DEPENDS strangen ${EXAMPLE_DIR}/example__space_transformation_1.h
         ${EXAMPLE_DIR}/example__space_definition.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/meta/strange__transformation.h
