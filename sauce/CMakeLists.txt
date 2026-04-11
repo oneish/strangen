@@ -37,9 +37,10 @@ add_custom_target(regenerate_space ALL
     COMMAND ${META_BUILD_DIR}/meta_gen > ${PASS1_OUTPUT}
     # Pass 2: regenerate using the pass 1 output
     COMMAND ${CMAKE_COMMAND} -E copy ${PASS1_OUTPUT} ${SPACE_HEADER}
-    COMMAND $<TARGET_FILE:strangen> ${META_DIR}/strange__space_meta.h ${META_BUILD_DIR}/strange__space_meta_p2.cpp
-    COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall -I${META_DIR}/.. -I${META_DIR} ${META_BUILD_DIR}/strange__space_meta_p2.cpp -o ${META_BUILD_DIR}/meta_gen_p2
-    COMMAND ${META_BUILD_DIR}/meta_gen_p2 > ${PASS2_OUTPUT}
+    COMMAND $<TARGET_FILE:strangen> ${META_DIR}/strange__space_meta.h ${META_BUILD_DIR}/strange__space_meta.cpp
+    COMMAND ${CMAKE_COMMAND} -E copy ${META_BUILD_DIR}/strange__space_meta.cpp ${META_DIR}/strange__space_meta.cpp
+    COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall -I${META_DIR}/.. -I${META_DIR} ${META_BUILD_DIR}/strange__space_meta.cpp -o ${META_BUILD_DIR}/meta_gen
+    COMMAND ${META_BUILD_DIR}/meta_gen > ${PASS2_OUTPUT}
     # Copy pass 2 output to source
     COMMAND ${CMAKE_COMMAND} -E copy ${PASS2_OUTPUT} ${SPACE_HEADER}
     # Hash comparison: fail if header changed from checked-in version
