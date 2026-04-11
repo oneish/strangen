@@ -65,10 +65,12 @@ set_target_properties(example PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXAMPLE_BUIL
 add_executable(baggage ${CMAKE_CURRENT_SOURCE_DIR}/baggage/baggage__main.cpp)
 target_link_libraries(baggage PRIVATE strange dart gsl rapidjson sajson)
 target_include_directories(baggage PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/baggage)
+set_target_properties(baggage PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/snacks/baggage)
 
 # --- Currants example (requires stlab) ---
 if(STRANGEN_HAS_STLAB)
     add_executable(currants ${CMAKE_CURRENT_SOURCE_DIR}/currants/currants__main.cpp)
     target_link_libraries(currants PRIVATE strange dart gsl rapidjson sajson stlab_lib)
     target_include_directories(currants PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/currants)
+    set_target_properties(currants PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/snacks/currants)
 endif()
