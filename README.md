@@ -228,7 +228,7 @@ cmake -S ../stlab-libraries -B ../BUILD \
 cmake --build ../BUILD
 ```
 
-**Note:** stlab is not building with clang for some reason, which is why `clang.sh` explicitly disables it with `-DSTRANGEN_ENABLE_STLAB=OFF`. When using clang, graph/concurrency targets (test_graph, currants_example) are skipped. Use `gcc.sh` for full functionality including concurrency features.
+**Note:** stlab is not building with clang for some reason, which is why `clang.sh` explicitly disables it with `-DSTRANGEN_ENABLE_STLAB=OFF`. When using clang, graph/concurrency targets (test_graph, currants) are skipped. Use `gcc.sh` for full functionality including concurrency features.
 
 ## Building
 
@@ -746,7 +746,7 @@ cmake --build bake --target demo && ./bake/snacks/demo
 Demonstrates JSON and binary serialization using the libdart library and the strange baggage system, including round-trip serialization of parsed space definitions.
 
 ```bash
-cmake --build bake --target baggage_example && ./bake/snacks/baggage_example
+cmake --build bake --target baggage && ./bake/snacks/baggage
 ```
 
 ### Currants (`snacks/currants/`)
@@ -754,7 +754,7 @@ cmake --build bake --target baggage_example && ./bake/snacks/baggage_example
 Demonstrates dataflow programming with stlab channels (split, join, zip), custom process functors, processor graphs, and the strange graph abstraction. Requires stlab (built automatically by CMake if available).
 
 ```bash
-cmake --build bake --target currants_example && ./bake/snacks/currants_example
+cmake --build bake --target currants && ./bake/snacks/currants
 ```
 
 ## License

@@ -77,8 +77,8 @@ cmake --build bake --target demo
 | `strangen` | Code generator tool |
 | `demo` | Demo example (with code generation) |
 | `example` | Type erasure example (with code generation) |
-| `baggage_example` | Serialization example |
-| `currants_example` | Concurrency example |
+| `baggage` | Serialization example |
+| `currants` | Concurrency example |
 | `test_strange` | Core unit tests |
 | `test_baggage` | Serialization unit tests |
 | `test_graph` | Concurrency unit tests |
@@ -99,19 +99,23 @@ This runs automatically as part of every build to surface any changes in the gen
 ```
 bake-gcc/                    # gcc.sh → bake-gcc/, clang.sh → bake-clang/
   sauce/
-    strangen                 # code generator tool
+    generation/
+      strangen               # code generator tool
+    strange/
+      meta/                  # bootstrap intermediates
+        pass1_strange__space.h
+        pass2_strange__space.h
   snacks/
-    demo                     # demo example
-    example                  # type erasure example
-    baggage_example          # serialization example
-    currants_example         # concurrency example
+    demo/                    # demo example + code gen intermediates
+    example/                 # type erasure example + code gen intermediates
+    baggage                  # serialization example
+    currants                 # concurrency example
   taste/
-    test_strange             # core tests
-    test_baggage             # serialization tests
-    test_graph               # concurrency tests
-  meta/                      # bootstrap intermediates
-    pass1_strange__space.h
-    pass2_strange__space.h
-  demo/                      # demo code gen intermediates
-  example/                   # example code gen intermediates
+    strange/
+      test_strange           # core tests
+      implementation/
+        baggage/
+          test_baggage       # serialization tests
+        graph/
+          test_graph         # concurrency tests
 ```
