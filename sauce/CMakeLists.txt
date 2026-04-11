@@ -30,6 +30,7 @@ add_custom_target(regenerate_space ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${META_BUILD_DIR}
     # Pass 1: generate using the checked-in header
     COMMAND $<TARGET_FILE:strangen> ${META_DIR}/strange__space_meta.h ${META_BUILD_DIR}/strange__space_meta.cpp
+    COMMAND ${CMAKE_COMMAND} -E copy ${META_BUILD_DIR}/strange__space_meta.cpp ${META_DIR}/strange__space_meta.cpp
     COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall -I${META_DIR}/.. -I${META_DIR} ${META_BUILD_DIR}/strange__space_meta.cpp -o ${META_BUILD_DIR}/meta_gen
     COMMAND ${META_BUILD_DIR}/meta_gen > ${PASS1_OUTPUT}
     # Pass 2: regenerate using the pass 1 output

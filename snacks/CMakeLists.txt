@@ -1,7 +1,7 @@
 # --- Code generation for demo ---
 set(DEMO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/demo)
 set(DEMO_BUILD_DIR ${CMAKE_BINARY_DIR}/snacks/demo)
-set(DEMO_SPACE_HEADER ${DEMO_DIR}/demo__space.h)
+set(DEMO_SPACE_HEADER ${DEMO_BUILD_DIR}/demo__space.h)
 
 add_custom_command(
     OUTPUT ${DEMO_SPACE_HEADER}
@@ -13,6 +13,8 @@ add_custom_command(
         ${DEMO_BUILD_DIR}/demo__space_meta.cpp
         -o ${DEMO_BUILD_DIR}/demo_gen
     COMMAND ${DEMO_BUILD_DIR}/demo_gen > ${DEMO_SPACE_HEADER}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEMO_BUILD_DIR}/demo__space_meta.cpp ${DEMO_DIR}/demo__space_meta.cpp
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEMO_SPACE_HEADER} ${DEMO_DIR}/demo__space.h
     DEPENDS strangen ${DEMO_DIR}/demo__space_meta.h ${DEMO_DIR}/demo__space_prototype.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/strange.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/meta/strange__transformation.h
@@ -26,13 +28,13 @@ add_custom_command(
 
 add_executable(demo ${DEMO_DIR}/demo__main.cpp ${DEMO_SPACE_HEADER})
 target_link_libraries(demo PRIVATE strange dart gsl rapidjson sajson)
-target_include_directories(demo PRIVATE ${DEMO_DIR})
+target_include_directories(demo PRIVATE ${DEMO_BUILD_DIR} ${DEMO_DIR})
 set_target_properties(demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${DEMO_BUILD_DIR})
 
 # --- Code generation for example ---
 set(EXAMPLE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example)
 set(EXAMPLE_BUILD_DIR ${CMAKE_BINARY_DIR}/snacks/example)
-set(EXAMPLE_SPACE_HEADER ${EXAMPLE_DIR}/example__space_transformation_3.h)
+set(EXAMPLE_SPACE_HEADER ${EXAMPLE_BUILD_DIR}/example__space_transformation_3.h)
 
 add_custom_command(
     OUTPUT ${EXAMPLE_SPACE_HEADER}
@@ -45,6 +47,8 @@ add_custom_command(
         ${EXAMPLE_BUILD_DIR}/example__space_transformation_2.cpp
         -o ${EXAMPLE_BUILD_DIR}/example_gen
     COMMAND ${EXAMPLE_BUILD_DIR}/example_gen > ${EXAMPLE_SPACE_HEADER}
+    COMMAND ${CMAKE_COMMAND} -E copy ${EXAMPLE_BUILD_DIR}/example__space_transformation_2.cpp ${EXAMPLE_DIR}/example__space_transformation_2.cpp
+    COMMAND ${CMAKE_COMMAND} -E copy ${EXAMPLE_SPACE_HEADER} ${EXAMPLE_DIR}/example__space_transformation_3.h
     DEPENDS strangen ${EXAMPLE_DIR}/example__space_transformation_1.h
         ${EXAMPLE_DIR}/example__space_definition.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/meta/strange__transformation.h
@@ -58,7 +62,7 @@ add_custom_command(
 
 add_executable(example ${EXAMPLE_DIR}/example__type_erasure_main.cpp ${EXAMPLE_SPACE_HEADER})
 target_link_libraries(example PRIVATE strange)
-target_include_directories(example PRIVATE ${EXAMPLE_DIR})
+target_include_directories(example PRIVATE ${EXAMPLE_BUILD_DIR} ${EXAMPLE_DIR})
 set_target_properties(example PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXAMPLE_BUILD_DIR})
 
 # --- Baggage example ---
