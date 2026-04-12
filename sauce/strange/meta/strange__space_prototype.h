@@ -200,7 +200,7 @@ namespace strange
         std::string type {};
         std::string name {};
         std::string argument {};
-        bool variadic {};
+        bool variadic {false};
     };
 
     struct [[strange::thing("strange::implementation::operation")]]

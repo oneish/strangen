@@ -5023,7 +5023,7 @@ struct parameter
     std::string argument_ {};
     inline auto argument() const -> std::string const & { return argument_; };
     inline auto argument() -> std::string & { return argument_; };
-    bool variadic_ {};
+    bool variadic_ {false};
     inline auto variadic() const -> bool const & { return variadic_; };
     inline auto variadic() -> bool & { return variadic_; };
 
