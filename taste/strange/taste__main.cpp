@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "common/taste__common.cpp"
+#include "common/taste__hash.cpp"
 #include "space/taste__any.cpp"
 #include "space/taste__parameter.cpp"
 #include "space/taste__operation.cpp"
