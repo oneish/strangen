@@ -168,6 +168,9 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::connection")]]
+    [[strange::hash]]
+    [[strange::equality]]
+    [[strange::comparison]]
     connection : stuff
     {
         uint64_t from_id {};

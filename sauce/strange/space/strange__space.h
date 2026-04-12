@@ -3858,6 +3858,18 @@ protected:
         virtual auto to_in() const -> uint64_t const & = 0;
 
         virtual auto to_in() -> uint64_t & = 0;
+
+        virtual auto operator==(connection const & other) const -> bool = 0;
+
+        virtual auto operator!=(connection const & other) const -> bool = 0;
+
+        virtual auto operator<(connection const & other) const -> bool = 0;
+
+        virtual auto operator<=(connection const & other) const -> bool = 0;
+
+        virtual auto operator>(connection const & other) const -> bool = 0;
+
+        virtual auto operator>=(connection const & other) const -> bool = 0;
     };
 
 public:
@@ -3947,6 +3959,18 @@ public:
     inline auto to_in() const -> uint64_t const &;
 
     inline auto to_in() -> uint64_t &;
+
+    inline auto operator==(connection const & other) const -> bool;
+
+    inline auto operator!=(connection const & other) const -> bool;
+
+    inline auto operator<(connection const & other) const -> bool;
+
+    inline auto operator<=(connection const & other) const -> bool;
+
+    inline auto operator>(connection const & other) const -> bool;
+
+    inline auto operator>=(connection const & other) const -> bool;
 };
 
 template<typename _Thing, bool _Copy>
@@ -4075,6 +4099,18 @@ private:
         inline auto to_in() const -> uint64_t const & final;
 
         inline auto to_in() -> uint64_t & final;
+
+        inline auto operator==(connection const & other) const -> bool final;
+
+        inline auto operator!=(connection const & other) const -> bool final;
+
+        inline auto operator<(connection const & other) const -> bool final;
+
+        inline auto operator<=(connection const & other) const -> bool final;
+
+        inline auto operator>(connection const & other) const -> bool final;
+
+        inline auto operator>=(connection const & other) const -> bool final;
 
         _Thing _thing;
     };
@@ -13165,6 +13201,36 @@ inline auto connection::to_in() -> uint64_t &
     return std::dynamic_pointer_cast<typename connection::_derived>(strange::_common::_shared)->to_in();
 }
 
+inline auto connection::operator==(connection const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->operator==(other);
+}
+
+inline auto connection::operator!=(connection const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->operator!=(other);
+}
+
+inline auto connection::operator<(connection const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->operator<(other);
+}
+
+inline auto connection::operator<=(connection const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->operator<=(other);
+}
+
+inline auto connection::operator>(connection const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->operator>(other);
+}
+
+inline auto connection::operator>=(connection const & other) const -> bool
+{
+    return std::dynamic_pointer_cast<typename connection::_derived const>(strange::_common::_shared)->operator>=(other);
+}
+
 template<typename _Thing, bool _Copy>
 inline auto connection_<_Thing, _Copy>::_instance::pack(strange::bag & dest) const -> void
 {
@@ -13223,6 +13289,48 @@ template<typename _Thing, bool _Copy>
 inline auto connection_<_Thing, _Copy>::_instance::to_in() -> uint64_t &
 {
     return _thing.to_in();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::operator==(connection const & other) const -> bool
+{
+    return from_id() == other.from_id()
+    && from_out() == other.from_out()
+    && to_id() == other.to_id()
+    && to_in() == other.to_in();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::operator!=(connection const & other) const -> bool
+{
+    return !operator==(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::operator<(connection const & other) const -> bool
+{
+    return from_id() < other.from_id() || (from_id() == other.from_id()
+    && (from_out() < other.from_out() || (from_out() == other.from_out()
+    && (to_id() < other.to_id() || (to_id() == other.to_id()
+    && to_in() < other.to_in())))));
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::operator<=(connection const & other) const -> bool
+{
+    return operator<(other) || operator==(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::operator>(connection const & other) const -> bool
+{
+    return !operator<=(other);
+}
+
+template<typename _Thing, bool _Copy>
+inline auto connection_<_Thing, _Copy>::_instance::operator>=(connection const & other) const -> bool
+{
+    return !operator<(other);
 }
 
 template<typename Signal>
@@ -16603,6 +16711,19 @@ inline auto vector_<_Thing, _Copy, T>::_instance::operator>=(vector<T> const & o
 }
 
 }
+
+template<>
+struct std::hash<strange::connection>
+{
+    inline auto operator()(strange::connection const & _obj) const -> size_t
+    {
+        auto _h = strange::hash_init(_obj.from_id());
+        strange::hash_combine(_h, _obj.from_out());
+        strange::hash_combine(_h, _obj.to_id());
+        strange::hash_combine(_h, _obj.to_in());
+        return _h;
+    }
+};
 
 template<>
 struct std::hash<strange::parameter>
