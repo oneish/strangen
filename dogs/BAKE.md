@@ -19,9 +19,12 @@ bash clang.sh
 
 # Build and test with both
 bash bake.sh
+
+# Run examples
+bash snacks.sh
 ```
 
-Each script accepts an optional action argument:
+Each build script accepts an optional action argument:
 
 | Action | Behaviour |
 |--------|-----------|
@@ -80,6 +83,19 @@ cmake --build bake --target demo
 ```
 
 **Note:** The convenience scripts (gcc.sh, clang.sh) use compiler-specific build directories (`bake-gcc/`, `bake-clang/`) for clarity. When using CMake directly, you can use any directory name (e.g., `-B bake`).
+
+## Running Examples
+
+After building, `snacks.sh` runs the example executables from both `bake-gcc/` and `bake-clang/`:
+
+```bash
+bash snacks.sh            # run all examples quietly (pass/fail summary)
+bash snacks.sh purge      # run all examples with full output
+bash snacks.sh demo       # run a single example with output
+bash snacks.sh baggage    # run a single example with output
+```
+
+Available snack names: `baggage`, `currants`, `demo`, `example`. Currants is skipped for clang builds (stlab dependency). Missing executables are reported as SKIP.
 
 ## Targets
 

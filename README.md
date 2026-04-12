@@ -244,6 +244,15 @@ bash gcc.sh rebuild
 # Build and test with both compilers
 bash bake.sh
 
+# Run all examples (quiet)
+bash snacks.sh
+
+# Run all examples (with output)
+bash snacks.sh purge
+
+# Run a single example (with output)
+bash snacks.sh demo
+
 # Or use CMake directly
 cmake -B bake -DCMAKE_CXX_COMPILER=g++-12
 cmake --build bake
@@ -667,6 +676,7 @@ strangen/
   gcc.sh                                         # Build and test with g++-12 [build|clean|rebuild]
   clang.sh                                       # Build and test with clang++-15 [build|clean|rebuild]
   bake.sh                                        # Build and test with both
+  snacks.sh                                      # Run examples [purge|baggage|currants|demo|example]
   sauce/                                         # Core library
     CMakeLists.txt                               # Tool + library + bootstrap targets
     generation/
@@ -792,6 +802,18 @@ Demonstrates dataflow programming with stlab channels (split, join, zip), custom
 ```bash
 cmake --build bake --target currants && ./bake/snacks/currants
 ```
+
+### Running Examples
+
+After building, use `snacks.sh` to run examples from both compiler builds:
+
+```bash
+bash snacks.sh            # run all examples quietly (pass/fail)
+bash snacks.sh purge      # run all examples with full output
+bash snacks.sh demo       # run a single example with output
+```
+
+Available snack names: `baggage`, `currants`, `demo`, `example`. Currants is skipped for clang builds (stlab dependency).
 
 ## License
 
