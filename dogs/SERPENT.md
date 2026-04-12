@@ -66,6 +66,8 @@ When a change to the prototype produces generated code that doesn't compile agai
 
 Fix the specific error directly in `strange__space.h`, then regenerate. The regeneration will overwrite your manual fix with correctly generated code.
 
+Note that a failed regeneration may still have partially succeeded: pass 1 runs first and copies its output to source before pass 2 attempts to verify. If pass 1 produced correct output but pass 2 failed (e.g., due to a redefinition conflict), the source file already contains the pass 1 output. In this case, fix the remaining conflict (often in a non-generated file like `strange.h`) and regenerate again -- the bootstrap should now succeed on both passes.
+
 ### 4. Deferred Removal
 
 When moving functionality from a manual location (e.g., `strange.h`) into the generated output:
@@ -99,3 +101,11 @@ The `regenerate_space` CMake target runs:
 3. **Verify**: Compare hashes -- if pass 1 and pass 2 differ, the generated output is not stable and the build fails.
 
 This means any change must produce stable output in two iterations. If pass 1 succeeds but pass 2 fails (e.g., due to redefinitions from deferred removal), the pass 1 output is already in source and you can fix the conflict and regenerate.
+
+## Reducing Bootstrap Pain Through Auto-Generation
+
+Hand-written `[[strange::customisation(...)]]` strings for comparison operators are a major source of bootstrap friction. Every new data member added to a prototype abstraction requires updating the `operator==` and `operator<` customisation strings -- adding fields to the `&&` chain and extending the nested parenthesised pattern for `operator<`. Getting the parenthesis count wrong in `operator<` (which requires exactly `2*(N-1) - 1` grouping parentheses for N fields) is an easy mistake that breaks the bootstrap and requires manual fixup of the generated file.
+
+The `[[strange::equality]]`, `[[strange::comparison]]`, and `[[strange::hash]]` attributes eliminate this class of problem entirely. When the parser synthesizes comparison operators from data members, adding a new field to a prototype abstraction requires only adding the data member declaration -- the operators update themselves on the next regeneration. No customisation strings to maintain, no parentheses to count, and no bootstrap breakage from comparison operator typos.
+
+Where possible, prefer auto-generation attributes over hand-written customisation strings for mechanical patterns that operate over all data members.
