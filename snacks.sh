@@ -8,6 +8,14 @@ SNACKS=(baggage currants demo example)
 COMPILERS=(gcc clang)
 FAILED=0
 
+for s in "${SNACKS[@]}"; do
+    if [[ "$ACTION" == "$s" ]]; then
+        SNACKS=("$s")
+        ACTION="purge"
+        break
+    fi
+done
+
 for snack in "${SNACKS[@]}"; do
     for compiler in "${COMPILERS[@]}"; do
         if [[ "$snack" == "currants" && "$compiler" == "clang" ]]; then
