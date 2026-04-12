@@ -51,12 +51,9 @@ git clone https://github.com/stlab/libraries.git stlab-libraries
 stlab must be pre-built, see [stlab.sh](../stlab.sh):
 
 ```bash
-cmake -S ../stlab-libraries -B ../BUILD \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CXX_COMPILER=/usr/bin/g++-12 \
-    -DCMAKE_CXX_STANDARD=17 \
-    -DBUILD_TESTING=OFF
-cmake --build ../BUILD
+bash stlab.sh          # build stlab (default)
+bash stlab.sh clean    # remove stlab build directory
+bash stlab.sh rebuild  # clean then build
 ```
 
 stlab is not building with clang for some reason. To build without stlab (skipping graph/concurrency targets):
