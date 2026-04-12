@@ -60,7 +60,7 @@ option(STRANGEN_ENABLE_STLAB "Enable stlab-dependent targets (graph/concurrency)
 set(STRANGEN_HAS_STLAB OFF)
 if(STRANGEN_ENABLE_STLAB)
     find_path(STLAB_INCLUDE_DIR stlab/concurrency/concurrency.hpp
-        HINTS ${CMAKE_SOURCE_DIR}/../stlab-libraries/include)
+        HINTS ${CMAKE_SOURCE_DIR}/../stlab/include)
     find_path(STLAB_CONFIG_DIR stlab/config.hpp
         HINTS ${CMAKE_SOURCE_DIR}/../stlab-build/include
               ${CMAKE_SOURCE_DIR}/../BUILD/include)

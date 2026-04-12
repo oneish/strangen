@@ -12,7 +12,7 @@ fi
 
 if [[ "$ACTION" == "build" || "$ACTION" == "rebuild" ]]; then
     echo "=== Building stlab ==="
-    cmake -S ../stlab-libraries -B ../BUILD \
+    cmake -S ../stlab -B ../BUILD \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CXX_COMPILER=/usr/bin/g++-12 \
         -DCMAKE_CXX_STANDARD=17 \

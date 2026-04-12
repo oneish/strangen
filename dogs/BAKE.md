@@ -45,7 +45,7 @@ git clone https://github.com/microsoft/GSL.git
 git clone https://github.com/Tencent/rapidjson.git
 git clone https://github.com/chadaustin/sajson.git
 git clone https://github.com/doctest/doctest.git
-git clone https://github.com/stlab/libraries.git stlab-libraries
+git clone https://github.com/stlab/stlab.git stlab
 ```
 
 stlab must be pre-built, see [stlab.sh](../stlab.sh):

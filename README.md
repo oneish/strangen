@@ -197,7 +197,7 @@ Version 3.14+ (required).
 | GSL | Guidelines Support Library | `../GSL/include` | https://github.com/microsoft/GSL |
 | RapidJSON | JSON parsing (libdart backend) | `../rapidjson/include` | https://github.com/Tencent/rapidjson |
 | sajson | JSON parsing (libdart backend) | `../sajson/include` | https://github.com/chadaustin/sajson |
-| stlab | Concurrency (optional) | `../stlab-libraries` | https://github.com/stlab/libraries |
+| stlab | Concurrency (optional) | `../stlab` | https://github.com/stlab/stlab |
 
 All paths are relative to the strangen repository root. doctest is needed for tests. libdart, GSL, RapidJSON, and sajson are needed for serialization (baggage) features. stlab is only needed for concurrency (graph/processor) features.
 
@@ -214,7 +214,7 @@ git clone https://github.com/Tencent/rapidjson.git
 git clone https://github.com/chadaustin/sajson.git
 
 # Optional, for concurrency features:
-git clone https://github.com/stlab/libraries.git stlab-libraries
+git clone https://github.com/stlab/stlab.git stlab
 ```
 
 If using stlab, build it using [stlab.sh](stlab.sh) (from the strangen directory):
