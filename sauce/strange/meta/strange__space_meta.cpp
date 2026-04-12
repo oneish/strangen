@@ -10,7 +10,6 @@ int main()
 std::cout << R"~(#pragma once
 #include "../common/strange__common.h"
 #include "../reflection/strange__reflection.h"
-#include <vector>
 namespace strange
 {
 namespace comprehension

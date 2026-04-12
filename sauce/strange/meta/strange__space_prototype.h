@@ -1,4 +1,5 @@
 // strange space prototype
+#include <vector>
 namespace strange
 {
     struct any
