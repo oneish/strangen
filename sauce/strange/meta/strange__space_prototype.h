@@ -193,38 +193,20 @@ namespace strange
 
     struct [[strange::thing("strange::implementation::parameter")]]
     [[strange::hash]]
+    [[strange::equality]]
+    [[strange::comparison]]
     parameter : stuff
     {
         std::string type {};
         std::string name {};
         std::string argument {};
-        bool variadic {false};
-
-        [[strange::customisation("return type() == other.type()"
-        "    && name() == other.name()"
-        "    && argument() == other.argument()")]]
-        auto operator==(parameter const & other) const -> bool;
-
-        [[strange::customisation("return !operator==(other)")]]
-        auto operator!=(parameter const & other) const -> bool;
-
-        [[strange::customisation("return type() < other.type() || (type() == other.type()"
-        "    && (name() < other.name() || (name() == other.name()"
-        "    && argument() < other.argument())))")]]
-        auto operator<(parameter const & other) const -> bool;
-
-        [[strange::customisation("return operator<(other) || operator==(other)")]]
-        auto operator<=(parameter const & other) const -> bool;
-
-        [[strange::customisation("return !operator<=(other)")]]
-        auto operator>(parameter const & other) const -> bool;
-
-        [[strange::customisation("return !operator<(other)")]]
-        auto operator>=(parameter const & other) const -> bool;
+        bool variadic {};
     };
 
     struct [[strange::thing("strange::implementation::operation")]]
     [[strange::hash]]
+    [[strange::equality]]
+    [[strange::comparison]]
     operation : stuff
     {
         std::string name {};
@@ -236,42 +218,12 @@ namespace strange
         std::string modification {};
         std::string customisation {};
         std::string implementation {};
-
-        [[strange::customisation("return name() == other.name()"
-        "    && parameters() == other.parameters()"
-        "    && constness() == other.constness()"
-        "    && result() == other.result()"
-        "    && data() == other.data()"
-        "    && modification() == other.modification()"
-        "    && customisation() == other.customisation()"
-        "    && implementation() == other.implementation()")]]
-        auto operator==(operation const & other) const -> bool;
-
-        [[strange::customisation("return !operator==(other)")]]
-        auto operator!=(operation const & other) const -> bool;
-
-        [[strange::customisation("return name() < other.name() || (name() == other.name()"
-        "    && (parameters() < other.parameters() || (parameters() == other.parameters()"
-        "    && (constness() < other.constness() || (constness() == other.constness()"
-        "    && (result() < other.result() || (result() == other.result()"
-        "    && (data() < other.data() || (data() == other.data()"
-        "    && (modification() < other.modification() || (modification() == other.modification()"
-        "    && (customisation() < other.customisation() || (customisation() == other.customisation()"
-        "    && implementation() < other.implementation())))))))))))))")]]
-        auto operator<(operation const & other) const -> bool;
-
-        [[strange::customisation("return operator<(other) || operator==(other)")]]
-        auto operator<=(operation const & other) const -> bool;
-
-        [[strange::customisation("return !operator<=(other)")]]
-        auto operator>(operation const & other) const -> bool;
-
-        [[strange::customisation("return !operator<(other)")]]
-        auto operator>=(operation const & other) const -> bool;
     };
 
     struct [[strange::thing("strange::implementation::abstraction")]]
     [[strange::hash]]
+    [[strange::equality]]
+    [[strange::comparison]]
     abstraction : stuff
     {
         std::vector<strange::parameter> parameters {};
@@ -282,76 +234,26 @@ namespace strange
         std::string thing {};
         std::string implementation {};
         bool hash {false};
-
-        [[strange::customisation("return parameters() == other.parameters()"
-        "    && name() == other.name()"
-        "    && parents() == other.parents()"
-        "    && types() == other.types()"
-        "    && operations() == other.operations()"
-        "    && thing() == other.thing()"
-        "    && implementation() == other.implementation()"
-        "    && hash() == other.hash()")]]
-        auto operator==(abstraction const & other) const -> bool;
-
-        [[strange::customisation("return !operator==(other)")]]
-        auto operator!=(abstraction const & other) const -> bool;
-
-        [[strange::customisation("return parameters() < other.parameters() || (parameters() == other.parameters()"
-        "    && (name() < other.name() || (name() == other.name()"
-        "    && (parents() < other.parents() || (parents() == other.parents()"
-        "    && (types() < other.types() || (types() == other.types()"
-        "    && (operations() < other.operations() || (operations() == other.operations()"
-        "    && (thing() < other.thing() || (thing() == other.thing()"
-        "    && (implementation() < other.implementation() || (implementation() == other.implementation()"
-        "    && hash() < other.hash())))))))))))))")]]
-        auto operator<(abstraction const & other) const -> bool;
-
-        [[strange::customisation("return operator<(other) || operator==(other)")]]
-        auto operator<=(abstraction const & other) const -> bool;
-
-        [[strange::customisation("return !operator<=(other)")]]
-        auto operator>(abstraction const & other) const -> bool;
-
-        [[strange::customisation("return !operator<(other)")]]
-        auto operator>=(abstraction const & other) const -> bool;
+        bool equality {false};
+        bool comparison {false};
     };
 
     struct [[strange::thing("strange::implementation::space")]]
     [[strange::hash]]
+    [[strange::equality]]
+    [[strange::comparison]]
     space : stuff
     {
         std::vector<std::string> includes {};
         std::vector<strange::abstraction> inclusions {};
         std::string name {};
         std::vector<strange::abstraction> abstractions {};
-
-        [[strange::customisation("return includes() == other.includes()"
-        "    && inclusions() == other.inclusions()"
-        "    && name() == other.name()"
-        "    && abstractions() == other.abstractions()")]]
-        auto operator==(space const & other) const -> bool;
-
-        [[strange::customisation("return !operator==(other)")]]
-        auto operator!=(space const & other) const -> bool;
-
-        [[strange::customisation("return includes() < other.includes() || (includes() == other.includes()"
-        "    && (inclusions() < other.inclusions() || (inclusions() == other.inclusions()"
-        "    && (name() < other.name() || (name() == other.name()"
-        "    && abstractions() < other.abstractions())))))")]]
-        auto operator<(space const & other) const -> bool;
-
-        [[strange::customisation("return operator<(other) || operator==(other)")]]
-        auto operator<=(space const & other) const -> bool;
-
-        [[strange::customisation("return !operator<=(other)")]]
-        auto operator>(space const & other) const -> bool;
-
-        [[strange::customisation("return !operator<(other)")]]
-        auto operator>=(space const & other) const -> bool;
     };
 
     struct [[strange::thing("strange::implementation::token")]]
     [[strange::hash]]
+    [[strange::equality]]
+    [[strange::comparison]]
     token : any
     {
         std::string filename {};
@@ -359,32 +261,6 @@ namespace strange
         int64_t position {};
         strange::comprehension::cls classification {};
         std::string text {};
-
-        [[strange::customisation("return filename() == other.filename()"
-        "    && line() == other.line()"
-        "    && position() == other.position()"
-        "    && classification() == other.classification()"
-        "    && text() == other.text()")]]
-        auto operator==(token const & other) const -> bool;
-
-        [[strange::customisation("return !operator==(other)")]]
-        auto operator!=(token const & other) const -> bool;
-
-        [[strange::customisation("return filename() < other.filename() || (filename() == other.filename()"
-        "    && (line() < other.line() || (line() == other.line()"
-        "    && (position() < other.position() || (position() == other.position()"
-        "    && (classification() < other.classification() || (classification() == other.classification()"
-        "    && text() < other.text())))))))")]]
-        auto operator<(token const & other) const -> bool;
-
-        [[strange::customisation("return operator<(other) || operator==(other)")]]
-        auto operator<=(token const & other) const -> bool;
-
-        [[strange::customisation("return !operator<=(other)")]]
-        auto operator>(token const & other) const -> bool;
-
-        [[strange::customisation("return !operator<(other)")]]
-        auto operator>=(token const & other) const -> bool;
     };
 
     template<typename T>

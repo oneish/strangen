@@ -362,6 +362,23 @@ widget : strange::stuff
 
 This generates a `std::hash<my_namespace::widget>` specialization. Vector members are hashed via `hash_range`; scalar members via `hash_init`/`hash_combine` (defined in `strange__hash.h`).
 
+### Equality and Comparison
+
+The `[[strange::equality]]` annotation generates `operator==` and `operator!=` over all data members. The `[[strange::comparison]]` annotation generates `operator<`, `operator<=`, `operator>`, and `operator>=`:
+
+```cpp
+struct [[strange::thing("my::implementation")]]
+[[strange::equality]]
+[[strange::comparison]]
+widget : strange::stuff
+{
+    std::string name {};
+    int64_t value {};
+};
+```
+
+`operator==` checks all fields with `&&`. `operator<` uses lexicographic ordering (nested `<`/`==` pattern). The remaining operators delegate: `!=` to `==`, `<=` to `<` and `==`, `>` to `<=`, `>=` to `<`.
+
 ### Template Abstractions
 
 ```cpp

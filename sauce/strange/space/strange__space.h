@@ -5023,7 +5023,7 @@ struct parameter
     std::string argument_ {};
     inline auto argument() const -> std::string const & { return argument_; };
     inline auto argument() -> std::string & { return argument_; };
-    bool variadic_ {false};
+    bool variadic_ {};
     inline auto variadic() const -> bool const & { return variadic_; };
     inline auto variadic() -> bool & { return variadic_; };
 
@@ -5681,6 +5681,14 @@ protected:
 
         virtual auto hash() -> bool & = 0;
 
+        virtual auto equality() const -> bool const & = 0;
+
+        virtual auto equality() -> bool & = 0;
+
+        virtual auto comparison() const -> bool const & = 0;
+
+        virtual auto comparison() -> bool & = 0;
+
         virtual auto operator==(abstraction const & other) const -> bool = 0;
 
         virtual auto operator!=(abstraction const & other) const -> bool = 0;
@@ -5797,6 +5805,14 @@ public:
     inline auto hash() const -> bool const &;
 
     inline auto hash() -> bool &;
+
+    inline auto equality() const -> bool const &;
+
+    inline auto equality() -> bool &;
+
+    inline auto comparison() const -> bool const &;
+
+    inline auto comparison() -> bool &;
 
     inline auto operator==(abstraction const & other) const -> bool;
 
@@ -5954,6 +5970,14 @@ private:
 
         inline auto hash() -> bool & final;
 
+        inline auto equality() const -> bool const & final;
+
+        inline auto equality() -> bool & final;
+
+        inline auto comparison() const -> bool const & final;
+
+        inline auto comparison() -> bool & final;
+
         inline auto operator==(abstraction const & other) const -> bool final;
 
         inline auto operator!=(abstraction const & other) const -> bool final;
@@ -6087,6 +6111,12 @@ struct abstraction
     bool hash_ {false};
     inline auto hash() const -> bool const & { return hash_; };
     inline auto hash() -> bool & { return hash_; };
+    bool equality_ {false};
+    inline auto equality() const -> bool const & { return equality_; };
+    inline auto equality() -> bool & { return equality_; };
+    bool comparison_ {false};
+    inline auto comparison() const -> bool const & { return comparison_; };
+    inline auto comparison() -> bool & { return comparison_; };
 
     inline auto pack(strange::bag & dest) const -> void
     {
@@ -6120,6 +6150,8 @@ struct abstraction
         dest.insert_object("thing", dest.make_string(thing()));
         dest.insert_object("implementation", dest.make_string(implementation()));
         dest.insert_object("hash", dest.make_bool(hash()));
+        dest.insert_object("equality", dest.make_bool(equality()));
+        dest.insert_object("comparison", dest.make_bool(comparison()));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -6159,6 +6191,8 @@ struct abstraction
         src.get_object("thing").as_string(thing());
         src.get_object("implementation").as_string(implementation());
         src.get_object("hash").as_bool(hash());
+        src.get_object("equality").as_bool(equality());
+        src.get_object("comparison").as_bool(comparison());
     }
 };
 }
@@ -13531,7 +13565,8 @@ inline auto parameter_<_Thing, _Copy>::_instance::operator==(parameter const & o
 {
     return type() == other.type()
     && name() == other.name()
-    && argument() == other.argument();
+    && argument() == other.argument()
+    && variadic() == other.variadic();
 }
 
 template<typename _Thing, bool _Copy>
@@ -13545,7 +13580,8 @@ inline auto parameter_<_Thing, _Copy>::_instance::operator<(parameter const & ot
 {
     return type() < other.type() || (type() == other.type()
     && (name() < other.name() || (name() == other.name()
-    && argument() < other.argument())));
+    && (argument() < other.argument() || (argument() == other.argument()
+    && variadic() < other.variadic())))));
 }
 
 template<typename _Thing, bool _Copy>
@@ -13834,6 +13870,7 @@ inline auto operation_<_Thing, _Copy>::_instance::operator==(operation const & o
     && constness() == other.constness()
     && result() == other.result()
     && data() == other.data()
+    && closure() == other.closure()
     && modification() == other.modification()
     && customisation() == other.customisation()
     && implementation() == other.implementation();
@@ -13853,9 +13890,10 @@ inline auto operation_<_Thing, _Copy>::_instance::operator<(operation const & ot
     && (constness() < other.constness() || (constness() == other.constness()
     && (result() < other.result() || (result() == other.result()
     && (data() < other.data() || (data() == other.data()
+    && (closure() < other.closure() || (closure() == other.closure()
     && (modification() < other.modification() || (modification() == other.modification()
     && (customisation() < other.customisation() || (customisation() == other.customisation()
-    && implementation() < other.implementation())))))))))))));
+    && implementation() < other.implementation())))))))))))))));
 }
 
 template<typename _Thing, bool _Copy>
@@ -13973,6 +14011,28 @@ inline auto abstraction::hash() -> bool &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->hash();
+}
+
+inline auto abstraction::equality() const -> bool const &
+{
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->equality();
+}
+
+inline auto abstraction::equality() -> bool &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->equality();
+}
+
+inline auto abstraction::comparison() const -> bool const &
+{
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->comparison();
+}
+
+inline auto abstraction::comparison() -> bool &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->comparison();
 }
 
 inline auto abstraction::operator==(abstraction const & other) const -> bool
@@ -14114,6 +14174,30 @@ inline auto abstraction_<_Thing, _Copy>::_instance::hash() -> bool &
 }
 
 template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::equality() const -> bool const &
+{
+    return _thing.equality();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::equality() -> bool &
+{
+    return _thing.equality();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::comparison() const -> bool const &
+{
+    return _thing.comparison();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::comparison() -> bool &
+{
+    return _thing.comparison();
+}
+
+template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::operator==(abstraction const & other) const -> bool
 {
     return parameters() == other.parameters()
@@ -14123,7 +14207,9 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator==(abstraction const
     && operations() == other.operations()
     && thing() == other.thing()
     && implementation() == other.implementation()
-    && hash() == other.hash();
+    && hash() == other.hash()
+    && equality() == other.equality()
+    && comparison() == other.comparison();
 }
 
 template<typename _Thing, bool _Copy>
@@ -14142,7 +14228,9 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator<(abstraction const 
     && (operations() < other.operations() || (operations() == other.operations()
     && (thing() < other.thing() || (thing() == other.thing()
     && (implementation() < other.implementation() || (implementation() == other.implementation()
-    && hash() < other.hash())))))))))))));
+    && (hash() < other.hash() || (hash() == other.hash()
+    && (equality() < other.equality() || (equality() == other.equality()
+    && comparison() < other.comparison())))))))))))))))));
 }
 
 template<typename _Thing, bool _Copy>
@@ -16560,6 +16648,8 @@ struct std::hash<strange::abstraction>
         strange::hash_combine(_h, _obj.thing());
         strange::hash_combine(_h, _obj.implementation());
         strange::hash_combine(_h, _obj.hash());
+        strange::hash_combine(_h, _obj.equality());
+        strange::hash_combine(_h, _obj.comparison());
         return _h;
     }
 };

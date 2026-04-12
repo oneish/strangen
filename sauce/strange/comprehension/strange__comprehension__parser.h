@@ -95,6 +95,82 @@ private:
 
     std::string _err;
 
+    auto data_member_names(abstraction const & abs) -> std::vector<std::string>
+    {
+        std::vector<std::string> names;
+        for (auto const & oper : abs.operations())
+        {
+            if (oper.data() && !oper.constness())
+            {
+                names.push_back(oper.name());
+            }
+        }
+        return names;
+    }
+
+    auto make_comparison_operation(std::string const & name, std::string const & abs_name, std::string const & customisation) -> strange::operation
+    {
+        auto oper = operation::_make();
+        oper.name() = name;
+        oper.constness() = true;
+        oper.result() = "bool";
+        oper.customisation() = customisation;
+        auto param = parameter::_make();
+        param.type() = abs_name + " const &";
+        param.name() = "other";
+        oper.parameters().push_back(param);
+        return oper;
+    }
+
+    void synthesize_equality(abstraction & abs)
+    {
+        auto fields = data_member_names(abs);
+        std::string eq = "return ";
+        for (std::size_t i = 0; i < fields.size(); ++i)
+        {
+            if (i > 0)
+            {
+                eq += "\n    && ";
+            }
+            eq += fields[i] + "() == other." + fields[i] + "()";
+        }
+        abs.operations().push_back(make_comparison_operation("operator==", abs.name(), eq));
+        abs.operations().push_back(make_comparison_operation("operator!=", abs.name(), "return !operator==(other)"));
+    }
+
+    void synthesize_comparison(abstraction & abs)
+    {
+        auto fields = data_member_names(abs);
+        std::string lt = "return ";
+        for (std::size_t i = 0; i < fields.size(); ++i)
+        {
+            if (i + 1 == fields.size())
+            {
+                lt += fields[i] + "() < other." + fields[i] + "()";
+                for (std::size_t j = 1; j < i; ++j)
+                {
+                    lt += "))";
+                }
+                if (i > 0)
+                {
+                    lt += ")";
+                }
+            }
+            else if (i == 0)
+            {
+                lt += fields[i] + "() < other." + fields[i] + "() || (" + fields[i] + "() == other." + fields[i] + "()\n    && ";
+            }
+            else
+            {
+                lt += "(" + fields[i] + "() < other." + fields[i] + "() || (" + fields[i] + "() == other." + fields[i] + "()\n    && ";
+            }
+        }
+        abs.operations().push_back(make_comparison_operation("operator<", abs.name(), lt));
+        abs.operations().push_back(make_comparison_operation("operator<=", abs.name(), "return operator<(other) || operator==(other)"));
+        abs.operations().push_back(make_comparison_operation("operator>", abs.name(), "return !operator<=(other)"));
+        abs.operations().push_back(make_comparison_operation("operator>=", abs.name(), "return !operator<(other)"));
+    }
+
     void parse_include(space & spc)
     {
         while (!_toke.end())
@@ -317,6 +393,14 @@ private:
                 abs.implementation() = abs.thing();
             }
         }
+        if (abs.equality())
+        {
+            synthesize_equality(abs);
+        }
+        if (abs.comparison())
+        {
+            synthesize_comparison(abs);
+        }
         parse_punctuation();
         if (!_err.empty())
         {
@@ -471,14 +555,18 @@ private:
         bool thing = (_tok.text() == "thing");
         bool implementation = (_tok.text() == "implementation");
         bool hash = (_tok.text() == "hash");
-        if (!thing && !implementation && !hash)
+        bool equality = (_tok.text() == "equality");
+        bool comparison = (_tok.text() == "comparison");
+        if (!thing && !implementation && !hash && !equality && !comparison)
         {
-            _err = "parse_abstraction_attribute() expected 'thing', 'implementation' or 'hash', but got name";
+            _err = "parse_abstraction_attribute() expected 'thing', 'implementation', 'hash', 'equality' or 'comparison', but got name";
             return;
         }
-        if (hash)
+        if (hash || equality || comparison)
         {
-            abs.hash() = true;
+            if (hash) abs.hash() = true;
+            if (equality) abs.equality() = true;
+            if (comparison) abs.comparison() = true;
             parse_punctuation();
             if (!_err.empty())
             {
