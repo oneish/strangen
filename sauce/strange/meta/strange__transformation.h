@@ -409,12 +409,12 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
                     first = false;
                     if (is_vector)
                     {
-                        _out << R"#(        auto _h = hash_range(_obj.)#" << operation.name() << R"#(());
+                        _out << R"#(        auto _h = strange::hash_range(_obj.)#" << operation.name() << R"#(());
 )#";
                     }
                     else
                     {
-                        _out << R"#(        auto _h = hash_init(_obj.)#" << operation.name() << R"#(());
+                        _out << R"#(        auto _h = strange::hash_init(_obj.)#" << operation.name() << R"#(());
 )#";
                     }
                 }
@@ -422,12 +422,12 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
                 {
                     if (is_vector)
                     {
-                        _out << R"#(        hash_combine(_h, hash_range(_obj.)#" << operation.name() << R"#(()));
+                        _out << R"#(        strange::hash_combine(_h, strange::hash_range(_obj.)#" << operation.name() << R"#(()));
 )#";
                     }
                     else
                     {
-                        _out << R"#(        hash_combine(_h, _obj.)#" << operation.name() << R"#(());
+                        _out << R"#(        strange::hash_combine(_h, _obj.)#" << operation.name() << R"#(());
 )#";
                     }
                 }

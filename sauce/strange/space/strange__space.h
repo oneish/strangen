@@ -16521,10 +16521,10 @@ struct std::hash<strange::parameter>
 {
     inline auto operator()(strange::parameter const & _obj) const -> size_t
     {
-        auto _h = hash_init(_obj.type());
-        hash_combine(_h, _obj.name());
-        hash_combine(_h, _obj.argument());
-        hash_combine(_h, _obj.variadic());
+        auto _h = strange::hash_init(_obj.type());
+        strange::hash_combine(_h, _obj.name());
+        strange::hash_combine(_h, _obj.argument());
+        strange::hash_combine(_h, _obj.variadic());
         return _h;
     }
 };
@@ -16534,15 +16534,15 @@ struct std::hash<strange::operation>
 {
     inline auto operator()(strange::operation const & _obj) const -> size_t
     {
-        auto _h = hash_init(_obj.name());
-        hash_combine(_h, hash_range(_obj.parameters()));
-        hash_combine(_h, _obj.constness());
-        hash_combine(_h, _obj.result());
-        hash_combine(_h, _obj.data());
-        hash_combine(_h, _obj.closure());
-        hash_combine(_h, _obj.modification());
-        hash_combine(_h, _obj.customisation());
-        hash_combine(_h, _obj.implementation());
+        auto _h = strange::hash_init(_obj.name());
+        strange::hash_combine(_h, strange::hash_range(_obj.parameters()));
+        strange::hash_combine(_h, _obj.constness());
+        strange::hash_combine(_h, _obj.result());
+        strange::hash_combine(_h, _obj.data());
+        strange::hash_combine(_h, _obj.closure());
+        strange::hash_combine(_h, _obj.modification());
+        strange::hash_combine(_h, _obj.customisation());
+        strange::hash_combine(_h, _obj.implementation());
         return _h;
     }
 };
@@ -16552,14 +16552,14 @@ struct std::hash<strange::abstraction>
 {
     inline auto operator()(strange::abstraction const & _obj) const -> size_t
     {
-        auto _h = hash_range(_obj.parameters());
-        hash_combine(_h, _obj.name());
-        hash_combine(_h, hash_range(_obj.parents()));
-        hash_combine(_h, hash_range(_obj.types()));
-        hash_combine(_h, hash_range(_obj.operations()));
-        hash_combine(_h, _obj.thing());
-        hash_combine(_h, _obj.implementation());
-        hash_combine(_h, _obj.hash());
+        auto _h = strange::hash_range(_obj.parameters());
+        strange::hash_combine(_h, _obj.name());
+        strange::hash_combine(_h, strange::hash_range(_obj.parents()));
+        strange::hash_combine(_h, strange::hash_range(_obj.types()));
+        strange::hash_combine(_h, strange::hash_range(_obj.operations()));
+        strange::hash_combine(_h, _obj.thing());
+        strange::hash_combine(_h, _obj.implementation());
+        strange::hash_combine(_h, _obj.hash());
         return _h;
     }
 };
@@ -16569,10 +16569,10 @@ struct std::hash<strange::space>
 {
     inline auto operator()(strange::space const & _obj) const -> size_t
     {
-        auto _h = hash_range(_obj.includes());
-        hash_combine(_h, hash_range(_obj.inclusions()));
-        hash_combine(_h, _obj.name());
-        hash_combine(_h, hash_range(_obj.abstractions()));
+        auto _h = strange::hash_range(_obj.includes());
+        strange::hash_combine(_h, strange::hash_range(_obj.inclusions()));
+        strange::hash_combine(_h, _obj.name());
+        strange::hash_combine(_h, strange::hash_range(_obj.abstractions()));
         return _h;
     }
 };
@@ -16582,11 +16582,11 @@ struct std::hash<strange::token>
 {
     inline auto operator()(strange::token const & _obj) const -> size_t
     {
-        auto _h = hash_init(_obj.filename());
-        hash_combine(_h, _obj.line());
-        hash_combine(_h, _obj.position());
-        hash_combine(_h, _obj.classification());
-        hash_combine(_h, _obj.text());
+        auto _h = strange::hash_init(_obj.filename());
+        strange::hash_combine(_h, _obj.line());
+        strange::hash_combine(_h, _obj.position());
+        strange::hash_combine(_h, _obj.classification());
+        strange::hash_combine(_h, _obj.text());
         return _h;
     }
 };

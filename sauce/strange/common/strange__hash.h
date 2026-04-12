@@ -1,6 +1,8 @@
 #pragma once
 #include <functional>
 
+namespace strange
+{
 template<typename T>
 inline auto hash_init(T const & v) -> std::size_t
 {
@@ -24,4 +26,5 @@ inline auto hash_range(T const & v) -> std::size_t
         hash_combine(h, elem);
     }
     return h;
+}
 }
