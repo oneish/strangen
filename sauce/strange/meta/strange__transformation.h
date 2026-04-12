@@ -34,6 +34,11 @@ public:
 #include <type_traits>
 #include <unordered_set>
 )#";
+        for (auto const & include : _space.includes())
+        {
+            _out << R"#(#include <)#" << include << R"#(>
+)#";
+        }
         _namespace();
     }
 
