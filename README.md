@@ -275,6 +275,7 @@ Define abstractions using C++ struct syntax. The prototype must include `strange
 - Inherit from `strange::any` for basic type erasure
 - Inherit from `strange::stuff` to add `pack`/`unpack` serialization support
 - Use `[[strange::closure("name")]]` annotations to generate callable wrappers
+- Use `[[strange::hash]]` to generate `std::hash` specializations
 - Template abstractions support defaults and variadics
 - Multiple inheritance is supported (e.g., `struct bunch_of_fruit : food, bunch<fruit>, strange::stuff`)
 
@@ -344,6 +345,22 @@ struct food : strange::any
 ```
 
 This generates an `eat_closure_()` method returning `std::function<void(int)>`.
+
+### Hash
+
+The `[[strange::hash]]` annotation generates a `std::hash` specialization for the abstraction, hashing all of its data members:
+
+```cpp
+struct [[strange::thing("my::implementation")]]
+[[strange::hash]]
+widget : strange::stuff
+{
+    std::string name {};
+    int64_t value {};
+};
+```
+
+This generates a `std::hash<my_namespace::widget>` specialization. Vector members are hashed via `hash_range`; scalar members via `hash_init`/`hash_combine` (defined in `strange__hash.h`).
 
 ### Template Abstractions
 
@@ -638,9 +655,10 @@ strangen/
     generation/
       strange__generation.cpp                    # strangen tool source
     strange/
-      strange.h                                  # Entry point (includes space, adds hashing)
+      strange.h                                  # Entry point (includes space, deduction guides)
       common/
         strange__common.h                        # Base class (_common, _base, copy-on-write)
+        strange__hash.h                          # Hash helpers (hash_init, hash_combine, hash_range)
       space/
         strange__space.h                         # Core abstractions (generated, ~495KB)
       reflection/

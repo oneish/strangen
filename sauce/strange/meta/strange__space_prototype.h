@@ -192,6 +192,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::parameter")]]
+    [[strange::hash]]
     parameter : stuff
     {
         std::string type {};
@@ -223,6 +224,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::operation")]]
+    [[strange::hash]]
     operation : stuff
     {
         std::string name {};
@@ -269,6 +271,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::abstraction")]]
+    [[strange::hash]]
     abstraction : stuff
     {
         std::vector<strange::parameter> parameters {};
@@ -278,6 +281,7 @@ namespace strange
         std::vector<strange::operation> operations {};
         std::string thing {};
         std::string implementation {};
+        bool hash {false};
 
         [[strange::customisation("return parameters() == other.parameters()"
         "    && name() == other.name()"
@@ -285,7 +289,8 @@ namespace strange
         "    && types() == other.types()"
         "    && operations() == other.operations()"
         "    && thing() == other.thing()"
-        "    && implementation() == other.implementation()")]]
+        "    && implementation() == other.implementation()"
+        "    && hash() == other.hash()")]]
         auto operator==(abstraction const & other) const -> bool;
 
         [[strange::customisation("return !operator==(other)")]]
@@ -297,7 +302,8 @@ namespace strange
         "    && (types() < other.types() || (types() == other.types()"
         "    && (operations() < other.operations() || (operations() == other.operations()"
         "    && (thing() < other.thing() || (thing() == other.thing()"
-        "    && implementation() < other.implementation())))))))))))")]]
+        "    && (implementation() < other.implementation() || (implementation() == other.implementation()"
+        "    && hash() < other.hash())))))))))))))")]]
         auto operator<(abstraction const & other) const -> bool;
 
         [[strange::customisation("return operator<(other) || operator==(other)")]]
@@ -311,6 +317,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::space")]]
+    [[strange::hash]]
     space : stuff
     {
         std::vector<std::string> includes {};
@@ -344,6 +351,7 @@ namespace strange
     };
 
     struct [[strange::thing("strange::implementation::token")]]
+    [[strange::hash]]
     token : any
     {
         std::string filename {};

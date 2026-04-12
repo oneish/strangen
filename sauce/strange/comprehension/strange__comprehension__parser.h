@@ -470,9 +470,25 @@ private:
         }
         bool thing = (_tok.text() == "thing");
         bool implementation = (_tok.text() == "implementation");
-        if (!thing && !implementation)
+        bool hash = (_tok.text() == "hash");
+        if (!thing && !implementation && !hash)
         {
-            _err = "parse_abstraction_attribute() expected 'thing' or 'implementation', but got name";
+            _err = "parse_abstraction_attribute() expected 'thing', 'implementation' or 'hash', but got name";
+            return;
+        }
+        if (hash)
+        {
+            abs.hash() = true;
+            parse_punctuation();
+            if (!_err.empty())
+            {
+                _err = "parse_abstraction_attribute() " + _err;
+                return;
+            }
+            if (_tok.text() != "]]")
+            {
+                _err = "parse_abstraction_attribute() expected ']]', but got punctuation";
+            }
             return;
         }
         parse_punctuation();

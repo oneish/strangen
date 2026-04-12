@@ -53,6 +53,7 @@ namespace )#" << _space.name() << R"#(
         _reflections();
         _declarations();
         _definitions();
+        _hashes();
     }
 
     auto _forward_declarations() -> void
@@ -372,6 +373,69 @@ namespace )#" << _space.name() << R"#(
         {
             std::unordered_set<strange::operation> unique;
             _abstraction_operations(abstraction, abstraction, _gen_mode::impl_def, unique);
+        }
+    }
+
+    auto _hashes() -> void
+    {
+        for (auto const & abstraction : _space.abstractions())
+        {
+            if (!abstraction.hash() || !abstraction.parameters().empty())
+            {
+                continue;
+            }
+            _out << R"#(
+template<>
+struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(>
+{
+    inline auto operator()()#" << _space.name() << R"#(::)#" << abstraction.name() << R"#( const & _obj) const -> size_t
+    {
+)#";
+            bool first = true;
+            for (auto const & operation : abstraction.operations())
+            {
+                if (!operation.data() || operation.constness())
+                {
+                    continue;
+                }
+                auto result = operation.result();
+                if (result.length() >= 2 && result.substr(result.length() - 2) == " &")
+                {
+                    result = result.substr(0, result.length() - 2);
+                }
+                bool const is_vector = (result.length() >= 12 && result.substr(0, 12) == "std::vector<");
+                if (first)
+                {
+                    first = false;
+                    if (is_vector)
+                    {
+                        _out << R"#(        auto _h = hash_range(_obj.)#" << operation.name() << R"#(());
+)#";
+                    }
+                    else
+                    {
+                        _out << R"#(        auto _h = hash_init(_obj.)#" << operation.name() << R"#(());
+)#";
+                    }
+                }
+                else
+                {
+                    if (is_vector)
+                    {
+                        _out << R"#(        hash_combine(_h, hash_range(_obj.)#" << operation.name() << R"#(()));
+)#";
+                    }
+                    else
+                    {
+                        _out << R"#(        hash_combine(_h, _obj.)#" << operation.name() << R"#(());
+)#";
+                    }
+                }
+            }
+            _out << R"#(        return _h;
+    }
+};
+)#";
         }
     }
 

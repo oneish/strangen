@@ -9,6 +9,7 @@ int main()
 {
 std::cout << R"~(#pragma once
 #include "../common/strange__common.h"
+#include "../common/strange__hash.h"
 #include "../reflection/strange__reflection.h"
 namespace strange
 {

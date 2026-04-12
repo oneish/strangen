@@ -1,5 +1,6 @@
 #pragma once
 #include "../common/strange__common.h"
+#include "../common/strange__hash.h"
 #include "../reflection/strange__reflection.h"
 namespace strange
 {
@@ -5676,6 +5677,10 @@ protected:
 
         virtual auto implementation() -> std::string & = 0;
 
+        virtual auto hash() const -> bool const & = 0;
+
+        virtual auto hash() -> bool & = 0;
+
         virtual auto operator==(abstraction const & other) const -> bool = 0;
 
         virtual auto operator!=(abstraction const & other) const -> bool = 0;
@@ -5788,6 +5793,10 @@ public:
     inline auto implementation() const -> std::string const &;
 
     inline auto implementation() -> std::string &;
+
+    inline auto hash() const -> bool const &;
+
+    inline auto hash() -> bool &;
 
     inline auto operator==(abstraction const & other) const -> bool;
 
@@ -5941,6 +5950,10 @@ private:
 
         inline auto implementation() -> std::string & final;
 
+        inline auto hash() const -> bool const & final;
+
+        inline auto hash() -> bool & final;
+
         inline auto operator==(abstraction const & other) const -> bool final;
 
         inline auto operator!=(abstraction const & other) const -> bool final;
@@ -6071,6 +6084,9 @@ struct abstraction
     std::string implementation_ {};
     inline auto implementation() const -> std::string const & { return implementation_; };
     inline auto implementation() -> std::string & { return implementation_; };
+    bool hash_ {false};
+    inline auto hash() const -> bool const & { return hash_; };
+    inline auto hash() -> bool & { return hash_; };
 
     inline auto pack(strange::bag & dest) const -> void
     {
@@ -6103,6 +6119,7 @@ struct abstraction
         }
         dest.insert_object("thing", dest.make_string(thing()));
         dest.insert_object("implementation", dest.make_string(implementation()));
+        dest.insert_object("hash", dest.make_bool(hash()));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -6141,6 +6158,7 @@ struct abstraction
         }
         src.get_object("thing").as_string(thing());
         src.get_object("implementation").as_string(implementation());
+        src.get_object("hash").as_bool(hash());
     }
 };
 }
@@ -13946,6 +13964,17 @@ inline auto abstraction::implementation() -> std::string &
     return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->implementation();
 }
 
+inline auto abstraction::hash() const -> bool const &
+{
+    return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->hash();
+}
+
+inline auto abstraction::hash() -> bool &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename abstraction::_derived>(strange::_common::_shared)->hash();
+}
+
 inline auto abstraction::operator==(abstraction const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename abstraction::_derived const>(strange::_common::_shared)->operator==(other);
@@ -14073,6 +14102,18 @@ inline auto abstraction_<_Thing, _Copy>::_instance::implementation() -> std::str
 }
 
 template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::hash() const -> bool const &
+{
+    return _thing.hash();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto abstraction_<_Thing, _Copy>::_instance::hash() -> bool &
+{
+    return _thing.hash();
+}
+
+template<typename _Thing, bool _Copy>
 inline auto abstraction_<_Thing, _Copy>::_instance::operator==(abstraction const & other) const -> bool
 {
     return parameters() == other.parameters()
@@ -14081,7 +14122,8 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator==(abstraction const
     && types() == other.types()
     && operations() == other.operations()
     && thing() == other.thing()
-    && implementation() == other.implementation();
+    && implementation() == other.implementation()
+    && hash() == other.hash();
 }
 
 template<typename _Thing, bool _Copy>
@@ -14099,7 +14141,8 @@ inline auto abstraction_<_Thing, _Copy>::_instance::operator<(abstraction const 
     && (types() < other.types() || (types() == other.types()
     && (operations() < other.operations() || (operations() == other.operations()
     && (thing() < other.thing() || (thing() == other.thing()
-    && implementation() < other.implementation())))))))))));
+    && (implementation() < other.implementation() || (implementation() == other.implementation()
+    && hash() < other.hash())))))))))))));
 }
 
 template<typename _Thing, bool _Copy>
@@ -16472,4 +16515,79 @@ inline auto vector_<_Thing, _Copy, T>::_instance::operator>=(vector<T> const & o
 }
 
 }
+
+template<>
+struct std::hash<strange::parameter>
+{
+    inline auto operator()(strange::parameter const & _obj) const -> size_t
+    {
+        auto _h = hash_init(_obj.type());
+        hash_combine(_h, _obj.name());
+        hash_combine(_h, _obj.argument());
+        hash_combine(_h, _obj.variadic());
+        return _h;
+    }
+};
+
+template<>
+struct std::hash<strange::operation>
+{
+    inline auto operator()(strange::operation const & _obj) const -> size_t
+    {
+        auto _h = hash_init(_obj.name());
+        hash_combine(_h, hash_range(_obj.parameters()));
+        hash_combine(_h, _obj.constness());
+        hash_combine(_h, _obj.result());
+        hash_combine(_h, _obj.data());
+        hash_combine(_h, _obj.closure());
+        hash_combine(_h, _obj.modification());
+        hash_combine(_h, _obj.customisation());
+        hash_combine(_h, _obj.implementation());
+        return _h;
+    }
+};
+
+template<>
+struct std::hash<strange::abstraction>
+{
+    inline auto operator()(strange::abstraction const & _obj) const -> size_t
+    {
+        auto _h = hash_range(_obj.parameters());
+        hash_combine(_h, _obj.name());
+        hash_combine(_h, hash_range(_obj.parents()));
+        hash_combine(_h, hash_range(_obj.types()));
+        hash_combine(_h, hash_range(_obj.operations()));
+        hash_combine(_h, _obj.thing());
+        hash_combine(_h, _obj.implementation());
+        hash_combine(_h, _obj.hash());
+        return _h;
+    }
+};
+
+template<>
+struct std::hash<strange::space>
+{
+    inline auto operator()(strange::space const & _obj) const -> size_t
+    {
+        auto _h = hash_range(_obj.includes());
+        hash_combine(_h, hash_range(_obj.inclusions()));
+        hash_combine(_h, _obj.name());
+        hash_combine(_h, hash_range(_obj.abstractions()));
+        return _h;
+    }
+};
+
+template<>
+struct std::hash<strange::token>
+{
+    inline auto operator()(strange::token const & _obj) const -> size_t
+    {
+        auto _h = hash_init(_obj.filename());
+        hash_combine(_h, _obj.line());
+        hash_combine(_h, _obj.position());
+        hash_combine(_h, _obj.classification());
+        hash_combine(_h, _obj.text());
+        return _h;
+    }
+};
 
