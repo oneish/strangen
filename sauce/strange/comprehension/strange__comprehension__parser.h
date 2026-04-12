@@ -138,7 +138,7 @@ private:
             while (!_toke.end())
             {
                 _tok = _toke.increment();
-                if (_tok.classification() == cls::whitespace || _tok.classification() == cls::comment)
+                if (_tok.classification() == cls::whitespace)
                 {
                     continue;
                 }
@@ -153,7 +153,7 @@ private:
         }
         else
         {
-            _err = "parse_include() expected string or '<', but got " + std::string{_tok.classification() == cls::name ? "name" : "unexpected token"};
+            _err = "parse_include() expected string or '<', but got unexpected token";
         }
     }
 
