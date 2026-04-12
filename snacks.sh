@@ -3,6 +3,7 @@ set -e
 
 cd "$(dirname "$0")"
 
+ACTION="${1:-}"
 SNACKS=(baggage currants demo example)
 COMPILERS=(gcc clang)
 FAILED=0
@@ -20,12 +21,22 @@ for snack in "${SNACKS[@]}"; do
             continue
         fi
 
-        echo -n "RUN   ${snack} (${compiler}) ... "
-        if (cd "snacks/${snack}" && "../../${exe}") > /dev/null 2>&1; then
-            echo "ok"
+        if [[ "$ACTION" == "purge" ]]; then
+            echo "=== ${snack} (${compiler}) ==="
+            if (cd "snacks/${snack}" && "../../${exe}"); then
+                echo ""
+            else
+                echo "FAILED"
+                FAILED=1
+            fi
         else
-            echo "FAILED"
-            FAILED=1
+            echo -n "RUN   ${snack} (${compiler}) ... "
+            if (cd "snacks/${snack}" && "../../${exe}") > /dev/null 2>&1; then
+                echo "ok"
+            else
+                echo "FAILED"
+                FAILED=1
+            fi
         fi
     done
 done
