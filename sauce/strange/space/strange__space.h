@@ -6197,6 +6197,10 @@ protected:
             return stuff::_derived::_static_shared_to_base(derived);
         }
 
+        virtual auto includes() const -> std::vector<std::string> const & = 0;
+
+        virtual auto includes() -> std::vector<std::string> & = 0;
+
         virtual auto inclusions() const -> std::vector<strange::abstraction> const & = 0;
 
         virtual auto inclusions() -> std::vector<strange::abstraction> & = 0;
@@ -6293,6 +6297,10 @@ public:
     inline auto pack(strange::bag & dest) const -> void;
 
     inline auto unpack(strange::bag const & src) -> void;
+
+    inline auto includes() const -> std::vector<std::string> const &;
+
+    inline auto includes() -> std::vector<std::string> &;
 
     inline auto inclusions() const -> std::vector<strange::abstraction> const &;
 
@@ -6430,6 +6438,10 @@ private:
 
         inline auto unpack(strange::bag const & src) -> void final;
 
+        inline auto includes() const -> std::vector<std::string> const & final;
+
+        inline auto includes() -> std::vector<std::string> & final;
+
         inline auto inclusions() const -> std::vector<strange::abstraction> const & final;
 
         inline auto inclusions() -> std::vector<strange::abstraction> & final;
@@ -6551,6 +6563,9 @@ namespace implementation
 {
 struct space
 {
+    std::vector<std::string> includes_ {};
+    inline auto includes() const -> std::vector<std::string> const & { return includes_; };
+    inline auto includes() -> std::vector<std::string> & { return includes_; };
     std::vector<strange::abstraction> inclusions_ {};
     inline auto inclusions() const -> std::vector<strange::abstraction> const & { return inclusions_; };
     inline auto inclusions() -> std::vector<strange::abstraction> & { return inclusions_; };
@@ -6564,6 +6579,7 @@ struct space
     inline auto pack(strange::bag & dest) const -> void
     {
         dest.from_object();
+        dest.insert_object("includes", dest.make_array_string(includes()));
         {
             auto _array = dest.make_array();
             for (auto const & _item : inclusions())
@@ -6585,6 +6601,7 @@ struct space
 
     inline auto unpack(strange::bag const & src) -> void
     {
+        src.get_object("includes").as_array_string(includes());
         {
             auto _array = src.get_object("inclusions").to_array();
             auto _size = _array.size();
@@ -14114,6 +14131,17 @@ inline auto space::unpack(strange::bag const & src) -> void
     std::dynamic_pointer_cast<typename stuff::_derived>(strange::_common::_shared)->unpack(src);
 }
 
+inline auto space::includes() const -> std::vector<std::string> const &
+{
+    return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->includes();
+}
+
+inline auto space::includes() -> std::vector<std::string> &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename space::_derived>(strange::_common::_shared)->includes();
+}
+
 inline auto space::inclusions() const -> std::vector<strange::abstraction> const &
 {
     return std::dynamic_pointer_cast<typename space::_derived const>(strange::_common::_shared)->inclusions();
@@ -14190,6 +14218,18 @@ inline auto space_<_Thing, _Copy>::_instance::unpack(strange::bag const & src) -
 }
 
 template<typename _Thing, bool _Copy>
+inline auto space_<_Thing, _Copy>::_instance::includes() const -> std::vector<std::string> const &
+{
+    return _thing.includes();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto space_<_Thing, _Copy>::_instance::includes() -> std::vector<std::string> &
+{
+    return _thing.includes();
+}
+
+template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::inclusions() const -> std::vector<strange::abstraction> const &
 {
     return _thing.inclusions();
@@ -14228,7 +14268,8 @@ inline auto space_<_Thing, _Copy>::_instance::abstractions() -> std::vector<stra
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::operator==(space const & other) const -> bool
 {
-    return inclusions() == other.inclusions()
+    return includes() == other.includes()
+    && inclusions() == other.inclusions()
     && name() == other.name()
     && abstractions() == other.abstractions();
 }
@@ -14242,9 +14283,10 @@ inline auto space_<_Thing, _Copy>::_instance::operator!=(space const & other) co
 template<typename _Thing, bool _Copy>
 inline auto space_<_Thing, _Copy>::_instance::operator<(space const & other) const -> bool
 {
-    return inclusions() < other.inclusions() || (inclusions() == other.inclusions()
+    return includes() < other.includes() || (includes() == other.includes()
+    && (inclusions() < other.inclusions() || (inclusions() == other.inclusions()
     && (name() < other.name() || (name() == other.name()
-    && abstractions() < other.abstractions())));
+    && abstractions() < other.abstractions())))));
 }
 
 template<typename _Thing, bool _Copy>

@@ -50,31 +50,10 @@ struct parser
                 }
                 else
                 {
-                    std::string prototype;
-                    parse_string(prototype, true);
+                    parse_include(spc);
                     if (!_err.empty())
                     {
                         _err = "parse() " + _err;
-                    }
-                    else
-                    {
-                        std::filesystem::path dir = std::filesystem::path(_toke.filename()).parent_path();
-                        std::filesystem::path resolved = dir / prototype;
-                        std::ifstream ifs{resolved, std::ios::binary};
-                        std::istreambuf_iterator<char> it{ifs};
-                        auto previous = _toke;
-                        _toke = toker{it, resolved.string()};
-                        auto deep = parse();
-                        _toke = previous;
-                        for (auto abstraction : deep.inclusions())
-                        {
-                            spc.inclusions().push_back(abstraction);
-                        }
-                        for (auto abstraction : deep.abstractions())
-                        {
-                            abstraction.name() = deep.name() + "::" + abstraction.name();
-                            spc.inclusions().push_back(abstraction);
-                        }
                     }
                 }
             }
@@ -115,6 +94,68 @@ private:
     strange::token _tok;
 
     std::string _err;
+
+    void parse_include(space & spc)
+    {
+        while (!_toke.end())
+        {
+            _tok = _toke.increment();
+            if (_tok.classification() == cls::whitespace || _tok.classification() == cls::comment)
+            {
+                continue;
+            }
+            break;
+        }
+        if (_toke.end() && _tok.classification() == cls::whitespace)
+        {
+            _err = "parse_include() reached end of tokens";
+            return;
+        }
+        if (_tok.classification() == cls::string)
+        {
+            std::string prototype = _tok.text();
+            std::filesystem::path dir = std::filesystem::path(_toke.filename()).parent_path();
+            std::filesystem::path resolved = dir / prototype;
+            std::ifstream ifs{resolved, std::ios::binary};
+            std::istreambuf_iterator<char> it{ifs};
+            auto previous = _toke;
+            _toke = toker{it, resolved.string()};
+            auto deep = parse();
+            _toke = previous;
+            for (auto abstraction : deep.inclusions())
+            {
+                spc.inclusions().push_back(abstraction);
+            }
+            for (auto abstraction : deep.abstractions())
+            {
+                abstraction.name() = deep.name() + "::" + abstraction.name();
+                spc.inclusions().push_back(abstraction);
+            }
+        }
+        else if (_tok.classification() == cls::punctuation && _tok.text() == "<")
+        {
+            std::string include;
+            while (!_toke.end())
+            {
+                _tok = _toke.increment();
+                if (_tok.classification() == cls::whitespace || _tok.classification() == cls::comment)
+                {
+                    continue;
+                }
+                if (_tok.classification() == cls::punctuation && _tok.text() == ">")
+                {
+                    spc.includes().push_back(include);
+                    return;
+                }
+                include += _tok.text();
+            }
+            _err = "parse_include() expected '>', but reached end of tokens";
+        }
+        else
+        {
+            _err = "parse_include() expected string or '<', but got " + std::string{_tok.classification() == cls::name ? "name" : "unexpected token"};
+        }
+    }
 
     auto parse_space(space & spc) -> void
     {
