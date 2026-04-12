@@ -237,11 +237,15 @@ The project uses CMake. For full build documentation, see [dogs/BAKE.md](dogs/BA
 **Quick start:**
 
 ```bash
-# Build and test with GCC
+# Build and test with GCC (default action: build)
 bash gcc.sh
 
-# Build and test with Clang
-bash clang.sh
+# Clean, rebuild, or build with GCC
+bash gcc.sh clean
+bash gcc.sh rebuild
+
+# Build and test with both compilers
+bash bake.sh
 
 # Or use CMake directly
 cmake -B bake -DCMAKE_CXX_COMPILER=g++-12
@@ -629,8 +633,8 @@ Subgraphs can be nested inside larger graphs, and graphs support split, join, an
 ```
 strangen/
   CMakeLists.txt                                 # Root build config
-  gcc.sh                                         # Build and test with g++-12
-  clang.sh                                       # Build and test with clang++-15
+  gcc.sh                                         # Build and test with g++-12 [build|clean|rebuild]
+  clang.sh                                       # Build and test with clang++-15 [build|clean|rebuild]
   bake.sh                                        # Build and test with both
   sauce/                                         # Core library
     CMakeLists.txt                               # Tool + library + bootstrap targets

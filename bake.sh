@@ -3,6 +3,8 @@ set -e
 
 cd "$(dirname "$0")"
 
-bash gcc.sh
+ACTION="${1:-build}"
+
+bash gcc.sh "$ACTION"
 echo ""
-bash clang.sh
+bash clang.sh "$ACTION"

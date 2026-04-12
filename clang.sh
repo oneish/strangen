@@ -3,14 +3,26 @@ set -e
 
 cd "$(dirname "$0")"
 
-echo "=== Configuring with clang++-15 ==="
-cmake -B bake-clang -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
+ACTION="${1:-build}"
 
-echo "=== Baking ==="
-cmake --build bake-clang
+if [[ "$ACTION" == "clean" || "$ACTION" == "rebuild" ]]; then
+    echo "=== Cleaning bake-clang ==="
+    rm -rf bake-clang
+fi
 
-echo "=== Running tests ==="
-cd bake-clang && ctest --output-on-failure
+if [[ "$ACTION" == "build" || "$ACTION" == "rebuild" ]]; then
+    echo "=== Configuring with clang++-15 ==="
+    cmake -B bake-clang -DCMAKE_CXX_COMPILER=clang++-15 -DSTRANGEN_ENABLE_STLAB=OFF
 
-echo ""
-echo "=== All tests passed (clang++-15) ==="
+    echo "=== Baking ==="
+    cmake --build bake-clang
+
+    echo "=== Running tests ==="
+    cd bake-clang && ctest --output-on-failure
+
+    echo ""
+    echo "=== All tests passed (clang++-15) ==="
+elif [[ "$ACTION" != "clean" ]]; then
+    echo "Usage: $0 [build|clean|rebuild]" >&2
+    exit 1
+fi

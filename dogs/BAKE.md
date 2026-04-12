@@ -21,6 +21,20 @@ bash clang.sh
 bash bake.sh
 ```
 
+Each script accepts an optional action argument:
+
+| Action | Behaviour |
+|--------|-----------|
+| `build` (default) | Configure, build, and run tests |
+| `clean` | Remove the build directory |
+| `rebuild` | Clean then build |
+
+```bash
+bash gcc.sh clean     # remove bake-gcc/
+bash gcc.sh rebuild   # clean then build
+bash bake.sh clean    # remove both bake-gcc/ and bake-clang/
+```
+
 ## Dependencies
 
 Clone these into the parent directory of strangen:
