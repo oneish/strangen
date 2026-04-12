@@ -561,3 +561,153 @@ namespace test
     CHECK(abs.types()[0].name() == "Item");
     CHECK(abs.types()[0].argument() == "int");
 }
+
+TEST_CASE("parser: angle bracket include")
+{
+    std::string input = R"(
+#include <path/to/header.h>
+namespace test
+{
+    struct widget : strange::any
+    {
+        auto display() -> void;
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.includes().size() == 1);
+    CHECK(spc.includes()[0] == "path/to/header.h");
+}
+
+TEST_CASE("parser: hash attribute")
+{
+    std::string input = R"(
+namespace test
+{
+    struct [[strange::hash]]
+    item : strange::any
+    {
+        std::string name {};
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+    CHECK(spc.abstractions()[0].hash() == true);
+}
+
+TEST_CASE("parser: equality attribute synthesizes operators")
+{
+    std::string input = R"(
+namespace test
+{
+    struct [[strange::equality]]
+    item : strange::any
+    {
+        std::string name {};
+        int64_t value {};
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+    CHECK(spc.abstractions()[0].equality() == true);
+
+    auto const & ops = spc.abstractions()[0].operations();
+    bool found_eq = false;
+    bool found_ne = false;
+    for (auto const & op : ops)
+    {
+        if (op.name() == "operator==" && op.constness() && op.result() == "bool")
+        {
+            found_eq = true;
+            CHECK(op.parameters().size() == 1);
+            CHECK(op.parameters()[0].name() == "other");
+            CHECK(op.customisation().find("name() == other.name()") != std::string::npos);
+            CHECK(op.customisation().find("value() == other.value()") != std::string::npos);
+        }
+        if (op.name() == "operator!=" && op.constness() && op.result() == "bool")
+        {
+            found_ne = true;
+            CHECK(op.customisation() == "return !operator==(other)");
+        }
+    }
+    CHECK(found_eq);
+    CHECK(found_ne);
+}
+
+TEST_CASE("parser: comparison attribute synthesizes operators")
+{
+    std::string input = R"(
+namespace test
+{
+    struct [[strange::comparison]]
+    item : strange::any
+    {
+        std::string name {};
+        int64_t value {};
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+    CHECK(spc.abstractions()[0].comparison() == true);
+
+    auto const & ops = spc.abstractions()[0].operations();
+    bool found_lt = false;
+    bool found_le = false;
+    bool found_gt = false;
+    bool found_ge = false;
+    for (auto const & op : ops)
+    {
+        if (op.name() == "operator<" && op.constness() && op.result() == "bool")
+        {
+            found_lt = true;
+            CHECK(op.customisation().find("name() < other.name()") != std::string::npos);
+            CHECK(op.customisation().find("value() < other.value()") != std::string::npos);
+        }
+        if (op.name() == "operator<=" && op.constness())
+        {
+            found_le = true;
+            CHECK(op.customisation() == "return operator<(other) || operator==(other)");
+        }
+        if (op.name() == "operator>" && op.constness())
+        {
+            found_gt = true;
+            CHECK(op.customisation() == "return !operator<=(other)");
+        }
+        if (op.name() == "operator>=" && op.constness())
+        {
+            found_ge = true;
+            CHECK(op.customisation() == "return !operator<(other)");
+        }
+    }
+    CHECK(found_lt);
+    CHECK(found_le);
+    CHECK(found_gt);
+    CHECK(found_ge);
+}
