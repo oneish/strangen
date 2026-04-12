@@ -229,7 +229,7 @@ bash stlab.sh rebuild  # clean then build
 
 ## Building
 
-The project uses CMake. For full build documentation, see [dogs/BAKE.md](dogs/BAKE.md).
+The project uses CMake. For full build documentation, see [dogs/BAKE.md](dogs/BAKE.md). For guidance on modifying the self-hosting code generator, see [dogs/SERPENT.md](dogs/SERPENT.md).
 
 **Quick start:**
 
