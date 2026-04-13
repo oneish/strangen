@@ -1,5 +1,8 @@
 # Build System
 
+> *"The strange loop phenomenon occurs whenever, by moving upwards (or downwards) through the levels of some hierarchical system, we unexpectedly find ourselves right back where we started."*
+> -- Douglas Hofstadter, *Godel, Escher, Bach* (1979)
+
 Strangen uses CMake as its build system.
 
 ## Prerequisites

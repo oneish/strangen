@@ -1,8 +1,5 @@
 # The Serpent Eating Its Own Tail
 
-> *"The strange loop phenomenon occurs whenever, by moving upwards (or downwards) through the levels of some hierarchical system, we unexpectedly find ourselves right back where we started."*
-> -- Douglas Hofstadter, *Godel, Escher, Bach* (1979)
-
 > *"The serpent that bites its own tail is the oldest known mythical symbol... it represents the eternal return and the self-referential nature of life's code."*
 > -- Jeremy Narby, *The Cosmic Serpent* (1998)
 
