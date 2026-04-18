@@ -477,14 +477,15 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
                             break;
                         }
                     }
+                    if (can_default && abstraction.thing().find('<') == std::string::npos
+                        && !abstraction.parameters().empty())
+                    {
+                        can_default = false;
+                    }
                     _out << R"#(typename _Thing)#";
                     if (can_default && !abstraction.thing().empty())
                     {
                         _out << R"#( = )#" << abstraction.thing();
-                        if (abstraction.thing().find('<') == std::string::npos)
-                        {
-                            _abstraction_parameters(abstraction, false, false, false, false);
-                        }
                     }
                     _out << R"#(, bool _Copy)#";
                     if (can_default)
@@ -893,7 +894,7 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
 
 )#";
         auto [last, depth] = _open_namespaces(abstraction.implementation());
-        _abstraction_parameters(abstraction, true, true, false, false);
+        _abstraction_parameters(abstraction, true, forward, false, false);
         _out << R"#(struct )#" << last;
         if (!forward)
         {

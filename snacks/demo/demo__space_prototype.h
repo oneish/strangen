@@ -58,7 +58,7 @@ namespace demo
         auto operator()() const -> void { std::string s; };
     };
 
-    template<typename F>
+    template<typename F = double>
     struct [[strange::thing("demo::fungimpl")]]
     fungible
     {

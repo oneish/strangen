@@ -47,21 +47,21 @@ struct function;
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct function_;
 
-template<typename F>
+template<typename F = double>
 struct fungible;
 
 }
 
 namespace demo
 {
-template<typename F>
+template<typename F = double>
 struct fungimpl;
 }
 
 namespace demo
 {
 
-template<typename _Thing, bool _Copy, typename F>
+template<typename _Thing, bool _Copy, typename F = double>
 struct fungible_;
 
 }
