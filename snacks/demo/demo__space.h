@@ -44,17 +44,7 @@ struct bunch_of_fruit_;
 
 struct function;
 
-}
-
-namespace demo
-{
-struct functimpl;
-}
-
-namespace demo
-{
-
-template<typename _Thing = demo::functimpl, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct function_;
 
 }
@@ -185,15 +175,6 @@ struct reflection<demo::function_<_Thing, _Copy>>
     static inline auto name() -> std::string
     {
         return "demo::function_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
-    }
-};
-
-template<>
-struct reflection<demo::functimpl>
-{
-    static inline auto name() -> std::string
-    {
-        return "demo::functimpl";
     }
 };
 
@@ -2367,7 +2348,7 @@ public:
         return function{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing = demo::functimpl, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
     static inline auto _make(_Args && ..._args) -> function
     {
         return function{function::_derived::_static_shared_to_base(std::make_shared<typename function_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
@@ -2594,19 +2575,6 @@ public:
         return name;
     }();
 };
-
-}
-
-namespace demo
-{
-struct functimpl
-{
-    inline auto operator()() const -> void;
-};
-}
-
-namespace demo
-{
 
 inline auto food::eat(int xxx) -> void
 {
@@ -3048,11 +3016,5 @@ inline auto function_<_Thing, _Copy>::_instance::operator()() const -> void
     _thing.operator()();
 }
 
-}
-
-namespace demo
-{
-inline auto functimpl::operator()() const -> void
-{ std::string s; }
 }
 

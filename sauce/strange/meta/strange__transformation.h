@@ -1077,7 +1077,7 @@ namespace )#" << _space.name() << R"#(
                     _out << R"#(;
 )#";
                 }
-                else if (!operation.data())
+                else if (!operation.data() && !abstraction.implementation().empty())
                 {
                     _out << R"#(
 )#";
