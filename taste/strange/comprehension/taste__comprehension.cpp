@@ -711,3 +711,43 @@ namespace test
     CHECK(found_gt);
     CHECK(found_ge);
 }
+
+TEST_CASE("parser: non-data operation with implementation")
+{
+    std::string input = R"(
+namespace test
+{
+    struct [[strange::thing("test::impl")]]
+    widget : strange::any
+    {
+        std::string name {};
+        auto compute() const -> int { return 42; };
+    };
+}
+)";
+    std::istringstream iss(input);
+    std::istreambuf_iterator<char> it(iss);
+    strange::comprehension::toker toker(it, "test_input");
+    strange::comprehension::parser parser(toker);
+
+    auto spc = parser.parse();
+    CHECK(spc._error() == "");
+    REQUIRE(spc.abstractions().size() == 1);
+
+    auto const & abs = spc.abstractions()[0];
+    CHECK(abs.thing() == "test::impl");
+    CHECK(abs.implementation() == "test::impl");
+
+    bool found_compute = false;
+    for (auto const & op : abs.operations())
+    {
+        if (op.name() == "compute" && op.constness())
+        {
+            found_compute = true;
+            CHECK(op.data() == false);
+            CHECK(op.result() == "int");
+            CHECK(op.implementation() == "{ return 42; }");
+        }
+    }
+    CHECK(found_compute);
+}
