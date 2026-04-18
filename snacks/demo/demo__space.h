@@ -47,35 +47,22 @@ struct function;
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>>
 struct function_;
 
+template<typename F>
 struct fungible;
 
 }
 
 namespace demo
 {
+template<typename F>
 struct fungimpl;
 }
 
 namespace demo
 {
 
-template<typename _Thing = demo::fungimpl, bool _Copy = std::is_copy_constructible_v<_Thing>>
+template<typename _Thing, bool _Copy, typename F>
 struct fungible_;
-
-struct fungible2;
-
-}
-
-namespace demo
-{
-struct fungimpl2;
-}
-
-namespace demo
-{
-
-template<typename _Thing = demo::fungimpl2, bool _Copy = std::is_copy_constructible_v<_Thing>>
-struct fungible2_;
 
 }
 
@@ -208,57 +195,30 @@ struct reflection<demo::function_<_Thing, _Copy>>
     }
 };
 
-template<>
-struct reflection<demo::fungible>
+template<typename F>
+struct reflection<demo::fungible<F>>
 {
     static inline auto name() -> std::string
     {
-        return "demo::fungible";
+        return "demo::fungible<" + concatename<false, F>() + ">";
     }
 };
 
-template<typename _Thing, bool _Copy>
-struct reflection<demo::fungible_<_Thing, _Copy>>
+template<typename _Thing, bool _Copy, typename F>
+struct reflection<demo::fungible_<_Thing, _Copy, F>>
 {
     static inline auto name() -> std::string
     {
-        return "demo::fungible_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
+        return "demo::fungible_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, F>() + ">";
     }
 };
 
-template<>
-struct reflection<demo::fungimpl>
+template<typename F>
+struct reflection<demo::fungimpl<F>>
 {
     static inline auto name() -> std::string
     {
-        return "demo::fungimpl";
-    }
-};
-
-template<>
-struct reflection<demo::fungible2>
-{
-    static inline auto name() -> std::string
-    {
-        return "demo::fungible2";
-    }
-};
-
-template<typename _Thing, bool _Copy>
-struct reflection<demo::fungible2_<_Thing, _Copy>>
-{
-    static inline auto name() -> std::string
-    {
-        return "demo::fungible2_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + ">";
-    }
-};
-
-template<>
-struct reflection<demo::fungimpl2>
-{
-    static inline auto name() -> std::string
-    {
-        return "demo::fungimpl2";
+        return "demo::fungimpl<" + concatename<false, F>() + ">";
     }
 };
 
@@ -2660,6 +2620,7 @@ public:
     }();
 };
 
+template<typename F>
 struct fungible : virtual strange::_common
 {
     inline fungible() = default;
@@ -2747,10 +2708,10 @@ public:
         return fungible{strange::_common::_shared->_strong()};
     }
 
-    template<typename _Thing = demo::fungimpl, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    template<typename _Thing = demo::fungimpl<F>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
     static inline auto _make(_Args && ..._args) -> fungible
     {
-        return fungible{fungible::_derived::_static_shared_to_base(std::make_shared<typename fungible_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
+        return fungible{fungible::_derived::_static_shared_to_base(std::make_shared<typename fungible_<_Thing, _Copy, F>::_instance>(std::forward<_Args>(_args)...))};
     }
 
     static inline auto _manufacture(std::string const & name) -> fungible
@@ -2777,20 +2738,20 @@ public:
     inline auto operator()() const -> void;
 };
 
-template<typename _Thing, bool _Copy>
-struct fungible_ : fungible
+template<typename _Thing, bool _Copy, typename F>
+struct fungible_ : fungible<F>
 {
     inline fungible_() = default;
 
     inline fungible_(fungible_ const & other)
     :strange::_common{other}
-    ,fungible{}
+    ,fungible<F>{}
     {
     }
 
     inline fungible_(fungible_ && other)
     :strange::_common{std::move(other)}
-    ,fungible{}
+    ,fungible<F>{}
     {
     }
 
@@ -2808,20 +2769,20 @@ struct fungible_ : fungible
 
     explicit inline fungible_(std::shared_ptr<strange::_common::_base> const & shared)
     :strange::_common{shared}
-    ,fungible{}
+    ,fungible<F>{}
     {
     }
 
     explicit inline fungible_(std::shared_ptr<strange::_common::_base> && shared)
     :strange::_common{std::move(shared)}
-    ,fungible{}
+    ,fungible<F>{}
     {
     }
 
 private:
-    friend struct fungible;
+    friend struct fungible<F>;
 
-    struct _instance final : fungible::_derived
+    struct _instance final : fungible<F>::_derived
     {
         template<typename... _Args>
         inline _instance(_Args && ..._args)
@@ -2866,12 +2827,12 @@ private:
 
         inline auto _cat() const -> std::string final
         {
-            return fungible::_cat_;
+            return fungible<F>::_cat_;
         }
 
         inline auto _cats() const -> std::unordered_set<std::string> final
         {
-            return fungible::_cats_;
+            return fungible<F>::_cats_;
         }
 
         inline auto _copy() const -> bool final
@@ -2979,347 +2940,10 @@ public:
 
 namespace demo
 {
+template<typename F>
 struct fungimpl
 {
     inline auto operator()() const -> void;
-};
-}
-
-namespace demo
-{
-
-struct fungible2 : fungible
-{
-    inline fungible2() = default;
-
-    inline fungible2(fungible2 const & other)
-    :strange::_common{other}
-    ,fungible{}
-    {
-    }
-
-    inline fungible2(fungible2 && other)
-    :strange::_common{std::move(other)}
-    ,fungible{}
-    {
-    }
-
-    inline auto operator=(fungible2 const & other) -> fungible2 &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(fungible2 && other) -> fungible2 &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline fungible2(std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-    ,fungible{}
-    {
-    }
-
-    explicit inline fungible2(std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-    ,fungible{}
-    {
-    }
-
-protected:
-    struct _derived : fungible::_derived
-    {
-        static inline auto _static_shared_to_base(std::shared_ptr<typename fungible2::_derived> derived) -> std::shared_ptr<strange::_common::_base>
-        {
-            return fungible::_derived::_static_shared_to_base(derived);
-        }
-
-        virtual auto fung() const -> void = 0;
-    };
-
-public:
-    inline auto _valid() const -> bool
-    {
-        return std::dynamic_pointer_cast<typename fungible2::_derived const>(strange::_common::_shared).operator bool();
-    }
-
-    inline auto _clone() const -> fungible2
-    {
-        try
-        {
-            return fungible2{strange::_common::_shared->_clone()};
-        }
-        catch(strange::_common::_no_copy const &)
-        {
-            return fungible2{};
-        }
-    }
-
-    inline auto _reproduce() const -> fungible2
-    {
-        try
-        {
-            return fungible2{strange::_common::_shared->_reproduce()};
-        }
-        catch(strange::_common::_no_default const &)
-        {
-            return fungible2{};
-        }
-    }
-
-    inline auto _weak() const -> fungible2
-    {
-        return fungible2{strange::_common::_weak_base()};
-    }
-
-    inline auto _strong() const -> fungible2
-    {
-        return fungible2{strange::_common::_shared->_strong()};
-    }
-
-    template<typename _Thing = demo::fungimpl2, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
-    static inline auto _make(_Args && ..._args) -> fungible2
-    {
-        return fungible2{fungible2::_derived::_static_shared_to_base(std::make_shared<typename fungible2_<_Thing, _Copy>::_instance>(std::forward<_Args>(_args)...))};
-    }
-
-    static inline auto _manufacture(std::string const & name) -> fungible2
-    {
-        auto it = strange::_common::_factory_.find(name);
-        if (it == strange::_common::_factory_.end())
-        {
-            return fungible2{};
-        }
-        return fungible2{it->second()};
-    }
-
-    using _Abstraction_ = fungible2;
-
-    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
-
-    static inline std::unordered_set<std::string> const _cats_ = []()
-    {
-        std::unordered_set<std::string> cats;
-        cats.insert(fungible::_cats_.cbegin(), fungible::_cats_.cend());
-        cats.insert(_cat_);
-        return cats;
-    }();
-
-    inline auto operator()() const -> void;
-
-    inline auto fung() const -> void;
-};
-
-template<typename _Thing, bool _Copy>
-struct fungible2_ : fungible2
-{
-    inline fungible2_() = default;
-
-    inline fungible2_(fungible2_ const & other)
-    :strange::_common{other}
-    ,fungible2{}
-    {
-    }
-
-    inline fungible2_(fungible2_ && other)
-    :strange::_common{std::move(other)}
-    ,fungible2{}
-    {
-    }
-
-    inline auto operator=(fungible2_ const & other) -> fungible2_ &
-    {
-        strange::_common::operator=(other);
-        return *this;
-    }
-
-    inline auto operator=(fungible2_ && other) -> fungible2_ &
-    {
-        strange::_common::operator=(std::move(other));
-        return *this;
-    }
-
-    explicit inline fungible2_(std::shared_ptr<strange::_common::_base> const & shared)
-    :strange::_common{shared}
-    ,fungible2{}
-    {
-    }
-
-    explicit inline fungible2_(std::shared_ptr<strange::_common::_base> && shared)
-    :strange::_common{std::move(shared)}
-    ,fungible2{}
-    {
-    }
-
-private:
-    friend struct fungible2;
-
-    struct _instance final : fungible2::_derived
-    {
-        template<typename... _Args>
-        inline _instance(_Args && ..._args)
-        :fungible2_::_derived{}
-        ,_thing{std::forward<_Args>(_args)...}
-        {
-        }
-
-        inline auto _address() const -> void const * final
-        {
-            return &_thing;
-        }
-
-        inline auto _sizeof() const -> size_t final
-        {
-            return sizeof(_thing);
-        }
-
-        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
-        {
-            if constexpr (_Copy)
-            {
-                return fungible2_::_derived::_static_shared_to_base(std::make_shared<fungible2_::_instance>(_thing));
-            }
-            else
-            {
-                throw strange::_common::_no_copy{};
-            }
-        }
-
-        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
-        {
-            if constexpr (std::is_default_constructible_v<_Thing>)
-            {
-                return fungible2_::_derived::_static_shared_to_base(std::make_shared<fungible2_::_instance>());
-            }
-            else
-            {
-                throw strange::_common::_no_default{};
-            }
-        }
-
-        inline auto _cat() const -> std::string final
-        {
-            return fungible2::_cat_;
-        }
-
-        inline auto _cats() const -> std::unordered_set<std::string> final
-        {
-            return fungible2::_cats_;
-        }
-
-        inline auto _copy() const -> bool final
-        {
-            return fungible2_::_copy_;
-        }
-
-        inline auto _name() const -> std::string final
-        {
-            return fungible2_::_name_;
-        }
-
-        inline auto operator()() const -> void final;
-
-        inline auto fung() const -> void final;
-
-        _Thing _thing;
-    };
-
-public:
-    template<typename... _Args>
-    static inline auto _make_(_Args && ..._args) -> fungible2_
-    {
-        return fungible2_{fungible2_::_derived::_static_shared_to_base(std::make_shared<fungible2_::_instance>(std::forward<_Args>(_args)...))};
-    }
-
-    static inline auto _manufacture_(std::string const & name) -> fungible2_
-    {
-        auto it = strange::_common::_factory_.find(name);
-        if (it == strange::_common::_factory_.end())
-        {
-            return fungible2_{};
-        }
-        return fungible2_{it->second()};
-    }
-
-    inline auto _valid_() const -> bool
-    {
-        return std::dynamic_pointer_cast<fungible2_::_instance const>(strange::_common::_shared).operator bool();
-    }
-
-    inline auto _clone_() const -> fungible2_
-    {
-        try
-        {
-            return fungible2_{strange::_common::_shared->_clone()};
-        }
-        catch(strange::_common::_no_copy const &)
-        {
-            return fungible2_{};
-        }
-    }
-
-    inline auto _reproduce_() const -> fungible2_
-    {
-        try
-        {
-            return fungible2_{strange::_common::_shared->_reproduce()};
-        }
-        catch(strange::_common::_no_default const &)
-        {
-            return fungible2_{};
-        }
-    }
-
-    inline auto _weak_() const -> fungible2_
-    {
-        return fungible2_{strange::_common::_weak_base()};
-    }
-
-    inline auto _strong_() const -> fungible2_
-    {
-        return fungible2_{strange::_common::_shared->_strong()};
-    }
-
-    inline auto _thing() const -> _Thing const &
-    {
-        return std::dynamic_pointer_cast<fungible2_::_instance const>(strange::_common::_shared)->_thing;
-    }
-
-    inline auto _thing() -> _Thing &
-    {
-        strange::_common::_mutate();
-        return std::dynamic_pointer_cast<fungible2_::_instance>(strange::_common::_shared)->_thing;
-    }
-
-    using _Kind_ = fungible2_;
-    using _Thing_ = _Thing;
-
-    static inline bool const _copy_ = _Copy;
-
-    static inline std::string const _name_ = []()
-    {
-        auto const name = strange::reflection<_Kind_>::name();
-        if constexpr (std::is_default_constructible_v<_Thing>)
-        {
-            strange::_common::_factory_.emplace(name, []()
-            {
-                return fungible2_::_derived::_static_shared_to_base(std::make_shared<fungible2_::_instance>());
-            });
-        }
-        return name;
-    }();
-};
-
-}
-
-namespace demo
-{
-struct fungimpl2
-{
-    inline auto operator()() const -> void;
-    inline auto fung() const -> void;
 };
 }
 
@@ -3766,56 +3390,24 @@ inline auto function_<_Thing, _Copy>::_instance::operator()() const -> void
     _thing.operator()();
 }
 
-inline auto fungible::operator()() const -> void
+template<typename F>
+inline auto fungible<F>::operator()() const -> void
 {
-    std::dynamic_pointer_cast<typename fungible::_derived const>(strange::_common::_shared)->operator()();
+    std::dynamic_pointer_cast<typename fungible<F>::_derived const>(strange::_common::_shared)->operator()();
 }
 
-template<typename _Thing, bool _Copy>
-inline auto fungible_<_Thing, _Copy>::_instance::operator()() const -> void
-{
-    _thing.operator()();
-}
-
-inline auto fungible2::operator()() const -> void
-{
-    std::dynamic_pointer_cast<typename fungible::_derived const>(strange::_common::_shared)->operator()();
-}
-
-inline auto fungible2::fung() const -> void
-{
-    std::dynamic_pointer_cast<typename fungible2::_derived const>(strange::_common::_shared)->fung();
-}
-
-template<typename _Thing, bool _Copy>
-inline auto fungible2_<_Thing, _Copy>::_instance::operator()() const -> void
+template<typename _Thing, bool _Copy, typename F>
+inline auto fungible_<_Thing, _Copy, F>::_instance::operator()() const -> void
 {
     _thing.operator()();
 }
 
-template<typename _Thing, bool _Copy>
-inline auto fungible2_<_Thing, _Copy>::_instance::fung() const -> void
-{
-    _thing.fung();
-}
-
 }
 
 namespace demo
 {
-inline auto fungimpl::operator()() const -> void
-{ std::string s; }
-}
-
-namespace demo
-{
-inline auto fungimpl2::operator()() const -> void
-{ std::string s; }
-}
-
-namespace demo
-{
-inline auto fungimpl2::fung() const -> void
-{ std::string f; }
+template<typename F>
+inline auto fungimpl<F>::operator()() const -> void
+{ F s; }
 }
 

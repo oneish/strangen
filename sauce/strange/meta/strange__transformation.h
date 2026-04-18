@@ -119,7 +119,7 @@ namespace strange
 )#";
                 _abstraction_parameters(abstraction, true, false, false, true);
                 _out << R"#(struct reflection<)#" << abstraction.implementation();
-                _abstraction_parameters(abstraction, false, false, false, true);
+                _abstraction_parameters(abstraction, false, false, false, false);
                 _out << R"#(>
 {
     static inline auto name() -> std::string
@@ -200,6 +200,10 @@ namespace )#" << _space.name() << R"#(
     if (!abstraction.thing().empty())
     {
         _out << R"#( = )#" << abstraction.thing();
+        if (abstraction.thing().find('<') == std::string::npos)
+        {
+            _abstraction_parameters(abstraction, false, false, false, false);
+        }
     }
     _out << R"#(, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
     static inline auto _make(_Args && ..._args) -> )#" << abstraction.name() << R"#(
@@ -477,6 +481,10 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
                     if (can_default && !abstraction.thing().empty())
                     {
                         _out << R"#( = )#" << abstraction.thing();
+                        if (abstraction.thing().find('<') == std::string::npos)
+                        {
+                            _abstraction_parameters(abstraction, false, false, false, false);
+                        }
                     }
                     _out << R"#(, bool _Copy)#";
                     if (can_default)
@@ -1082,7 +1090,10 @@ namespace )#" << _space.name() << R"#(
                     _out << R"#(
 )#";
                     auto [last, depth] = _open_namespaces(derived.implementation());
-                    _out << R"#(inline auto )#" << last << R"#(::)#" << operation.name();
+                    _abstraction_parameters(derived, true, false, false, false);
+                    _out << R"#(inline auto )#" << last;
+                    _abstraction_parameters(derived, false, false, false, false);
+                    _out << R"#(::)#" << operation.name();
                     _operation_parameters(operation, true, false);
                     if (operation.constness())
                     {
