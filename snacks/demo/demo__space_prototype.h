@@ -53,8 +53,9 @@ namespace demo
         auto picked() const -> bool;
     };
 
-    struct function
+    struct [[strange::thing("demo::functimpl")]]
+    function
     {
-        auto operator()() const -> void;
+        auto operator()() const -> void { std::string s; };
     };
 }
