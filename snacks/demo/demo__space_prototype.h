@@ -64,11 +64,11 @@ namespace demo
     {
         auto operator()() const -> void { F s; };
     };
-/*
+
+    template<typename F>
     struct [[strange::thing("demo::fungimpl2")]]
-    fungible2 : fungible
+    fungible2 : fungible<F>
     {
         auto fung() const -> void { std::string f; };
     };
-*/
 }
