@@ -64,21 +64,21 @@ namespace demo
 template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename F = double>
 struct fungible_;
 
-template<typename F>
+template<typename F = float>
 struct fungible2;
 
 }
 
 namespace demo
 {
-template<typename F>
+template<typename F = float>
 struct fungimpl2;
 }
 
 namespace demo
 {
 
-template<typename _Thing, bool _Copy, typename F>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename F = float>
 struct fungible2_;
 
 }
@@ -3816,20 +3816,20 @@ namespace demo
 {
 template<typename F>
 inline auto fungimpl<F>::operator()() const -> void
-{ F s; }
+{ F f = 0.0; f += 1.0; }
 }
 
 namespace demo
 {
 template<typename F>
 inline auto fungimpl2<F>::operator()() const -> void
-{ F s; }
+{ F f = 0.0; f += 1.0; }
 }
 
 namespace demo
 {
 template<typename F>
 inline auto fungimpl2<F>::fung() const -> void
-{ std::string f; }
+{ std::string s; s += "s"; }
 }
 

@@ -248,5 +248,13 @@ int main()
     auto fun_2 = demo::functor<>::_make<std::function<void()>>();
     std::cout << "fun_2._name(): " << fun_2._name() << "\n";
 
+    auto fung = demo::fungible<>::_make();
+    fung();
+    std::cout << "fung._namme(): " << fung._name() << "\n";
+    auto fung2 = demo::fungible2<>::_make();
+    fung2();
+    fung2.fung();
+    std::cout << "fung2._namme(): " << fung2._name() << "\n";
+
     return 0;
 }
