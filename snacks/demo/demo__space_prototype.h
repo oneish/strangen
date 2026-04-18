@@ -63,4 +63,10 @@ namespace demo
     {
         auto operator()() const -> void { std::string s; };
     };
+
+    struct [[strange::thing("demo::fungimpl2")]]
+    fungible2 : fungible
+    {
+        auto fung() const -> void { std::string f; };
+    };
 }

@@ -1081,7 +1081,7 @@ namespace )#" << _space.name() << R"#(
                 {
                     _out << R"#(
 )#";
-                    auto [last, depth] = _open_namespaces(abstraction.implementation());
+                    auto [last, depth] = _open_namespaces(derived.implementation());
                     _out << R"#(inline auto )#" << last << R"#(::)#" << operation.name();
                     _operation_parameters(operation, true, false);
                     if (operation.constness())
