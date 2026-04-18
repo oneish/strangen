@@ -61,7 +61,7 @@ struct fungimpl;
 namespace demo
 {
 
-template<typename _Thing, bool _Copy, typename F = double>
+template<typename _Thing, bool _Copy = std::is_copy_constructible_v<_Thing>, typename F = double>
 struct fungible_;
 
 }

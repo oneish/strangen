@@ -477,6 +477,7 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
                             break;
                         }
                     }
+                    bool can_default_copy = can_default;
                     if (can_default && abstraction.thing().find('<') == std::string::npos
                         && !abstraction.parameters().empty())
                     {
@@ -488,7 +489,7 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
                         _out << R"#( = )#" << abstraction.thing();
                     }
                     _out << R"#(, bool _Copy)#";
-                    if (can_default)
+                    if (can_default_copy)
                     {
                         _out << R"#( = std::is_copy_constructible_v<_Thing>)#";
                     }
