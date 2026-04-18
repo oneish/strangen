@@ -1074,12 +1074,32 @@ namespace )#" << _space.name() << R"#(
                     {
                         _out << R"#( { return )#" << operation.name() << R"#(_; })#";
                     }
-                    else
-                    {
-                        _out << R"#( )#" << operation.implementation();
-                    }
                     _out << R"#(;
 )#";
+                }
+                else if (!operation.data())
+                {
+                    _out << R"#(
+)#";
+                    auto [last, depth] = _open_namespaces(derived.implementation());
+                    _out << R"#(inline auto )#" << last << R"#(::)#" << operation.name();
+                    _operation_parameters(operation, true, false);
+                    if (operation.constness())
+                    {
+                        _out << R"#( const -> )#";
+                    }
+                    else
+                    {
+                        _out << R"#( -> )#";
+                    }
+                    _out << operation.result() << R"#(
+)#" << operation.implementation() << R"#(
+)#";
+                    while (depth--)
+                    {
+                        _out << R"#(}
+)#";
+                    }
                 }
                 continue;
             }

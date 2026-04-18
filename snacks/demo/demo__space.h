@@ -2601,7 +2601,7 @@ namespace demo
 {
 struct functimpl
 {
-    inline auto operator()() const -> void { std::string s; };
+    inline auto operator()() const -> void;
 };
 }
 
@@ -3048,5 +3048,11 @@ inline auto function_<_Thing, _Copy>::_instance::operator()() const -> void
     _thing.operator()();
 }
 
+}
+
+namespace demo
+{
+inline auto functimpl::operator()() const -> void
+{ std::string s; }
 }
 
