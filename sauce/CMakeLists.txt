@@ -23,29 +23,28 @@ set(SPACE_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/strange/space/strange__space.h)
 set(PASS1_OUTPUT ${META_BUILD_DIR}/pass1_strange__space.h)
 set(PASS2_OUTPUT ${META_BUILD_DIR}/pass2_strange__space.h)
 
+set(ENSTRANGE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/enstrange/strange__enstrange.cpp)
+
 add_custom_target(regenerate_space ALL
-    DEPENDS strangen
-        ${META_DIR}/strange__space_meta.h
+    DEPENDS
+        ${ENSTRANGE_SRC}
         ${META_DIR}/strange__space_prototype.h
         ${CMAKE_CURRENT_SOURCE_DIR}/strange/meta/strange__transformation.h
         ${CMAKE_CURRENT_SOURCE_DIR}/strange/comprehension/strange__comprehension__parser.h
         ${CMAKE_CURRENT_SOURCE_DIR}/strange/comprehension/strange__comprehension__toker.h
         ${CMAKE_CURRENT_SOURCE_DIR}/strange/reflection/strange__reflection.h
         ${CMAKE_CURRENT_SOURCE_DIR}/strange/common/strange__common.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/strange/common/strange__hash.h
     COMMAND ${CMAKE_COMMAND} -E make_directory ${META_BUILD_DIR}
     # Hash checked-in header before generation
     COMMAND ${CMAKE_COMMAND} -E md5sum ${SPACE_HEADER} > ${META_BUILD_DIR}/strange__space.h.old_hash
-    # Pass 1: generate using the checked-in header
-    COMMAND $<TARGET_FILE:strangen> ${META_DIR}/strange__space_meta.h ${META_BUILD_DIR}/strange__space_meta.cpp
-    COMMAND ${CMAKE_COMMAND} -E copy ${META_BUILD_DIR}/strange__space_meta.cpp ${META_DIR}/strange__space_meta.cpp
-    COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall -I${META_DIR}/.. -I${META_DIR} ${META_BUILD_DIR}/strange__space_meta.cpp -o ${META_BUILD_DIR}/meta_gen
-    COMMAND ${META_BUILD_DIR}/meta_gen > ${PASS1_OUTPUT}
-    # Pass 2: regenerate using the pass 1 output
+    # Pass 1: compile enstrange against checked-in header and generate
+    COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall -I${CMAKE_CURRENT_SOURCE_DIR} ${ENSTRANGE_SRC} -o ${META_BUILD_DIR}/enstrange_regen
+    COMMAND ${META_BUILD_DIR}/enstrange_regen ${META_DIR}/strange__space_prototype.h ${PASS1_OUTPUT}
+    # Pass 2: recompile enstrange against pass 1 output and regenerate
     COMMAND ${CMAKE_COMMAND} -E copy ${PASS1_OUTPUT} ${SPACE_HEADER}
-    COMMAND $<TARGET_FILE:strangen> ${META_DIR}/strange__space_meta.h ${META_BUILD_DIR}/strange__space_meta.cpp
-    COMMAND ${CMAKE_COMMAND} -E copy ${META_BUILD_DIR}/strange__space_meta.cpp ${META_DIR}/strange__space_meta.cpp
-    COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall -I${META_DIR}/.. -I${META_DIR} ${META_BUILD_DIR}/strange__space_meta.cpp -o ${META_BUILD_DIR}/meta_gen
-    COMMAND ${META_BUILD_DIR}/meta_gen > ${PASS2_OUTPUT}
+    COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall -I${CMAKE_CURRENT_SOURCE_DIR} ${ENSTRANGE_SRC} -o ${META_BUILD_DIR}/enstrange_regen
+    COMMAND ${META_BUILD_DIR}/enstrange_regen ${META_DIR}/strange__space_prototype.h ${PASS2_OUTPUT}
     # Copy pass 2 output to source
     COMMAND ${CMAKE_COMMAND} -E copy ${PASS2_OUTPUT} ${SPACE_HEADER}
     # Hash comparison: fail if header changed from checked-in version

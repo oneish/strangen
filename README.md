@@ -31,11 +31,11 @@ Strangen is self-hosting -- the core library's own 495KB `strange__space.h` head
 
 ## Quick Start
 
-### 1. Build the strangen tool
+### 1. Build the enstrange tool
 
 ```bash
 cmake -B bake -DCMAKE_CXX_COMPILER=g++-12
-cmake --build bake --target strangen
+cmake --build bake --target enstrange
 ```
 
 ### 2. Define a prototype
@@ -66,58 +66,22 @@ namespace demo
 
 Inherit from `strange::any` for basic type erasure, or from `strange::stuff` to add serialization support (`pack`/`unpack`).
 
-### 3. Write a meta header
+### 3. Generate the space header
 
-The meta header mixes static output with executable meta code delimited by `/*~ ... */`:
+Run `enstrange` on the prototype to produce the generated header:
 
-```cpp
-// demo__space_meta.h
-/*~// meta code -- this becomes executable C++
-#include <fstream>
-#include "../../sauce/strange/strange.h"
-#include "../../sauce/strange/comprehension/strange__comprehension__parser.h"
-#include "../../sauce/strange/meta/strange__transformation.h"
-*/#pragma once
-#include "../../sauce/strange/common/strange__common.h"
-#include "../../sauce/strange/reflection/strange__reflection.h"
-/*~
-    // parse the prototype and generate the space header
-    char const * const prototype = "demo__space_prototype.h";
-    std::ifstream ifs{prototype, std::ios::binary};
-    std::istreambuf_iterator<char> it{ifs};
-    strange::comprehension::toker toker{it, prototype};
-    strange::comprehension::parser parser{toker};
-    auto space = parser.parse();
-    if (space._valid())
-    {
-        strange::transformation(space, std::cout).transform();
-    }
-*/
+```bash
+./bake/sauce/enstrange/enstrange my_space_prototype.h my_space.h
 ```
-
-Content outside `/*~ ... */` markers becomes raw string output in the generated header. Content inside becomes C++ code that runs during generation.
 
 ### 4. Build and run
 
-CMake handles the code generation pipeline automatically:
+Compile the output with `-I path/to/sauce/strange` to resolve the strange library includes. CMake handles this automatically for the demo:
 
 ```bash
 cmake --build bake --target demo
 ./bake/demo
 ```
-
-Under the hood, CMake runs: `strangen` on the meta header, compiles the generated code, executes it to produce the space header, then compiles the demo.
-
-### Alternative: Using enstrange
-
-The `enstrange` tool combines the meta header, strangen preprocessing, and code generation into a single command:
-
-```bash
-cmake --build bake --target enstrange
-./bake/sauce/enstrange/enstrange my_space_prototype.h my_space.h
-```
-
-This reads the prototype directly and writes the generated header. Compile the output with `-I path/to/sauce/strange` to resolve the strange library includes. No meta header needed.
 
 ### 5. Use the generated types
 
@@ -277,15 +241,9 @@ This builds everything: the `strangen` code generator tool, examples, tests, and
 ## Code Generation Pipeline
 
 ```
-Prototype (.h)           Meta Header (.h)          strangen tool
-[DSL definitions]  --->  [meta code + includes]  ------->  Compilable C++ (.cpp)
-                                                                   |
-                                                            compile & run
-                                                                   |
-                                                                   v
-                                                         Generated Space Header (.h)
-                                                         [type erasure wrappers,
-                                                          reflection, closures]
+Prototype (.h)              enstrange tool              Generated Space Header (.h)
+[DSL definitions]  ------>  [parse + transform]  ------>  [type erasure wrappers,
+                                                           reflection, closures]
 ```
 
 ### Stage 1: Prototype File
@@ -300,35 +258,17 @@ Define abstractions using C++ struct syntax. The prototype must include `strange
 - Template abstractions support defaults and variadics
 - Multiple inheritance is supported (e.g., `struct bunch_of_fruit : food, bunch<fruit>, strange::stuff`)
 
-### Stage 2: Meta Header
-
-A file that mixes raw C++ output with executable meta code. The `strangen` tool recognizes two delimiter syntaxes:
-
-- `/*~ ... */` for block meta code
-- `//~ ...` for line meta code
-
-Content inside these delimiters becomes executable C++ code in the generated `.cpp` file. Content outside becomes raw string literal output that forms the generated header.
-
-### Stage 3: Run strangen
+### Stage 2: Run enstrange
 
 ```bash
-./bake/strangen input_meta.h output.cpp
+./bake/sauce/enstrange/enstrange my_space_prototype.h my_space.h
 ```
 
-The tool converts the meta header into a self-contained C++ program that, when compiled and run, produces the final space header.
+The `enstrange` tool reads the prototype, parses it, applies transformations, and writes the complete type erasure implementation to the output file.
 
-### Stage 4: Compile and Execute
+### Stage 3: Use Generated Code
 
-```bash
-g++-12 -std=c++17 -Wall output.cpp
-./a.out > generated_space.h
-```
-
-The executable parses the prototype file, applies transformations, and writes the complete type erasure implementation to stdout.
-
-### Stage 5: Use Generated Code
-
-Include the generated space header in your application code and compile with the required dependency include paths.
+Include the generated space header in your application code (after `#include "strange.h"`) and compile with the required dependency include paths.
 
 ## Prototype DSL Reference
 
@@ -784,7 +724,6 @@ strangen/
       meta/
         strange__transformation.h                # Code generation engine
         strange__space_prototype.h               # Core library prototype definitions
-        strange__space_meta.h                    # Meta header for core library
       implementation/
         baggage/
           strange__implementation__baggage.h      # Serialization via libdart
@@ -793,6 +732,7 @@ strangen/
   snacks/                                        # Examples
     CMakeLists.txt                               # Example build targets
     demo/                                        # Full demo (fruit/banana)
+    example/                                     # Type erasure example (outdated, uses strangen)
     baggage/                                     # Serialization examples
     currants/                                    # Concurrency/dataflow examples
   taste/                                         # Unit tests (doctest)
@@ -862,8 +802,7 @@ Everything outside these delimiters becomes raw string literals (`R"~(...)~"`) w
 The core library's own `strange__space.h` (~495KB) is generated by the same pipeline:
 
 1. `sauce/strange/meta/strange__space_prototype.h` defines the core abstractions (`any`, `stuff`, `bag`, `space`, `abstraction`, `operation`, `parameter`, `token`, etc.)
-2. `sauce/strange/meta/strange__space_meta.h` is the meta header
-3. The CMake `regenerate_space` target runs a two-pass bootstrap: hashes the checked-in `strange__space.h`, regenerates it twice (pass 2 uses pass 1 output), copies results to source, and fails the build if the hash changed
+2. The CMake `regenerate_space` target compiles `enstrange` from source and runs a two-pass bootstrap: hashes the checked-in `strange__space.h`, regenerates it twice (pass 2 recompiles `enstrange` against pass 1 output), copies results to source, and fails the build if the hash changed
 
 ## Examples
 
@@ -882,6 +821,10 @@ Demonstrates JSON and binary serialization using the libdart library and the str
 ```bash
 cmake --build bake --target baggage && ./bake/snacks/baggage
 ```
+
+### Example (`snacks/example/`)
+
+**Note:** This example is outdated and may be misleading. It uses the older `strangen` preprocessor pipeline and programmatic space construction rather than the current `enstrange`-based prototype approach. Refer to the demo for up-to-date usage patterns.
 
 ### Currants (`snacks/currants/`)
 
