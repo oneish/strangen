@@ -94,7 +94,6 @@ After building, `snacks.sh` runs the example executables from both `bake-gcc/` a
 ```bash
 bash snacks.sh            # run all examples quietly (pass/fail summary)
 bash snacks.sh purge      # run all examples with full output
-bash snacks.sh demo       # run a single example with output
 bash snacks.sh baggage    # run a single example with output
 ```
 
@@ -106,10 +105,10 @@ Available snack names: `baggage`, `currants`, `demo`, `example`. Currants is ski
 |--------|-------------|
 | `strangen` | Code generator preprocessor tool |
 | `enstrange` | Single-command prototype-to-header generator |
-| `demo` | Demo example (with code generation) |
-| `example` | Type erasure example (outdated, uses strangen) |
 | `baggage` | Serialization example |
 | `currants` | Concurrency example |
+| `demo` | Demo example (with code generation) |
+| `example` | Type erasure example (outdated, uses strangen) |
 | `test_strange` | Core unit tests |
 | `test_baggage` | Serialization unit tests |
 | `test_graph` | Concurrency unit tests |
@@ -141,11 +140,11 @@ bake-gcc/                    # gcc.sh → bake-gcc/, clang.sh → bake-clang/
         pass1_strange__space.h
         pass2_strange__space.h
   snacks/
+    baggage                  # serialization example
+    currants                 # concurrency example
     demo/                    # demo example
       demo__space.h          # generated space header
     example/                 # type erasure example (outdated, uses strangen)
-    baggage                  # serialization example
-    currants                 # concurrency example
   taste/
     strange/
       test_strange           # core tests
