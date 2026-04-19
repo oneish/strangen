@@ -59,14 +59,14 @@ namespace demo
     };
 
     template<typename F = double>
-    struct [[strange::thing("demo::fungimpl")]]
+    struct [[strange::implementation("demo::fungimpl")]]
     fungible
     {
         auto operator()() const -> void { F f = 0.0; f += 1.0; };
     };
 
     template<typename F = float>
-    struct [[strange::thing("demo::fungimpl2")]]
+    struct [[strange::implementation("demo::fungimpl2")]]
     fungible2 : fungible<F>
     {
         auto fung() const -> void { std::string s; s += "s"; };

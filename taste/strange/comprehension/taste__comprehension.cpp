@@ -717,7 +717,7 @@ TEST_CASE("parser: non-data operation with implementation")
     std::string input = R"(
 namespace test
 {
-    struct [[strange::thing("test::impl")]]
+    struct [[strange::implementation("test::impl")]]
     widget : strange::any
     {
         std::string name {};

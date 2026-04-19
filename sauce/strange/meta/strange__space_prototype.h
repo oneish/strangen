@@ -167,7 +167,7 @@ namespace strange
         auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
     };
 
-    struct [[strange::thing("strange::implementation::connection")]]
+    struct [[strange::implementation("strange::implementation::connection")]]
     [[strange::hash]]
     [[strange::equality]]
     [[strange::comparison]]
@@ -194,7 +194,7 @@ namespace strange
         auto connections() -> std::vector<strange::connection> &;
     };
 
-    struct [[strange::thing("strange::implementation::parameter")]]
+    struct [[strange::implementation("strange::implementation::parameter")]]
     [[strange::hash]]
     [[strange::equality]]
     [[strange::comparison]]
@@ -206,7 +206,7 @@ namespace strange
         bool variadic {false};
     };
 
-    struct [[strange::thing("strange::implementation::operation")]]
+    struct [[strange::implementation("strange::implementation::operation")]]
     [[strange::hash]]
     [[strange::equality]]
     [[strange::comparison]]
@@ -223,7 +223,7 @@ namespace strange
         std::string implementation {};
     };
 
-    struct [[strange::thing("strange::implementation::abstraction")]]
+    struct [[strange::implementation("strange::implementation::abstraction")]]
     [[strange::hash]]
     [[strange::equality]]
     [[strange::comparison]]
@@ -241,7 +241,7 @@ namespace strange
         bool comparison {false};
     };
 
-    struct [[strange::thing("strange::implementation::space")]]
+    struct [[strange::implementation("strange::implementation::space")]]
     [[strange::hash]]
     [[strange::equality]]
     [[strange::comparison]]
@@ -253,7 +253,7 @@ namespace strange
         std::vector<strange::abstraction> abstractions {};
     };
 
-    struct [[strange::thing("strange::implementation::token")]]
+    struct [[strange::implementation("strange::implementation::token")]]
     [[strange::hash]]
     [[strange::equality]]
     [[strange::comparison]]

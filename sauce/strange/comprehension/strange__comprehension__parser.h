@@ -325,6 +325,10 @@ private:
                 return;
             }
         }
+        if (abs.thing().empty())
+        {
+            abs.thing() = abs.implementation();
+        }
         abs.name() = _tok.text();
         parse_punctuation();
         if (!_err.empty())
@@ -388,10 +392,6 @@ private:
                 oper.result() += " &";
             }
             abs.operations().push_back(oper);
-            if (abs.implementation().empty() && !oper.implementation().empty())
-            {
-                abs.implementation() = abs.thing();
-            }
         }
         if (abs.equality())
         {
