@@ -1,4 +1,3 @@
-#pragma once
 #include "../common/strange__common.h"
 #include "../common/strange__hash.h"
 #include "../reflection/strange__reflection.h"
@@ -16,6 +15,7 @@ template <typename Signal>
 struct graph;
 }
 }
+#pragma once
 #include <memory>
 #include <string>
 #include <type_traits>

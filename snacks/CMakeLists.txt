@@ -9,26 +9,21 @@ add_custom_command(
     # Hash checked-in header before generation
     COMMAND ${CMAKE_COMMAND} -E md5sum ${DEMO_DIR}/demo__space.h > ${DEMO_BUILD_DIR}/demo__space.h.old_hash
     # Generate
-    COMMAND $<TARGET_FILE:strangen> ${DEMO_DIR}/demo__space_meta.h ${DEMO_BUILD_DIR}/demo__space_meta.cpp
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEMO_BUILD_DIR}/demo__space_meta.cpp ${DEMO_DIR}/demo__space_meta.cpp
-    COMMAND ${CMAKE_CXX_COMPILER} -std=c++17 -Wall
-        -I${CMAKE_SOURCE_DIR}/sauce/strange
-        -I${CMAKE_SOURCE_DIR}/sauce/strange/meta
-        ${DEMO_BUILD_DIR}/demo__space_meta.cpp
-        -o ${DEMO_BUILD_DIR}/demo_gen
-    COMMAND ${DEMO_BUILD_DIR}/demo_gen > ${DEMO_SPACE_HEADER}
+    COMMAND $<TARGET_FILE:enstrange> ${DEMO_DIR}/demo__space_prototype.h ${DEMO_SPACE_HEADER}
     # Copy header to source immediately
     COMMAND ${CMAKE_COMMAND} -E copy ${DEMO_SPACE_HEADER} ${DEMO_DIR}/demo__space.h
     # Hash comparison: fail if header changed from checked-in version
     COMMAND ${CMAKE_COMMAND} -E md5sum ${DEMO_DIR}/demo__space.h > ${DEMO_BUILD_DIR}/demo__space.h.new_hash
     COMMAND ${CMAKE_COMMAND} -E compare_files ${DEMO_BUILD_DIR}/demo__space.h.old_hash ${DEMO_BUILD_DIR}/demo__space.h.new_hash
-    DEPENDS strangen ${DEMO_DIR}/demo__space_meta.h ${DEMO_DIR}/demo__space_prototype.h
+    DEPENDS enstrange ${DEMO_DIR}/demo__space_prototype.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/strange.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/space/strange__space.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/meta/strange__transformation.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/comprehension/strange__comprehension__parser.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/comprehension/strange__comprehension__toker.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/reflection/strange__reflection.h
         ${CMAKE_SOURCE_DIR}/sauce/strange/common/strange__common.h
+        ${CMAKE_SOURCE_DIR}/sauce/strange/common/strange__hash.h
     WORKING_DIRECTORY ${DEMO_DIR}
     COMMENT "Generating demo__space.h"
 )

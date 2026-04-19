@@ -3,8 +3,7 @@
 #include "../strange.h"
 #include "../comprehension/strange__comprehension__parser.h"
 #include "strange__transformation.h"
-*/#pragma once
-#include "../common/strange__common.h"
+*/#include "../common/strange__common.h"
 #include "../common/strange__hash.h"
 #include "../reflection/strange__reflection.h"
 namespace strange

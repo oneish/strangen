@@ -29,7 +29,8 @@ public:
 
     auto transform() -> void
     {
-        _out << R"#(#include <memory>
+        _out << R"#(#pragma once
+#include <memory>
 #include <string>
 #include <type_traits>
 #include <unordered_set>
