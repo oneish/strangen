@@ -283,8 +283,9 @@ Define abstractions using C++ struct syntax. The prototype must include `strange
 
 - Inherit from `strange::any` for basic type erasure
 - Inherit from `strange::stuff` to add `pack`/`unpack` serialization support
-- Use `[[strange::closure("name")]]` annotations to generate callable wrappers
-- Use `[[strange::hash]]` to generate `std::hash` specializations
+- Use `[[strange::closure("name")]]` to generate callable wrappers
+- Use `[[strange::implementation("name")]]` to generate implementation structs with data storage
+- Use `[[strange::hash]]`, `[[strange::equality]]`, `[[strange::comparison]]` to auto-generate boilerplate
 - Template abstractions support defaults and variadics
 - Multiple inheritance is supported (e.g., `struct bunch_of_fruit : food, bunch<fruit>, strange::stuff`)
 
@@ -341,9 +342,61 @@ struct fruit : food, strange::stuff
 };
 ```
 
-### Closures
+### Abstraction Attributes
 
-The `[[strange::closure("name")]]` annotation generates a method that returns a `std::function` wrapping the operation:
+Abstraction attributes appear as `[[strange::...]]` before the struct name. Multiple attributes can be stacked.
+
+#### `thing("name")`
+
+Sets the default concrete type for `_make()`. Used when the implementation type is external (not generated):
+
+```cpp
+struct [[strange::thing("std::vector<T>")]]
+vector : strange::stuff
+{
+    auto push_back(T const & item) -> void;
+};
+```
+
+Callers can then write `auto v = my_namespace::vector<int>::_make();` without specifying the concrete type -- it defaults to `std::vector<T>`.
+
+#### `implementation("name")`
+
+Generates an implementation struct with automatic data member storage, inline accessors, and `pack`/`unpack` serialization for `stuff` derivatives. If `thing` is not specified, it is auto-set to the same value:
+
+```cpp
+struct [[strange::implementation("my_namespace::impl::widget")]]
+[[strange::hash]]
+[[strange::equality]]
+[[strange::comparison]]
+widget : strange::stuff
+{
+    std::string name {};
+    int64_t value {};
+};
+```
+
+This generates a `my_namespace::impl::widget` struct with `name_` and `value_` member variables, const/mutable accessors, and `pack`/`unpack` methods. The generated struct becomes the default `_Thing` for `_make()`.
+
+#### `hash`
+
+Generates a `std::hash` specialization for the abstraction, hashing all data members. Vector members use `strange::hash_range`; scalars use `strange::hash_init`/`strange::hash_combine` (defined in `strange__hash.h`). Requires `implementation`.
+
+#### `equality`
+
+Generates `operator==` (checks all data members with `&&`) and `operator!=` (delegates to `==`). Requires `implementation`.
+
+#### `comparison`
+
+Generates `operator<` (lexicographic ordering over all data members), `operator<=` (delegates to `<` and `==`), `operator>` (delegates to `<=`), and `operator>=` (delegates to `<`). Requires `implementation`.
+
+### Operation Attributes
+
+Operation attributes appear as `[[strange::...]]` before an operation declaration.
+
+#### `closure("name")`
+
+Generates a companion method that returns a `std::function` wrapping the operation:
 
 ```cpp
 struct food : strange::any
@@ -355,38 +408,60 @@ struct food : strange::any
 
 This generates an `eat_closure_()` method returning `std::function<void(int)>`.
 
-### Hash
+#### `customisation("code")`
 
-The `[[strange::hash]]` annotation generates a `std::hash` specialization for the abstraction, hashing all of its data members:
+Replaces the default forwarding body in the inner (instance) class. Normally, the instance class forwards calls to the concrete object via `_thing.method(args)`. A customisation replaces this with custom code:
 
 ```cpp
-struct [[strange::thing("my::implementation")]]
-[[strange::hash]]
-widget : strange::stuff
+[[strange::customisation("return _thing == other.template _static<widget_<_Thing, _Copy> const>()._thing()")]]
+auto operator==(widget const & other) const -> bool;
+```
+
+This is used when the default forwarding is insufficient -- for example, comparing the underlying objects of two type-erased wrappers requires extracting `_thing` from both sides.
+
+#### `modification("code")`
+
+Replaces the forwarding code in the type-erased wrapper class. Normally, the wrapper calls `_mutate()` (for non-const operations) then forwards via `dynamic_pointer_cast<_derived>(shared)->method(args)`. A modification replaces this entire sequence:
+
+```cpp
+[[strange::modification("auto const index = pos - cbegin();"
+"    strange::_common::_mutate();"
+"    pos = cbegin() + index;"
+"    return std::dynamic_pointer_cast<typename vector<T>::_derived>"
+"(strange::_common::_shared)->insert(pos, value);")]]
+auto insert(random_access_const_iterator<T> pos, T const & value) -> random_access_iterator<T>;
+```
+
+This is used when `_mutate()` invalidates state (like iterator positions) that must be saved and restored around the clone.
+
+#### `result("type")`
+
+Overrides the return type parsed from the operation signature. The special values `"*this"` and `"*that"` generate return-self semantics:
+
+```cpp
+[[strange::result("*this")]]
+auto operator++() -> forward_const_iterator &;
+
+[[strange::result("*that")]]
+auto operator++(int i) -> forward_const_iterator;
+```
+
+`"*this"` returns a reference to self after the operation (prefix increment). `"*that"` returns a copy of self taken before the operation (postfix increment).
+
+### Inline Operation Implementations
+
+Operations can include an inline implementation between the return type and the terminating semicolon. This provides the method body for the generated implementation struct:
+
+```cpp
+struct [[strange::implementation("my_namespace::impl::widget")]]
+widget : strange::any
 {
     std::string name {};
-    int64_t value {};
+    auto compute() const -> int { return name().length(); };
 };
 ```
 
-This generates a `std::hash<my_namespace::widget>` specialization. Vector members are hashed via `hash_range`; scalar members via `hash_init`/`hash_combine` (defined in `strange__hash.h`).
-
-### Equality and Comparison
-
-The `[[strange::equality]]` annotation generates `operator==` and `operator!=` over all data members. The `[[strange::comparison]]` annotation generates `operator<`, `operator<=`, `operator>`, and `operator>=`:
-
-```cpp
-struct [[strange::thing("my::implementation")]]
-[[strange::equality]]
-[[strange::comparison]]
-widget : strange::stuff
-{
-    std::string name {};
-    int64_t value {};
-};
-```
-
-`operator==` checks all fields with `&&`. `operator<` uses lexicographic ordering (nested `<`/`==` pattern). The remaining operators delegate: `!=` to `==`, `<=` to `<` and `==`, `>` to `<=`, `>=` to `<`.
+The implementation struct will contain `inline auto compute() const -> int;` declared in the struct, with the definition `{ return name().length(); }` emitted at the end of the generated output. Data members automatically get inline accessors (`{ return name_; }`) without needing explicit implementations.
 
 ### Template Abstractions
 
