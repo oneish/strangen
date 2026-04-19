@@ -108,6 +108,17 @@ cmake --build bake --target demo
 
 Under the hood, CMake runs: `strangen` on the meta header, compiles the generated code, executes it to produce the space header, then compiles the demo.
 
+### Alternative: Using enstrange
+
+The `enstrange` tool combines the meta header, strangen preprocessing, and code generation into a single command:
+
+```bash
+cmake --build bake --target enstrange
+./bake/sauce/enstrange/enstrange my_space_prototype.h my_space.h
+```
+
+This reads the prototype directly and writes the generated header. Compile the output with `-I path/to/sauce/strange` to resolve the strange library includes. No meta header needed.
+
 ### 5. Use the generated types
 
 Implement a concrete type and wrap it with the generated abstraction:
@@ -754,6 +765,8 @@ strangen/
   snacks.sh                                      # Run examples [purge|baggage|currants|demo|example]
   sauce/                                         # Core library
     CMakeLists.txt                               # Tool + library + bootstrap targets
+    enstrange/
+      strange__enstrange.cpp                     # enstrange tool source (single-command generation)
     generation/
       strange__generation.cpp                    # strangen tool source
     strange/

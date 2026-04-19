@@ -104,7 +104,8 @@ Available snack names: `baggage`, `currants`, `demo`, `example`. Currants is ski
 
 | Target | Description |
 |--------|-------------|
-| `strangen` | Code generator tool |
+| `strangen` | Code generator preprocessor tool |
+| `enstrange` | Single-command prototype-to-header generator |
 | `demo` | Demo example (with code generation) |
 | `example` | Type erasure example (with code generation) |
 | `baggage` | Serialization example |

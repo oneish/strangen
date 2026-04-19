@@ -2,6 +2,11 @@
 add_executable(strangen generation/strange__generation.cpp)
 set_target_properties(strangen PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/sauce/generation)
 
+# --- enstrange code generator tool ---
+add_executable(enstrange enstrange/strange__enstrange.cpp)
+set_target_properties(enstrange PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/sauce/enstrange)
+target_include_directories(enstrange PRIVATE ${CMAKE_SOURCE_DIR}/sauce)
+
 # --- strange interface library (header-only) ---
 add_library(strange INTERFACE)
 target_include_directories(strange INTERFACE
