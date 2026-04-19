@@ -45,9 +45,6 @@ int main(int argc, char* argv[])
 
     if (space._valid())
     {
-        ofs << R"(#pragma once
-#include "strange.h"
-)";
         strange::transformation(space, ofs).transform();
     }
     else
