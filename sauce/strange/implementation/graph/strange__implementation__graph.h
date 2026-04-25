@@ -314,16 +314,14 @@ struct thru_processor
         return _ins;
     }
 
-    inline auto input_type(uint64_t in) const -> uint64_t const &
+    inline auto input_types() const -> std::vector<uint64_t> const &
     {
-        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
-        return _types[in];
+        return _types;
     }
 
-    inline auto input_type(uint64_t in) -> uint64_t &
+    inline auto input_types() -> std::vector<uint64_t> &
     {
-        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
-        return _types[in];
+        return _types;
     }
 
     inline auto outs() const -> uint64_t const &
@@ -336,16 +334,14 @@ struct thru_processor
         return _outs;
     }
 
-    inline auto output_type(uint64_t out) const -> uint64_t const &
+    inline auto output_types() const -> std::vector<uint64_t> const &
     {
-        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
-        return _types[out];
+        return _types;
     }
 
-    inline auto output_type(uint64_t out) -> uint64_t &
+    inline auto output_types() -> std::vector<uint64_t> &
     {
-        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
-        return _types[out];
+        return _types;
     }
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
@@ -359,7 +355,7 @@ struct thru_processor
 private:
     uint64_t _ins;
     uint64_t _outs;
-    mutable std::vector<uint64_t> _types;
+    std::vector<uint64_t> _types;
 };
 
 template<typename Signal>
@@ -437,16 +433,14 @@ struct graph
         return _ins;
     }
 
-    inline auto input_type(uint64_t in) const -> uint64_t const &
+    inline auto input_types() const -> std::vector<uint64_t> const &
     {
-        _input_types.resize(static_cast<std::size_t>(_ins));
-        return _input_types[in];
+        return _input_types;
     }
 
-    inline auto input_type(uint64_t in) -> uint64_t &
+    inline auto input_types() -> std::vector<uint64_t> &
     {
-        _input_types.resize(static_cast<std::size_t>(_ins));
-        return _input_types[in];
+        return _input_types;
     }
 
     inline auto outs() const -> uint64_t const &
@@ -459,16 +453,14 @@ struct graph
         return _outs;
     }
 
-    inline auto output_type(uint64_t out) const -> uint64_t const &
+    inline auto output_types() const -> std::vector<uint64_t> const &
     {
-        _output_types.resize(static_cast<std::size_t>(_outs));
-        return _output_types[out];
+        return _output_types;
     }
 
-    inline auto output_type(uint64_t out) -> uint64_t &
+    inline auto output_types() -> std::vector<uint64_t> &
     {
-        _output_types.resize(static_cast<std::size_t>(_outs));
-        return _output_types[out];
+        return _output_types;
     }
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
@@ -516,8 +508,8 @@ struct graph
     {
         if (_processors[conn.from_id()]._something()
             && _processors[conn.to_id()]._something()
-            && _processors[conn.from_id()].output_type(conn.from_out()) !=
-               _processors[conn.to_id()].input_type(conn.to_in()))
+            && _processors[conn.from_id()].output_types()[conn.from_out()] !=
+               _processors[conn.to_id()].input_types()[conn.to_in()])
         {
             throw std::runtime_error("connection between different types");
         }
@@ -596,8 +588,8 @@ private:
 
     uint64_t _ins;
     uint64_t _outs;
-    mutable std::vector<uint64_t> _input_types;
-    mutable std::vector<uint64_t> _output_types;
+    std::vector<uint64_t> _input_types;
+    std::vector<uint64_t> _output_types;
     std::vector<strange::processor<Signal>> _processors;
     std::vector<strange::connection> _connections;
 };
