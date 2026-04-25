@@ -18,6 +18,7 @@
 #include <set>
 #include <future>
 #include <stdexcept>
+#include <algorithm>
 
 namespace strange
 {
@@ -284,6 +285,7 @@ struct thru_processor
     inline thru_processor()
     :_ins(0)
     ,_outs(0)
+    ,_types{}
     {
     }
 
@@ -292,12 +294,14 @@ struct thru_processor
         dest.from_object();
         dest.insert_object("ins", dest.make_uint64(ins()));
         dest.insert_object("outs", dest.make_uint64(outs()));
+        dest.insert_object("types", dest.make_array_uint64(_types));
     }
 
     inline auto unpack(strange::bag const & src) -> void
     {
         src.get_object("ins").as_uint64(ins());
         src.get_object("outs").as_uint64(outs());
+        src.get_object("types").as_array_uint64(_types);
     }
 
     inline auto ins() const -> uint64_t const &
@@ -310,9 +314,16 @@ struct thru_processor
         return _ins;
     }
 
-    inline auto input_type(uint64_t in) const -> uint64_t
+    inline auto input_type(uint64_t in) const -> uint64_t const &
     {
-        return 0;
+        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
+        return _types[in];
+    }
+
+    inline auto input_type(uint64_t in) -> uint64_t &
+    {
+        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
+        return _types[in];
     }
 
     inline auto outs() const -> uint64_t const &
@@ -325,9 +336,16 @@ struct thru_processor
         return _outs;
     }
 
-    inline auto output_type(uint64_t out) const -> uint64_t
+    inline auto output_type(uint64_t out) const -> uint64_t const &
     {
-        return 0;
+        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
+        return _types[out];
+    }
+
+    inline auto output_type(uint64_t out) -> uint64_t &
+    {
+        _types.resize(static_cast<std::size_t>(std::max(_ins, _outs)));
+        return _types[out];
     }
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
@@ -341,6 +359,7 @@ struct thru_processor
 private:
     uint64_t _ins;
     uint64_t _outs;
+    mutable std::vector<uint64_t> _types;
 };
 
 template<typename Signal>
@@ -349,6 +368,8 @@ struct graph
     inline graph()
     :_ins(0)
     ,_outs(0)
+    ,_input_types{}
+    ,_output_types{}
     ,_processors(2)
     {
     }
@@ -358,6 +379,8 @@ struct graph
         dest.from_object();
         dest.insert_object("ins", dest.make_uint64(ins()));
         dest.insert_object("outs", dest.make_uint64(outs()));
+        dest.insert_object("input_types", dest.make_array_uint64(_input_types));
+        dest.insert_object("output_types", dest.make_array_uint64(_output_types));
         {
             auto _array = dest.make_array();
             for (auto const & _item : processors())
@@ -380,6 +403,8 @@ struct graph
     {
         src.get_object("ins").as_uint64(ins());
         src.get_object("outs").as_uint64(outs());
+        src.get_object("input_types").as_array_uint64(_input_types);
+        src.get_object("output_types").as_array_uint64(_output_types);
         {
             auto _array = src.get_object("processors").to_array();
             auto _size = _array.size();
@@ -412,9 +437,16 @@ struct graph
         return _ins;
     }
 
-    inline auto input_type(uint64_t in) const -> uint64_t
+    inline auto input_type(uint64_t in) const -> uint64_t const &
     {
-        return 0;
+        _input_types.resize(static_cast<std::size_t>(_ins));
+        return _input_types[in];
+    }
+
+    inline auto input_type(uint64_t in) -> uint64_t &
+    {
+        _input_types.resize(static_cast<std::size_t>(_ins));
+        return _input_types[in];
     }
 
     inline auto outs() const -> uint64_t const &
@@ -427,9 +459,16 @@ struct graph
         return _outs;
     }
 
-    inline auto output_type(uint64_t out) const -> uint64_t
+    inline auto output_type(uint64_t out) const -> uint64_t const &
     {
-        return 0;
+        _output_types.resize(static_cast<std::size_t>(_outs));
+        return _output_types[out];
+    }
+
+    inline auto output_type(uint64_t out) -> uint64_t &
+    {
+        _output_types.resize(static_cast<std::size_t>(_outs));
+        return _output_types[out];
     }
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
@@ -557,6 +596,8 @@ private:
 
     uint64_t _ins;
     uint64_t _outs;
+    mutable std::vector<uint64_t> _input_types;
+    mutable std::vector<uint64_t> _output_types;
     std::vector<strange::processor<Signal>> _processors;
     std::vector<strange::connection> _connections;
 };
