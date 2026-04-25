@@ -216,9 +216,13 @@ int main()
         auto subgraph = strange::graph<std::string>::_make(); // "A"
         subgraph.ins() = 1; // "B"
         subgraph.outs() = 1; // "C"
+        subgraph.input_types().resize(1);
+        subgraph.output_types().resize(1);
         auto proc = subgraph.add_processor(strange::processor<std::string>::_make<strange::implementation::thru_processor<std::string>>()); // "D"
         subgraph.processors()[proc].ins() = 1;
         subgraph.processors()[proc].outs() = 1;
+        subgraph.processors()[proc].input_types().resize(1);
+        subgraph.processors()[proc].output_types().resize(1);
 
         subgraph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = proc, .to_in_ = 0})); // B0 -> D0
         subgraph.add_connection(make_connection({.from_id_ = proc, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0})); // D0 -> C0
@@ -226,14 +230,18 @@ int main()
         auto graph = strange::graph<std::string>::_make(); // "E"
         graph.ins() = 3; // "F"
         graph.outs() = 3; // "G"
+        graph.input_types().resize(3);
+        graph.output_types().resize(3);
         auto sub = graph.add_processor(subgraph); // "A"
         proc = graph.add_processor(strange::processor<std::string>::_make<strange::implementation::thru_processor<std::string>>()); // "H"
         graph.processors()[proc].ins() = 1;
         graph.processors()[proc].outs() = 1;
+        graph.processors()[proc].input_types().resize(1);
+        graph.processors()[proc].output_types().resize(1);
 
         graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = sub, .to_in_ = 0})); // F0 -> A0
         graph.add_connection(make_connection({.from_id_ = sub, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0})); // A0 -> G0
- 
+
         graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 1, .to_id_ = proc, .to_in_ = 0})); // F1 -> H0
         graph.add_connection(make_connection({.from_id_ = proc, .from_out_ = 0, .to_id_ = 0, .to_in_ = 1})); // H0 -> G1
 

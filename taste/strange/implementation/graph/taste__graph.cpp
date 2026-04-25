@@ -157,6 +157,10 @@ TEST_CASE("graph: add and remove processors")
 TEST_CASE("graph: add and remove connections")
 {
     auto graph = strange::graph<std::string>::_make();
+    graph.ins() = 1;
+    graph.outs() = 1;
+    graph.input_types().resize(1);
+    graph.output_types().resize(1);
 
     auto conn = make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0});
     auto id = graph.add_connection(conn);
@@ -176,11 +180,15 @@ TEST_CASE("graph: simple passthrough execution")
     auto graph = strange::graph<std::string>::_make();
     graph.ins() = 1;
     graph.outs() = 1;
+    graph.input_types().resize(1);
+    graph.output_types().resize(1);
 
     auto proc = strange::processor<std::string>::_make<
         strange::implementation::thru_processor<std::string>>();
     proc.ins() = 1;
     proc.outs() = 1;
+    proc.input_types().resize(1);
+    proc.output_types().resize(1);
     auto proc_id = graph.add_processor(proc);
 
     // input(1) -> proc -> output(0)
@@ -198,11 +206,15 @@ TEST_CASE("graph: multiple inputs and outputs")
     auto graph = strange::graph<std::string>::_make();
     graph.ins() = 2;
     graph.outs() = 2;
+    graph.input_types().resize(2);
+    graph.output_types().resize(2);
 
     auto proc = strange::processor<std::string>::_make<
         strange::implementation::thru_processor<std::string>>();
     proc.ins() = 2;
     proc.outs() = 2;
+    proc.input_types().resize(2);
+    proc.output_types().resize(2);
     auto proc_id = graph.add_processor(proc);
 
     // input port 0 -> proc in 0, input port 1 -> proc in 1
@@ -225,11 +237,15 @@ TEST_CASE("graph: nested subgraph")
     auto subgraph = strange::graph<std::string>::_make();
     subgraph.ins() = 1;
     subgraph.outs() = 1;
+    subgraph.input_types().resize(1);
+    subgraph.output_types().resize(1);
 
     auto inner_proc = strange::processor<std::string>::_make<
         strange::implementation::thru_processor<std::string>>();
     inner_proc.ins() = 1;
     inner_proc.outs() = 1;
+    inner_proc.input_types().resize(1);
+    inner_proc.output_types().resize(1);
     auto inner_id = subgraph.add_processor(inner_proc);
 
     subgraph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = inner_id, .to_in_ = 0}));
@@ -239,6 +255,8 @@ TEST_CASE("graph: nested subgraph")
     auto graph = strange::graph<std::string>::_make();
     graph.ins() = 1;
     graph.outs() = 1;
+    graph.input_types().resize(1);
+    graph.output_types().resize(1);
 
     auto sub_proc = subgraph._static<strange::processor<std::string>>();
     auto sub_id = graph.add_processor(sub_proc);

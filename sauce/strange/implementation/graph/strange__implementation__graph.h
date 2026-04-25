@@ -506,10 +506,17 @@ struct graph
 
     inline auto add_connection(strange::connection conn) -> uint64_t
     {
-        if (_processors[conn.from_id()]._something()
-            && _processors[conn.to_id()]._something()
-            && _processors[conn.from_id()].output_types()[conn.from_out()] !=
-               _processors[conn.to_id()].input_types()[conn.to_in()])
+        auto from_type = conn.from_id() == 1
+            ? _input_types[conn.from_out()]
+            : _processors[conn.from_id()]._something()
+                ? _processors[conn.from_id()].output_types()[conn.from_out()]
+                : uint64_t{0};
+        auto to_type = conn.to_id() == 0
+            ? _output_types[conn.to_in()]
+            : _processors[conn.to_id()]._something()
+                ? _processors[conn.to_id()].input_types()[conn.to_in()]
+                : uint64_t{0};
+        if (from_type != to_type)
         {
             throw std::runtime_error("connection between different types");
         }
