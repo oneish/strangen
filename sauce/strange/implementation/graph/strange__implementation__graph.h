@@ -17,6 +17,7 @@
 #include <vector>
 #include <set>
 #include <future>
+#include <stdexcept>
 
 namespace strange
 {
@@ -309,6 +310,11 @@ struct thru_processor
         return _ins;
     }
 
+    inline auto input_type(uint64_t in) const -> uint64_t
+    {
+        return 0;
+    }
+
     inline auto outs() const -> uint64_t const &
     {
         return _outs;
@@ -317,6 +323,11 @@ struct thru_processor
     inline auto outs() -> uint64_t &
     {
         return _outs;
+    }
+
+    inline auto output_type(uint64_t out) const -> uint64_t
+    {
+        return 0;
     }
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
@@ -401,6 +412,11 @@ struct graph
         return _ins;
     }
 
+    inline auto input_type(uint64_t in) const -> uint64_t
+    {
+        return 0;
+    }
+
     inline auto outs() const -> uint64_t const &
     {
         return _outs;
@@ -409,6 +425,11 @@ struct graph
     inline auto outs() -> uint64_t &
     {
         return _outs;
+    }
+
+    inline auto output_type(uint64_t out) const -> uint64_t
+    {
+        return 0;
     }
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
@@ -454,6 +475,13 @@ struct graph
 
     inline auto add_connection(strange::connection conn) -> uint64_t
     {
+        if (_processors[conn.from_id()]._something()
+            && _processors[conn.to_id()]._something()
+            && _processors[conn.from_id()].output_type(conn.from_out()) !=
+               _processors[conn.to_id()].input_type(conn.to_in()))
+        {
+            throw std::runtime_error("connection between different types");
+        }
         auto id = _connections.size();
         _connections.push_back(conn);
         return id;

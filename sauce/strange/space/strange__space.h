@@ -3478,9 +3478,13 @@ protected:
 
         virtual auto ins() -> uint64_t & = 0;
 
+        virtual auto input_type(uint64_t in) const -> uint64_t = 0;
+
         virtual auto outs() const -> uint64_t const & = 0;
 
         virtual auto outs() -> uint64_t & = 0;
+
+        virtual auto output_type(uint64_t out) const -> uint64_t = 0;
 
         virtual auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
     };
@@ -3561,9 +3565,13 @@ public:
 
     inline auto ins() -> uint64_t &;
 
+    inline auto input_type(uint64_t in) const -> uint64_t;
+
     inline auto outs() const -> uint64_t const &;
 
     inline auto outs() -> uint64_t &;
+
+    inline auto output_type(uint64_t out) const -> uint64_t;
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 };
@@ -3683,9 +3691,13 @@ private:
 
         inline auto ins() -> uint64_t & final;
 
+        inline auto input_type(uint64_t in) const -> uint64_t final;
+
         inline auto outs() const -> uint64_t const & final;
 
         inline auto outs() -> uint64_t & final;
+
+        inline auto output_type(uint64_t out) const -> uint64_t final;
 
         inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
@@ -4370,9 +4382,13 @@ public:
 
     inline auto ins() -> uint64_t &;
 
+    inline auto input_type(uint64_t in) const -> uint64_t;
+
     inline auto outs() const -> uint64_t const &;
 
     inline auto outs() -> uint64_t &;
+
+    inline auto output_type(uint64_t out) const -> uint64_t;
 
     inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 
@@ -4508,9 +4524,13 @@ private:
 
         inline auto ins() -> uint64_t & final;
 
+        inline auto input_type(uint64_t in) const -> uint64_t final;
+
         inline auto outs() const -> uint64_t const & final;
 
         inline auto outs() -> uint64_t & final;
+
+        inline auto output_type(uint64_t out) const -> uint64_t final;
 
         inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
@@ -13068,6 +13088,12 @@ inline auto processor<Signal>::ins() -> uint64_t &
 }
 
 template<typename Signal>
+inline auto processor<Signal>::input_type(uint64_t in) const -> uint64_t
+{
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->input_type(in);
+}
+
+template<typename Signal>
 inline auto processor<Signal>::outs() const -> uint64_t const &
 {
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->outs();
@@ -13078,6 +13104,12 @@ inline auto processor<Signal>::outs() -> uint64_t &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->outs();
+}
+
+template<typename Signal>
+inline auto processor<Signal>::output_type(uint64_t out) const -> uint64_t
+{
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->output_type(out);
 }
 
 template<typename Signal>
@@ -13112,6 +13144,12 @@ inline auto processor_<_Thing, _Copy, Signal>::_instance::ins() -> uint64_t &
 }
 
 template<typename _Thing, bool _Copy, typename Signal>
+inline auto processor_<_Thing, _Copy, Signal>::_instance::input_type(uint64_t in) const -> uint64_t
+{
+    return _thing.input_type(in);
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
 inline auto processor_<_Thing, _Copy, Signal>::_instance::outs() const -> uint64_t const &
 {
     return _thing.outs();
@@ -13121,6 +13159,12 @@ template<typename _Thing, bool _Copy, typename Signal>
 inline auto processor_<_Thing, _Copy, Signal>::_instance::outs() -> uint64_t &
 {
     return _thing.outs();
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
+inline auto processor_<_Thing, _Copy, Signal>::_instance::output_type(uint64_t out) const -> uint64_t
+{
+    return _thing.output_type(out);
 }
 
 template<typename _Thing, bool _Copy, typename Signal>
@@ -13343,6 +13387,12 @@ inline auto graph<Signal>::ins() -> uint64_t &
 }
 
 template<typename Signal>
+inline auto graph<Signal>::input_type(uint64_t in) const -> uint64_t
+{
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->input_type(in);
+}
+
+template<typename Signal>
 inline auto graph<Signal>::outs() const -> uint64_t const &
 {
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->outs();
@@ -13353,6 +13403,12 @@ inline auto graph<Signal>::outs() -> uint64_t &
 {
     strange::_common::_mutate();
     return std::dynamic_pointer_cast<typename processor<Signal>::_derived>(strange::_common::_shared)->outs();
+}
+
+template<typename Signal>
+inline auto graph<Signal>::output_type(uint64_t out) const -> uint64_t
+{
+    return std::dynamic_pointer_cast<typename processor<Signal>::_derived const>(strange::_common::_shared)->output_type(out);
 }
 
 template<typename Signal>
@@ -13441,6 +13497,12 @@ inline auto graph_<_Thing, _Copy, Signal>::_instance::ins() -> uint64_t &
 }
 
 template<typename _Thing, bool _Copy, typename Signal>
+inline auto graph_<_Thing, _Copy, Signal>::_instance::input_type(uint64_t in) const -> uint64_t
+{
+    return _thing.input_type(in);
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
 inline auto graph_<_Thing, _Copy, Signal>::_instance::outs() const -> uint64_t const &
 {
     return _thing.outs();
@@ -13450,6 +13512,12 @@ template<typename _Thing, bool _Copy, typename Signal>
 inline auto graph_<_Thing, _Copy, Signal>::_instance::outs() -> uint64_t &
 {
     return _thing.outs();
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
+inline auto graph_<_Thing, _Copy, Signal>::_instance::output_type(uint64_t out) const -> uint64_t
+{
+    return _thing.output_type(out);
 }
 
 template<typename _Thing, bool _Copy, typename Signal>

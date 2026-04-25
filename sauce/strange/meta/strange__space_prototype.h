@@ -160,9 +160,11 @@ namespace strange
     {
         auto ins() const -> uint64_t const &;
         auto ins() -> uint64_t &;
+        auto input_type(uint64_t in) const -> uint64_t;
 
         auto outs() const -> uint64_t const &;
         auto outs() -> uint64_t &;
+        auto output_type(uint64_t out) const -> uint64_t;
 
         auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
     };
