@@ -106,3 +106,16 @@ Hand-written `[[strange::customisation(...)]]` strings for comparison operators 
 The `[[strange::equality]]`, `[[strange::comparison]]`, and `[[strange::hash]]` attributes eliminate this class of problem entirely. When the parser synthesizes comparison operators from data members, adding a new field to a prototype abstraction requires only adding the data member declaration -- the operators update themselves on the next regeneration. No customisation strings to maintain, no parentheses to count, and no bootstrap breakage from comparison operator typos.
 
 Where possible, prefer auto-generation attributes over hand-written customisation strings for mechanical patterns that operate over all data members.
+
+## Forward Declarations in `strange.h`
+
+`strange.h` contains forward declarations for implementation types (e.g., `template<typename Config, typename Signal> struct graph;`) that must appear before `strange__space.h` is included. When changing template parameters on these types, the forward declaration in `strange.h` must match the generated `strange__space.h`.
+
+This creates a bootstrap conflict: the old generated file uses the old template parameter count, but `strange.h` has been updated to the new count. The compilation of `enstrange` against the mismatched files fails.
+
+**The fix is a two-step stagger:**
+
+1. Temporarily revert `strange.h` to the old forward declaration (matching the checked-in `strange__space.h`)
+2. Regenerate -- pass 1 compiles against the old files and produces the new `strange__space.h`, pass 2 fails (expected)
+3. Restore `strange.h` to the new forward declaration (now matching the pass 1 output)
+4. Regenerate again -- both passes succeed

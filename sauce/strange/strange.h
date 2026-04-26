@@ -13,7 +13,7 @@ namespace implementation
 {
 struct baggage;
 
-template <typename Signal>
+template <typename Config, typename Signal>
 struct graph;
 }
 }

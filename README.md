@@ -664,18 +664,19 @@ send(42);
 
 ### Processors and Graphs
 
-```cpp
-// Create a graph with input/output ports
-auto graph = strange::graph<std::string>::_make();
-graph.ins() = 3;   // 3 input ports
-graph.outs() = 3;  // 3 output ports
+Processors and graphs are parameterised by `Config` (configuration type passed to `closure()`) and `Signal` (the data type flowing through the graph). Port counts and types are set at construction time via type vectors -- processors and graphs are immutable after construction.
 
-// Add processors
-auto proc_id = graph.add_processor(
-    strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>());
-graph.processors()[proc_id].ins() = 1;
-graph.processors()[proc_id].outs() = 1;
+```cpp
+// Create a graph with 3 input ports and 3 output ports (all type 0)
+auto graph = strange::graph<std::string, std::string>::_make(
+    std::vector<uint64_t>{0, 0, 0},   // input types
+    std::vector<uint64_t>{0, 0, 0});  // output types
+
+// Create a processor with 1 input and 1 output (type 0)
+auto proc = strange::processor<std::string, std::string>::_make<
+    strange::implementation::thru_processor<std::string, std::string>>(
+    std::vector<uint64_t>{0});
+auto proc_id = graph.add_processor(proc);
 
 // Connect ports (from_id, from_out, to_id, to_in)
 // id 1 = input node, id 0 = output node
@@ -692,7 +693,7 @@ std::vector<std::string> inputs {"hello", "world", "!"};
 auto outputs = graph_closure(inputs);
 ```
 
-Subgraphs can be nested inside larger graphs, and graphs support split, join, and pass-through connection patterns.
+Type vectors specify the type identifier for each port. `add_connection` validates that connected ports have matching types. `thru_processor` uses a single type vector (input and output ports share the same types). Subgraphs can be nested inside larger graphs, and graphs support split, join, and pass-through connection patterns.
 
 ## Project Structure
 

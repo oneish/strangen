@@ -279,37 +279,30 @@ private:
     std::vector<std::unique_ptr<processor>> _subprocs;
 };
 
-template<typename Signal>
+template<typename Config, typename Signal>
 struct thru_processor
 {
-    inline thru_processor()
-    :_ins(0)
-    ,_outs(0)
-    ,_types{}
+    inline thru_processor(std::vector<uint64_t> types)
+    :_ins(types.size())
+    ,_outs(types.size())
+    ,_types(std::move(types))
     {
     }
 
     inline auto pack(strange::bag & dest) const -> void
     {
         dest.from_object();
-        dest.insert_object("ins", dest.make_uint64(ins()));
-        dest.insert_object("outs", dest.make_uint64(outs()));
         dest.insert_object("types", dest.make_array_uint64(_types));
     }
 
     inline auto unpack(strange::bag const & src) -> void
     {
-        src.get_object("ins").as_uint64(ins());
-        src.get_object("outs").as_uint64(outs());
         src.get_object("types").as_array_uint64(_types);
+        _ins = _types.size();
+        _outs = _types.size();
     }
 
     inline auto ins() const -> uint64_t const &
-    {
-        return _ins;
-    }
-
-    inline auto ins() -> uint64_t &
     {
         return _ins;
     }
@@ -319,17 +312,7 @@ struct thru_processor
         return _types;
     }
 
-    inline auto input_types() -> std::vector<uint64_t> &
-    {
-        return _types;
-    }
-
     inline auto outs() const -> uint64_t const &
-    {
-        return _outs;
-    }
-
-    inline auto outs() -> uint64_t &
     {
         return _outs;
     }
@@ -339,12 +322,7 @@ struct thru_processor
         return _types;
     }
 
-    inline auto output_types() -> std::vector<uint64_t> &
-    {
-        return _types;
-    }
-
-    inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         return [*this](std::vector<Signal> inputs) {
             inputs.resize(_outs);
@@ -358,14 +336,14 @@ private:
     std::vector<uint64_t> _types;
 };
 
-template<typename Signal>
+template<typename Config, typename Signal>
 struct graph
 {
-    inline graph()
-    :_ins(0)
-    ,_outs(0)
-    ,_input_types{}
-    ,_output_types{}
+    inline graph(std::vector<uint64_t> input_types, std::vector<uint64_t> output_types)
+    :_ins(input_types.size())
+    ,_outs(output_types.size())
+    ,_input_types(std::move(input_types))
+    ,_output_types(std::move(output_types))
     ,_processors(2)
     {
     }
@@ -373,13 +351,11 @@ struct graph
     inline auto pack(strange::bag & dest) const -> void
     {
         dest.from_object();
-        dest.insert_object("ins", dest.make_uint64(ins()));
-        dest.insert_object("outs", dest.make_uint64(outs()));
         dest.insert_object("input_types", dest.make_array_uint64(_input_types));
         dest.insert_object("output_types", dest.make_array_uint64(_output_types));
         {
             auto _array = dest.make_array();
-            for (auto const & _item : processors())
+            for (auto const & _item : _processors)
             {
                 _array.push_back_array(dest.make_any(_item));
             }
@@ -387,7 +363,7 @@ struct graph
         }
         {
             auto _array = dest.make_array();
-            for (auto const & _item : connections())
+            for (auto const & _item : _connections)
             {
                 _array.push_back_array(dest.make_any(_item));
             }
@@ -397,28 +373,28 @@ struct graph
 
     inline auto unpack(strange::bag const & src) -> void
     {
-        src.get_object("ins").as_uint64(ins());
-        src.get_object("outs").as_uint64(outs());
         src.get_object("input_types").as_array_uint64(_input_types);
         src.get_object("output_types").as_array_uint64(_output_types);
+        _ins = _input_types.size();
+        _outs = _output_types.size();
         {
             auto _array = src.get_object("processors").to_array();
             auto _size = _array.size();
-            processors().clear();
-            processors().resize(_size);
+            _processors.clear();
+            _processors.resize(_size);
             for (std::size_t _index = 0; _index < _size; ++_index)
             {
-                _array[_index].as_any(processors()[_index]);
+                _array[_index].as_any(_processors[_index]);
             }
         }
         {
             auto _array = src.get_object("connections").to_array();
             auto _size = _array.size();
-            connections().clear();
-            connections().resize(_size);
+            _connections.clear();
+            _connections.resize(_size);
             for (std::size_t _index = 0; _index < _size; ++_index)
             {
-                _array[_index].as_any(connections()[_index]);
+                _array[_index].as_any(_connections[_index]);
             }
         }
     }
@@ -428,17 +404,7 @@ struct graph
         return _ins;
     }
 
-    inline auto ins() -> uint64_t &
-    {
-        return _ins;
-    }
-
     inline auto input_types() const -> std::vector<uint64_t> const &
-    {
-        return _input_types;
-    }
-
-    inline auto input_types() -> std::vector<uint64_t> &
     {
         return _input_types;
     }
@@ -448,27 +414,17 @@ struct graph
         return _outs;
     }
 
-    inline auto outs() -> uint64_t &
-    {
-        return _outs;
-    }
-
     inline auto output_types() const -> std::vector<uint64_t> const &
     {
         return _output_types;
     }
 
-    inline auto output_types() -> std::vector<uint64_t> &
-    {
-        return _output_types;
-    }
-
-    inline auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins)); // [1] input
-        iterate(_processors, _connections, subprocs);
+        iterate(_processors, _connections, config, subprocs);
         auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
         proc->on_your_marks();
         proc->get_set();
@@ -477,7 +433,7 @@ struct graph
         };
     }
 
-    inline auto add_processor(strange::processor<Signal> proc) -> uint64_t
+    inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t
     {
         auto id = _processors.size();
         _processors.push_back(proc);
@@ -488,18 +444,18 @@ struct graph
     {
         if (id < _processors.size() && _processors[id]._something())
         {
-            _processors[id] = strange::processor<Signal>{};
+            _processors[id] = strange::processor<Config, Signal>{};
             return true;
         }
         return false;
     }
 
-    inline auto processors() const -> std::vector<strange::processor<Signal>> const &
+    inline auto processors() const -> std::vector<strange::processor<Config, Signal>> const &
     {
         return _processors;
     }
 
-    inline auto processors() -> std::vector<strange::processor<Signal>> &
+    inline auto processors() -> std::vector<strange::processor<Config, Signal>> &
     {
         return _processors;
     }
@@ -546,8 +502,9 @@ struct graph
     }
 
 private:
-    static inline auto iterate(std::vector<strange::processor<Signal>> & processors,
+    static inline auto iterate(std::vector<strange::processor<Config, Signal>> & processors,
         std::vector<strange::connection> const & connections,
+        Config const & config,
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> & subprocs) -> void
     {
         uint64_t skip = 2;
@@ -560,14 +517,14 @@ private:
             }
             if (proc._something())
             {
-                auto subgraph = proc.template _dynamic<strange::graph<Signal>>();
+                auto subgraph = proc.template _dynamic<strange::graph<Config, Signal>>();
                 if (subgraph._something())
                 {
-                    subprocs.push_back(recurse(subgraph));
+                    subprocs.push_back(recurse(subgraph, config));
                 }
                 else
                 {
-                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), proc.closure()));
+                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), proc.closure(config)));
                 }
             }
             else
@@ -584,12 +541,12 @@ private:
         }
     }
 
-    static inline auto recurse(strange::graph<Signal> & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
+    static inline auto recurse(strange::graph<Config, Signal> & subgraph, Config const & config) -> std::unique_ptr<strange::implementation::processor<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), [](std::vector<Signal> outputs){ return outputs; })); // [0] output
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), [](std::vector<Signal> inputs){ return inputs; })); // [1] input
-        iterate(subgraph.processors(), subgraph.connections(), subprocs);
+        iterate(subgraph.processors(), subgraph.connections(), config, subprocs);
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
 
@@ -597,7 +554,7 @@ private:
     uint64_t _outs;
     std::vector<uint64_t> _input_types;
     std::vector<uint64_t> _output_types;
-    std::vector<strange::processor<Signal>> _processors;
+    std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
 };
 }

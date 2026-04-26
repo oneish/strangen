@@ -155,20 +155,16 @@ namespace strange
     {
     };
 
-    template<typename Signal>
+    template<typename Config, typename Signal>
     struct processor : stuff
     {
         auto ins() const -> uint64_t const &;
-        auto ins() -> uint64_t &;
         auto input_types() const -> std::vector<uint64_t> const &;
-        auto input_types() -> std::vector<uint64_t> &;
 
         auto outs() const -> uint64_t const &;
-        auto outs() -> uint64_t &;
         auto output_types() const -> std::vector<uint64_t> const &;
-        auto output_types() -> std::vector<uint64_t> &;
 
-        auto closure() -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+        auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
     };
 
     struct [[strange::implementation("strange::implementation::connection")]]
@@ -183,14 +179,14 @@ namespace strange
         uint64_t to_in {};
     };
 
-    template<typename Signal>
-    struct [[strange::thing("strange::implementation::graph<Signal>")]]
-    graph : processor<Signal>
+    template<typename Config, typename Signal>
+    struct [[strange::thing("strange::implementation::graph<Config, Signal>")]]
+    graph : processor<Config, Signal>
     {
-        auto add_processor(strange::processor<Signal> proc) -> uint64_t;
+        auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t;
         auto remove_processor(uint64_t id) -> bool;
-        auto processors() const -> std::vector<strange::processor<Signal>> const &;
-        auto processors() -> std::vector<strange::processor<Signal>> &;
+        auto processors() const -> std::vector<strange::processor<Config, Signal>> const &;
+        auto processors() -> std::vector<strange::processor<Config, Signal>> &;
 
         auto add_connection(strange::connection conn = strange::connection::_make()) -> uint64_t;
         auto remove_connection(uint64_t id) -> bool;

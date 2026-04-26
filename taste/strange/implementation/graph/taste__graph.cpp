@@ -41,32 +41,30 @@ TEST_CASE("connection: copy semantics")
 
 // ---- THRU_PROCESSOR TESTS ----
 
-TEST_CASE("thru_processor: default construction")
+TEST_CASE("thru_processor: empty construction")
 {
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{});
     CHECK(proc._something());
     CHECK(proc._valid());
     CHECK(proc.ins() == 0);
     CHECK(proc.outs() == 0);
 }
 
-TEST_CASE("thru_processor: ins and outs accessors")
+TEST_CASE("thru_processor: construction with types")
 {
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
-    proc.ins() = 3;
-    proc.outs() = 2;
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0, 0, 0});
     CHECK(proc.ins() == 3);
-    CHECK(proc.outs() == 2);
+    CHECK(proc.outs() == 3);
+    CHECK(proc.input_types().size() == 3);
+    CHECK(proc.output_types().size() == 3);
 }
 
 TEST_CASE("thru_processor: closure passthrough")
 {
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
-    proc.ins() = 2;
-    proc.outs() = 2;
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0, 0});
 
     auto closure = proc.closure();
     std::vector<std::string> input = {"hello", "world"};
@@ -78,10 +76,8 @@ TEST_CASE("thru_processor: closure passthrough")
 
 TEST_CASE("thru_processor: closure resizes output")
 {
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
-    proc.ins() = 3;
-    proc.outs() = 2;
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0, 0});
 
     auto closure = proc.closure();
     std::vector<std::string> input = {"a", "b", "c"};
@@ -95,8 +91,8 @@ TEST_CASE("thru_processor: closure resizes output")
 
 TEST_CASE("processor: _cat and _cats")
 {
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{});
     CHECK(proc._cat().find("processor") != std::string::npos);
     auto cats = proc._cats();
     CHECK(cats.count("strange::any") == 1);
@@ -122,9 +118,9 @@ TEST_CASE("processor: implementation constructor and connections")
 
 // ---- GRAPH TESTS ----
 
-TEST_CASE("graph: default construction")
+TEST_CASE("graph: empty construction")
 {
-    auto graph = strange::graph<std::string>::_make();
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{}, std::vector<uint64_t>{});
     CHECK(graph._something());
     CHECK(graph._valid());
     CHECK(graph.ins() == 0);
@@ -135,12 +131,10 @@ TEST_CASE("graph: default construction")
 
 TEST_CASE("graph: add and remove processors")
 {
-    auto graph = strange::graph<std::string>::_make();
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{}, std::vector<uint64_t>{});
 
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
-    proc.ins() = 1;
-    proc.outs() = 1;
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
 
     auto id = graph.add_processor(proc);
     CHECK(id == 2);
@@ -156,11 +150,7 @@ TEST_CASE("graph: add and remove processors")
 
 TEST_CASE("graph: add and remove connections")
 {
-    auto graph = strange::graph<std::string>::_make();
-    graph.ins() = 1;
-    graph.outs() = 1;
-    graph.input_types().resize(1);
-    graph.output_types().resize(1);
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
 
     auto conn = make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0});
     auto id = graph.add_connection(conn);
@@ -177,18 +167,10 @@ TEST_CASE("graph: add and remove connections")
 
 TEST_CASE("graph: simple passthrough execution")
 {
-    auto graph = strange::graph<std::string>::_make();
-    graph.ins() = 1;
-    graph.outs() = 1;
-    graph.input_types().resize(1);
-    graph.output_types().resize(1);
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
 
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
-    proc.ins() = 1;
-    proc.outs() = 1;
-    proc.input_types().resize(1);
-    proc.output_types().resize(1);
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
     auto proc_id = graph.add_processor(proc);
 
     // input(1) -> proc -> output(0)
@@ -203,18 +185,10 @@ TEST_CASE("graph: simple passthrough execution")
 
 TEST_CASE("graph: multiple inputs and outputs")
 {
-    auto graph = strange::graph<std::string>::_make();
-    graph.ins() = 2;
-    graph.outs() = 2;
-    graph.input_types().resize(2);
-    graph.output_types().resize(2);
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0, 0}, std::vector<uint64_t>{0, 0});
 
-    auto proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
-    proc.ins() = 2;
-    proc.outs() = 2;
-    proc.input_types().resize(2);
-    proc.output_types().resize(2);
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0, 0});
     auto proc_id = graph.add_processor(proc);
 
     // input port 0 -> proc in 0, input port 1 -> proc in 1
@@ -234,31 +208,19 @@ TEST_CASE("graph: multiple inputs and outputs")
 TEST_CASE("graph: nested subgraph")
 {
     // Build inner subgraph: 1 in -> thru -> 1 out
-    auto subgraph = strange::graph<std::string>::_make();
-    subgraph.ins() = 1;
-    subgraph.outs() = 1;
-    subgraph.input_types().resize(1);
-    subgraph.output_types().resize(1);
+    auto subgraph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
 
-    auto inner_proc = strange::processor<std::string>::_make<
-        strange::implementation::thru_processor<std::string>>();
-    inner_proc.ins() = 1;
-    inner_proc.outs() = 1;
-    inner_proc.input_types().resize(1);
-    inner_proc.output_types().resize(1);
+    auto inner_proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
     auto inner_id = subgraph.add_processor(inner_proc);
 
     subgraph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = inner_id, .to_in_ = 0}));
     subgraph.add_connection(make_connection({.from_id_ = inner_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
 
     // Build outer graph using subgraph as a processor
-    auto graph = strange::graph<std::string>::_make();
-    graph.ins() = 1;
-    graph.outs() = 1;
-    graph.input_types().resize(1);
-    graph.output_types().resize(1);
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
 
-    auto sub_proc = subgraph._static<strange::processor<std::string>>();
+    auto sub_proc = subgraph._static<strange::processor<std::string, std::string>>();
     auto sub_id = graph.add_processor(sub_proc);
 
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = sub_id, .to_in_ = 0}));
