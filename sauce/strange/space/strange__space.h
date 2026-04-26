@@ -3482,7 +3482,7 @@ protected:
 
         virtual auto output_types() const -> std::vector<uint64_t> const & = 0;
 
-        virtual auto closure(Config config) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
+        virtual auto closure(Config config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
     };
 
 public:
@@ -3565,7 +3565,7 @@ public:
 
     inline auto output_types() const -> std::vector<uint64_t> const &;
 
-    inline auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+    inline auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 };
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -3687,7 +3687,7 @@ private:
 
         inline auto output_types() const -> std::vector<uint64_t> const & final;
 
-        inline auto closure(Config config) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
+        inline auto closure(Config config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
         _Thing _thing;
     };
@@ -4283,15 +4283,11 @@ protected:
 
         virtual auto processors() const -> std::vector<strange::processor<Config, Signal>> const & = 0;
 
-        virtual auto processors() -> std::vector<strange::processor<Config, Signal>> & = 0;
-
         virtual auto add_connection(strange::connection conn) -> uint64_t = 0;
 
         virtual auto remove_connection(uint64_t id) -> bool = 0;
 
         virtual auto connections() const -> std::vector<strange::connection> const & = 0;
-
-        virtual auto connections() -> std::vector<strange::connection> & = 0;
     };
 
 public:
@@ -4374,7 +4370,7 @@ public:
 
     inline auto output_types() const -> std::vector<uint64_t> const &;
 
-    inline auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+    inline auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 
     inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t;
 
@@ -4382,15 +4378,11 @@ public:
 
     inline auto processors() const -> std::vector<strange::processor<Config, Signal>> const &;
 
-    inline auto processors() -> std::vector<strange::processor<Config, Signal>> &;
-
     inline auto add_connection(strange::connection conn = strange::connection::_make()) -> uint64_t;
 
     inline auto remove_connection(uint64_t id) -> bool;
 
     inline auto connections() const -> std::vector<strange::connection> const &;
-
-    inline auto connections() -> std::vector<strange::connection> &;
 };
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -4512,7 +4504,7 @@ private:
 
         inline auto output_types() const -> std::vector<uint64_t> const & final;
 
-        inline auto closure(Config config) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
+        inline auto closure(Config config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
         inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t final;
 
@@ -4520,15 +4512,11 @@ private:
 
         inline auto processors() const -> std::vector<strange::processor<Config, Signal>> const & final;
 
-        inline auto processors() -> std::vector<strange::processor<Config, Signal>> & final;
-
         inline auto add_connection(strange::connection conn) -> uint64_t final;
 
         inline auto remove_connection(uint64_t id) -> bool final;
 
         inline auto connections() const -> std::vector<strange::connection> const & final;
-
-        inline auto connections() -> std::vector<strange::connection> & final;
 
         _Thing _thing;
     };
@@ -13079,10 +13067,9 @@ inline auto processor<Config, Signal>::output_types() const -> std::vector<uint6
 }
 
 template<typename Config, typename Signal>
-inline auto processor<Config, Signal>::closure(Config config) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+inline auto processor<Config, Signal>::closure(Config config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived>(strange::_common::_shared)->closure(config);
+    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->closure(config);
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -13122,7 +13109,7 @@ inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::output_types()
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::closure(Config config) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::closure(Config config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return _thing.closure(config);
 }
@@ -13352,10 +13339,9 @@ inline auto graph<Config, Signal>::output_types() const -> std::vector<uint64_t>
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::closure(Config config) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+inline auto graph<Config, Signal>::closure(Config config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived>(strange::_common::_shared)->closure(config);
+    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->closure(config);
 }
 
 template<typename Config, typename Signal>
@@ -13379,13 +13365,6 @@ inline auto graph<Config, Signal>::processors() const -> std::vector<strange::pr
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::processors() -> std::vector<strange::processor<Config, Signal>> &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->processors();
-}
-
-template<typename Config, typename Signal>
 inline auto graph<Config, Signal>::add_connection(strange::connection conn) -> uint64_t
 {
     strange::_common::_mutate();
@@ -13403,13 +13382,6 @@ template<typename Config, typename Signal>
 inline auto graph<Config, Signal>::connections() const -> std::vector<strange::connection> const &
 {
     return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived const>(strange::_common::_shared)->connections();
-}
-
-template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::connections() -> std::vector<strange::connection> &
-{
-    strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->connections();
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -13449,7 +13421,7 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::output_types() con
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::closure(Config config) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::closure(Config config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return _thing.closure(config);
 }
@@ -13473,12 +13445,6 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::processors() const
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::processors() -> std::vector<strange::processor<Config, Signal>> &
-{
-    return _thing.processors();
-}
-
-template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::add_connection(strange::connection conn) -> uint64_t
 {
     return _thing.add_connection(conn);
@@ -13492,12 +13458,6 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::remove_connection(
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::connections() const -> std::vector<strange::connection> const &
-{
-    return _thing.connections();
-}
-
-template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::connections() -> std::vector<strange::connection> &
 {
     return _thing.connections();
 }

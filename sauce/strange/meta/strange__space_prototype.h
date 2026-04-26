@@ -164,7 +164,7 @@ namespace strange
         auto outs() const -> uint64_t const &;
         auto output_types() const -> std::vector<uint64_t> const &;
 
-        auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+        auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
     };
 
     struct [[strange::implementation("strange::implementation::connection")]]
@@ -186,12 +186,10 @@ namespace strange
         auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t;
         auto remove_processor(uint64_t id) -> bool;
         auto processors() const -> std::vector<strange::processor<Config, Signal>> const &;
-        auto processors() -> std::vector<strange::processor<Config, Signal>> &;
 
         auto add_connection(strange::connection conn = strange::connection::_make()) -> uint64_t;
         auto remove_connection(uint64_t id) -> bool;
         auto connections() const -> std::vector<strange::connection> const &;
-        auto connections() -> std::vector<strange::connection> &;
     };
 
     struct [[strange::implementation("strange::implementation::parameter")]]

@@ -322,7 +322,7 @@ struct thru_processor
         return _types;
     }
 
-    inline auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         return [*this](std::vector<Signal> inputs) {
             inputs.resize(_outs);
@@ -419,7 +419,7 @@ struct graph
         return _output_types;
     }
 
-    inline auto closure(Config config = Config{}) -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
@@ -451,11 +451,6 @@ struct graph
     }
 
     inline auto processors() const -> std::vector<strange::processor<Config, Signal>> const &
-    {
-        return _processors;
-    }
-
-    inline auto processors() -> std::vector<strange::processor<Config, Signal>> &
     {
         return _processors;
     }
@@ -496,19 +491,14 @@ struct graph
         return _connections;
     }
 
-    inline auto connections() -> std::vector<strange::connection> &
-    {
-        return _connections;
-    }
-
 private:
     static inline auto iterate(Config const & config,
-        std::vector<strange::processor<Config, Signal>> & processors,
+        std::vector<strange::processor<Config, Signal>> const & processors,
         std::vector<strange::connection> const & connections,
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> & subprocs) -> void
     {
         uint64_t skip = 2;
-        for (auto & proc : processors)
+        for (auto const & proc : processors)
         {
             if (skip)
             {
@@ -532,7 +522,7 @@ private:
                 subprocs.emplace_back();
             }
         }
-        for (auto & conn : connections)
+        for (auto const & conn : connections)
         {
             if (conn._something())
             {
@@ -541,7 +531,7 @@ private:
         }
     }
 
-    static inline auto recurse(Config const & config, strange::graph<Config, Signal> & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
+    static inline auto recurse(Config const & config, strange::graph<Config, Signal> const & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), [](std::vector<Signal> outputs){ return outputs; })); // [0] output
