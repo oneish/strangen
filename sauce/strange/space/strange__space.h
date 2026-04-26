@@ -4378,7 +4378,7 @@ public:
 
     inline auto processors() const -> std::vector<strange::processor<Config, Signal>> const &;
 
-    inline auto add_connection(strange::connection conn = strange::connection::_make()) -> uint64_t;
+    inline auto add_connection(strange::connection conn) -> uint64_t;
 
     inline auto remove_connection(uint64_t id) -> bool;
 

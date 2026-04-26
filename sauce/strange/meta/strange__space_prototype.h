@@ -187,7 +187,7 @@ namespace strange
         auto remove_processor(uint64_t id) -> bool;
         auto processors() const -> std::vector<strange::processor<Config, Signal>> const &;
 
-        auto add_connection(strange::connection conn = strange::connection::_make()) -> uint64_t;
+        auto add_connection(strange::connection conn) -> uint64_t;
         auto remove_connection(uint64_t id) -> bool;
         auto connections() const -> std::vector<strange::connection> const &;
     };
