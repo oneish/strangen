@@ -21,7 +21,7 @@ auto handle_initialize() -> strange::baggage
 {
     auto result = make();
     result.from_object();
-    result.insert_object("protocolVersion", result.make_string("2025-06-18"));
+    result.insert_object("protocolVersion", result.make_string("2025-11-25"));
 
     auto capabilities = make();
     capabilities.from_object();
@@ -188,13 +188,25 @@ int main()
             continue;
         }
 
-        auto req = make();
-        req.from_json(line);
-
-        auto resp = handle_request(req);
-        if (resp._something())
+        try
         {
-            std::cout << resp.to_json() << "\n" << std::flush;
+            auto req = make();
+            req.from_json(line);
+            req.unseal();
+
+            auto resp = handle_request(req);
+            if (resp._something())
+            {
+                std::cout << resp.to_json() << "\n" << std::flush;
+            }
+        }
+        catch (std::exception const & e)
+        {
+            std::cout << R"({"jsonrpc":"2.0","id":null,"error":{"code":-32700,"message":"Parse error"}})" << "\n" << std::flush;
+        }
+        catch (...)
+        {
+            std::cout << R"({"jsonrpc":"2.0","id":null,"error":{"code":-32700,"message":"Parse error"}})" << "\n" << std::flush;
         }
     }
 

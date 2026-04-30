@@ -421,6 +421,59 @@ TEST_CASE("baggage: complex nested round-trip")
     CHECK(b2.get_object("list").get_array(2).get_object("nested").to_bool() == true);
 }
 
+// ---- JSON PARSING TESTS ----
+
+TEST_CASE("baggage: from_json integer field accessible via contains_object and get_object")
+{
+    // Regression test: integer-valued fields in JSON were not findable via
+    // contains_object/get_object, causing MCP responses to silently drop "id":0.
+    auto b = strange::baggage::_make();
+    b.from_json(R"({"method":"initialize","jsonrpc":"2.0","id":0})");
+    b.unseal();
+
+    CHECK(b.contains_object("method"));
+    CHECK(b.get_object("method").to_string() == "initialize");
+
+    CHECK(b.contains_object("id"));
+    CHECK(b.get_object("id").is_int64());
+    CHECK(b.get_object("id").to_int64() == 0);
+}
+
+TEST_CASE("baggage: from_json non-zero integer field")
+{
+    auto b = strange::baggage::_make();
+    b.from_json(R"({"id":42,"value":-7})");
+    b.unseal();
+
+    CHECK(b.contains_object("id"));
+    CHECK(b.get_object("id").to_int64() == 42);
+
+    CHECK(b.contains_object("value"));
+    CHECK(b.get_object("value").to_int64() == -7);
+}
+
+TEST_CASE("baggage: from_json mixed field types all accessible")
+{
+    auto b = strange::baggage::_make();
+    b.from_json(R"({"s":"hello","i":1,"f":2.5,"b":true,"n":null})");
+    b.unseal();
+
+    CHECK(b.contains_object("s"));
+    CHECK(b.get_object("s").to_string() == "hello");
+
+    CHECK(b.contains_object("i"));
+    CHECK(b.get_object("i").to_int64() == 1);
+
+    CHECK(b.contains_object("f"));
+    CHECK(b.get_object("f").is_double());
+
+    CHECK(b.contains_object("b"));
+    CHECK(b.get_object("b").to_bool() == true);
+
+    CHECK(b.contains_object("n"));
+    CHECK(b.get_object("n").is_null());
+}
+
 // ---- ANY-TYPE SERIALIZATION TESTS ----
 
 TEST_CASE("baggage: from_any / to_any with parameter")
