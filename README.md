@@ -695,6 +695,25 @@ auto outputs = graph_closure(inputs);
 
 Type vectors specify the type identifier for each port. `add_connection` validates that connected ports have matching types. `thru_processor` uses a single type vector (input and output ports share the same types). Subgraphs can be nested inside larger graphs, and graphs support split, join, and pass-through connection patterns.
 
+## MCP Server
+
+The `strange_mcp` tool is an MCP (Model Context Protocol) server that exposes strangen's code generation as a tool for AI assistants. It uses `strange::baggage` for all JSON handling and communicates via JSON-RPC 2.0 over stdio.
+
+### Building and Registering
+
+```bash
+cmake --build bake --target strange_mcp
+claude mcp add --transport stdio strange -- ./bake/sauce/mcp/strange_mcp
+```
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `enstrange` | Transform a strangen prototype into a generated C++ header |
+
+The `enstrange` tool accepts a `prototype` string parameter containing the prototype definition and returns the generated C++ header as text.
+
 ## Project Structure
 
 ```
@@ -710,6 +729,8 @@ strangen/
       strange__enstrange.cpp                     # enstrange tool source (single-command generation)
     generation/
       strange__generation.cpp                    # strangen tool source
+    mcp/
+      strange__mcp.cpp                           # MCP server source
     strange/
       strange.h                                  # Entry point (includes space, deduction guides)
       common/

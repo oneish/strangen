@@ -105,6 +105,7 @@ Available snack names: `baggage`, `currants`, `demo`, `example`. Currants is ski
 |--------|-------------|
 | `strangen` | Code generator preprocessor tool |
 | `enstrange` | Single-command prototype-to-header generator |
+| `strange_mcp` | MCP server exposing strangen tools for AI assistants |
 | `baggage` | Serialization example |
 | `currants` | Concurrency example |
 | `demo` | Demo example (with code generation) |

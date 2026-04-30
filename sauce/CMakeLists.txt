@@ -7,6 +7,12 @@ add_executable(enstrange enstrange/strange__enstrange.cpp)
 set_target_properties(enstrange PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/sauce/enstrange)
 target_include_directories(enstrange PRIVATE ${CMAKE_SOURCE_DIR}/sauce)
 
+# --- strange MCP server ---
+add_executable(strange_mcp mcp/strange__mcp.cpp)
+set_target_properties(strange_mcp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/sauce/mcp)
+target_include_directories(strange_mcp PRIVATE ${CMAKE_SOURCE_DIR}/sauce)
+target_link_libraries(strange_mcp PRIVATE strange dart gsl rapidjson sajson)
+
 # --- strange interface library (header-only) ---
 add_library(strange INTERFACE)
 target_include_directories(strange INTERFACE
