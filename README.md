@@ -616,6 +616,15 @@ bag.sealed();   // check if sealed
 bag.unseal();   // make mutable again
 ```
 
+**Note:** `from_json()` also produces a finalized (sealed) bag. Call `unseal()` before accessing fields via `contains_object`/`get_object`:
+
+```cpp
+auto bag = strange::baggage::_make();
+bag.from_json(json);
+bag.unseal(); // required before field access
+auto val = bag.get_object("key").to_string();
+```
+
 ### Concrete Type Requirements
 
 To support serialization, concrete types must implement `pack` and `unpack`, and inherit from `strange::stuff` in the prototype:

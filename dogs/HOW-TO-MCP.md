@@ -23,6 +23,7 @@ auto make() -> strange::baggage
 // Parse JSON from stdin
 auto req = make();
 req.from_json(line);
+req.unseal(); // from_json produces a finalized buffer; unseal() before accessing fields
 
 // Read fields
 auto method = req.get_object("method").to_string();
@@ -63,6 +64,8 @@ Notifications (methods starting with `notifications/`) get no response. Requests
 1. **Never write debug output to stdout** -- it corrupts the protocol. Use `std::cerr` instead.
 2. Tool results must be `{"content": [{"type": "text", "text": "..."}]}`, not bare strings.
 3. Use `resp._something()` to check whether a response should be sent (empty baggage = no response).
+4. **Always call `unseal()` after `from_json()`** -- `dart::packet::from_json` produces a finalized (read-only) buffer by default. Calling `contains_object`/`get_object` on it returns false/null for all fields. Call `unseal()` first to convert it to a mutable heap.
+5. **Always echo the request `"id"` in responses** -- Claude Code matches responses to pending requests by id. A missing or null id causes a 30-second connection timeout.
 
 ## Available Tools
 
