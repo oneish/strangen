@@ -704,6 +704,17 @@ auto outputs = graph_closure(inputs);
 
 Type vectors specify the type identifier for each port. `add_connection` validates that connected ports have matching types. `thru_processor` uses a single type vector (input and output ports share the same types). Subgraphs can be nested inside larger graphs, and graphs support split, join, and pass-through connection patterns.
 
+### Latency
+
+Processors expose a `latency(config)` method that returns the processor's latency in samples. For graphs, `latency()` computes the overall graph latency by recursively walking the connection graph: each processor's output latency is the maximum output latency of its input sources plus its own latency. The graph's latency is the maximum output latency reaching its output node.
+
+```cpp
+auto graph = strange::graph<std::string, std::string>::_make(
+    std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
+// ... add processors and connections ...
+auto lat = graph.latency();  // computed on demand from the connection graph
+```
+
 ## MCP Server
 
 The `strange_mcp` tool is an MCP (Model Context Protocol) server that exposes strangen's code generation as a tool for AI assistants. It uses `strange::baggage` for all JSON handling and communicates via JSON-RPC 2.0 over stdio.
