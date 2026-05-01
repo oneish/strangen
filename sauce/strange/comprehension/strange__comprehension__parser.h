@@ -193,6 +193,11 @@ private:
             std::filesystem::path dir = std::filesystem::path(_toke.filename()).parent_path();
             std::filesystem::path resolved = dir / prototype;
             std::ifstream ifs{resolved, std::ios::binary};
+            if (!ifs.is_open())
+            {
+                _err = "parse_include() could not open file: " + resolved.string();
+                return;
+            }
             std::istreambuf_iterator<char> it{ifs};
             auto previous = _toke;
             _toke = toker{it, resolved.string()};

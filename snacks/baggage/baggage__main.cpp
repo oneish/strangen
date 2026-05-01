@@ -117,6 +117,11 @@ dart::packet pkt = dynimmut;
 
     char const * const prototype = "../../sauce/strange/meta/strange__space_prototype.h";
     std::ifstream ifs{prototype, std::ios::binary};
+    if (!ifs.is_open())
+    {
+        std::cerr << "failed to open file: " << prototype << "\n";
+        return 1;
+    }
     std::istreambuf_iterator<char> it{ifs};
     strange::comprehension::toker toker{it, prototype};
     strange::comprehension::parser parser{toker};

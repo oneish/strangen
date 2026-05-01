@@ -262,8 +262,12 @@ int main()
         std::cout << "param: " << param.name() << std::endl;
     }
 
-    // coredumps when file not found:
     std::ifstream ifs{"example__parser_input.h", std::ios::binary};
+    if (!ifs.is_open())
+    {
+        std::cerr << "failed to open file: example__parser_input.h\n";
+        return 1;
+    }
     std::istreambuf_iterator<char> it{ifs};
     strange::comprehension::toker toker(it);
     strange::comprehension::parser parser(toker);
