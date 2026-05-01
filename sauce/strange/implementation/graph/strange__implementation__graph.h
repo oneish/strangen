@@ -322,7 +322,7 @@ struct thru_processor
         return _types;
     }
 
-    inline auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         return [*this](std::vector<Signal> inputs) {
             inputs.resize(_outs);
@@ -330,7 +330,7 @@ struct thru_processor
         };
     }
 
-    inline auto latency() const -> uint64_t
+    inline auto latency(Config const & config = Config{}) const -> uint64_t
     {
         return 0;
     }
@@ -424,7 +424,7 @@ struct graph
         return _output_types;
     }
 
-    inline auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
@@ -433,21 +433,17 @@ struct graph
         auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
         proc->on_your_marks();
         proc->get_set();
-
-        // Compute graph latency by recursively walking from the output node
-        std::vector<uint64_t> output_latencies(_processors.size(), 0);
-        std::vector<bool> computed(_processors.size(), false);
-        computed[1] = true; // input node: output latency = 0
-        _latency = compute_output_latency(0, _processors, _connections, output_latencies, computed);
-
         return [proc](std::vector<Signal> inputs) {
             return (*proc)(inputs);
         };
     }
 
-    inline auto latency() const -> uint64_t
+    inline auto latency(Config const & config = Config{}) const -> uint64_t
     {
-        return _latency;
+        std::vector<uint64_t> output_latencies(_processors.size(), 0);
+        std::vector<bool> computed(_processors.size(), false);
+        computed[1] = true; // input node: output latency = 0
+        return compute_output_latency(0, config, _processors, _connections, output_latencies, computed);
     }
 
     inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t
@@ -557,8 +553,8 @@ private:
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
 
-    static inline auto compute_output_latency(
-        uint64_t id,
+    static inline auto compute_output_latency(uint64_t id,
+        Config const & config,
         std::vector<strange::processor<Config, Signal>> const & processors,
         std::vector<strange::connection> const & connections,
         std::vector<uint64_t> & output_latencies,
@@ -572,8 +568,8 @@ private:
             if (conn._something() && conn.to_id() == id)
             {
                 auto from = conn.from_id();
-                auto source_ol = compute_output_latency(from, processors, connections, output_latencies, computed);
-                auto source_lat = processors[from]._something() ? processors[from].latency() : uint64_t{0};
+                auto source_ol = compute_output_latency(from, config, processors, connections, output_latencies, computed);
+                auto source_lat = processors[from]._something() ? processors[from].latency(config) : uint64_t{0};
                 auto candidate = source_ol + source_lat;
                 if (candidate > max_input) max_input = candidate;
             }
@@ -588,7 +584,6 @@ private:
     std::vector<uint64_t> _output_types;
     std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
-    mutable uint64_t _latency = 0;
 };
 }
 }
