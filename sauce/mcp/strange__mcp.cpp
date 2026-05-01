@@ -84,6 +84,20 @@ auto handle_tool_call(std::string const & name, strange::baggage const & args) -
 
     if (name == "enstrange")
     {
+        if (!args.contains_object("prototype"))
+        {
+            auto content = make();
+            content.from_array();
+            auto item = make();
+            item.from_object();
+            item.insert_object("type", item.make_string("text"));
+            item.insert_object("text", item.make_string("missing required argument: prototype"));
+            content.push_back_array(item);
+            result.insert_object("content", content);
+            result.insert_object("isError", result.make_bool(true));
+            return result;
+        }
+
         auto prototype = args.get_object("prototype").to_string();
 
         std::istringstream iss{prototype};
@@ -93,6 +107,7 @@ auto handle_tool_call(std::string const & name, strange::baggage const & args) -
         auto space = parser.parse();
 
         std::string output;
+        bool is_error = false;
         if (space._valid())
         {
             std::ostringstream oss;
@@ -102,6 +117,7 @@ auto handle_tool_call(std::string const & name, strange::baggage const & args) -
         else
         {
             output = "error: " + space._error();
+            is_error = true;
         }
 
         auto content = make();
@@ -112,6 +128,10 @@ auto handle_tool_call(std::string const & name, strange::baggage const & args) -
         item.insert_object("text", item.make_string(output));
         content.push_back_array(item);
         result.insert_object("content", content);
+        if (is_error)
+        {
+            result.insert_object("isError", result.make_bool(true));
+        }
     }
     else
     {
@@ -159,12 +179,40 @@ auto handle_request(strange::baggage const & req) -> strange::baggage
     {
         resp.insert_object("result", handle_tools_list());
     }
+    else if (method == "ping")
+    {
+        auto empty = make();
+        empty.from_object();
+        resp.insert_object("result", empty);
+    }
     else if (method == "tools/call")
     {
-        auto params = req.get_object("params");
-        auto name = params.get_object("name").to_string();
-        auto arguments = params.get_object("arguments");
-        resp.insert_object("result", handle_tool_call(name, arguments._static<strange::baggage>()));
+        if (!req.contains_object("params"))
+        {
+            auto error = make();
+            error.from_object();
+            error.insert_object("code", error.make_int64(-32602));
+            error.insert_object("message", error.make_string("Invalid params"));
+            resp.insert_object("error", error);
+        }
+        else
+        {
+            auto params = req.get_object("params");
+            if (!params.contains_object("name") || !params.contains_object("arguments"))
+            {
+                auto error = make();
+                error.from_object();
+                error.insert_object("code", error.make_int64(-32602));
+                error.insert_object("message", error.make_string("Invalid params: missing name or arguments"));
+                resp.insert_object("error", error);
+            }
+            else
+            {
+                auto name = params.get_object("name").to_string();
+                auto arguments = params.get_object("arguments");
+                resp.insert_object("result", handle_tool_call(name, arguments._static<strange::baggage>()));
+            }
+        }
     }
     else
     {
