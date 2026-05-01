@@ -165,6 +165,8 @@ namespace strange
         auto output_types() const -> std::vector<uint64_t> const &;
 
         auto closure(Config config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+
+        auto latency() const -> uint64_t;
     };
 
     struct [[strange::implementation("strange::implementation::connection")]]

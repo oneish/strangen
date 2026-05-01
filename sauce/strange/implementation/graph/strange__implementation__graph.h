@@ -330,6 +330,11 @@ struct thru_processor
         };
     }
 
+    inline auto latency() const -> uint64_t
+    {
+        return 0;
+    }
+
 private:
     uint64_t _ins;
     uint64_t _outs;
@@ -428,9 +433,21 @@ struct graph
         auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
         proc->on_your_marks();
         proc->get_set();
+
+        // Compute graph latency by recursively walking from the output node
+        std::vector<uint64_t> output_latencies(_processors.size(), 0);
+        std::vector<bool> computed(_processors.size(), false);
+        computed[1] = true; // input node: output latency = 0
+        _latency = compute_output_latency(0, _processors, _connections, output_latencies, computed);
+
         return [proc](std::vector<Signal> inputs) {
             return (*proc)(inputs);
         };
+    }
+
+    inline auto latency() const -> uint64_t
+    {
+        return _latency;
     }
 
     inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t
@@ -540,12 +557,38 @@ private:
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
 
+    static inline auto compute_output_latency(
+        uint64_t id,
+        std::vector<strange::processor<Config, Signal>> const & processors,
+        std::vector<strange::connection> const & connections,
+        std::vector<uint64_t> & output_latencies,
+        std::vector<bool> & computed) -> uint64_t
+    {
+        if (computed[id]) return output_latencies[id];
+        computed[id] = true;
+        uint64_t max_input = 0;
+        for (auto const & conn : connections)
+        {
+            if (conn._something() && conn.to_id() == id)
+            {
+                auto from = conn.from_id();
+                auto source_ol = compute_output_latency(from, processors, connections, output_latencies, computed);
+                auto source_lat = processors[from]._something() ? processors[from].latency() : uint64_t{0};
+                auto candidate = source_ol + source_lat;
+                if (candidate > max_input) max_input = candidate;
+            }
+        }
+        output_latencies[id] = max_input;
+        return max_input;
+    }
+
     uint64_t _ins;
     uint64_t _outs;
     std::vector<uint64_t> _input_types;
     std::vector<uint64_t> _output_types;
     std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
+    mutable uint64_t _latency = 0;
 };
 }
 }
