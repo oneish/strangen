@@ -4289,7 +4289,7 @@ protected:
             return processor<Config, Signal>::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t = 0;
+        virtual auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t = 0;
 
         virtual auto remove_processor(uint64_t id) -> bool = 0;
 
@@ -4388,7 +4388,7 @@ public:
 
     inline auto latency(Config const & config = Config{}) const -> uint64_t;
 
-    inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t;
+    inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t;
 
     inline auto remove_processor(uint64_t id) -> bool;
 
@@ -4526,7 +4526,7 @@ private:
 
         inline auto latency(Config const & config) const -> uint64_t final;
 
-        inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t final;
+        inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t final;
 
         inline auto remove_processor(uint64_t id) -> bool final;
 
@@ -13403,10 +13403,10 @@ inline auto graph<Config, Signal>::latency(Config const & config) const -> uint6
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::add_processor(strange::processor<Config, Signal> proc) -> uint64_t
+inline auto graph<Config, Signal>::add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->add_processor(proc);
+    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->add_processor(self, proc);
 }
 
 template<typename Config, typename Signal>
@@ -13497,9 +13497,9 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::latency(Config con
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::add_processor(strange::processor<Config, Signal> proc) -> uint64_t
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
 {
-    return _thing.add_processor(proc);
+    return _thing.add_processor(self, proc);
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>

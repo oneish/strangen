@@ -181,11 +181,11 @@ TEST_CASE("graph: add and remove processors")
     auto proc = strange::processor<std::string, std::string>::_make<
         strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
 
-    auto id = graph.add_processor(proc);
+    auto id = graph.add_processor(graph, proc);
     CHECK(id == 2);
     CHECK(graph.processors().size() == 3);
 
-    auto id2 = graph.add_processor(proc);
+    auto id2 = graph.add_processor(graph, proc);
     CHECK(id2 == 3);
     CHECK(graph.processors().size() == 4);
 
@@ -216,7 +216,7 @@ TEST_CASE("graph: simple passthrough execution")
 
     auto proc = strange::processor<std::string, std::string>::_make<
         strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
-    auto proc_id = graph.add_processor(proc);
+    auto proc_id = graph.add_processor(graph, proc);
 
     // input(1) -> proc -> output(0)
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = proc_id, .to_in_ = 0}));
@@ -234,7 +234,7 @@ TEST_CASE("graph: multiple inputs and outputs")
 
     auto proc = strange::processor<std::string, std::string>::_make<
         strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0, 0});
-    auto proc_id = graph.add_processor(proc);
+    auto proc_id = graph.add_processor(graph, proc);
 
     // input port 0 -> proc in 0, input port 1 -> proc in 1
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = proc_id, .to_in_ = 0}));
@@ -257,7 +257,7 @@ TEST_CASE("graph: nested subgraph")
 
     auto inner_proc = strange::processor<std::string, std::string>::_make<
         strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
-    auto inner_id = subgraph.add_processor(inner_proc);
+    auto inner_id = subgraph.add_processor(subgraph, inner_proc);
 
     subgraph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = inner_id, .to_in_ = 0}));
     subgraph.add_connection(make_connection({.from_id_ = inner_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
@@ -266,7 +266,7 @@ TEST_CASE("graph: nested subgraph")
     auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
 
     auto sub_proc = subgraph._static<strange::processor<std::string, std::string>>();
-    auto sub_id = graph.add_processor(sub_proc);
+    auto sub_id = graph.add_processor(graph, sub_proc);
 
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = sub_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = sub_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
@@ -285,7 +285,7 @@ TEST_CASE("graph: latency with single processor")
     auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
     auto proc = strange::processor<std::string, std::string>::_make<
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{5});
-    auto id = graph.add_processor(proc);
+    auto id = graph.add_processor(graph, proc);
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
     CHECK(graph.latency() == 5);
@@ -299,8 +299,8 @@ TEST_CASE("graph: latency with chain of processors")
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{3});
     auto b = strange::processor<std::string, std::string>::_make<
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{7});
-    auto a_id = graph.add_processor(a);
-    auto b_id = graph.add_processor(b);
+    auto a_id = graph.add_processor(graph, a);
+    auto b_id = graph.add_processor(graph, b);
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = b_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = b_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
@@ -317,8 +317,8 @@ TEST_CASE("graph: latency with parallel paths takes max")
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{3});
     auto b = strange::processor<std::string, std::string>::_make<
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{7});
-    auto a_id = graph.add_processor(a);
-    auto b_id = graph.add_processor(b);
+    auto a_id = graph.add_processor(graph, a);
+    auto b_id = graph.add_processor(graph, b);
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = b_id, .to_in_ = 0}));
@@ -338,9 +338,9 @@ TEST_CASE("graph: latency with diamond")
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{5});
     auto c = strange::processor<std::string, std::string>::_make<
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0, 0}, uint64_t{1});
-    auto a_id = graph.add_processor(a);
-    auto b_id = graph.add_processor(b);
-    auto c_id = graph.add_processor(c);
+    auto a_id = graph.add_processor(graph, a);
+    auto b_id = graph.add_processor(graph, b);
+    auto c_id = graph.add_processor(graph, c);
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = b_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = c_id, .to_in_ = 0}));
@@ -356,17 +356,17 @@ TEST_CASE("graph: latency with nested subgraph")
     auto subgraph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
     auto inner = strange::processor<std::string, std::string>::_make<
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{4});
-    auto inner_id = subgraph.add_processor(inner);
+    auto inner_id = subgraph.add_processor(subgraph, inner);
     subgraph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = inner_id, .to_in_ = 0}));
     subgraph.add_connection(make_connection({.from_id_ = inner_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
     CHECK(subgraph.latency() == 4);
 
     auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
     auto sub_proc = subgraph._static<strange::processor<std::string, std::string>>();
-    auto sub_id = graph.add_processor(sub_proc);
+    auto sub_id = graph.add_processor(graph, sub_proc);
     auto tail = strange::processor<std::string, std::string>::_make<
         latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{2});
-    auto tail_id = graph.add_processor(tail);
+    auto tail_id = graph.add_processor(graph, tail);
     graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = sub_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = sub_id, .from_out_ = 0, .to_id_ = tail_id, .to_in_ = 0}));
     graph.add_connection(make_connection({.from_id_ = tail_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));

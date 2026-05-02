@@ -470,9 +470,10 @@ struct graph
         return compute_output_latency(0, config, _processors, _connections, output_latencies, computed);
     }
 
-    inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t
+    inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
     {
         auto id = _processors.size();
+        proc.owned(self, id);
         _processors.push_back(proc);
         return id;
     }

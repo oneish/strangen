@@ -214,14 +214,14 @@ int main()
     }
     {   // strange graph
         auto subgraph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0}); // "A" with "B"=1 in, "C"=1 out
-        auto proc = subgraph.add_processor(strange::processor<std::string, std::string>::_make<strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0})); // "D"
+        auto proc = subgraph.add_processor(subgraph, strange::processor<std::string, std::string>::_make<strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0})); // "D"
 
         subgraph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = proc, .to_in_ = 0})); // B0 -> D0
         subgraph.add_connection(make_connection({.from_id_ = proc, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0})); // D0 -> C0
 
         auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0, 0, 0}, std::vector<uint64_t>{0, 0, 0}); // "E" with "F"=3 ins, "G"=3 outs
-        auto sub = graph.add_processor(subgraph); // "A"
-        proc = graph.add_processor(strange::processor<std::string, std::string>::_make<strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0})); // "H"
+        auto sub = graph.add_processor(graph, subgraph); // "A"
+        proc = graph.add_processor(graph, strange::processor<std::string, std::string>::_make<strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0})); // "H"
 
         graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = sub, .to_in_ = 0})); // F0 -> A0
         graph.add_connection(make_connection({.from_id_ = sub, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0})); // A0 -> G0

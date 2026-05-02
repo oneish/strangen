@@ -186,7 +186,7 @@ namespace strange
     struct [[strange::thing("strange::implementation::graph<Config, Signal>")]]
     graph : processor<Config, Signal>
     {
-        auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t;
+        auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t;
         auto remove_processor(uint64_t id) -> bool;
         auto processors() const -> std::vector<strange::processor<Config, Signal>> const &;
 
