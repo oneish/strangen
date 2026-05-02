@@ -364,6 +364,10 @@ struct graph
     ,_output_types(std::move(output_types))
     ,_own_id(0)
     ,_processors(2)
+    ,_reconfigured(true)
+    ,_config()
+    ,_output_latencies()
+    ,_latency(0)
     {
     }
 
@@ -420,6 +424,7 @@ struct graph
                 _array[_index].as_any(_connections[_index]);
             }
         }
+        _reconfigured = true;
     }
 
     inline auto ins() const -> uint64_t const &
@@ -450,14 +455,21 @@ struct graph
 
     inline auto latency(Config const & config = Config{}) const -> uint64_t
     {
-        _output_latencies.assign(_processors.size(), 0);
-        std::vector<bool> computed(_processors.size(), false);
-        computed[1] = true; // input node: output latency = 0
-        return compute_output_latency(0, config, _processors, _connections, _output_latencies, computed);
+        if (_reconfigured || _config != config)
+        {
+            _reconfigured = false;
+            _config = config;
+            _output_latencies.assign(_processors.size(), 0);
+            std::vector<bool> computed(_processors.size(), false);
+            computed[1] = true; // input node: output latency = 0
+            _latency = compute_output_latency(0, config, _processors, _connections, _output_latencies, computed);
+        }
+        return _latency;
     }
 
     inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
+        latency(config);
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins)); // [1] input
@@ -472,6 +484,7 @@ struct graph
 
     inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
     {
+        _reconfigured = true;
         auto id = _processors.size();
         proc.owned(self, id);
         _processors.push_back(proc);
@@ -482,6 +495,7 @@ struct graph
     {
         if (id < _processors.size() && _processors[id]._something())
         {
+            _reconfigured = true;
             _processors[id] = strange::processor<Config, Signal>{};
             return true;
         }
@@ -514,6 +528,7 @@ struct graph
         {
             throw std::runtime_error("connection between different types");
         }
+        _reconfigured = true;
         auto id = _connections.size();
         _connections.push_back(conn);
         return id;
@@ -523,6 +538,7 @@ struct graph
     {
         if (id < _connections.size() && _connections[id]._something())
         {
+            _reconfigured = true;
             _connections[id] = strange::connection{};
             return true;
         }
@@ -616,7 +632,10 @@ private:
     uint64_t _own_id;
     std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
+    mutable bool _reconfigured;
+    mutable Config _config;
     mutable std::vector<uint64_t> _output_latencies;
+    mutable uint64_t _latency;
 };
 }
 }
