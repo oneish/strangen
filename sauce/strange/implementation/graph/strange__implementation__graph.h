@@ -286,6 +286,7 @@ struct thru_processor
     :_ins(types.size())
     ,_outs(types.size())
     ,_types(std::move(types))
+    ,_own_id(0)
     {
     }
 
@@ -293,6 +294,8 @@ struct thru_processor
     {
         dest.from_object();
         dest.insert_object("types", dest.make_array_uint64(_types));
+        dest.insert_object("owner", dest.make_any(_owner));
+        dest.insert_object("own_id", dest.make_uint64(_own_id));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -300,6 +303,8 @@ struct thru_processor
         src.get_object("types").as_array_uint64(_types);
         _ins = _types.size();
         _outs = _types.size();
+        src.get_object("owner").as_any(_owner);
+        src.get_object("own_id").as_uint64(_own_id);
     }
 
     inline auto ins() const -> uint64_t const &
@@ -322,6 +327,12 @@ struct thru_processor
         return _types;
     }
 
+    inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
+    {
+        _owner = owner._weak();
+        _own_id = id;
+    }
+
     inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         return [*this](std::vector<Signal> inputs) {
@@ -339,6 +350,8 @@ private:
     uint64_t _ins;
     uint64_t _outs;
     std::vector<uint64_t> _types;
+    strange::graph<Config, Signal> _owner;
+    uint64_t _own_id;
 };
 
 template<typename Config, typename Signal>
@@ -349,6 +362,7 @@ struct graph
     ,_outs(output_types.size())
     ,_input_types(std::move(input_types))
     ,_output_types(std::move(output_types))
+    ,_own_id(0)
     ,_processors(2)
     {
     }
@@ -358,6 +372,8 @@ struct graph
         dest.from_object();
         dest.insert_object("input_types", dest.make_array_uint64(_input_types));
         dest.insert_object("output_types", dest.make_array_uint64(_output_types));
+        dest.insert_object("owner", dest.make_any(_owner));
+        dest.insert_object("own_id", dest.make_uint64(_own_id));
         {
             auto _array = dest.make_array();
             for (auto const & _item : _processors)
@@ -382,6 +398,8 @@ struct graph
         src.get_object("output_types").as_array_uint64(_output_types);
         _ins = _input_types.size();
         _outs = _output_types.size();
+        src.get_object("owner").as_any(_owner);
+        src.get_object("own_id").as_uint64(_own_id);
         {
             auto _array = src.get_object("processors").to_array();
             auto _size = _array.size();
@@ -422,6 +440,12 @@ struct graph
     inline auto output_types() const -> std::vector<uint64_t> const &
     {
         return _output_types;
+    }
+
+    inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
+    {
+        _owner = owner._weak();
+        _own_id = id;
     }
 
     inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
@@ -582,6 +606,8 @@ private:
     uint64_t _outs;
     std::vector<uint64_t> _input_types;
     std::vector<uint64_t> _output_types;
+    strange::graph<Config, Signal> _owner;
+    uint64_t _own_id;
     std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
 };

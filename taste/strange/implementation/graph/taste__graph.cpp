@@ -10,6 +10,7 @@ struct latency_processor
     :_ins(types.size())
     ,_outs(types.size())
     ,_types(std::move(types))
+    ,_own_id(0)
     ,_lat(lat)
     {
     }
@@ -21,6 +22,12 @@ struct latency_processor
     inline auto input_types() const -> std::vector<uint64_t> const & { return _types; }
     inline auto outs() const -> uint64_t const & { return _outs; }
     inline auto output_types() const -> std::vector<uint64_t> const & { return _types; }
+
+    inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
+    {
+        _owner = owner._weak();
+        _own_id = id;
+    }
 
     inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
@@ -36,6 +43,8 @@ private:
     uint64_t _ins;
     uint64_t _outs;
     std::vector<uint64_t> _types;
+    strange::graph<Config, Signal> _owner;
+    uint64_t _own_id;
     uint64_t _lat;
 };
 
