@@ -333,17 +333,17 @@ struct thru_processor
         _own_id = id;
     }
 
+    inline auto latency(Config const & config = Config{}) const -> uint64_t
+    {
+        return 0;
+    }
+
     inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         return [*this](std::vector<Signal> inputs) {
             inputs.resize(_outs);
             return inputs;
         };
-    }
-
-    inline auto latency(Config const & config = Config{}) const -> uint64_t
-    {
-        return 0;
     }
 
 private:
@@ -448,6 +448,14 @@ struct graph
         _own_id = id;
     }
 
+    inline auto latency(Config const & config = Config{}) const -> uint64_t
+    {
+        _output_latencies.assign(_processors.size(), 0);
+        std::vector<bool> computed(_processors.size(), false);
+        computed[1] = true; // input node: output latency = 0
+        return compute_output_latency(0, config, _processors, _connections, _output_latencies, computed);
+    }
+
     inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
@@ -460,14 +468,6 @@ struct graph
         return [proc](std::vector<Signal> inputs) {
             return (*proc)(inputs);
         };
-    }
-
-    inline auto latency(Config const & config = Config{}) const -> uint64_t
-    {
-        std::vector<uint64_t> output_latencies(_processors.size(), 0);
-        std::vector<bool> computed(_processors.size(), false);
-        computed[1] = true; // input node: output latency = 0
-        return compute_output_latency(0, config, _processors, _connections, output_latencies, computed);
     }
 
     inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
@@ -491,6 +491,11 @@ struct graph
     inline auto processors() const -> std::vector<strange::processor<Config, Signal>> const &
     {
         return _processors;
+    }
+
+    inline auto output_latencies() const -> std::vector<uint64_t> const &
+    {
+        return _output_latencies;
     }
 
     inline auto add_connection(strange::connection conn) -> uint64_t
@@ -611,6 +616,7 @@ private:
     uint64_t _own_id;
     std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
+    mutable std::vector<uint64_t> _output_latencies;
 };
 }
 }

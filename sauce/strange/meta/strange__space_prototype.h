@@ -166,8 +166,8 @@ namespace strange
 
         auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
-        auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
         auto latency(Config const & config = Config{}) const -> uint64_t;
+        auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
     };
 
     struct [[strange::implementation("strange::implementation::connection")]]
@@ -189,6 +189,7 @@ namespace strange
         auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t;
         auto remove_processor(uint64_t id) -> bool;
         auto processors() const -> std::vector<strange::processor<Config, Signal>> const &;
+        auto output_latencies() const -> std::vector<uint64_t> const &;
 
         auto add_connection(strange::connection conn) -> uint64_t;
         auto remove_connection(uint64_t id) -> bool;
