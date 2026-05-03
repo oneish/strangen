@@ -4306,6 +4306,8 @@ protected:
         virtual auto connections_to(uint64_t id) const -> std::vector<strange::connection> const & = 0;
 
         virtual auto connections_from(uint64_t id) const -> std::vector<strange::connection> const & = 0;
+
+        virtual auto renumber(strange::graph<Config, Signal> const & self) -> void = 0;
     };
 
 public:
@@ -4411,6 +4413,8 @@ public:
     inline auto connections_to(uint64_t id) const -> std::vector<strange::connection> const &;
 
     inline auto connections_from(uint64_t id) const -> std::vector<strange::connection> const &;
+
+    inline auto renumber(strange::graph<Config, Signal> const & self) -> void;
 };
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -4555,6 +4559,8 @@ private:
         inline auto connections_to(uint64_t id) const -> std::vector<strange::connection> const & final;
 
         inline auto connections_from(uint64_t id) const -> std::vector<strange::connection> const & final;
+
+        inline auto renumber(strange::graph<Config, Signal> const & self) -> void final;
 
         _Thing _thing;
     };
@@ -13478,6 +13484,13 @@ inline auto graph<Config, Signal>::connections_from(uint64_t id) const -> std::v
     return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived const>(strange::_common::_shared)->connections_from(id);
 }
 
+template<typename Config, typename Signal>
+inline auto graph<Config, Signal>::renumber(strange::graph<Config, Signal> const & self) -> void
+{
+    strange::_common::_mutate();
+    std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->renumber(self);
+}
+
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::pack(strange::bag & dest) const -> void
 {
@@ -13584,6 +13597,12 @@ template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::connections_from(uint64_t id) const -> std::vector<strange::connection> const &
 {
     return _thing.connections_from(id);
+}
+
+template<typename _Thing, bool _Copy, typename Config, typename Signal>
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::renumber(strange::graph<Config, Signal> const & self) -> void
+{
+    _thing.renumber(self);
 }
 
 inline auto parameter::pack(strange::bag & dest) const -> void

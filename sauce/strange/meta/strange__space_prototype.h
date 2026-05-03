@@ -196,6 +196,8 @@ namespace strange
         auto connections() const -> std::vector<strange::connection> const &;
         auto connections_to(uint64_t id) const -> std::vector<strange::connection> const &;
         auto connections_from(uint64_t id) const -> std::vector<strange::connection> const &;
+
+        auto renumber(strange::graph<Config, Signal> const & self) -> void;
     };
 
     struct [[strange::implementation("strange::implementation::parameter")]]

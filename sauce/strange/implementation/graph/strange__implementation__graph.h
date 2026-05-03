@@ -426,7 +426,14 @@ struct graph
             {
                 strange::connection conn;
                 _array[_index].as_any(conn);
-                add_connection(conn);
+                if (conn._something())
+                {
+                    add_connection(conn);
+                }
+                else
+                {
+                    _connections.push_back(conn);
+                }
             }
         }
         _reconfigured = true;
@@ -580,6 +587,47 @@ struct graph
     {
         auto it = _connections_from.find(id);
         return it != _connections_from.end() ? it->second : _no_connections;
+    }
+
+    inline auto renumber(strange::graph<Config, Signal> const & self) -> void
+    {
+        std::unordered_map<uint64_t, uint64_t> id_map;
+        id_map[0] = 0;
+        id_map[1] = 1;
+        std::vector<strange::processor<Config, Signal>> new_processors(2);
+        for (uint64_t i = 2; i < _processors.size(); ++i)
+        {
+            if (_processors[i]._something())
+            {
+                auto new_id = new_processors.size();
+                id_map[i] = new_id;
+                _processors[i].owned(self, new_id);
+                new_processors.push_back(_processors[i]);
+            }
+        }
+        _processors = std::move(new_processors);
+
+        std::vector<strange::connection> live;
+        for (auto const & conn : _connections)
+        {
+            if (conn._something())
+            {
+                live.push_back(strange::connection::_make(strange::implementation::connection{
+                    .from_id_ = id_map[conn.from_id()],
+                    .from_out_ = conn.from_out(),
+                    .to_id_ = id_map[conn.to_id()],
+                    .to_in_ = conn.to_in()
+                }));
+            }
+        }
+
+        _connections.clear();
+        _connections_to.clear();
+        _connections_from.clear();
+        for (auto & conn : live)
+        {
+            add_connection(conn);
+        }
     }
 
 private:
