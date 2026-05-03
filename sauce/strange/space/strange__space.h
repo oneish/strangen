@@ -4302,6 +4302,10 @@ protected:
         virtual auto remove_connection(uint64_t id) -> bool = 0;
 
         virtual auto connections() const -> std::vector<strange::connection> const & = 0;
+
+        virtual auto connections_to(uint64_t id) const -> std::vector<strange::connection> const & = 0;
+
+        virtual auto connections_from(uint64_t id) const -> std::vector<strange::connection> const & = 0;
     };
 
 public:
@@ -4403,6 +4407,10 @@ public:
     inline auto remove_connection(uint64_t id) -> bool;
 
     inline auto connections() const -> std::vector<strange::connection> const &;
+
+    inline auto connections_to(uint64_t id) const -> std::vector<strange::connection> const &;
+
+    inline auto connections_from(uint64_t id) const -> std::vector<strange::connection> const &;
 };
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -4543,6 +4551,10 @@ private:
         inline auto remove_connection(uint64_t id) -> bool final;
 
         inline auto connections() const -> std::vector<strange::connection> const & final;
+
+        inline auto connections_to(uint64_t id) const -> std::vector<strange::connection> const & final;
+
+        inline auto connections_from(uint64_t id) const -> std::vector<strange::connection> const & final;
 
         _Thing _thing;
     };
@@ -13454,6 +13466,18 @@ inline auto graph<Config, Signal>::connections() const -> std::vector<strange::c
     return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived const>(strange::_common::_shared)->connections();
 }
 
+template<typename Config, typename Signal>
+inline auto graph<Config, Signal>::connections_to(uint64_t id) const -> std::vector<strange::connection> const &
+{
+    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived const>(strange::_common::_shared)->connections_to(id);
+}
+
+template<typename Config, typename Signal>
+inline auto graph<Config, Signal>::connections_from(uint64_t id) const -> std::vector<strange::connection> const &
+{
+    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived const>(strange::_common::_shared)->connections_from(id);
+}
+
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::pack(strange::bag & dest) const -> void
 {
@@ -13548,6 +13572,18 @@ template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::connections() const -> std::vector<strange::connection> const &
 {
     return _thing.connections();
+}
+
+template<typename _Thing, bool _Copy, typename Config, typename Signal>
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::connections_to(uint64_t id) const -> std::vector<strange::connection> const &
+{
+    return _thing.connections_to(id);
+}
+
+template<typename _Thing, bool _Copy, typename Config, typename Signal>
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::connections_from(uint64_t id) const -> std::vector<strange::connection> const &
+{
+    return _thing.connections_from(id);
 }
 
 inline auto parameter::pack(strange::bag & dest) const -> void

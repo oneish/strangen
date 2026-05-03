@@ -194,6 +194,8 @@ namespace strange
         auto add_connection(strange::connection conn) -> uint64_t;
         auto remove_connection(uint64_t id) -> bool;
         auto connections() const -> std::vector<strange::connection> const &;
+        auto connections_to(uint64_t id) const -> std::vector<strange::connection> const &;
+        auto connections_from(uint64_t id) const -> std::vector<strange::connection> const &;
     };
 
     struct [[strange::implementation("strange::implementation::parameter")]]

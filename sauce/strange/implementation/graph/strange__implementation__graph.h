@@ -19,6 +19,7 @@
 #include <future>
 #include <stdexcept>
 #include <algorithm>
+#include <unordered_map>
 
 namespace strange
 {
@@ -414,14 +415,18 @@ struct graph
                 _array[_index].as_any(_processors[_index]);
             }
         }
+        for (auto i = _connections.size(); i > 0; --i)
+        {
+            remove_connection(i - 1);
+        }
+        _connections.clear();
         {
             auto _array = src.get_object("connections").to_array();
-            auto _size = _array.size();
-            _connections.clear();
-            _connections.resize(_size);
-            for (std::size_t _index = 0; _index < _size; ++_index)
+            for (std::size_t _index = 0; _index < _array.size(); ++_index)
             {
-                _array[_index].as_any(_connections[_index]);
+                strange::connection conn;
+                _array[_index].as_any(conn);
+                add_connection(conn);
             }
         }
         _reconfigured = true;
@@ -462,7 +467,7 @@ struct graph
             _output_latencies.assign(_processors.size(), 0);
             std::vector<bool> computed(_processors.size(), false);
             computed[1] = true; // input node: output latency = 0
-            _latency = compute_output_latency(0, config, _processors, _connections, _output_latencies, computed);
+            _latency = compute_output_latency(0, config, computed);
         }
         return _latency;
     }
@@ -496,6 +501,14 @@ struct graph
         if (id < _processors.size() && _processors[id]._something())
         {
             _reconfigured = true;
+            for (uint64_t i = 0; i < _connections.size(); ++i)
+            {
+                if (_connections[i]._something()
+                    && (_connections[i].from_id() == id || _connections[i].to_id() == id))
+                {
+                    remove_connection(i);
+                }
+            }
             _processors[id] = strange::processor<Config, Signal>{};
             return true;
         }
@@ -531,6 +544,8 @@ struct graph
         _reconfigured = true;
         auto id = _connections.size();
         _connections.push_back(conn);
+        _connections_to[conn.to_id()].push_back(conn);
+        _connections_from[conn.from_id()].push_back(conn);
         return id;
     }
 
@@ -539,6 +554,11 @@ struct graph
         if (id < _connections.size() && _connections[id]._something())
         {
             _reconfigured = true;
+            auto const & conn = _connections[id];
+            auto & to_vec = _connections_to[conn.to_id()];
+            to_vec.erase(std::remove(to_vec.begin(), to_vec.end(), conn), to_vec.end());
+            auto & from_vec = _connections_from[conn.from_id()];
+            from_vec.erase(std::remove(from_vec.begin(), from_vec.end(), conn), from_vec.end());
             _connections[id] = strange::connection{};
             return true;
         }
@@ -548,6 +568,18 @@ struct graph
     inline auto connections() const -> std::vector<strange::connection> const &
     {
         return _connections;
+    }
+
+    inline auto connections_to(uint64_t id) const -> std::vector<strange::connection> const &
+    {
+        auto it = _connections_to.find(id);
+        return it != _connections_to.end() ? it->second : _no_connections;
+    }
+
+    inline auto connections_from(uint64_t id) const -> std::vector<strange::connection> const &
+    {
+        auto it = _connections_from.find(id);
+        return it != _connections_from.end() ? it->second : _no_connections;
     }
 
 private:
@@ -599,28 +631,21 @@ private:
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
 
-    static inline auto compute_output_latency(uint64_t id,
-        Config const & config,
-        std::vector<strange::processor<Config, Signal>> const & processors,
-        std::vector<strange::connection> const & connections,
-        std::vector<uint64_t> & output_latencies,
-        std::vector<bool> & computed) -> uint64_t
+    inline auto compute_output_latency(uint64_t id, Config const & config,
+        std::vector<bool> & computed) const -> uint64_t
     {
-        if (computed[id]) return output_latencies[id];
+        if (computed[id]) return _output_latencies[id];
         computed[id] = true;
         uint64_t max_input = 0;
-        for (auto const & conn : connections)
+        for (auto const & conn : connections_to(id))
         {
-            if (conn._something() && conn.to_id() == id)
-            {
-                auto from = conn.from_id();
-                auto source_ol = compute_output_latency(from, config, processors, connections, output_latencies, computed);
-                auto source_lat = processors[from]._something() ? processors[from].latency(config) : uint64_t{0};
-                auto candidate = source_ol + source_lat;
-                if (candidate > max_input) max_input = candidate;
-            }
+            auto from = conn.from_id();
+            auto source_ol = compute_output_latency(from, config, computed);
+            auto source_lat = _processors[from]._something() ? _processors[from].latency(config) : uint64_t{0};
+            auto candidate = source_ol + source_lat;
+            if (candidate > max_input) max_input = candidate;
         }
-        output_latencies[id] = max_input;
+        _output_latencies[id] = max_input;
         return max_input;
     }
 
@@ -632,6 +657,9 @@ private:
     uint64_t _own_id;
     std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
+    std::unordered_map<uint64_t, std::vector<strange::connection>> _connections_to;
+    std::unordered_map<uint64_t, std::vector<strange::connection>> _connections_from;
+    static inline std::vector<strange::connection> const _no_connections;
     mutable bool _reconfigured;
     mutable Config _config;
     mutable std::vector<uint64_t> _output_latencies;
