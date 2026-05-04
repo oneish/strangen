@@ -40,10 +40,12 @@ struct processor
         uint64_t outs,
         strange::delay<Signal> delay,
         std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
-        :_latency(ins, 0)
+        :_max_receiver_latency(0)
+        ,_receiver_latencies(ins)
         ,_receivers(ins)
         ,_senders(outs)
         ,_function(fun)
+        ,_delay(delay)
         ,_inputs(ins)
     {
     }
@@ -82,7 +84,8 @@ struct processor
         }
         other._senders[out].push_back(stlab::sender<Signal>{});
         _receivers[in].push_back(stlab::receiver<Signal>{});
-        _latency[in] = std::max(_latency[in], latency);
+        _receiver_latencies[in].push_back(latency);
+        _max_receiver_latency = std::max(_max_receiver_latency, latency);
         std::tie(other._senders[out].back(), _receivers[in].back()) = stlab::channel<Signal>(stlab::high_executor);
     }
 
@@ -100,7 +103,8 @@ struct processor
         }
         _senders[out].push_back(stlab::sender<Signal>{});
         other._receivers[in].push_back(stlab::receiver<Signal>{});
-        other._latency[in] = std::max(other._latency[in], latency);
+        other._receiver_latencies[in].push_back(latency);
+        other._max_receiver_latency = std::max(other._max_receiver_latency, latency);
         std::tie(_senders[out].back(), other._receivers[in].back()) = stlab::channel<Signal>(stlab::high_executor);
     }
 
@@ -117,6 +121,9 @@ struct processor
         {
             for (uint64_t j = 0; j < _receivers[i].size(); ++j)
             {
+                _delays.push_back(_delay);
+                _delays.back().latency() = _max_receiver_latency - _receiver_latencies[i][j];
+                _delayed_closures.emplace_back(_delays.back().delayed_closure_());
                 _connected_ins.emplace_back(i, j);
             }
         }
@@ -245,22 +252,23 @@ private:
             _receivers[_connected_ins[Index].first][_connected_ins[Index].second]...) |
             [this](std::tuple<SignalTypeFromSizeType<Index>...> connected_inputs) {
                 std::apply([this](auto && ...args) {
-                    auto it = _connected_ins.cbegin();
-                    ((assign_input(*it++, std::forward<decltype(args)>(args))), ...);
+                    auto dit = _delayed_closures.cbegin();
+                    auto cit = _connected_ins.cbegin();
+                    ((assign_input(*dit++, *cit++, std::forward<decltype(args)>(args))), ...);
                 }, connected_inputs);
                 send();
             };
     }
 
-    inline auto assign_input(std::pair<uint64_t, uint64_t> const & connected_in, Signal signal) -> void
+    inline auto assign_input(std::function<auto (Signal signal) -> Signal> const & delayed_closure, std::pair<uint64_t, uint64_t> const & connected_in, Signal signal) -> void
     {
         if (!connected_in.second)
         {
-            _inputs[connected_in.first] = signal;
+            _inputs[connected_in.first] = delayed_closure(signal);
         }
         else
         {
-            _inputs[connected_in.first] += signal;
+            _inputs[connected_in.first] += delayed_closure(signal);
         }
     }
 
@@ -273,10 +281,14 @@ private:
         }
     }
 
-    std::vector<uint64_t> _latency;
+    uint64_t _max_receiver_latency;
+    std::vector<std::vector<uint64_t>> _receiver_latencies;
     std::vector<std::vector<stlab::receiver<Signal>>> _receivers;
     std::vector<std::vector<stlab::sender<Signal>>> _senders;
     std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
+    strange::delay<Signal> _delay;
+    std::vector<strange::delay<Signal>> _delays;
+    std::vector<std::function<auto (Signal signal) -> Signal>> _delayed_closures;
     std::vector<std::pair<uint64_t, uint64_t>> _connected_ins;
     std::vector<std::pair<uint64_t, uint64_t>> _connected_outs;
     std::any _zip;
