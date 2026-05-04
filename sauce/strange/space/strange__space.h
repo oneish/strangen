@@ -63,6 +63,26 @@ struct graph;
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
 struct graph_;
 
+template<typename Signal>
+struct delay;
+
+}
+
+namespace strange
+{
+namespace implementation
+{
+template<typename Signal>
+struct delay;
+}
+}
+
+namespace strange
+{
+
+template<typename _Thing, bool _Copy, typename Signal>
+struct delay_;
+
 struct parameter;
 
 }
@@ -350,6 +370,33 @@ struct reflection<strange::graph_<_Thing, _Copy, Config, Signal>>
     static inline auto name() -> std::string
     {
         return "strange::graph_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Config, Signal>() + ">";
+    }
+};
+
+template<typename Signal>
+struct reflection<strange::delay<Signal>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::delay<" + concatename<false, Signal>() + ">";
+    }
+};
+
+template<typename _Thing, bool _Copy, typename Signal>
+struct reflection<strange::delay_<_Thing, _Copy, Signal>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::delay_<" + reflection<_Thing>::name() + ", " + (_Copy ? "true" : "false") + concatename<true, Signal>() + ">";
+    }
+};
+
+template<typename Signal>
+struct reflection<strange::implementation::delay<Signal>>
+{
+    static inline auto name() -> std::string
+    {
+        return "strange::implementation::delay<" + concatename<false, Signal>() + ">";
     }
 };
 
@@ -4650,6 +4697,365 @@ public:
         return name;
     }();
 };
+
+template<typename Signal>
+struct delay : any
+{
+    inline delay() = default;
+
+    inline delay(delay const & other)
+    :strange::_common{other}
+    ,any{}
+    {
+    }
+
+    inline delay(delay && other)
+    :strange::_common{std::move(other)}
+    ,any{}
+    {
+    }
+
+    inline auto operator=(delay const & other) -> delay &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(delay && other) -> delay &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline delay(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,any{}
+    {
+    }
+
+    explicit inline delay(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,any{}
+    {
+    }
+
+protected:
+    struct _derived : any::_derived
+    {
+        static inline auto _static_shared_to_base(std::shared_ptr<typename delay::_derived> derived) -> std::shared_ptr<strange::_common::_base>
+        {
+            return any::_derived::_static_shared_to_base(derived);
+        }
+
+        virtual auto latency() const -> uint64_t const & = 0;
+
+        virtual auto latency() -> uint64_t & = 0;
+
+        virtual auto delayed(Signal signal) -> Signal = 0;
+
+        virtual auto delayed_closure_() -> std::function<auto (Signal signal) -> Signal> = 0;
+    };
+
+public:
+    inline auto _valid() const -> bool
+    {
+        return std::dynamic_pointer_cast<typename delay::_derived const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone() const -> delay
+    {
+        try
+        {
+            return delay{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return delay{};
+        }
+    }
+
+    inline auto _reproduce() const -> delay
+    {
+        try
+        {
+            return delay{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return delay{};
+        }
+    }
+
+    inline auto _weak() const -> delay
+    {
+        return delay{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong() const -> delay
+    {
+        return delay{strange::_common::_shared->_strong()};
+    }
+
+    template<typename _Thing = strange::implementation::delay<Signal>, bool _Copy = std::is_copy_constructible_v<_Thing>, typename... _Args>
+    static inline auto _make(_Args && ..._args) -> delay
+    {
+        return delay{delay::_derived::_static_shared_to_base(std::make_shared<typename delay_<_Thing, _Copy, Signal>::_instance>(std::forward<_Args>(_args)...))};
+    }
+
+    static inline auto _manufacture(std::string const & name) -> delay
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return delay{};
+        }
+        return delay{it->second()};
+    }
+
+    using _Abstraction_ = delay;
+
+    static inline std::string const _cat_ = strange::reflection<_Abstraction_>::name();
+
+    static inline std::unordered_set<std::string> const _cats_ = []()
+    {
+        std::unordered_set<std::string> cats;
+        cats.insert(any::_cats_.cbegin(), any::_cats_.cend());
+        cats.insert(_cat_);
+        return cats;
+    }();
+
+    inline auto latency() const -> uint64_t const &;
+
+    inline auto latency() -> uint64_t &;
+
+    inline auto delayed(Signal signal) -> Signal;
+
+    inline auto delayed_closure_() -> std::function<auto (Signal signal) -> Signal>;
+};
+
+template<typename _Thing, bool _Copy, typename Signal>
+struct delay_ : delay<Signal>
+{
+    inline delay_() = default;
+
+    inline delay_(delay_ const & other)
+    :strange::_common{other}
+    ,delay<Signal>{}
+    {
+    }
+
+    inline delay_(delay_ && other)
+    :strange::_common{std::move(other)}
+    ,delay<Signal>{}
+    {
+    }
+
+    inline auto operator=(delay_ const & other) -> delay_ &
+    {
+        strange::_common::operator=(other);
+        return *this;
+    }
+
+    inline auto operator=(delay_ && other) -> delay_ &
+    {
+        strange::_common::operator=(std::move(other));
+        return *this;
+    }
+
+    explicit inline delay_(std::shared_ptr<strange::_common::_base> const & shared)
+    :strange::_common{shared}
+    ,delay<Signal>{}
+    {
+    }
+
+    explicit inline delay_(std::shared_ptr<strange::_common::_base> && shared)
+    :strange::_common{std::move(shared)}
+    ,delay<Signal>{}
+    {
+    }
+
+private:
+    friend struct delay<Signal>;
+
+    struct _instance final : delay<Signal>::_derived
+    {
+        template<typename... _Args>
+        inline _instance(_Args && ..._args)
+        :delay_::_derived{}
+        ,_thing{std::forward<_Args>(_args)...}
+        {
+        }
+
+        inline auto _address() const -> void const * final
+        {
+            return &_thing;
+        }
+
+        inline auto _sizeof() const -> size_t final
+        {
+            return sizeof(_thing);
+        }
+
+        inline auto _clone() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (_Copy)
+            {
+                return delay_::_derived::_static_shared_to_base(std::make_shared<delay_::_instance>(_thing));
+            }
+            else
+            {
+                throw strange::_common::_no_copy{};
+            }
+        }
+
+        inline auto _reproduce() const -> std::shared_ptr<strange::_common::_base> final
+        {
+            if constexpr (std::is_default_constructible_v<_Thing>)
+            {
+                return delay_::_derived::_static_shared_to_base(std::make_shared<delay_::_instance>());
+            }
+            else
+            {
+                throw strange::_common::_no_default{};
+            }
+        }
+
+        inline auto _cat() const -> std::string final
+        {
+            return delay<Signal>::_cat_;
+        }
+
+        inline auto _cats() const -> std::unordered_set<std::string> final
+        {
+            return delay<Signal>::_cats_;
+        }
+
+        inline auto _copy() const -> bool final
+        {
+            return delay_::_copy_;
+        }
+
+        inline auto _name() const -> std::string final
+        {
+            return delay_::_name_;
+        }
+
+        inline auto latency() const -> uint64_t const & final;
+
+        inline auto latency() -> uint64_t & final;
+
+        inline auto delayed(Signal signal) -> Signal final;
+
+        inline auto delayed_closure_() -> std::function<auto (Signal signal) -> Signal> final;
+
+        _Thing _thing;
+    };
+
+public:
+    template<typename... _Args>
+    static inline auto _make_(_Args && ..._args) -> delay_
+    {
+        return delay_{delay_::_derived::_static_shared_to_base(std::make_shared<delay_::_instance>(std::forward<_Args>(_args)...))};
+    }
+
+    static inline auto _manufacture_(std::string const & name) -> delay_
+    {
+        auto it = strange::_common::_factory_.find(name);
+        if (it == strange::_common::_factory_.end())
+        {
+            return delay_{};
+        }
+        return delay_{it->second()};
+    }
+
+    inline auto _valid_() const -> bool
+    {
+        return std::dynamic_pointer_cast<delay_::_instance const>(strange::_common::_shared).operator bool();
+    }
+
+    inline auto _clone_() const -> delay_
+    {
+        try
+        {
+            return delay_{strange::_common::_shared->_clone()};
+        }
+        catch(strange::_common::_no_copy const &)
+        {
+            return delay_{};
+        }
+    }
+
+    inline auto _reproduce_() const -> delay_
+    {
+        try
+        {
+            return delay_{strange::_common::_shared->_reproduce()};
+        }
+        catch(strange::_common::_no_default const &)
+        {
+            return delay_{};
+        }
+    }
+
+    inline auto _weak_() const -> delay_
+    {
+        return delay_{strange::_common::_weak_base()};
+    }
+
+    inline auto _strong_() const -> delay_
+    {
+        return delay_{strange::_common::_shared->_strong()};
+    }
+
+    inline auto _thing() const -> _Thing const &
+    {
+        return std::dynamic_pointer_cast<delay_::_instance const>(strange::_common::_shared)->_thing;
+    }
+
+    inline auto _thing() -> _Thing &
+    {
+        strange::_common::_mutate();
+        return std::dynamic_pointer_cast<delay_::_instance>(strange::_common::_shared)->_thing;
+    }
+
+    using _Kind_ = delay_;
+    using _Thing_ = _Thing;
+
+    static inline bool const _copy_ = _Copy;
+
+    static inline std::string const _name_ = []()
+    {
+        auto const name = strange::reflection<_Kind_>::name();
+        if constexpr (std::is_default_constructible_v<_Thing>)
+        {
+            strange::_common::_factory_.emplace(name, []()
+            {
+                return delay_::_derived::_static_shared_to_base(std::make_shared<delay_::_instance>());
+            });
+        }
+        return name;
+    }();
+};
+
+}
+
+namespace strange
+{
+namespace implementation
+{
+template<typename Signal>
+struct delay
+{
+    uint64_t latency_ {};
+    inline auto latency() const -> uint64_t const & { return latency_; };
+    inline auto latency() -> uint64_t & { return latency_; };
+    inline auto delayed(Signal signal) -> Signal;
+};
+}
+}
+
+namespace strange
+{
 
 struct parameter : stuff
 {
@@ -13605,6 +14011,60 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::renumber(strange::
     _thing.renumber(self);
 }
 
+template<typename Signal>
+inline auto delay<Signal>::latency() const -> uint64_t const &
+{
+    return std::dynamic_pointer_cast<typename delay<Signal>::_derived const>(strange::_common::_shared)->latency();
+}
+
+template<typename Signal>
+inline auto delay<Signal>::latency() -> uint64_t &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename delay<Signal>::_derived>(strange::_common::_shared)->latency();
+}
+
+template<typename Signal>
+inline auto delay<Signal>::delayed(Signal signal) -> Signal
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename delay<Signal>::_derived>(strange::_common::_shared)->delayed(signal);
+}
+
+template<typename Signal>
+inline auto delay<Signal>::delayed_closure_() -> std::function<auto (Signal signal) -> Signal>
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename delay<Signal>::_derived>(strange::_common::_shared)->delayed_closure_();
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
+inline auto delay_<_Thing, _Copy, Signal>::_instance::latency() const -> uint64_t const &
+{
+    return _thing.latency();
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
+inline auto delay_<_Thing, _Copy, Signal>::_instance::latency() -> uint64_t &
+{
+    return _thing.latency();
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
+inline auto delay_<_Thing, _Copy, Signal>::_instance::delayed(Signal signal) -> Signal
+{
+    return _thing.delayed(signal);
+}
+
+template<typename _Thing, bool _Copy, typename Signal>
+inline auto delay_<_Thing, _Copy, Signal>::_instance::delayed_closure_() -> std::function<auto (Signal signal) -> Signal>
+{
+    return [this](Signal signal) -> Signal
+    {
+        return _thing.delayed(signal);
+    };
+}
+
 inline auto parameter::pack(strange::bag & dest) const -> void
 {
     std::dynamic_pointer_cast<typename stuff::_derived const>(strange::_common::_shared)->pack(dest);
@@ -16792,6 +17252,16 @@ inline auto vector_<_Thing, _Copy, T>::_instance::operator>=(vector<T> const & o
     return _thing >= other.template _static<strange::vector_<_Thing, _Copy, T> const>()._thing();
 }
 
+}
+
+namespace strange
+{
+namespace implementation
+{
+template<typename Signal>
+inline auto delay<Signal>::delayed(Signal signal) -> Signal
+{ return signal; }
+}
 }
 
 template<>

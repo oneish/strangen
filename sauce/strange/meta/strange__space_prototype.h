@@ -200,6 +200,19 @@ namespace strange
         auto renumber(strange::graph<Config, Signal> const & self) -> void;
     };
 
+    template<typename Signal>
+    struct [[strange::implementation("strange::implementation::delay")]]
+    delay : any
+    {
+        uint64_t latency {};
+
+        [[strange::closure("delayed_closure_")]]
+        auto delayed(Signal signal) -> Signal
+        {
+            return signal;
+        };
+    };
+
     struct [[strange::implementation("strange::implementation::parameter")]]
     [[strange::hash]]
     [[strange::equality]]

@@ -475,6 +475,13 @@ struct graph
             std::vector<bool> computed(_processors.size(), false);
             computed[1] = true; // input node: output latency = 0
             _latency = compute_output_latency(0, config, computed);
+            for (uint64_t id = 2; id < _processors.size(); ++id)
+            {
+                if (!computed[id])
+                {
+                    _output_latencies[id] = _processors[id]._something() ? _processors[id].latency(config) : uint64_t{0};
+                }
+            }
         }
         return _latency;
     }
