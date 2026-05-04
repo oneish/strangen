@@ -362,11 +362,12 @@ private:
 template<typename Config, typename Signal>
 struct graph
 {
-    inline graph(std::vector<uint64_t> input_types, std::vector<uint64_t> output_types)
+    inline graph(std::vector<uint64_t> input_types, std::vector<uint64_t> output_types, strange::delay<Signal> delay = strange::delay<Signal>::_make())
     :_ins(input_types.size())
     ,_outs(output_types.size())
     ,_input_types(std::move(input_types))
     ,_output_types(std::move(output_types))
+    ,_delay(delay)
     ,_own_id(0)
     ,_processors(2)
     ,_reconfigured(true)
@@ -713,6 +714,7 @@ private:
     uint64_t _outs;
     std::vector<uint64_t> _input_types;
     std::vector<uint64_t> _output_types;
+    strange::delay<Signal> _delay;
     strange::graph<Config, Signal> _owner;
     uint64_t _own_id;
     std::vector<strange::processor<Config, Signal>> _processors;
