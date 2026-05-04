@@ -715,6 +715,12 @@ auto graph = strange::graph<std::string, std::string>::_make(
 auto lat = graph.latency();  // computed on demand from the connection graph
 ```
 
+### Delay and Latency Compensation
+
+The `strange::delay<Signal>` abstraction provides per-connection latency compensation. Each processor receives a `delay` object at construction. When a processor has multiple inputs with different latencies, signals on shorter-latency inputs are passed through delay closures to align with the longest input. The delay's `latency` data member controls the compensation amount, and its `delayed(signal)` closure performs the actual signal transformation (defaulting to passthrough).
+
+Graphs pass each connection's source output latency to the stlab processor pipeline, which uses it to compute per-receiver compensation delays automatically.
+
 ## MCP Server
 
 The `strange_mcp` tool is an MCP (Model Context Protocol) server that exposes strangen's code generation as a tool for AI assistants. It uses `strange::baggage` for all JSON handling and communicates via JSON-RPC 2.0 over stdio.
@@ -770,7 +776,8 @@ strangen/
         baggage/
           strange__implementation__baggage.h      # Serialization via libdart
         graph/
-          strange__implementation__graph.h        # Concurrency via stlab
+          strange__implementation__graph.h        # Graph and stlab processor
+          strange__implementation__thru_processor.h  # Simple passthrough processor
   snacks/                                        # Examples
     CMakeLists.txt                               # Example build targets
     baggage/                                     # Serialization examples
