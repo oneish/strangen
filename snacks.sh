@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")"
 
 ACTION="${1:-}"
-SNACKS=(baggage currants demo example)
+SNACKS=(bananas cabbage currants toast)
 COMPILERS=(gcc clang)
 FAILED=0
 

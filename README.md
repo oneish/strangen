@@ -45,7 +45,7 @@ Create a prototype header that defines your abstractions. This file uses C++ str
 ```cpp
 // my_space_prototype.h
 #include "../../sauce/strange/meta/strange__space_prototype.h"
-namespace demo
+namespace bananas
 {
     struct food : strange::any
     {
@@ -76,11 +76,11 @@ Run `enstrange` on the prototype to produce the generated header:
 
 ### 4. Build and run
 
-Compile the output with `-I path/to/sauce/strange` to resolve the strange library includes. CMake handles this automatically for the demo:
+Compile the output with `-I path/to/sauce/strange` to resolve the strange library includes. CMake handles this automatically for bananas:
 
 ```bash
-cmake --build bake --target demo
-./bake/demo
+cmake --build bake --target bananas
+./bake/bananas
 ```
 
 ### 5. Use the generated types
@@ -88,7 +88,7 @@ cmake --build bake --target demo
 Implement a concrete type and wrap it with the generated abstraction:
 
 ```cpp
-#include "demo__space.h"
+#include "bananas__space.h"
 
 struct banana
 {
@@ -130,7 +130,7 @@ namespace strange
 int main()
 {
     // Create a type-erased fruit from a concrete banana
-    auto fruit_1 = demo::fruit::_make<banana>();
+    auto fruit_1 = bananas::fruit::_make<banana>();
 
     // Call operations through the type-erased interface
     fruit_1.ripen();
@@ -146,7 +146,7 @@ int main()
     std::cout << bag.to_json();
 
     // Manufacture a new instance by registered type name
-    auto fruit_2 = demo::fruit::_manufacture("demo::fruit_<banana, true>");
+    auto fruit_2 = bananas::fruit::_manufacture("bananas::fruit_<banana, true>");
 }
 ```
 
@@ -226,7 +226,7 @@ bash snacks.sh
 bash snacks.sh purge
 
 # Run a single example (with output)
-bash snacks.sh demo
+bash snacks.sh bananas
 
 # Or use CMake directly
 cmake -B bake -DCMAKE_CXX_COMPILER=g++-12
@@ -444,24 +444,24 @@ struct bunch_of_fruit : food, bunch<fruit>, strange::stuff
 
 ```cpp
 // Create a type-erased wrapper around a concrete implementation
-auto fruit = demo::fruit::_make<banana>();
+auto fruit = bananas::fruit::_make<banana>();
 
 // Create with constructor arguments
-auto nb = demo::fruit::_make<no_banana>(std::string{});
+auto nb = bananas::fruit::_make<no_banana>(std::string{});
 
 // Create by registered type name at runtime
-auto fruit = demo::fruit::_manufacture("demo::fruit_<banana, true>");
+auto fruit = bananas::fruit::_manufacture("bananas::fruit_<banana, true>");
 
 // Default construction creates an empty (invalid) instance
-demo::fruit empty;
+bananas::fruit empty;
 ```
 
 ### Introspection
 
 ```cpp
 fruit._something();  // true if the instance holds a value
-fruit._name();       // runtime type name (e.g., "demo::fruit_<banana, true>")
-fruit._cat();        // category name (e.g., "demo::fruit")
+fruit._name();       // runtime type name (e.g., "bananas::fruit_<banana, true>")
+fruit._cat();        // category name (e.g., "bananas::fruit")
 fruit._cats();       // set of all categories (all implemented abstractions)
 fruit._copy();       // whether the underlying object is copyable
 fruit._address();    // address of the underlying concrete object
@@ -477,7 +477,7 @@ fruit._error("msg"); // set error state with message
 auto any = fruit._static<strange::any>();
 
 // Checked cast, returns empty if the types don't match (like dynamic_cast)
-auto food = fruit._dynamic<demo::food>();
+auto food = fruit._dynamic<bananas::food>();
 if (food._something())
 {
     food.eat();
@@ -487,7 +487,7 @@ if (food._something())
 ### Copy-on-Write
 
 ```cpp
-auto fruit_1 = demo::fruit::_make<banana>();
+auto fruit_1 = bananas::fruit::_make<banana>();
 auto fruit_2 = fruit_1; // shared pointer, same underlying object
 
 fruit_1._mutate(); // clones the underlying object if shared
@@ -507,7 +507,7 @@ fruit._is_weak();             // check if this is a weak reference
 For operations annotated with `[[strange::closure("name")]]`:
 
 ```cpp
-auto fruit = demo::fruit::_make<banana>();
+auto fruit = bananas::fruit::_make<banana>();
 auto closure = fruit.eat_closure_();  // returns std::function<void(int)>
 closure(0); // calls eat(0) on the fruit
 
@@ -581,7 +581,7 @@ auto bag = strange::baggage::_make();
 bag.from_any(fruit._static<strange::any>());
 
 // Deserialize back
-auto restored = bag.to_any()._static<demo::fruit>();
+auto restored = bag.to_any()._static<bananas::fruit>();
 
 // JSON conversion
 std::string json = bag.to_json();
@@ -748,7 +748,7 @@ strangen/
   gcc.sh                                         # Build and test with g++-12 [build|clean|rebuild]
   clang.sh                                       # Build and test with clang++-15 [build|clean|rebuild]
   bake.sh                                        # Build and test with both
-  snacks.sh                                      # Run examples [purge|baggage|currants|demo|example]
+  snacks.sh                                      # Run examples [purge|bananas|cabbage|currants|toast]
   sauce/                                         # Core library
     CMakeLists.txt                               # Tool + library + bootstrap targets
     enstrange/
@@ -780,10 +780,10 @@ strangen/
           strange__implementation__thru_processor.h  # Simple passthrough processor
   snacks/                                        # Examples
     CMakeLists.txt                               # Example build targets
-    baggage/                                     # Serialization examples
+    bananas/                                     # Full demo (fruit/banana)
+    cabbage/                                     # Serialization examples
     currants/                                    # Concurrency/dataflow examples
-    demo/                                        # Full demo (fruit/banana)
-    example/                                     # Type erasure example (outdated, uses strangen)
+    toast/                                       # Type erasure example (outdated, uses strangen)
   taste/                                         # Unit tests (doctest)
     CMakeLists.txt                               # Test targets + CTest
     strange/                                     # Core tests
@@ -855,12 +855,20 @@ The core library's own `strange__space.h` (~495KB) is generated by the same pipe
 
 ## Examples
 
-### Baggage (`snacks/baggage/`)
+### Bananas (`snacks/bananas/`)
+
+Full-featured demonstration including type erasure, closures, templates, multiple inheritance, serialization, and runtime manufacturing with a fruit/banana type hierarchy.
+
+```bash
+cmake --build bake --target bananas && ./bake/snacks/bananas
+```
+
+### Cabbage (`snacks/cabbage/`)
 
 Demonstrates JSON and binary serialization using the libdart library and the strange baggage system, including round-trip serialization of parsed space definitions.
 
 ```bash
-cmake --build bake --target baggage && ./bake/snacks/baggage
+cmake --build bake --target cabbage && ./bake/snacks/cabbage
 ```
 
 ### Currants (`snacks/currants/`)
@@ -871,17 +879,9 @@ Demonstrates dataflow programming with stlab channels (split, join, zip), custom
 cmake --build bake --target currants && ./bake/snacks/currants
 ```
 
-### Demo (`snacks/demo/`)
+### Toast (`snacks/toast/`)
 
-Full-featured demonstration including type erasure, closures, templates, multiple inheritance, serialization, and runtime manufacturing with a fruit/banana type hierarchy.
-
-```bash
-cmake --build bake --target demo && ./bake/snacks/demo
-```
-
-### Example (`snacks/example/`)
-
-**Note:** This example is outdated and may be misleading. It uses the older `strangen` preprocessor pipeline and programmatic space construction rather than the current `enstrange`-based prototype approach. Refer to the demo for up-to-date usage patterns.
+**Note:** This example is outdated and may be misleading. It uses the older `strangen` preprocessor pipeline and programmatic space construction rather than the current `enstrange`-based prototype approach. Refer to bananas for up-to-date usage patterns.
 
 ### Running Examples
 
@@ -890,10 +890,10 @@ After building, use `snacks.sh` to run examples from both compiler builds:
 ```bash
 bash snacks.sh            # run all examples quietly (pass/fail)
 bash snacks.sh purge      # run all examples with full output
-bash snacks.sh baggage    # run a single example with output
+bash snacks.sh cabbage    # run a single example with output
 ```
 
-Available snack names: `baggage`, `currants`, `demo`, `example`. Currants is skipped for clang builds (stlab dependency).
+Available snack names: `bananas`, `cabbage`, `currants`, `toast`. Currants is skipped for clang builds (stlab dependency).
 
 ## License
 
