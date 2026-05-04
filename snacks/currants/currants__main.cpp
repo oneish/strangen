@@ -151,10 +151,10 @@ int main()
             std::cout << "process " << concat << "\n";
             return std::vector<std::string>(3, concat);
         };
-        strange::implementation::processor<std::string> proc0{0, 1, fun};
-        strange::implementation::processor<std::string> proc1{1, 3, fun};
-        strange::implementation::processor<std::string> proc2{3, 1, fun};
-        strange::implementation::processor<std::string> proc3{1, 0, fun};
+        strange::implementation::processor<std::string> proc0{0, 1, strange::delay<std::string>::_make(), fun};
+        strange::implementation::processor<std::string> proc1{1, 3, strange::delay<std::string>::_make(), fun};
+        strange::implementation::processor<std::string> proc2{3, 1, strange::delay<std::string>::_make(), fun};
+        strange::implementation::processor<std::string> proc3{1, 0, strange::delay<std::string>::_make(), fun};
         proc0.to(proc1, 0, 0, 0);
         //proc1.to(proc2, 0, 0, 0);
         proc2.from(proc1, 1, 1, 0);
@@ -176,14 +176,14 @@ int main()
     }
     {   // graph
         std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subsubprocs;
-        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // output [0] "A"
-        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // input [1] "B"
+        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::vector<std::string> inputs){ return inputs; })); // output [0] "A"
+        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::vector<std::string> inputs){ return inputs; })); // input [1] "B"
         subsubprocs[1]->to(*subsubprocs[0], 0, 0, 0); // B0 -> A0
         std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subprocs;
-        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(3, 0)); // output [0] "C"
-        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(0, 3)); // input [1] "D"
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(3, 0, strange::delay<std::string>::_make())); // output [0] "C"
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(0, 3, strange::delay<std::string>::_make())); // input [1] "D"
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(std::move(subsubprocs))); // [2] "E"
-        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // [3] "F"
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::vector<std::string> inputs){ return inputs; })); // [3] "F"
         subprocs[1]->to(*subprocs[2], 0, 0, 0); // D0 -> E0
         subprocs[0]->from(*subprocs[2], 0, 0, 0); // C0 <- E0
         subprocs[1]->to(*subprocs[3], 1, 0, 0); // D1 -> F0

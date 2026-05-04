@@ -157,7 +157,7 @@ TEST_CASE("processor: implementation constructor and connections")
     };
 
     // Just verify construction doesn't throw
-    strange::implementation::processor<std::string> proc{2, 2, fun};
+    strange::implementation::processor<std::string> proc{2, 2, strange::delay<std::string>::_make(), fun};
     CHECK(true);
 }
 

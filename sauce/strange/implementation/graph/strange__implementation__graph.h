@@ -38,6 +38,7 @@ struct processor
     inline processor(
         uint64_t ins,
         uint64_t outs,
+        strange::delay<Signal> delay,
         std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
         :_latency(ins, 0)
         ,_receivers(ins)
@@ -495,9 +496,9 @@ struct graph
     {
         latency(config);
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins)); // [1] input
-        iterate(config, _processors, _connections, _output_latencies, subprocs);
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0, _delay)); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins, _delay)); // [1] input
+        iterate(config, _delay, _processors, _connections, _output_latencies, subprocs);
         auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
         proc->on_your_marks();
         proc->get_set();
@@ -644,6 +645,7 @@ struct graph
 
 private:
     static inline auto iterate(Config const & config,
+        strange::delay<Signal> const & delay,
         std::vector<strange::processor<Config, Signal>> const & processors,
         std::vector<strange::connection> const & connections,
         std::vector<uint64_t> const & output_latencies,
@@ -662,11 +664,11 @@ private:
                 auto subgraph = proc.template _dynamic<strange::graph<Config, Signal>>();
                 if (subgraph._something())
                 {
-                    subprocs.push_back(recurse(config, subgraph));
+                    subprocs.push_back(recurse(config, delay, subgraph));
                 }
                 else
                 {
-                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), proc.closure(config)));
+                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), delay, proc.closure(config)));
                 }
             }
             else
@@ -683,12 +685,14 @@ private:
         }
     }
 
-    static inline auto recurse(Config const & config, strange::graph<Config, Signal> const & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
+    static inline auto recurse(Config const & config,
+        strange::delay<Signal> const & delay,
+        strange::graph<Config, Signal> const & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), [](std::vector<Signal> outputs){ return outputs; })); // [0] output
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), [](std::vector<Signal> inputs){ return inputs; })); // [1] input
-        iterate(config, subgraph.processors(), subgraph.connections(), subgraph.output_latencies(), subprocs);
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), delay, [](std::vector<Signal> outputs){ return outputs; })); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), delay, [](std::vector<Signal> inputs){ return inputs; })); // [1] input
+        iterate(config, delay, subgraph.processors(), subgraph.connections(), subgraph.output_latencies(), subprocs);
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
 
