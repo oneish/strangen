@@ -39,7 +39,8 @@ struct processor
         uint64_t ins,
         uint64_t outs,
         std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
-        :_receivers(ins)
+        :_latency(ins, 0)
+        ,_receivers(ins)
         ,_senders(outs)
         ,_function(fun)
         ,_inputs(ins)
@@ -66,37 +67,39 @@ struct processor
         }
     }
 
-    inline auto from(processor & other, uint64_t in, uint64_t out) -> void
+    inline auto from(processor & other, uint64_t in, uint64_t out, uint64_t latency) -> void
     {
         if (_subprocs.size() > 1)
         {
-            _subprocs[1]->from(other, in, out);
+            _subprocs[1]->from(other, in, out, latency);
             return;
         }
         if (other._subprocs.size() > 0)
         {
-            from(*other._subprocs[0], in, out);
+            from(*other._subprocs[0], in, out, latency);
             return;
         }
         other._senders[out].push_back(stlab::sender<Signal>{});
         _receivers[in].push_back(stlab::receiver<Signal>{});
+        _latency[in] = std::max(_latency[in], latency);
         std::tie(other._senders[out].back(), _receivers[in].back()) = stlab::channel<Signal>(stlab::high_executor);
     }
 
-    inline auto to(processor & other, uint64_t out, uint64_t in) -> void
+    inline auto to(processor & other, uint64_t out, uint64_t in, uint64_t latency) -> void
     {
         if (_subprocs.size() > 0)
         {
-            _subprocs[0]->to(other, out, in);
+            _subprocs[0]->to(other, out, in, latency);
             return;
         }
         if (other._subprocs.size() > 1)
         {
-            to(*other._subprocs[1], out, in);
+            to(*other._subprocs[1], out, in, latency);
             return;
         }
         _senders[out].push_back(stlab::sender<Signal>{});
         other._receivers[in].push_back(stlab::receiver<Signal>{});
+        other._latency[in] = std::max(other._latency[in], latency);
         std::tie(_senders[out].back(), other._receivers[in].back()) = stlab::channel<Signal>(stlab::high_executor);
     }
 
@@ -269,6 +272,7 @@ private:
         }
     }
 
+    std::vector<uint64_t> _latency;
     std::vector<std::vector<stlab::receiver<Signal>>> _receivers;
     std::vector<std::vector<stlab::sender<Signal>>> _senders;
     std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
@@ -492,7 +496,7 @@ struct graph
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0)); // [0] output
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins)); // [1] input
-        iterate(config, _processors, _connections, subprocs);
+        iterate(config, _processors, _connections, _output_latencies, subprocs);
         auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
         proc->on_your_marks();
         proc->get_set();
@@ -641,6 +645,7 @@ private:
     static inline auto iterate(Config const & config,
         std::vector<strange::processor<Config, Signal>> const & processors,
         std::vector<strange::connection> const & connections,
+        std::vector<uint64_t> const & output_latencies,
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> & subprocs) -> void
     {
         uint64_t skip = 2;
@@ -672,7 +677,7 @@ private:
         {
             if (conn._something())
             {
-                subprocs[conn.from_id()]->to(*subprocs[conn.to_id()], conn.from_out(), conn.to_in());
+                subprocs[conn.from_id()]->to(*subprocs[conn.to_id()], conn.from_out(), conn.to_in(), output_latencies[conn.from_id()]);
             }
         }
     }
@@ -682,7 +687,7 @@ private:
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), [](std::vector<Signal> outputs){ return outputs; })); // [0] output
         subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), [](std::vector<Signal> inputs){ return inputs; })); // [1] input
-        iterate(config, subgraph.processors(), subgraph.connections(), subprocs);
+        iterate(config, subgraph.processors(), subgraph.connections(), subgraph.output_latencies(), subprocs);
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
 

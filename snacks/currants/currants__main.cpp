@@ -155,11 +155,11 @@ int main()
         strange::implementation::processor<std::string> proc1{1, 3, fun};
         strange::implementation::processor<std::string> proc2{3, 1, fun};
         strange::implementation::processor<std::string> proc3{1, 0, fun};
-        proc0.to(proc1, 0, 0);
-        //proc1.to(proc2, 0, 0);
-        proc2.from(proc1, 1, 1);
-        //proc2.from(proc1, 2, 2);
-        proc2.to(proc3, 0, 0);
+        proc0.to(proc1, 0, 0, 0);
+        //proc1.to(proc2, 0, 0, 0);
+        proc2.from(proc1, 1, 1, 0);
+        //proc2.from(proc1, 2, 2, 0);
+        proc2.to(proc3, 0, 0, 0);
         proc0.on_your_marks();
         proc1.on_your_marks();
         proc2.on_your_marks();
@@ -178,17 +178,17 @@ int main()
         std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subsubprocs;
         subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // output [0] "A"
         subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // input [1] "B"
-        subsubprocs[1]->to(*subsubprocs[0], 0, 0); // B0 -> A0
+        subsubprocs[1]->to(*subsubprocs[0], 0, 0, 0); // B0 -> A0
         std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(3, 0)); // output [0] "C"
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(0, 3)); // input [1] "D"
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(std::move(subsubprocs))); // [2] "E"
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, [](std::vector<std::string> inputs){ return inputs; })); // [3] "F"
-        subprocs[1]->to(*subprocs[2], 0, 0); // D0 -> E0
-        subprocs[0]->from(*subprocs[2], 0, 0); // C0 <- E0
-        subprocs[1]->to(*subprocs[3], 1, 0); // D1 -> F0
-        subprocs[0]->from(*subprocs[3], 1, 0); // C1 <- F0
-        subprocs[1]->to(*subprocs[0], 2, 2); // D2 -> C2
+        subprocs[1]->to(*subprocs[2], 0, 0, 0); // D0 -> E0
+        subprocs[0]->from(*subprocs[2], 0, 0, 0); // C0 <- E0
+        subprocs[1]->to(*subprocs[3], 1, 0, 0); // D1 -> F0
+        subprocs[0]->from(*subprocs[3], 1, 0, 0); // C1 <- F0
+        subprocs[1]->to(*subprocs[0], 2, 2, 0); // D2 -> C2
         strange::implementation::processor<std::string> proc{std::move(subprocs)};
         proc.on_your_marks();
         proc.get_set();
