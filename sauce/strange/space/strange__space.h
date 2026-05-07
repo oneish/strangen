@@ -6043,6 +6043,7 @@ struct operation
         dest.insert_object("modification", dest.make_string(modification()));
         dest.insert_object("customisation", dest.make_string(customisation()));
         dest.insert_object("implementation", dest.make_string(implementation()));
+        dest.insert_object("access", dest.make_int64(static_cast<int64_t>(access())));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -6065,6 +6066,11 @@ struct operation
         src.get_object("modification").as_string(modification());
         src.get_object("customisation").as_string(customisation());
         src.get_object("implementation").as_string(implementation());
+        {
+            int64_t temp_access = 0;
+            src.get_object("access").as_int64(temp_access);
+            access() = static_cast<strange::access>(temp_access);
+        }
     }
 };
 }

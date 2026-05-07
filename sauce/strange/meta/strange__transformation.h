@@ -828,7 +828,8 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
     {
         if (operation.result() == "strange::access &")
         {
-            //TODO
+            _out << R"#(        dest.insert_object(")#" << operation.name() << R"#(", dest.make_int64(static_cast<int64_t>()#" << operation.name() << R"#(())));
+)#";
             return;
         }
         for (auto const & entry : _pack_table())
@@ -863,7 +864,13 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
     {
         if (operation.result() == "strange::access &")
         {
-            //TODO
+
+            _out << R"#(        {
+            int64_t temp_access = 0;
+            src.get_object(")#" << operation.name() << R"#(").as_int64(temp_access);
+            )#" << operation.name() << R"#(() = static_cast<strange::access>(temp_access);
+        }
+)#";
             return;
         }
         for (auto const & entry : _pack_table())
