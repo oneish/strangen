@@ -282,7 +282,7 @@ namespace strange
         std::string filename {};
         int64_t line {};
         int64_t position {};
-        strange::comprehension::cls classification {};
+        strange::comprehension::cls classification {strange::comprehension::cls::whitespace};
         std::string text {};
     };
 

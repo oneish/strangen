@@ -7582,7 +7582,7 @@ struct token
     int64_t position_ {};
     inline auto position() const -> int64_t const & { return position_; };
     inline auto position() -> int64_t & { return position_; };
-    strange::comprehension::cls classification_ {};
+    strange::comprehension::cls classification_ {strange::comprehension::cls::whitespace};
     inline auto classification() const -> strange::comprehension::cls const & { return classification_; };
     inline auto classification() -> strange::comprehension::cls & { return classification_; };
     std::string text_ {};

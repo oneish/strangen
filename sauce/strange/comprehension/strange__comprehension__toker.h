@@ -14,18 +14,6 @@ namespace strange
 {
 namespace comprehension
 {
-enum class cls
-{
-    name,
-    number,
-    character,
-    string,
-    comment,
-    punctuation,
-    whitespace,
-    mistake,
-};
-
 struct toker
 {
     inline auto filename() const -> std::string const & { return _filename; }

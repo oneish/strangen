@@ -7,7 +7,17 @@ namespace strange
 {
 namespace comprehension
 {
-enum class cls;
+enum class cls
+{
+    name,
+    number,
+    character,
+    string,
+    comment,
+    punctuation,
+    whitespace,
+    mistake,
+};
 }
 enum class access
 {
