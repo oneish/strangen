@@ -5591,6 +5591,10 @@ protected:
 
         virtual auto implementation() -> std::string & = 0;
 
+        virtual auto access() const -> strange::access const & = 0;
+
+        virtual auto access() -> strange::access & = 0;
+
         virtual auto operator==(operation const & other) const -> bool = 0;
 
         virtual auto operator!=(operation const & other) const -> bool = 0;
@@ -5711,6 +5715,10 @@ public:
     inline auto implementation() const -> std::string const &;
 
     inline auto implementation() -> std::string &;
+
+    inline auto access() const -> strange::access const &;
+
+    inline auto access() -> strange::access &;
 
     inline auto operator==(operation const & other) const -> bool;
 
@@ -5872,6 +5880,10 @@ private:
 
         inline auto implementation() -> std::string & final;
 
+        inline auto access() const -> strange::access const & final;
+
+        inline auto access() -> strange::access & final;
+
         inline auto operator==(operation const & other) const -> bool final;
 
         inline auto operator!=(operation const & other) const -> bool final;
@@ -6008,6 +6020,9 @@ struct operation
     std::string implementation_ {};
     inline auto implementation() const -> std::string const & { return implementation_; };
     inline auto implementation() -> std::string & { return implementation_; };
+    strange::access access_ {strange::access::_public_};
+    inline auto access() const -> strange::access const & { return access_; };
+    inline auto access() -> strange::access & { return access_; };
 
     inline auto pack(strange::bag & dest) const -> void
     {
@@ -14362,6 +14377,17 @@ inline auto operation::implementation() -> std::string &
     return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->implementation();
 }
 
+inline auto operation::access() const -> strange::access const &
+{
+    return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->access();
+}
+
+inline auto operation::access() -> strange::access &
+{
+    strange::_common::_mutate();
+    return std::dynamic_pointer_cast<typename operation::_derived>(strange::_common::_shared)->access();
+}
+
 inline auto operation::operator==(operation const & other) const -> bool
 {
     return std::dynamic_pointer_cast<typename operation::_derived const>(strange::_common::_shared)->operator==(other);
@@ -14513,6 +14539,18 @@ inline auto operation_<_Thing, _Copy>::_instance::implementation() -> std::strin
 }
 
 template<typename _Thing, bool _Copy>
+inline auto operation_<_Thing, _Copy>::_instance::access() const -> strange::access const &
+{
+    return _thing.access();
+}
+
+template<typename _Thing, bool _Copy>
+inline auto operation_<_Thing, _Copy>::_instance::access() -> strange::access &
+{
+    return _thing.access();
+}
+
+template<typename _Thing, bool _Copy>
 inline auto operation_<_Thing, _Copy>::_instance::operator==(operation const & other) const -> bool
 {
     return name() == other.name()
@@ -14523,7 +14561,8 @@ inline auto operation_<_Thing, _Copy>::_instance::operator==(operation const & o
     && closure() == other.closure()
     && modification() == other.modification()
     && customisation() == other.customisation()
-    && implementation() == other.implementation();
+    && implementation() == other.implementation()
+    && access() == other.access();
 }
 
 template<typename _Thing, bool _Copy>
@@ -14543,7 +14582,8 @@ inline auto operation_<_Thing, _Copy>::_instance::operator<(operation const & ot
     && (closure() < other.closure() || (closure() == other.closure()
     && (modification() < other.modification() || (modification() == other.modification()
     && (customisation() < other.customisation() || (customisation() == other.customisation()
-    && implementation() < other.implementation())))))))))))))));
+    && (implementation() < other.implementation() || (implementation() == other.implementation()
+    && access() < other.access())))))))))))))))));
 }
 
 template<typename _Thing, bool _Copy>
@@ -17304,6 +17344,7 @@ struct std::hash<strange::operation>
         strange::hash_combine(_h, _obj.modification());
         strange::hash_combine(_h, _obj.customisation());
         strange::hash_combine(_h, _obj.implementation());
+        strange::hash_combine(_h, _obj.access());
         return _h;
     }
 };

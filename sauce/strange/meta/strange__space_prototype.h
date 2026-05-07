@@ -240,6 +240,7 @@ namespace strange
         std::string modification {};
         std::string customisation {};
         std::string implementation {};
+        strange::access access {strange::access::_public_};
     };
 
     struct [[strange::implementation("strange::implementation::abstraction")]]

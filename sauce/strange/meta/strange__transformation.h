@@ -826,6 +826,11 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
 
     auto _generate_pack_field(strange::operation const & operation) -> void
     {
+        if (operation.result() == "strange::access &")
+        {
+            //TODO
+            return;
+        }
         for (auto const & entry : _pack_table())
         {
             if (operation.result() == entry.result_type)
@@ -856,6 +861,11 @@ struct std::hash<)#" << _space.name() << R"#(::)#" << abstraction.name() << R"#(
 
     auto _generate_unpack_field(strange::operation const & operation) -> void
     {
+        if (operation.result() == "strange::access &")
+        {
+            //TODO
+            return;
+        }
         for (auto const & entry : _pack_table())
         {
             if (operation.result() == entry.result_type)
@@ -1052,11 +1062,12 @@ namespace )#" << _space.name() << R"#(
             unique.insert(operation);
             if (implementation)
             {
-                if (operation.implementation().empty())
+                if ((operation.access() == strange::access::_private_ && abstraction.name() != derived.name())
+                    || operation.implementation().empty())
                 {
                     continue;
                 }
-                else if (operation.data())
+                if (operation.data())
                 {
                     if (operation.constness() && !definition)
                     {
@@ -1115,6 +1126,10 @@ namespace )#" << _space.name() << R"#(
 )#";
                     }
                 }
+                continue;
+            }
+            else if (operation.access() != strange::access::_public_)
+            {
                 continue;
             }
             _generate_operation_method(operation, abstraction, derived, inner, pure, definition, name);

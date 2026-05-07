@@ -354,6 +354,7 @@ private:
             _err = "parse_abstraction() expected '{', but got punctuation";
             return;
         }
+        strange::access current_access = strange::access::_public_;
         for (;;)
         {
             parse_name_or_punctuation();
@@ -365,6 +366,24 @@ private:
             if (_tok.text() == "}")
             {
                 break;
+            }
+            if (_tok.text() == "public" || _tok.text() == "protected" || _tok.text() == "private")
+            {
+                if (_tok.text() == "public") current_access = strange::access::_public_;
+                else if (_tok.text() == "protected") current_access = strange::access::_protected_;
+                else current_access = strange::access::_private_;
+                parse_punctuation();
+                if (!_err.empty())
+                {
+                    _err = "parse_abstraction() " + _err;
+                    return;
+                }
+                if (_tok.text() != ":")
+                {
+                    _err = "parse_abstraction() expected ':', but got punctuation";
+                    return;
+                }
+                continue;
             }
             if (_tok.text() == "using")
             {
@@ -378,6 +397,7 @@ private:
                 continue;
             }
             auto oper = operation::_make();
+            oper.access() = current_access;
             parse_operation(oper);
             if (!_err.empty())
             {

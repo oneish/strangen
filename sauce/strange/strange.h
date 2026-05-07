@@ -9,6 +9,12 @@ namespace comprehension
 {
 enum class cls;
 }
+enum class access
+{
+    _public_ = 0,
+    _protected_ = 1,
+    _private_ = 2,
+};
 namespace implementation
 {
 struct baggage;
