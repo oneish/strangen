@@ -10,10 +10,11 @@ namespace implementation
 template<typename Config, typename Signal>
 struct thru_processor
 {
-    inline thru_processor(std::vector<uint64_t> types)
+    inline thru_processor(std::vector<uint64_t> types, bool feedback = false)
     :_ins(types.size())
     ,_outs(types.size())
     ,_types(std::move(types))
+    ,_feedback(feedback)
     ,_own_id(0)
     {
     }
@@ -22,6 +23,7 @@ struct thru_processor
     {
         dest.from_object();
         dest.insert_object("types", dest.make_array_uint64(_types));
+        dest.insert_object("feedback", dest.make_bool(_feedback));
         dest.insert_object("owner", dest.make_any(_owner));
         dest.insert_object("own_id", dest.make_uint64(_own_id));
     }
@@ -31,6 +33,7 @@ struct thru_processor
         src.get_object("types").as_array_uint64(_types);
         _ins = _types.size();
         _outs = _types.size();
+        src.get_object("feedback").as_bool(_feedback);
         src.get_object("owner").as_any(_owner);
         src.get_object("own_id").as_uint64(_own_id);
     }
@@ -53,6 +56,11 @@ struct thru_processor
     inline auto output_types() const -> std::vector<uint64_t> const &
     {
         return _types;
+    }
+
+    inline auto feedback() const -> bool
+    {
+        return _feedback;
     }
 
     inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
@@ -78,6 +86,7 @@ private:
     uint64_t _ins;
     uint64_t _outs;
     std::vector<uint64_t> _types;
+    bool _feedback;
     strange::graph<Config, Signal> _owner;
     uint64_t _own_id;
 };

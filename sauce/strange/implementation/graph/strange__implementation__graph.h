@@ -41,11 +41,13 @@ struct processor
         uint64_t ins,
         uint64_t outs,
         strange::delay<Signal> delay,
-        std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
+        std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr,
+        bool feedback = false)
         :_receiver_latencies(ins)
         ,_receivers(ins)
         ,_senders(outs)
         ,_function(fun)
+        ,_feedback(feedback)
         ,_delay(delay)
         ,_inputs(ins)
     {
@@ -212,7 +214,7 @@ struct processor
         }
     }
 
-    inline auto go() const -> void
+    inline auto go() -> void
     {
         for (auto & subproc : _subprocs)
         {
@@ -223,6 +225,11 @@ struct processor
         }
         if (_function && _connected_ins.empty())
         {
+            send();
+        }
+        else if (_feedback)
+        {
+            _feedback = false;
             send();
         }
     }
@@ -287,6 +294,7 @@ private:
     std::vector<std::vector<stlab::receiver<Signal>>> _receivers;
     std::vector<std::vector<stlab::sender<Signal>>> _senders;
     std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
+    bool _feedback = false;
     strange::delay<Signal> _delay;
     std::vector<strange::delay<Signal>> _delays;
     std::vector<std::function<auto (Signal signal) -> Signal>> _delayed_closures;
@@ -401,6 +409,11 @@ struct graph
     inline auto output_types() const -> std::vector<uint64_t> const &
     {
         return _output_types;
+    }
+
+    inline auto feedback() const -> bool
+    {
+        return false;
     }
 
     inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
@@ -606,7 +619,7 @@ private:
                 }
                 else
                 {
-                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), delay, proc.closure(config)));
+                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), delay, proc.closure(config), proc.feedback()));
                 }
             }
             else
@@ -643,6 +656,10 @@ private:
         for (auto const & conn : connections_to(id))
         {
             auto from = conn.from_id();
+            if (_processors[from]._something() && _processors[from].feedback())
+            {
+                continue;
+            }
             auto source_ol = compute_output_latency(from, config, computed);
             auto source_lat = _processors[from]._something() ? _processors[from].latency(config) : uint64_t{0};
             auto candidate = source_ol + source_lat;

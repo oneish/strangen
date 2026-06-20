@@ -23,6 +23,8 @@ struct latency_processor
     inline auto outs() const -> uint64_t const & { return _outs; }
     inline auto output_types() const -> std::vector<uint64_t> const & { return _types; }
 
+    inline auto feedback() const -> bool { return false; }
+
     inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
     {
         _owner = owner._weak();

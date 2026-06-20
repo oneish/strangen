@@ -164,6 +164,8 @@ namespace strange
         auto outs() const -> uint64_t const &;
         auto output_types() const -> std::vector<uint64_t> const &;
 
+        auto feedback() const -> bool;
+
         auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
         auto latency(Config const & config = Config{}) const -> uint64_t;

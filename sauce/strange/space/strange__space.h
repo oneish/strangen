@@ -3529,6 +3529,8 @@ protected:
 
         virtual auto output_types() const -> std::vector<uint64_t> const & = 0;
 
+        virtual auto feedback() const -> bool = 0;
+
         virtual auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void = 0;
 
         virtual auto latency(Config const & config) const -> uint64_t = 0;
@@ -3615,6 +3617,8 @@ public:
     inline auto outs() const -> uint64_t const &;
 
     inline auto output_types() const -> std::vector<uint64_t> const &;
+
+    inline auto feedback() const -> bool;
 
     inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
@@ -3741,6 +3745,8 @@ private:
         inline auto outs() const -> uint64_t const & final;
 
         inline auto output_types() const -> std::vector<uint64_t> const & final;
+
+        inline auto feedback() const -> bool final;
 
         inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void final;
 
@@ -4437,6 +4443,8 @@ public:
 
     inline auto output_types() const -> std::vector<uint64_t> const &;
 
+    inline auto feedback() const -> bool;
+
     inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
     inline auto latency(Config const & config = Config{}) const -> uint64_t;
@@ -4582,6 +4590,8 @@ private:
         inline auto outs() const -> uint64_t const & final;
 
         inline auto output_types() const -> std::vector<uint64_t> const & final;
+
+        inline auto feedback() const -> bool final;
 
         inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void final;
 
@@ -13538,6 +13548,12 @@ inline auto processor<Config, Signal>::output_types() const -> std::vector<uint6
 }
 
 template<typename Config, typename Signal>
+inline auto processor<Config, Signal>::feedback() const -> bool
+{
+    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->feedback();
+}
+
+template<typename Config, typename Signal>
 inline auto processor<Config, Signal>::owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
 {
     strange::_common::_mutate();
@@ -13590,6 +13606,12 @@ template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::output_types() const -> std::vector<uint64_t> const &
 {
     return _thing.output_types();
+}
+
+template<typename _Thing, bool _Copy, typename Config, typename Signal>
+inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::feedback() const -> bool
+{
+    return _thing.feedback();
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -13835,6 +13857,12 @@ inline auto graph<Config, Signal>::output_types() const -> std::vector<uint64_t>
 }
 
 template<typename Config, typename Signal>
+inline auto graph<Config, Signal>::feedback() const -> bool
+{
+    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->feedback();
+}
+
+template<typename Config, typename Signal>
 inline auto graph<Config, Signal>::owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
 {
     strange::_common::_mutate();
@@ -13952,6 +13980,12 @@ template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::output_types() const -> std::vector<uint64_t> const &
 {
     return _thing.output_types();
+}
+
+template<typename _Thing, bool _Copy, typename Config, typename Signal>
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::feedback() const -> bool
+{
+    return _thing.feedback();
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
