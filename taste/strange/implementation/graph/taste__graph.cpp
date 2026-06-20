@@ -375,6 +375,91 @@ TEST_CASE("graph: latency with nested subgraph")
     CHECK(graph.latency() == 6);
 }
 
+// ---- FEEDBACK TESTS ----
+
+TEST_CASE("thru_processor: feedback accessor")
+{
+    auto proc = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0}, false);
+    CHECK_FALSE(proc.feedback());
+
+    auto fb = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0}, true);
+    CHECK(fb.feedback());
+}
+
+TEST_CASE("graph: latency with feedback cycle does not infinite loop")
+{
+    // input -> A(lat=3) -> output
+    //          A -> feedback -> A (cycle)
+    // latency should be 3 (feedback edge skipped)
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
+    auto a = strange::processor<std::string, std::string>::_make<
+        latency_processor<std::string, std::string>>(std::vector<uint64_t>{0}, uint64_t{3});
+    auto fb = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0}, true);
+    auto a_id = graph.add_processor(graph, a);
+    auto fb_id = graph.add_processor(graph, fb);
+    graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = fb_id, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = fb_id, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
+    CHECK(graph.latency() == 3);
+}
+
+TEST_CASE("graph: feedback cycle executes without deadlock")
+{
+    // input -> A -> output
+    //          A -> feedback -> A (cycle on same input port via +=)
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
+    auto a = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
+    auto fb = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0}, true);
+    auto a_id = graph.add_processor(graph, a);
+    auto fb_id = graph.add_processor(graph, fb);
+    graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = fb_id, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = fb_id, .to_in_ = 0}));
+
+    auto closure = graph.closure();
+    auto output = closure({"hello"});
+    CHECK(output.size() == 1);
+    CHECK(output[0] == "hello");
+}
+
+TEST_CASE("graph: feedback relays previous cycle output")
+{
+    // Same topology as above. On second invocation, feedback provides
+    // the previous cycle's output via += on A's input port.
+    auto graph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0});
+    auto a = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0});
+    auto fb = strange::processor<std::string, std::string>::_make<
+        strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0}, true);
+    auto a_id = graph.add_processor(graph, a);
+    auto fb_id = graph.add_processor(graph, fb);
+    graph.add_connection(make_connection({.from_id_ = 1, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = fb_id, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
+    graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = fb_id, .to_in_ = 0}));
+
+    auto closure = graph.closure();
+
+    // First call: feedback sends "" (default), A gets "hello" + "" = "hello"
+    auto out1 = closure({"hello"});
+    CHECK(out1[0] == "hello");
+
+    // Second call: feedback relays "hello" from previous, A gets "world" + "hello" = "worldhello"
+    auto out2 = closure({"world"});
+    CHECK(out2[0] == "worldhello");
+
+    // Third call: feedback relays "worldhello", A gets "!" + "worldhello" = "!worldhello"
+    auto out3 = closure({"!"});
+    CHECK(out3[0] == "!worldhello");
+}
+
 // Note: stlab channel tests are omitted because the async executor
 // timing makes them unreliable in a unit test context. The stlab
 // channel integration is exercised indirectly through the graph tests.
