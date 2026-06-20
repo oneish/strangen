@@ -42,8 +42,7 @@ struct processor
         uint64_t outs,
         strange::delay<Signal> delay,
         std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr)
-        :_max_receiver_latency(0)
-        ,_receiver_latencies(ins)
+        :_receiver_latencies(ins)
         ,_receivers(ins)
         ,_senders(outs)
         ,_function(fun)
@@ -283,7 +282,7 @@ private:
         }
     }
 
-    uint64_t _max_receiver_latency;
+    uint64_t _max_receiver_latency = 0;
     std::vector<std::vector<uint64_t>> _receiver_latencies;
     std::vector<std::vector<stlab::receiver<Signal>>> _receivers;
     std::vector<std::vector<stlab::sender<Signal>>> _senders;
