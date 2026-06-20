@@ -721,6 +721,30 @@ The `strange::delay<Signal>` abstraction provides per-connection latency compens
 
 Graphs pass each connection's source output latency to the stlab processor pipeline, which uses it to compute per-receiver compensation delays automatically.
 
+### Feedback (Cyclic Graphs)
+
+By default, graphs are acyclic (DAG). Cycles would deadlock because stlab zip waits for all inputs before firing. Feedback processors break this constraint by producing initial output before receiving input, bootstrapping the cycle.
+
+```cpp
+// Create a feedback processor (thru_processor with feedback=true)
+auto fb = strange::processor<std::string, std::string>::_make<
+    strange::implementation::thru_processor<std::string, std::string>>(
+    std::vector<uint64_t>{0}, true);  // second arg: feedback=true
+auto fb_id = graph.add_processor(graph, fb);
+
+// Connect the cycle: A -> feedback -> A
+graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = fb_id, .to_in_ = 0}));
+graph.add_connection(make_connection({.from_id_ = fb_id, .from_out_ = 0, .to_id_ = a_id, .to_in_ = 0}));
+```
+
+The `feedback()` accessor on the processor prototype controls two behaviours:
+
+1. **Execution:** On the first `go()` call, a feedback processor calls `send()` with default-initialized inputs (bootstrapping the cycle), then reverts to normal zip-driven execution. On subsequent invocations, the stlab channel buffers the previous cycle's output, so no further kick-start is needed.
+
+2. **Latency calculation:** `compute_output_latency` skips connections from feedback processors, preventing infinite recursion and excluding the feedback path from the current cycle's latency.
+
+**Safety invariant:** Every cycle must include at least one feedback processor with at least one input connected from outside the cycle. This ensures the cycle only advances when external data arrives, preventing infinite execution.
+
 ## MCP Server
 
 The `strange_mcp` tool is an MCP (Model Context Protocol) server that exposes strangen's code generation as a tool for AI assistants. It uses `strange::baggage` for all JSON handling and communicates via JSON-RPC 2.0 over stdio.
