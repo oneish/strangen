@@ -2,6 +2,14 @@
 // channel-based signal processing pipelines, thru_processor<Signal> is a simple
 // passthrough, graph<Signal> composes processors with connections into executable
 // graphs, and connection holds routing metadata.
+//
+// Clock: go(clock) broadcasts a Signal clock to every processor. Each processor
+// applies latency compensation via _clock_delayed_closure before passing the
+// clock to its closure. _clock_delayed_closure is derived from _clock_delay with
+// latency set to _max_receiver_latency, aligning the clock with the
+// delay-compensated signals. For subgraphs, graph::latency(config, input_latency)
+// seeds _output_latencies[1] with the cumulative upstream latency, so internal
+// processors receive globally-correct connection latencies and clock compensation.
 
 #pragma once
 
@@ -40,26 +48,33 @@ struct processor
     inline processor(
         uint64_t ins,
         uint64_t outs,
-        strange::delay<Signal> delay,
-        std::function<auto (std::vector<Signal>) -> std::vector<Signal>> fun = nullptr,
+        strange::delay<Signal> clock_delay,
+        std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>> fun = nullptr,
         bool feedback = false)
-        :_receiver_latencies(ins)
+        :_max_receiver_latency(0)
+        ,_receiver_latencies(ins)
         ,_receivers(ins)
         ,_senders(outs)
         ,_function(fun)
         ,_feedback(feedback)
-        ,_delay(delay)
+        ,_clock_delay(clock_delay)
+        ,_clock_delayed_closure([](Signal signal) { return signal; })
+        ,_clock()
         ,_inputs(ins)
     {
     }
 
     inline processor(std::vector<std::unique_ptr<processor>> && subprocs)
-        :_subprocs(std::move(subprocs))
+        :_max_receiver_latency(0)
+        ,_feedback(false)
+        ,_clock_delayed_closure([](Signal signal) { return signal; })
+        ,_clock()
+        ,_subprocs(std::move(subprocs))
     {
         // output
         if (_subprocs.size() > 0 && !_subprocs[0]->_function)
         {
-            _subprocs[0]->_function = [this](std::vector<Signal> inputs) {
+            _subprocs[0]->_function = [this](Signal clock, std::vector<Signal> inputs) {
                 _outputs.set_value(inputs);
                 return std::vector<Signal>{};
             };
@@ -67,7 +82,7 @@ struct processor
         // input
         if (_subprocs.size() > 1 && !_subprocs[1]->_function)
         {
-            _subprocs[1]->_function = [this](std::vector<Signal> inputs) {
+            _subprocs[1]->_function = [this](Signal clock, std::vector<Signal> inputs) {
                 return _inputs;
             };
         }
@@ -120,11 +135,16 @@ struct processor
                 subproc->on_your_marks();
             }
         }
+        if (_clock_delay._something())
+        {
+            _clock_delay.latency() = _max_receiver_latency;
+            _clock_delayed_closure = _clock_delay.delayed_closure_();
+        }
         for (uint64_t i = 0; i < _receivers.size(); ++i)
         {
             for (uint64_t j = 0; j < _receivers[i].size(); ++j)
             {
-                _delays.push_back(_delay);
+                _delays.push_back(_clock_delay);
                 _delays.back().latency() = _max_receiver_latency - _receiver_latencies[i][j];
                 _delayed_closures.emplace_back(_delays.back().delayed_closure_());
                 _connected_ins.emplace_back(i, j);
@@ -214,13 +234,14 @@ struct processor
         }
     }
 
-    inline auto go() -> void
+    inline auto go(Signal const & clock) -> void
     {
+        _clock = clock;
         for (auto & subproc : _subprocs)
         {
             if (subproc)
             {
-                subproc->go();
+                subproc->go(clock);
             }
         }
         if (_function && _connected_ins.empty())
@@ -234,12 +255,12 @@ struct processor
         }
     }
 
-    inline auto operator()(std::vector<Signal> inputs) -> std::vector<Signal>
+    inline auto operator()(Signal clock, std::vector<Signal> inputs) -> std::vector<Signal>
     {
         _inputs = inputs;
         _outputs = std::promise<std::vector<Signal>>{};
         auto future = _outputs.get_future();
-        go();
+        go(clock);
         return future.get();
     }
 
@@ -282,25 +303,27 @@ private:
 
     inline auto send() const -> void
     {
-        auto outputs = _function(_inputs);
+        auto outputs = _function(_clock_delayed_closure(_clock), _inputs);
         for (auto const & connected_out : _connected_outs)
         {
             _senders[connected_out.first][connected_out.second](outputs[connected_out.first]);
         }
     }
 
-    uint64_t _max_receiver_latency = 0;
+    uint64_t _max_receiver_latency;
     std::vector<std::vector<uint64_t>> _receiver_latencies;
     std::vector<std::vector<stlab::receiver<Signal>>> _receivers;
     std::vector<std::vector<stlab::sender<Signal>>> _senders;
-    std::function<auto (std::vector<Signal>) -> std::vector<Signal>> _function;
-    bool _feedback = false;
-    strange::delay<Signal> _delay;
+    std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>> _function;
+    bool _feedback;
+    strange::delay<Signal> _clock_delay;
+    std::function<auto (Signal signal) -> Signal> _clock_delayed_closure;
     std::vector<strange::delay<Signal>> _delays;
     std::vector<std::function<auto (Signal signal) -> Signal>> _delayed_closures;
     std::vector<std::pair<uint64_t, uint64_t>> _connected_ins;
     std::vector<std::pair<uint64_t, uint64_t>> _connected_outs;
     std::any _zip;
+    Signal _clock;
     std::vector<Signal> _inputs;
     std::promise<std::vector<Signal>> _outputs;
     std::vector<std::unique_ptr<processor>> _subprocs;
@@ -309,16 +332,17 @@ private:
 template<typename Config, typename Signal>
 struct graph
 {
-    inline graph(std::vector<uint64_t> input_types, std::vector<uint64_t> output_types, strange::delay<Signal> delay = strange::delay<Signal>::_make())
+    inline graph(std::vector<uint64_t> input_types, std::vector<uint64_t> output_types, strange::delay<Signal> clock_delay = strange::delay<Signal>::_make())
     :_ins(input_types.size())
     ,_outs(output_types.size())
     ,_input_types(std::move(input_types))
     ,_output_types(std::move(output_types))
-    ,_delay(delay)
+    ,_clock_delay(clock_delay)
     ,_own_id(0)
     ,_processors(2)
     ,_reconfigured(true)
     ,_config()
+    ,_input_latency(0)
     ,_output_latencies()
     ,_latency(0)
     {
@@ -422,39 +446,38 @@ struct graph
         _own_id = id;
     }
 
-    inline auto latency(Config const & config = Config{}) const -> uint64_t
+    inline auto latency(Config const & config = Config{}, uint64_t input_latency = 0) const -> uint64_t
     {
-        if (_reconfigured || _config != config)
+        if (_reconfigured || _config != config || _input_latency != input_latency)
         {
             _reconfigured = false;
             _config = config;
+            _input_latency = input_latency;
             _output_latencies.assign(_processors.size(), 0);
             std::vector<bool> computed(_processors.size(), false);
-            computed[1] = true; // input node: output latency = 0
-            _latency = compute_output_latency(0, config, computed);
+            computed[1] = true;
+            _output_latencies[1] = input_latency; // input
+            _latency = compute_output_latency(0, config, computed) - input_latency; // output
             for (uint64_t id = 2; id < _processors.size(); ++id)
             {
-                if (!computed[id])
-                {
-                    _output_latencies[id] = _processors[id]._something() ? _processors[id].latency(config) : uint64_t{0};
-                }
+                compute_output_latency(id, config, computed);
             }
         }
         return _latency;
     }
 
-    inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config const & config = Config{}) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>
     {
         latency(config);
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0, _delay)); // [0] output
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins, _delay)); // [1] input
-        iterate(config, _delay, _processors, _connections, _output_latencies, subprocs);
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(_outs, 0, _clock_delay)); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(0, _ins, _clock_delay)); // [1] input
+        iterate(config, _clock_delay, _processors, _connections, _output_latencies, subprocs);
         auto proc = std::make_shared<strange::implementation::processor<Signal>>(std::move(subprocs));
         proc->on_your_marks();
         proc->get_set();
-        return [proc](std::vector<Signal> inputs) {
-            return (*proc)(inputs);
+        return [proc](Signal clock, std::vector<Signal> inputs) {
+            return (*proc)(clock, inputs);
         };
     }
 
@@ -596,7 +619,7 @@ struct graph
 
 private:
     static inline auto iterate(Config const & config,
-        strange::delay<Signal> const & delay,
+        strange::delay<Signal> const & clock_delay,
         std::vector<strange::processor<Config, Signal>> const & processors,
         std::vector<strange::connection> const & connections,
         std::vector<uint64_t> const & output_latencies,
@@ -615,11 +638,11 @@ private:
                 auto subgraph = proc.template _dynamic<strange::graph<Config, Signal>>();
                 if (subgraph._something())
                 {
-                    subprocs.push_back(recurse(config, delay, subgraph));
+                    subprocs.push_back(recurse(config, clock_delay, subgraph));
                 }
                 else
                 {
-                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), delay, proc.closure(config), proc.feedback()));
+                    subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(proc.ins(), proc.outs(), clock_delay, proc.closure(config), proc.feedback()));
                 }
             }
             else
@@ -637,22 +660,25 @@ private:
     }
 
     static inline auto recurse(Config const & config,
-        strange::delay<Signal> const & delay,
+        strange::delay<Signal> const & clock_delay,
         strange::graph<Config, Signal> const & subgraph) -> std::unique_ptr<strange::implementation::processor<Signal>>
     {
         std::vector<std::unique_ptr<strange::implementation::processor<Signal>>> subprocs;
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), delay, [](std::vector<Signal> outputs){ return outputs; })); // [0] output
-        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), delay, [](std::vector<Signal> inputs){ return inputs; })); // [1] input
-        iterate(config, delay, subgraph.processors(), subgraph.connections(), subgraph.output_latencies(), subprocs);
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.outs(), subgraph.outs(), clock_delay, [](Signal clock, std::vector<Signal> outputs){ return outputs; })); // [0] output
+        subprocs.push_back(std::make_unique<strange::implementation::processor<Signal>>(subgraph.ins(), subgraph.ins(), clock_delay, [](Signal clock, std::vector<Signal> inputs){ return inputs; })); // [1] input
+        iterate(config, clock_delay, subgraph.processors(), subgraph.connections(), subgraph.output_latencies(), subprocs);
         return std::make_unique<strange::implementation::processor<Signal>>(std::move(subprocs));
     }
 
     inline auto compute_output_latency(uint64_t id, Config const & config,
         std::vector<bool> & computed) const -> uint64_t
     {
-        if (computed[id]) return _output_latencies[id];
+        if (computed[id])
+        {
+            return _output_latencies[id];
+        }
         computed[id] = true;
-        uint64_t max_input = 0;
+        uint64_t output_latency = 0;
         for (auto const & conn : connections_to(id))
         {
             auto from = conn.from_id();
@@ -660,20 +686,25 @@ private:
             {
                 continue;
             }
-            auto source_ol = compute_output_latency(from, config, computed);
-            auto source_lat = _processors[from]._something() ? _processors[from].latency(config) : uint64_t{0};
-            auto candidate = source_ol + source_lat;
-            if (candidate > max_input) max_input = candidate;
+            auto candidate = compute_output_latency(from, config, computed);
+            if (candidate > output_latency)
+            {
+                output_latency = candidate;
+            }
         }
-        _output_latencies[id] = max_input;
-        return max_input;
+        if (_processors[id]._something())
+        {
+            output_latency += _processors[id].latency(config, output_latency);
+        }
+        _output_latencies[id] = output_latency;
+        return output_latency;
     }
 
     uint64_t _ins;
     uint64_t _outs;
     std::vector<uint64_t> _input_types;
     std::vector<uint64_t> _output_types;
-    strange::delay<Signal> _delay;
+    strange::delay<Signal> _clock_delay;
     strange::graph<Config, Signal> _owner;
     uint64_t _own_id;
     std::vector<strange::processor<Config, Signal>> _processors;
@@ -683,6 +714,7 @@ private:
     static inline std::vector<strange::connection> const _no_connections;
     mutable bool _reconfigured;
     mutable Config _config;
+    mutable uint64_t _input_latency;
     mutable std::vector<uint64_t> _output_latencies;
     mutable uint64_t _latency;
 };

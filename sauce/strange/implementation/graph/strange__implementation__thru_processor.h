@@ -69,14 +69,14 @@ struct thru_processor
         _own_id = id;
     }
 
-    inline auto latency(Config const & config = Config{}) const -> uint64_t
+    inline auto latency(Config const & config = Config{}, uint64_t input_latency = 0) const -> uint64_t
     {
         return 0;
     }
 
-    inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>
     {
-        return [*this](std::vector<Signal> inputs) {
+        return [*this](Signal clock, std::vector<Signal> inputs) {
             inputs.resize(_outs);
             return inputs;
         };

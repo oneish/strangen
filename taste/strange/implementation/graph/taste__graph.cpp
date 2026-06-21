@@ -31,15 +31,15 @@ struct latency_processor
         _own_id = id;
     }
 
-    inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
+    inline auto closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>
     {
-        return [*this](std::vector<Signal> inputs) {
+        return [*this](Signal clock, std::vector<Signal> inputs) {
             inputs.resize(_outs);
             return inputs;
         };
     }
 
-    inline auto latency(Config const & config = Config{}) const -> uint64_t { return _lat; }
+    inline auto latency(Config const & config = Config{}, uint64_t input_latency = 0) const -> uint64_t { return _lat; }
 
 private:
     uint64_t _ins;
@@ -115,7 +115,7 @@ TEST_CASE("thru_processor: closure passthrough")
 
     auto closure = proc.closure();
     std::vector<std::string> input = {"hello", "world"};
-    auto output = closure(input);
+    auto output = closure(std::string{}, input);
     CHECK(output.size() == 2);
     CHECK(output[0] == "hello");
     CHECK(output[1] == "world");
@@ -128,7 +128,7 @@ TEST_CASE("thru_processor: closure resizes output")
 
     auto closure = proc.closure();
     std::vector<std::string> input = {"a", "b", "c"};
-    auto output = closure(input);
+    auto output = closure(std::string{}, input);
     CHECK(output.size() == 2);
     CHECK(output[0] == "a");
     CHECK(output[1] == "b");
@@ -148,7 +148,7 @@ TEST_CASE("processor: _cat and _cats")
 TEST_CASE("processor: implementation constructor and connections")
 {
     // Verify that implementation::processor can be constructed
-    auto fun = [](std::vector<std::string> inputs) -> std::vector<std::string>
+    auto fun = [](std::string clock, std::vector<std::string> inputs) -> std::vector<std::string>
     {
         std::vector<std::string> outputs;
         for (auto const & s : inputs)
@@ -225,7 +225,7 @@ TEST_CASE("graph: simple passthrough execution")
     graph.add_connection(make_connection({.from_id_ = proc_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
 
     auto closure = graph.closure();
-    auto output = closure({"hello"});
+    auto output = closure(std::string{}, {"hello"});
     CHECK(output.size() == 1);
     CHECK(output[0] == "hello");
 }
@@ -246,7 +246,7 @@ TEST_CASE("graph: multiple inputs and outputs")
     graph.add_connection(make_connection({.from_id_ = proc_id, .from_out_ = 1, .to_id_ = 0, .to_in_ = 1}));
 
     auto closure = graph.closure();
-    auto output = closure({"first", "second"});
+    auto output = closure(std::string{}, {"first", "second"});
     CHECK(output.size() == 2);
     CHECK(output[0] == "first");
     CHECK(output[1] == "second");
@@ -274,7 +274,7 @@ TEST_CASE("graph: nested subgraph")
     graph.add_connection(make_connection({.from_id_ = sub_id, .from_out_ = 0, .to_id_ = 0, .to_in_ = 0}));
 
     auto closure = graph.closure();
-    auto output = closure({"nested"});
+    auto output = closure(std::string{}, {"nested"});
     CHECK(output.size() == 1);
     CHECK(output[0] == "nested");
 }
@@ -424,7 +424,7 @@ TEST_CASE("graph: feedback cycle executes without deadlock")
     graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = fb_id, .to_in_ = 0}));
 
     auto closure = graph.closure();
-    auto output = closure({"hello"});
+    auto output = closure(std::string{}, {"hello"});
     CHECK(output.size() == 1);
     CHECK(output[0] == "hello");
 }
@@ -448,15 +448,15 @@ TEST_CASE("graph: feedback relays previous cycle output")
     auto closure = graph.closure();
 
     // First call: feedback sends "" (default), A gets "hello" + "" = "hello"
-    auto out1 = closure({"hello"});
+    auto out1 = closure(std::string{}, {"hello"});
     CHECK(out1[0] == "hello");
 
     // Second call: feedback relays "hello" from previous, A gets "world" + "hello" = "worldhello"
-    auto out2 = closure({"world"});
+    auto out2 = closure(std::string{}, {"world"});
     CHECK(out2[0] == "worldhello");
 
     // Third call: feedback relays "worldhello", A gets "!" + "worldhello" = "!worldhello"
-    auto out3 = closure({"!"});
+    auto out3 = closure(std::string{}, {"!"});
     CHECK(out3[0] == "!worldhello");
 }
 

@@ -168,8 +168,8 @@ namespace strange
 
         auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
-        auto latency(Config const & config = Config{}) const -> uint64_t;
-        auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
+        auto latency(Config const & config = Config{}, uint64_t input_latency = 0) const -> uint64_t;
+        auto closure(Config const & config = Config{}) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>;
     };
 
     struct [[strange::implementation("strange::implementation::connection")]]
