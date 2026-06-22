@@ -3533,9 +3533,9 @@ protected:
 
         virtual auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void = 0;
 
-        virtual auto latency(Config const & config, uint64_t input_latency) const -> uint64_t = 0;
+        virtual auto latency(Config const & config) const -> uint64_t = 0;
 
-        virtual auto closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>> = 0;
+        virtual auto closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
     };
 
 public:
@@ -3622,9 +3622,9 @@ public:
 
     inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
-    inline auto latency(Config const & config = Config{}, uint64_t input_latency = 0) const -> uint64_t;
+    inline auto latency(Config const & config = Config{}) const -> uint64_t;
 
-    inline auto closure(Config const & config = Config{}) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>;
+    inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 };
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -3750,9 +3750,9 @@ private:
 
         inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void final;
 
-        inline auto latency(Config const & config, uint64_t input_latency) const -> uint64_t final;
+        inline auto latency(Config const & config) const -> uint64_t final;
 
-        inline auto closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>> final;
+        inline auto closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
         _Thing _thing;
     };
@@ -4447,9 +4447,9 @@ public:
 
     inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
-    inline auto latency(Config const & config = Config{}, uint64_t input_latency = 0) const -> uint64_t;
+    inline auto latency(Config const & config = Config{}) const -> uint64_t;
 
-    inline auto closure(Config const & config = Config{}) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>;
+    inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 
     inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t;
 
@@ -4595,9 +4595,9 @@ private:
 
         inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void final;
 
-        inline auto latency(Config const & config, uint64_t input_latency) const -> uint64_t final;
+        inline auto latency(Config const & config) const -> uint64_t final;
 
-        inline auto closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>> final;
+        inline auto closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
         inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t final;
 
@@ -13561,13 +13561,13 @@ inline auto processor<Config, Signal>::owned(strange::graph<Config, Signal> cons
 }
 
 template<typename Config, typename Signal>
-inline auto processor<Config, Signal>::latency(Config const & config, uint64_t input_latency) const -> uint64_t
+inline auto processor<Config, Signal>::latency(Config const & config) const -> uint64_t
 {
-    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->latency(config, input_latency);
+    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->latency(config);
 }
 
 template<typename Config, typename Signal>
-inline auto processor<Config, Signal>::closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>
+inline auto processor<Config, Signal>::closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->closure(config);
 }
@@ -13621,13 +13621,13 @@ inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::owned(strange:
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::latency(Config const & config, uint64_t input_latency) const -> uint64_t
+inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::latency(Config const & config) const -> uint64_t
 {
-    return _thing.latency(config, input_latency);
+    return _thing.latency(config);
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>
+inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return _thing.closure(config);
 }
@@ -13870,13 +13870,13 @@ inline auto graph<Config, Signal>::owned(strange::graph<Config, Signal> const & 
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::latency(Config const & config, uint64_t input_latency) const -> uint64_t
+inline auto graph<Config, Signal>::latency(Config const & config) const -> uint64_t
 {
-    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->latency(config, input_latency);
+    return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->latency(config);
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>
+inline auto graph<Config, Signal>::closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->closure(config);
 }
@@ -13995,13 +13995,13 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::owned(strange::gra
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::latency(Config const & config, uint64_t input_latency) const -> uint64_t
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::latency(Config const & config) const -> uint64_t
 {
-    return _thing.latency(config, input_latency);
+    return _thing.latency(config);
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::closure(Config const & config) const -> std::function<auto (Signal, std::vector<Signal>) -> std::vector<Signal>>
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>
 {
     return _thing.closure(config);
 }

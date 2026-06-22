@@ -141,7 +141,7 @@ int main()
         /*prints 12,13,14 22,23,24 32,33,34*/
     }
     {   // processors
-        std::function<auto (std::string, std::vector<std::string>) -> std::vector<std::string>> fun = [](std::string clock, std::vector<std::string> inputs) {
+        std::function<auto (std::vector<std::string>) -> std::vector<std::string>> fun = [](std::vector<std::string> inputs) {
             std::string concat = ":";
             for (auto input : inputs)
             {
@@ -168,22 +168,22 @@ int main()
         proc1.get_set();
         proc2.get_set();
         proc3.get_set();
-        proc0.go(std::string{});
-        proc0.go(std::string{});
-        proc0.go(std::string{});
+        proc0.go();
+        proc0.go();
+        proc0.go();
         std::cout << "sleep\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     {   // graph
         std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subsubprocs;
-        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::string, std::vector<std::string> inputs){ return inputs; })); // output [0] "A"
-        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::string, std::vector<std::string> inputs){ return inputs; })); // input [1] "B"
+        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::vector<std::string> inputs){ return inputs; })); // output [0] "A"
+        subsubprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::vector<std::string> inputs){ return inputs; })); // input [1] "B"
         subsubprocs[1]->to(*subsubprocs[0], 0, 0, 0); // B0 -> A0
         std::vector<std::unique_ptr<strange::implementation::processor<std::string>>> subprocs;
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(3, 0, strange::delay<std::string>::_make())); // output [0] "C"
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(0, 3, strange::delay<std::string>::_make())); // input [1] "D"
         subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(std::move(subsubprocs))); // [2] "E"
-        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::string, std::vector<std::string> inputs){ return inputs; })); // [3] "F"
+        subprocs.push_back(std::make_unique<strange::implementation::processor<std::string>>(1, 1, strange::delay<std::string>::_make(), [](std::vector<std::string> inputs){ return inputs; })); // [3] "F"
         subprocs[1]->to(*subprocs[2], 0, 0, 0); // D0 -> E0
         subprocs[0]->from(*subprocs[2], 0, 0, 0); // C0 <- E0
         subprocs[1]->to(*subprocs[3], 1, 0, 0); // D1 -> F0
@@ -195,7 +195,7 @@ int main()
         std::vector<std::string> inputs {"hello", "world", "!"};
         for (auto input : inputs)
         {
-            auto outputs = proc(std::string{}, inputs);
+            auto outputs = proc(inputs);
             std::cout << "graph outputs: ";
             for (auto output : outputs)
             {
@@ -210,7 +210,7 @@ int main()
     {   // strange processor
         auto proc = strange::processor<std::string, std::string>::_make<strange::implementation::thru_processor<std::string, std::string>>(std::vector<uint64_t>{0, 0, 0});
         auto proc_closure = proc.closure();
-        proc_closure(std::string{}, std::vector<std::string>{"hello", "world", "!"});
+        proc_closure(std::vector<std::string>{"hello", "world", "!"});
     }
     {   // strange graph
         auto subgraph = strange::graph<std::string, std::string>::_make(std::vector<uint64_t>{0}, std::vector<uint64_t>{0}); // "A" with "B"=1 in, "C"=1 out
@@ -235,7 +235,7 @@ int main()
         std::vector<std::string> inputs {"hello", "world", "!"};
         for (auto input : inputs)
         {
-            auto outputs = graph_closure(std::string{}, inputs);
+            auto outputs = graph_closure(inputs);
             std::cout << "strange graph outputs: ";
             for (auto output : outputs)
             {
