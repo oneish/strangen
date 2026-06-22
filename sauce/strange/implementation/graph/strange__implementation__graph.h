@@ -332,7 +332,7 @@ struct graph
         dest.from_object();
         dest.insert_object("input_types", dest.make_array_uint64(_input_types));
         dest.insert_object("output_types", dest.make_array_uint64(_output_types));
-        //TODO _delay
+        dest.insert_object("delay", dest.make_any(_delay));
         dest.insert_object("owner", dest.make_any(_owner));
         dest.insert_object("own_id", dest.make_uint64(_own_id));
         {
@@ -359,7 +359,7 @@ struct graph
         src.get_object("output_types").as_array_uint64(_output_types);
         _ins = _input_types.size();
         _outs = _output_types.size();
-        //TODO _delay
+        src.get_object("delay").as_any(_delay);
         src.get_object("owner").as_any(_owner);
         src.get_object("own_id").as_uint64(_own_id);
         {
