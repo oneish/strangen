@@ -1036,6 +1036,13 @@ namespace )#" << _space.name() << R"#(
 
     auto _abstraction_operations(strange::abstraction const & abstraction, strange::abstraction const & derived, _gen_mode const mode, std::unordered_set<strange::operation> & unique, std::string const & name = std::string{}) -> void
     {
+        // Decode `mode` into the axes that drive emission:
+        //   inner          - the pure-virtual concept (_derived) or the instance model side
+        //   pure           - the pure-virtual concept declarations (= 0)
+        //   definition     - out-of-line bodies rather than in-class declarations
+        //   implementation - the concrete implementation struct (impl_decl / impl_def)
+        // Access levels are applied differently for the implementation passes and the
+        // type-erased interface passes further below; see dogs/ACCESS.md.
         bool const inner = (mode == _gen_mode::pure_virtual_decl || mode == _gen_mode::inner_decl || mode == _gen_mode::inner_def);
         bool const pure = (mode == _gen_mode::pure_virtual_decl);
         bool const definition = (mode == _gen_mode::type_erased_def || mode == _gen_mode::inner_def || mode == _gen_mode::impl_def);
@@ -1069,6 +1076,10 @@ namespace )#" << _space.name() << R"#(
             unique.insert(operation);
             if (implementation)
             {
+                // Implementation passes emit the concrete member/method for public, protected AND
+                // private operations. Two exceptions: a private operation is not regenerated into an
+                // inheriting abstraction's implementation (abstraction != derived), and an operation
+                // with no body is skipped entirely. See dogs/ACCESS.md.
                 if ((operation.access() == strange::access::_private_ && abstraction.name() != derived.name())
                     || operation.implementation().empty())
                 {
@@ -1135,6 +1146,8 @@ namespace )#" << _space.name() << R"#(
                 }
                 continue;
             }
+            // Type-erased interface passes (public handle, pure-virtual concept, instance model):
+            // only public operations get an interface; protected and private are implementation-only.
             else if (operation.access() != strange::access::_public_)
             {
                 continue;

@@ -329,6 +329,8 @@ widget : strange::stuff
 
 This generates a `my_namespace::impl::widget` struct with `name_` and `value_` member variables, const/mutable accessors, and `pack`/`unpack` methods. The generated struct becomes the default `_Thing` for `_make()`.
 
+Operation access (`public`/`protected`/`private` labels in a prototype) controls which of these pieces an operation gets -- only public operations receive a type-erased interface. See [dogs/ACCESS.md](dogs/ACCESS.md).
+
 #### `hash`
 
 Generates a `std::hash` specialization for the abstraction, hashing all data members. Vector members use `strange::hash_range`; scalars use `strange::hash_init`/`strange::hash_combine` (defined in `strange__hash.h`). Requires `implementation`.
