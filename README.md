@@ -732,7 +732,7 @@ By default, graphs are acyclic (DAG). Cycles would deadlock because stlab zip wa
 auto fb = strange::processor<std::string, std::string>::_make<
     strange::implementation::thru_processor<std::string, std::string>>(
     std::vector<uint64_t>{0}, true);  // second arg: feedback=true
-auto fb_id = graph.add_processor(graph, fb);
+auto fb_id = graph.add_processor(fb);
 
 // Connect the cycle: A -> feedback -> A
 graph.add_connection(make_connection({.from_id_ = a_id, .from_out_ = 0, .to_id_ = fb_id, .to_in_ = 0}));

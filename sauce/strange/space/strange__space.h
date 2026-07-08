@@ -3531,8 +3531,6 @@ protected:
 
         virtual auto feedback() const -> bool = 0;
 
-        virtual auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void = 0;
-
         virtual auto latency(Config const & config) const -> uint64_t = 0;
 
         virtual auto closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> = 0;
@@ -3619,8 +3617,6 @@ public:
     inline auto output_types() const -> std::vector<uint64_t> const &;
 
     inline auto feedback() const -> bool;
-
-    inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
 
     inline auto latency(Config const & config = Config{}) const -> uint64_t;
 
@@ -3747,8 +3743,6 @@ private:
         inline auto output_types() const -> std::vector<uint64_t> const & final;
 
         inline auto feedback() const -> bool final;
-
-        inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void final;
 
         inline auto latency(Config const & config) const -> uint64_t final;
 
@@ -4342,7 +4336,7 @@ protected:
             return processor<Config, Signal>::_derived::_static_shared_to_base(derived);
         }
 
-        virtual auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t = 0;
+        virtual auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t = 0;
 
         virtual auto remove_processor(uint64_t id) -> bool = 0;
 
@@ -4360,7 +4354,7 @@ protected:
 
         virtual auto connections_from(uint64_t id) const -> std::vector<strange::connection> const & = 0;
 
-        virtual auto renumber(strange::graph<Config, Signal> const & self) -> void = 0;
+        virtual auto renumber() -> void = 0;
     };
 
 public:
@@ -4445,13 +4439,11 @@ public:
 
     inline auto feedback() const -> bool;
 
-    inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void;
-
     inline auto latency(Config const & config = Config{}) const -> uint64_t;
 
     inline auto closure(Config const & config = Config{}) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>>;
 
-    inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t;
+    inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t;
 
     inline auto remove_processor(uint64_t id) -> bool;
 
@@ -4469,7 +4461,7 @@ public:
 
     inline auto connections_from(uint64_t id) const -> std::vector<strange::connection> const &;
 
-    inline auto renumber(strange::graph<Config, Signal> const & self) -> void;
+    inline auto renumber() -> void;
 };
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -4593,13 +4585,11 @@ private:
 
         inline auto feedback() const -> bool final;
 
-        inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void final;
-
         inline auto latency(Config const & config) const -> uint64_t final;
 
         inline auto closure(Config const & config) const -> std::function<auto (std::vector<Signal>) -> std::vector<Signal>> final;
 
-        inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t final;
+        inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t final;
 
         inline auto remove_processor(uint64_t id) -> bool final;
 
@@ -4617,7 +4607,7 @@ private:
 
         inline auto connections_from(uint64_t id) const -> std::vector<strange::connection> const & final;
 
-        inline auto renumber(strange::graph<Config, Signal> const & self) -> void final;
+        inline auto renumber() -> void final;
 
         _Thing _thing;
     };
@@ -13554,13 +13544,6 @@ inline auto processor<Config, Signal>::feedback() const -> bool
 }
 
 template<typename Config, typename Signal>
-inline auto processor<Config, Signal>::owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived>(strange::_common::_shared)->owned(owner, id);
-}
-
-template<typename Config, typename Signal>
 inline auto processor<Config, Signal>::latency(Config const & config) const -> uint64_t
 {
     return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->latency(config);
@@ -13612,12 +13595,6 @@ template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::feedback() const -> bool
 {
     return _thing.feedback();
-}
-
-template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto processor_<_Thing, _Copy, Config, Signal>::_instance::owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
-{
-    _thing.owned(owner, id);
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -13863,13 +13840,6 @@ inline auto graph<Config, Signal>::feedback() const -> bool
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
-{
-    strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived>(strange::_common::_shared)->owned(owner, id);
-}
-
-template<typename Config, typename Signal>
 inline auto graph<Config, Signal>::latency(Config const & config) const -> uint64_t
 {
     return std::dynamic_pointer_cast<typename processor<Config, Signal>::_derived const>(strange::_common::_shared)->latency(config);
@@ -13882,10 +13852,10 @@ inline auto graph<Config, Signal>::closure(Config const & config) const -> std::
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
+inline auto graph<Config, Signal>::add_processor(strange::processor<Config, Signal> proc) -> uint64_t
 {
     strange::_common::_mutate();
-    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->add_processor(self, proc);
+    return std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->add_processor(proc);
 }
 
 template<typename Config, typename Signal>
@@ -13940,10 +13910,10 @@ inline auto graph<Config, Signal>::connections_from(uint64_t id) const -> std::v
 }
 
 template<typename Config, typename Signal>
-inline auto graph<Config, Signal>::renumber(strange::graph<Config, Signal> const & self) -> void
+inline auto graph<Config, Signal>::renumber() -> void
 {
     strange::_common::_mutate();
-    std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->renumber(self);
+    std::dynamic_pointer_cast<typename graph<Config, Signal>::_derived>(strange::_common::_shared)->renumber();
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -13989,12 +13959,6 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::feedback() const -
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
-{
-    _thing.owned(owner, id);
-}
-
-template<typename _Thing, bool _Copy, typename Config, typename Signal>
 inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::latency(Config const & config) const -> uint64_t
 {
     return _thing.latency(config);
@@ -14007,9 +13971,9 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::closure(Config con
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::add_processor(strange::processor<Config, Signal> proc) -> uint64_t
 {
-    return _thing.add_processor(self, proc);
+    return _thing.add_processor(proc);
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
@@ -14061,9 +14025,9 @@ inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::connections_from(u
 }
 
 template<typename _Thing, bool _Copy, typename Config, typename Signal>
-inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::renumber(strange::graph<Config, Signal> const & self) -> void
+inline auto graph_<_Thing, _Copy, Config, Signal>::_instance::renumber() -> void
 {
-    _thing.renumber(self);
+    _thing.renumber();
 }
 
 template<typename Signal>

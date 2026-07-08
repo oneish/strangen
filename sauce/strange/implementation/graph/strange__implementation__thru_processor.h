@@ -15,7 +15,6 @@ struct thru_processor
     ,_outs(types.size())
     ,_types(std::move(types))
     ,_feedback(feedback)
-    ,_own_id(0)
     {
     }
 
@@ -24,8 +23,6 @@ struct thru_processor
         dest.from_object();
         dest.insert_object("types", dest.make_array_uint64(_types));
         dest.insert_object("feedback", dest.make_bool(_feedback));
-        dest.insert_object("owner", dest.make_any(_owner));
-        dest.insert_object("own_id", dest.make_uint64(_own_id));
     }
 
     inline auto unpack(strange::bag const & src) -> void
@@ -34,8 +31,6 @@ struct thru_processor
         _ins = _types.size();
         _outs = _types.size();
         src.get_object("feedback").as_bool(_feedback);
-        src.get_object("owner").as_any(_owner);
-        src.get_object("own_id").as_uint64(_own_id);
     }
 
     inline auto ins() const -> uint64_t const &
@@ -63,12 +58,6 @@ struct thru_processor
         return _feedback;
     }
 
-    inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
-    {
-        _owner = owner._weak();
-        _own_id = id;
-    }
-
     inline auto latency(Config const & config = Config{}) const -> uint64_t
     {
         return 0;
@@ -87,8 +76,6 @@ private:
     uint64_t _outs;
     std::vector<uint64_t> _types;
     bool _feedback;
-    strange::graph<Config, Signal> _owner;
-    uint64_t _own_id;
 };
 }
 }

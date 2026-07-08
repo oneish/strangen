@@ -318,7 +318,6 @@ struct graph
     ,_input_types(std::move(input_types))
     ,_output_types(std::move(output_types))
     ,_delay(delay)
-    ,_own_id(0)
     ,_processors(2)
     ,_reconfigured(true)
     ,_config()
@@ -333,8 +332,6 @@ struct graph
         dest.insert_object("input_types", dest.make_array_uint64(_input_types));
         dest.insert_object("output_types", dest.make_array_uint64(_output_types));
         dest.insert_object("delay", dest.make_any(_delay));
-        dest.insert_object("owner", dest.make_any(_owner));
-        dest.insert_object("own_id", dest.make_uint64(_own_id));
         {
             auto _array = dest.make_array();
             for (auto const & _item : _processors)
@@ -360,8 +357,6 @@ struct graph
         _ins = _input_types.size();
         _outs = _output_types.size();
         src.get_object("delay").as_any(_delay);
-        src.get_object("owner").as_any(_owner);
-        src.get_object("own_id").as_uint64(_own_id);
         {
             auto _array = src.get_object("processors").to_array();
             auto _size = _array.size();
@@ -421,12 +416,6 @@ struct graph
         return false;
     }
 
-    inline auto owned(strange::graph<Config, Signal> const & owner, uint64_t id) -> void
-    {
-        _owner = owner._weak();
-        _own_id = id;
-    }
-
     inline auto latency(Config const & config = Config{}) const -> uint64_t
     {
         if (_reconfigured || _config != config)
@@ -460,11 +449,10 @@ struct graph
         };
     }
 
-    inline auto add_processor(strange::graph<Config, Signal> const & self, strange::processor<Config, Signal> proc) -> uint64_t
+    inline auto add_processor(strange::processor<Config, Signal> proc) -> uint64_t
     {
         _reconfigured = true;
         auto id = _processors.size();
-        proc.owned(self, id);
         _processors.push_back(proc);
         return id;
     }
@@ -555,7 +543,7 @@ struct graph
         return it != _connections_from.end() ? it->second : _no_connections;
     }
 
-    inline auto renumber(strange::graph<Config, Signal> const & self) -> void
+    inline auto renumber() -> void
     {
         std::unordered_map<uint64_t, uint64_t> id_map;
         id_map[0] = 0;
@@ -567,7 +555,6 @@ struct graph
             {
                 auto new_id = new_processors.size();
                 id_map[i] = new_id;
-                _processors[i].owned(self, new_id);
                 new_processors.push_back(_processors[i]);
             }
         }
@@ -680,8 +667,6 @@ private:
     std::vector<uint64_t> _input_types;
     std::vector<uint64_t> _output_types;
     strange::delay<Signal> _delay;
-    strange::graph<Config, Signal> _owner;
-    uint64_t _own_id;
     std::vector<strange::processor<Config, Signal>> _processors;
     std::vector<strange::connection> _connections;
     std::unordered_map<uint64_t, std::vector<strange::connection>> _connections_to;
