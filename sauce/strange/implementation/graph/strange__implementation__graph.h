@@ -352,6 +352,10 @@ struct graph
 
     inline auto unpack(strange::bag const & src) -> void
     {
+        _connections_from.clear();
+        _connections_to.clear();
+        _connections.clear();
+        _processors.clear();
         src.get_object("input_types").as_array_uint64(_input_types);
         src.get_object("output_types").as_array_uint64(_output_types);
         _ins = _input_types.size();
@@ -360,18 +364,12 @@ struct graph
         {
             auto _array = src.get_object("processors").to_array();
             auto _size = _array.size();
-            _processors.clear();
             _processors.resize(_size);
             for (std::size_t _index = 0; _index < _size; ++_index)
             {
                 _array[_index].as_any(_processors[_index]);
             }
         }
-        for (auto i = _connections.size(); i > 0; --i)
-        {
-            remove_connection(i - 1);
-        }
-        _connections.clear();
         {
             auto _array = src.get_object("connections").to_array();
             for (std::size_t _index = 0; _index < _array.size(); ++_index)
@@ -388,6 +386,7 @@ struct graph
                 }
             }
         }
+        renumber();
         _reconfigured = true;
     }
 
