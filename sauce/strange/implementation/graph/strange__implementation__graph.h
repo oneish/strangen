@@ -140,66 +140,7 @@ struct processor
                 _connected_outs.emplace_back(i, j);
             }
         }
-        // stlab::zip requires compile-time arity, so we dispatch via switch.
-        // Maximum supported connected inputs is 16.
-        switch (_connected_ins.size())
-        {
-            case 0:
-                break;
-            case 1:
-                _zip = _receivers[_connected_ins[0].first][_connected_ins[0].second] | [this](Signal connected_input) {
-                        _inputs[_connected_ins[0].first] = connected_input;
-                        send();
-                    };
-                break;
-            case 2:
-                combine_receivers<2>();
-                break;
-            case 3:
-                combine_receivers<3>();
-                break;
-            case 4:
-                combine_receivers<4>();
-                break;
-            case 5:
-                combine_receivers<5>();
-                break;
-            case 6:
-                combine_receivers<6>();
-                break;
-            case 7:
-                combine_receivers<7>();
-                break;
-            case 8:
-                combine_receivers<8>();
-                break;
-            case 9:
-                combine_receivers<9>();
-                break;
-            case 10:
-                combine_receivers<10>();
-                break;
-            case 11:
-                combine_receivers<11>();
-                break;
-            case 12:
-                combine_receivers<12>();
-                break;
-            case 13:
-                combine_receivers<13>();
-                break;
-            case 14:
-                combine_receivers<14>();
-                break;
-            case 15:
-                combine_receivers<15>();
-                break;
-            case 16:
-                combine_receivers<16>();
-                break;
-            default:
-                throw std::runtime_error("too many connected ins (max 16)");
-        }
+        zip_receivers();
     }
 
     inline auto get_set() -> void
@@ -291,6 +232,8 @@ private:
             _senders[connected_out.first][connected_out.second](outputs[connected_out.first]);
         }
     }
+
+    inline auto zip_receivers() -> void;
 
     uint64_t _max_receiver_latency;
     std::vector<std::vector<uint64_t>> _receiver_latencies;
@@ -497,7 +440,7 @@ struct graph
             : _processors[conn.to_id()]._something()
                 ? _processors[conn.to_id()].input_types()[conn.to_in()]
                 : uint64_t{0};
-        if (from_type != to_type)
+        if (from_type != to_type && !(from_type & to_type))
         {
             throw std::runtime_error("connection between different types");
         }
@@ -676,5 +619,71 @@ private:
     mutable std::vector<uint64_t> _output_latencies;
     mutable uint64_t _latency;
 };
+
+template<typename Signal>
+inline auto processor<Signal>::zip_receivers() -> void
+{
+    // stlab::zip requires compile-time arity, so we dispatch via switch.
+    // Maximum supported connected inputs is 16.
+    switch (_connected_ins.size())
+    {
+        case 0:
+            break;
+        case 1:
+            _zip = _receivers[_connected_ins[0].first][_connected_ins[0].second] | [this](Signal connected_input) {
+                    _inputs[_connected_ins[0].first] = connected_input;
+                    send();
+                };
+            break;
+        case 2:
+            combine_receivers<2>();
+            break;
+        case 3:
+            combine_receivers<3>();
+            break;
+        case 4:
+            combine_receivers<4>();
+            break;
+        case 5:
+            combine_receivers<5>();
+            break;
+        case 6:
+            combine_receivers<6>();
+            break;
+        case 7:
+            combine_receivers<7>();
+            break;
+        case 8:
+            combine_receivers<8>();
+            break;
+        case 9:
+            combine_receivers<9>();
+            break;
+        case 10:
+            combine_receivers<10>();
+            break;
+        case 11:
+            combine_receivers<11>();
+            break;
+        case 12:
+            combine_receivers<12>();
+            break;
+        case 13:
+            combine_receivers<13>();
+            break;
+        case 14:
+            combine_receivers<14>();
+            break;
+        case 15:
+            combine_receivers<15>();
+            break;
+        case 16:
+            combine_receivers<16>();
+            break;
+        default:
+            throw std::runtime_error("too many connected ins (max 16)");
+    }
+}
+
 }
 }
